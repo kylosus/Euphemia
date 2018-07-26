@@ -1,6 +1,7 @@
 # Euphemia
 ***
 ![](https://files.catbox.moe/mxzpmq.jpg)
+
 Yet another discord.js bot. And best girl.
 ***
 #### [Click here to add Euphemia to your server](https://discordapp.com/oauth2/authorize?client_id=469059467544100864&scope=bot&permissions=8)
