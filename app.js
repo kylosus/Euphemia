@@ -32,10 +32,7 @@ client.registry
     .registerDefaultCommands({
         ping: false
     })
-    .registerCommandsIn(path.join(__dirname, 'commands'))
-
-
-// client.on('message', message => {}); 
+    .registerCommandsIn(path.join(__dirname, 'commands')) 
 
 client.login(process.env.DISCORD_TOKEN || config.token).catch(fail => {
     console.log('Failed to log in\n' + fail.toString());
