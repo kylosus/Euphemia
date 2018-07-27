@@ -11,7 +11,7 @@ module.exports = message => {
             return message.guild.channels.find(val => val.id === entry.log).send(new RichEmbed()
                 .setColor('DARK_PURPLE')
                 .setTitle(`🗑 Message deleted in #${message.channel.name}`)
-                .setDescription(`${message.member.toString()} \`${message.author.id}\``)
+                .setDescription(`${message.member? message.member.toString() : message.author.tag} \`${message.author.id}\``)
                 .addField('Content', message.content, false)
                 .addField('ID', message.id, false)
                 .setTimestamp(moment().toISOString())
