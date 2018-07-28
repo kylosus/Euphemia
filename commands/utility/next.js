@@ -89,7 +89,7 @@ async function sendResponse(response, message) {
         response.data.Page.media.forEach(anime => {
             if (anime.nextAiringEpisode && anime.nextAiringEpisode.timeUntilAiring < 82800) {
                 duration = moment.duration(anime.nextAiringEpisode.timeUntilAiring, 'seconds').format("D [days] H [hours] m [minutes] s [seconds]");
-                embed.addField(`${anime.title.userPreferred} ${anime.nextAiringEpisode.episode || ''}`, duration, false);
+                embed.addField(`${anime.title.userPreferred} ${anime.nextAiringEpisode? (anime.nextAiringEpisode.episode || '') : '?'}`, duration, false);
             }
         });
 
@@ -111,10 +111,10 @@ async function sendResponse(response, message) {
         }
 
         embed
-            .setTitle(`${anime.title.userPreferred} ${anime.nextAiringEpisode.episode || '-'}`)
+            .setTitle(`${anime.title.userPreferred} ${anime.nextAiringEpisode? (anime.nextAiringEpisode.episode || '-') : '?'}`)
             .setThumbnail(anime.coverImage.medium)
             .setTitle(anime.title.userPreferred, anime.siteUrl)
-            .addField(`Next episode ${anime.nextAiringEpisode.episode || '-'} in`, duration, false)
+            .addField(`Next episode ${anime.nextAiringEpisode? (anime.nextAiringEpisode.episode || '-') : '?'} in`, duration, false)
 
         if (anime.id in settings) { 
             embed.setColor(settings[anime.id]);
