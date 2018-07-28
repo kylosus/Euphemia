@@ -1,5 +1,6 @@
 const { Command } = require('discord.js-commando');
 const { RichEmbed } = require('discord.js');
+const moment = require('moment');
 
 module.exports = class extends Command {
     constructor(client) {
@@ -12,9 +13,8 @@ module.exports = class extends Command {
     }
 
    async run(message) {
-        const embed = new RichEmbed()
-            .setDescription(`⏳ ${this.client.ping.toFixed(2)}`)
-            .setColor(message.member.displayColor);
-        return message.embed(embed);
+        return message.embed(new RichEmbed()
+            .setDescription(`⏳ ${moment().diff(moment(message.createdAt), 'milliseconds')}`)
+            .setColor(message.member? message.member.displayColor : [233, 91, 169]));
     }
 };
