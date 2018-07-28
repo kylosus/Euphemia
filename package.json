@@ -12,6 +12,7 @@
   "dependencies": {
     "discord.js": "^11.3.2",
     "discord.js-commando": "^0.10.0",
+    "forever": "^0.15.3",
     "moment": "^2.22.2",
     "moment-duration-format": "^2.2.2",
     "request": "^2.87.0",
