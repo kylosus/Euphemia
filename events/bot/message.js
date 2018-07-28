@@ -7,7 +7,7 @@ module.exports = message => {
                 owner.send(new RichEmbed()
                     .setColor('BLUE')
                     .setTitle('Bot has received a DM')
-                    .addField(message.author.tag, message.content)
+                    .addField(message.author.tag, message.content || '-')
                 );
             }
         });
