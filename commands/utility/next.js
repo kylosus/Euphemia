@@ -23,9 +23,9 @@ module.exports = class extends Command {
        if (args.length < 2) {
             query = `{
                 Page(perPage: 100) {
-                    media(type: ANIME, status: RELEASING) {
+                    media(type: ANIME status: RELEASING sort:POPULARITY_DESC) {
                         title { userPreferred }
-                        nextAiringEpisode { timeUntilAiring }
+                        nextAiringEpisode { episode timeUntilAiring }
                     }
                 }
             }`;
@@ -36,7 +36,7 @@ module.exports = class extends Command {
                         siteUrl
                         coverImage { medium }
                         title { userPreferred }
-                        nextAiringEpisode { timeUntilAiring }
+                        nextAiringEpisode { episode timeUntilAiring }
                     }
                 }`;
             variables = {
@@ -90,7 +90,7 @@ async function sendResponse(response, message) {
         response.data.Page.media.forEach(anime => {
             if (anime.nextAiringEpisode && anime.nextAiringEpisode.timeUntilAiring < 82800) {
                 duration = moment.duration(anime.nextAiringEpisode.timeUntilAiring, 'seconds').format("D [days] H [hours] m [minutes] s [seconds]");
-                embed.addField(anime.title.userPreferred, duration, false);
+                embed.addField(`${anime.title.userPreferred} ${anime.nextAiringEpisode.episode || ''}`, duration, false);
             }
         });
 
@@ -112,10 +112,10 @@ async function sendResponse(response, message) {
         }
 
         embed
-            .setTitle(anime.title.userPreferred)
+            .setTitle(`${anime.title.userPreferred} ${anime.nextAiringEpisode.episode || '-'}`)
             .setThumbnail(anime.coverImage.medium)
             .setTitle(anime.title.userPreferred, anime.siteUrl)
-            .addField('Next episode in', duration, false)
+            .addField(`Next episode ${anime.nextAiringEpisode.episode || '-'} in`, duration, false)
 
         if (anime.id in settings) { 
             embed.setColor(settings[anime.id]);
