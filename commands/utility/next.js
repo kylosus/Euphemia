@@ -12,8 +12,7 @@ module.exports = class extends Command {
             group: 'utility',
             memberName: 'next',
             description: 'Returns remaining time for the next episode of given anime. Returns this day\'s schedule, if no anime is specified',
-            examples: [`${client.commandPrefix}next Anime Title`, `${client.commandPrefix}next`],
-            guildOnly: true
+            examples: [`${client.commandPrefix}next Anime Title`, `${client.commandPrefix}next`]
         });
     }
 
