@@ -1,14 +1,17 @@
 {
-  "name": "akise-cg",
+  "name": "euphemia",
   "version": "1.0.1",
-  "description": "",
-  "main": "index.js",
+  "description": "Yet another Discord bot with moderation and utility commands",
+  "main": "app.js",
   "scripts": {
     "start": "node app.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "discord bot",
+    "discord.js"
+  ],
+  "author": "jokersus#3343",
+  "license": "MIT",
   "dependencies": {
     "discord.js": "^11.3.2",
     "discord.js-commando": "^0.10.0",
