@@ -26,7 +26,7 @@ Yet another discord.js bot. And best girl.
         *  `;goodbye { embedJSOn }` Sets goodbye message to the specified JSON string. See `;help goodbye` for more info.
     * `;log`
         * `;log list` List all available guild events to log.
-        * `;log enable logEvent #chanel` Enable given log event in the specified channel.
+        * `;log enable logEvent #channel` Enable given log event in the specified channel.
         * `;log disable logEvent` Disable given log event.
 
 *   ##### General utility
@@ -34,6 +34,7 @@ Yet another discord.js bot. And best girl.
     * `;ping` Replies with average ping.
     * `;quote [messageID]` Quotes a message by given ID.
     * `;help <commandName>` Displays a list of available commands, or detailed information for a specified command.
+    * `;stats` Displays bot stats
 
 *   ##### Fun commands
     * `;jojo` Replies with a random JoJo/Duwang quote.
