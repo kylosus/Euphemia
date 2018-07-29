@@ -2,7 +2,7 @@ const { Command } = require('discord.js-commando');
 const { RichEmbed } = require('discord.js');
 const settings = require('./next-settings.json');
 const moment = require('moment');
-const momentDurationFormatSetup = require("moment-duration-format");
+const momentDurationFormatSetup = require('moment-duration-format');
 const request = require('request-promise');
 
 module.exports = class extends Command {
@@ -88,7 +88,7 @@ async function sendResponse(response, message) {
     if (response.data.hasOwnProperty('Page')) {
         response.data.Page.media.forEach(anime => {
             if (anime.nextAiringEpisode && anime.nextAiringEpisode.timeUntilAiring < 82800) {
-                duration = moment.duration(anime.nextAiringEpisode.timeUntilAiring, 'seconds').format("D [days] H [hours] m [minutes] s [seconds]");
+                duration = moment.duration(anime.nextAiringEpisode.timeUntilAiring, 'seconds').format('D [days] H [hours] m [minutes] s [seconds]');
                 embed.addField(`${anime.title.userPreferred} ${anime.nextAiringEpisode? (anime.nextAiringEpisode.episode || '') : '?'}`, duration, false);
             }
         });
@@ -104,7 +104,7 @@ async function sendResponse(response, message) {
 
         if (anime.nextAiringEpisode) {
             duration = moment.duration(anime.nextAiringEpisode.timeUntilAiring, 'seconds');
-            duration = duration.format("D [days] H [hours] m [minutes] s [seconds]");   
+            duration = duration.format('D [days] H [hours] m [minutes] s [seconds]');   
         } else {
             duration = 'unknown';
             embed.setColor('ORANGE');
