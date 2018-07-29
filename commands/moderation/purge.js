@@ -32,7 +32,7 @@ module.exports = class extends Command {
                     .setTitle('Please specify a smaller value')
                 );
            } else {
-                return message.channel.fetchMessages({ limit: ++amount }).then(messages => {
+                return message.channel.fetchMessages({ limit: (amount === 100)? amount : amount++ }).then(messages => {
                     let messageArray = messages.array();
                     messageArray.forEach(message => {
                         message.delete();
