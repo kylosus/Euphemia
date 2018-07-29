@@ -18,7 +18,7 @@ module.exports = class extends Command {
        if (args.length < 2) {
            return message.embed(new RichEmbed()
                 .setColor('RED')
-                .setTitle('PLease enter a message ID')
+                .setTitle('Please enter a message ID')
             );
        } else {
            message.channel.fetchMessage(args[1]).then(found => {
