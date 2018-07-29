@@ -20,7 +20,7 @@ module.exports = class extends Command {
         return message.embed(new RichEmbed()
             .setAuthor(`Euphemia version ${packageJSON.version} by ${packageJSON.author}`, 'https://cdn.discordapp.com/attachments/469111529384443904/473072301315981312/Euphie-sama.png', 'https://github.com/jokersus/Euphemia')
             .setColor([233, 91, 169])
-            .addField(`⌛ Uptime`, moment.duration(this.client.uptime, 'seconds').format('D [days] H [hours] m [minutes] s [seconds]'), false)
+            .addField(`⌛ Uptime`, moment.duration(this.client.uptime, 'milliseconds').format('D [days] H [hours] m [minutes] s [seconds]'), false)
             .addField(`📥 Received`, this.client.messageStats.received, true)
             .addField(`📤 Sent`, this.client.messageStats.sent, true)
             .addField(`📡 Commands`, this.client.messageStats.commands, true)
