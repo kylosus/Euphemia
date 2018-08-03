@@ -2,7 +2,7 @@ const botEventHandler = event => require(`./bot/${event}`);
 const serverEventHandler = event => require(`../events/${event}`);
 module.exports = client => {
     client.on('ready', () => botEventHandler('ready')(client));
-    client.on('error', error => botEventHandler('error')(error));
+    client.on('error', error => botEventHandler('error')(error, client));
     client.on('reconnecting', () => botEventHandler('reconnecting'));
     client.on('disconnect', event => botEventHandler('disconnect')(event));
     client.on('guildCreate', guild => botEventHandler('guildCreate')(guild));
@@ -16,5 +16,6 @@ module.exports = client => {
     client.on('userUpdate', (oldUser, newUser) => serverEventHandler('userUpdate')(oldUser, newUser));
     client.on('message', botEventHandler('message'));
     client.on('commandRun', () => client.messageStats.commands++);
+    client.on('messageReactionAdd', (reaction, user) => botEventHandler('messageReactionAdd')(reaction, user));
     // client.on('commandBlocked', (message, reason) => console.log(message.command._throttles.keys())); soontm
 };

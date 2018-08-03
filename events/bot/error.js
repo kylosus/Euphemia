@@ -1,8 +1,8 @@
 const { RichEmbed } = require('discord.js');
 
-module.exports = error => {
+module.exports = (error, client) => {
     console.log(error);
-    this.client.owners.forEach(owner => {
+    client.owners.forEach(owner => {
         owner.send(new RichEmbed()
             .setColor('RED')
             .setTitle(`A websocket error occured`)
