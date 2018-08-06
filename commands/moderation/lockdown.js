@@ -36,25 +36,7 @@ module.exports = class extends Command {
                     sendNotification(message, 'Enabled');
                 });
 			}
-       }
-    //    if (!entry || !entry.hasOwnProperty('automute')) {
-    //        entry.automute = true;
-    //        message.client.provider.set(message.guild, 'guildMemberAdd', entry).then(entry => {
-    //         sendNotification(message, 'Enabled');
-    //        });
-    //     } else if (entry.hasOwnProperty('automute')) {
-    //         if (entry.automute) {
-    //             entry.automute = false;
-    //             message.client.provider.set(message.guild, 'guildMemberAdd', entry).then(entry => {
-    //                 sendNotification(message, 'Disabled');
-    //             });
-    //         } else {
-    //             entry.automute = true;
-    //             message.client.provider.set(message.guild, 'guildMemberAdd', entry).then(entry => {
-    //                 sendNotification(message, 'Disabled');
-    //             });
-    //         }
-        // }
+		}
     }
 }
 
