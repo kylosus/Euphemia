@@ -15,24 +15,46 @@ module.exports = class extends Command {
 
    async run(message) {
        let entry = message.client.provider.get(message.guild, 'guildMemberAdd', false);
-       if (!entry || !entry.hasOwnProperty('automute')) {
-           entry.automute = true;
-           message.client.provider.set(message.guild, 'guildMemberAdd', entry).then(entry => {
-            sendNotification(message, 'Enabled');
-           });
-        } else if (entry.hasOwnProperty('automute')) {
-            if (entry.automute) {
-                entry.automute = false;
+       if (!entry) {
+			message.client.provider.set(message.guild, 'guildMemberAdd', {automute: true}).then(entry => {
+				sendNotification(message, 'Enabled')
+			});
+       } else if (!entry.hasOwnProperty('automute')) {
+			entry.automute = true;
+			message.client.provider.set(message.guild, 'guildMemberAdd', entry).then(entry => {
+        		sendNotification(message, 'Enabled');
+            });
+       } else {
+		   if (entry.automute) {
+				entry.automute = false;
+				message.client.provider.set(message.guild, 'guildMemberAdd', entry).then(entry => {
+					sendNotification(message, 'Disabled');
+				});
+			} else {
+				entry.automute = true;
                 message.client.provider.set(message.guild, 'guildMemberAdd', entry).then(entry => {
-                    sendNotification(message, 'Disabled');
+                    sendNotification(message, 'Enabled');
                 });
-            } else {
-                entry.automute = true;
-                message.client.provider.set(message.guild, 'guildMemberAdd', entry).then(entry => {
-                    sendNotification(message, 'Disabled');
-                });
-            }
-        }
+			}
+       }
+    //    if (!entry || !entry.hasOwnProperty('automute')) {
+    //        entry.automute = true;
+    //        message.client.provider.set(message.guild, 'guildMemberAdd', entry).then(entry => {
+    //         sendNotification(message, 'Enabled');
+    //        });
+    //     } else if (entry.hasOwnProperty('automute')) {
+    //         if (entry.automute) {
+    //             entry.automute = false;
+    //             message.client.provider.set(message.guild, 'guildMemberAdd', entry).then(entry => {
+    //                 sendNotification(message, 'Disabled');
+    //             });
+    //         } else {
+    //             entry.automute = true;
+    //             message.client.provider.set(message.guild, 'guildMemberAdd', entry).then(entry => {
+    //                 sendNotification(message, 'Disabled');
+    //             });
+    //         }
+        // }
     }
 }
 
