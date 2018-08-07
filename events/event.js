@@ -16,6 +16,5 @@ module.exports = client => {
     client.on('userUpdate', (oldUser, newUser) => serverEventHandler('userUpdate')(oldUser, newUser));
     client.on('message', botEventHandler('message'));
     client.on('commandRun', () => client.messageStats.commands++);
-    client.on('messageReactionAdd', (reaction, user) => botEventHandler('messageReactionAdd')(reaction, user));
     // client.on('commandBlocked', (message, reason) => console.log(message.command._throttles.keys())); soontm
 };
