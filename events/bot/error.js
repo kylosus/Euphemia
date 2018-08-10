@@ -5,10 +5,8 @@ module.exports = (error, client) => {
     client.owners.forEach(owner => {
         owner.send(new RichEmbed()
             .setColor('RED')
-            .setTitle(`A websocket error occured`)
-            .addField('Error message', error.message)
-            .addField('File name?', error.fileName || '-')
-            .addField('Line number?'. error.lineNumber || '-')
+            .setTitle('An error has occured')
+            .setDescription('Check console for details')
         );
     })
 }
