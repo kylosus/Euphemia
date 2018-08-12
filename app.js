@@ -4,7 +4,7 @@ const path = require('path');
 const sqlite = require('sqlite');
 const config = require('./config.json');
 const client = new Commando.Client({
-    owner: config.owner,
+    owner: process.env.BOT_OWNER || config.owner,
     commandPrefix: ';',
     disableEveryone: true,
     unknownCommandResponse: false
