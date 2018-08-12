@@ -19,11 +19,11 @@ Yet another discord.js bot. And best girl.
     *  `;welcome` New member greeting
         *  `;welcome` Disables welcome message for current guild, if enabled.
         *  `;welcome #channel` Enables welcome message in the specified channel
-        *  `;welcome { embedJSOn }` Sets goodbye message to the specified JSON string. See `;help welcome` for more info.
+        *  `;welcome { embedJSON }` Sets goodbye message to the specified JSON string. See `;help welcome` for more info.
     *  `;goodbye` Member leave message.
         *  `;goodbye` Disables goodbye message for current guild, if enabled.
         *  `;goodbye #channel` Enables goodbye message in the specified channel.
-        *  `;goodbye { embedJSOn }` Sets goodbye message to the specified JSON string. See `;help goodbye` for more info.
+        *  `;goodbye { embedJSON }` Sets goodbye message to the specified JSON string. See `;help goodbye` for more info.
     * `;log`
         * `;log list` List all available guild events to log.
         * `;log enable logEvent #channel` Enable given log event in the specified channel.
