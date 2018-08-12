@@ -38,6 +38,7 @@ Yet another discord.js bot. And best girl.
 
 *   ##### Fun commands
     * `;jojo` Replies with a random JoJo/Duwang quote.
+    * `;ment` Replies with a random MENT dialogue.
 
 *   ##### Owner-only commands
     * `;groups` Lists all command groups.
