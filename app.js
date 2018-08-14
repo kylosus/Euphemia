@@ -10,7 +10,7 @@ const client = new Commando.Client({
     unknownCommandResponse: false
 });
 require('./events/event.js')(client);
-
+client.defaultColor = config.defaultColor;
 
 client.setProvider(
     sqlite.open(path.join(__dirname, 'settings.sqlite3')).then(db => {
