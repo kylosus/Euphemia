@@ -7,7 +7,8 @@ module.exports = class extends Command {
             name: 'welcome',
             group: 'setup',
             memberName: 'welcome',
-            description: 'Sets up welcome message. Takes a JSON String as an argument.\n`%MENTION%` -> mentions user;\n`%NAME%` -> user name and discriminator without tagging;\n$MEMBER_COUNT$ -> guild member count;\n$AVATAR$ -> avatar URL',
+            description: 'Sets up welcome message.',
+            details: ' Takes a JSON String as an argument.\n`%MENTION%` -> mentions user;\n`%NAME%` -> user name and discriminator without tagging;\n$MEMBER_COUNT$ -> guild member count;\n$AVATAR$ -> avatar URL',
             examples: [`\`\`\`JSON\n${client.commandPrefix}welcome {\n\t"content":"%MENTION% has joined the server",\n\t"image":"http://image-link.com"\n}\`\`\``],
             userPermissions: ['MANAGE_GUILD']
         });
