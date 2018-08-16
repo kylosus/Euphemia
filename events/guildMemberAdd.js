@@ -1,12 +1,12 @@
 const { RichEmbed } = require('discord.js');
+const EuphemiaEmbed = require('../util/EuphemiaEmbed.js');
 const moment = require('moment');
 
 module.exports = member => {
     let entry = member.client.provider.get(member.guild, 'guildMemberAdd', false);
     if (entry.message && entry.channel) {
-        let message = entry.message;
-        message = JSON.parse(message.replace('$MENTION$', member.toString()).replace('$NAME$', member.user.tag).replace('$MEMBER_COUNT$', member.guild.memberCount).replace('$AVATAR$', member.user.avatarURL || member.guild.iconURL));
-        member.guild.channels.find(val => val.id === entry.channel).send(message.content, new RichEmbed(message));
+        let message = entry.message.replace('$MENTION$', member.toString()).replace('$NAME$', member.user.tag).replace('$MEMBER_COUNT$', member.guild.memberCount).replace('$AVATAR$', member.user.avatarURL || member.user.defaultAvatarURL);
+        member.guild.channels.find(val => val.id === entry.channel).send(message.content || '-', EuphemiaEmbed.build(message));
     }
     if (entry.log) {
         let channel = member.guild.channels.find(val => val.id === entry.log);
