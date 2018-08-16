@@ -1,5 +1,6 @@
 const { Command } = require('discord.js-commando');
 const { RichEmbed } = require('discord.js');
+const EuphemiaEmbed = require('../../util/EuphemiaEmbed.js')
 
 module.exports = class extends Command {
     constructor(client) {
@@ -30,7 +31,7 @@ module.exports = class extends Command {
                }
            })
         } else {
-            let argument = message.content.split(`${this.client.commandPrefix}welcome `)[1];
+            let argument = message.content.split(' ').splice(1).join(' ');
             if (argument.startsWith('<#')) {
                 let object = this.client.provider.get(message.guild, 'guildMemberAdd', false);
                 if (object) {
@@ -54,32 +55,48 @@ module.exports = class extends Command {
                 let entry = this.client.provider.get(message.guild, 'guildMemberAdd', false);
                 if (entry) {
                     entry.message = argument;
-                    let newEntry = this.client.provider.set(message.guild, 'guildMemberAdd', entry);
+                    this.client.provider.set(message.guild, 'guildMemberAdd', entry);
                     if (!entry.channel) {
                         message.embed(new RichEmbed()
                             .setColor('ORANGE')
                             .setTitle(`Warning: No Welcome channel set. Do ${this.client.commandPrefix}welcome #channel to set the channel`)
                         );
                     }
-                    return message.embed(new RichEmbed()
-                        .setColor('GREEN')
-                        .setTitle('Welcome message set')).then(message => {
-                            message.channel.send(JSON.parse(argument).content || '', new RichEmbed(JSON.parse(argument)));
-                        });
+                    const embed = EuphemiaEmbed.build(argument);
+                    if (embed) {
+                        message.channel.send(new RichEmbed()
+                            .setColor('GREEN')
+                            .setTitle('Welcome message set')
+                        );
+                        return message.channel.send(embed.content || '', embed);
+                    } else {
+                        return message.channel.send(new RichEmbed()
+                            .setColor('RED')
+                            .setTitle('Please check your input')
+                        );
+                    }
                 } else {
                     this.client.provider.set(message.guild, 'guildMemberAdd', {message: argument, channel: null}).then(entry => {
-                        return message.embed(new RichEmbed()
-                            .setColor('GREEN')
-                            .setTitle('Welcome message set')).then(message => {
-                                message.channel.send(JSON.parse(argument).content || '', new RichEmbed(JSON.parse(argument)));
-                            });
-                        })
-                    }
+                        const embed = EuphemiaEmbed.build(argument);
+                        if (embed) {
+                            message.channel.send(new RichEmbed()
+                                .setColor('GREEN')
+                                .setTitle('Welcome message set')
+                            );
+                            return message.channel.send(embed.content || '', embed);
+                        } else {
+                            return message.channel.send(new RichEmbed()
+                                .setColor('RED')
+                                .setTitle('Please check your input')
+                            );
+                        }
+                    });
+                }
             } else {
                 return message.embed(new RichEmbed()
                     .setColor('ORANGE')
                     .setTitle(`See ${this.client.commandPrefix}help welcome for help`)
-                )
+                );
             }
         }
     }

@@ -30,7 +30,7 @@ module.exports = class extends Command {
                }
            })
         } else {
-            let argument = message.content.split(`${this.client.commandPrefix}goodbye `)[1];
+            let argument = message.content.split(' ').splice(1).join(' ');
             if (argument.startsWith('<#')) {
                 let object = this.client.provider.get(message.guild, 'guildMemberRemove', false);
                 if (object) {
@@ -61,20 +61,36 @@ module.exports = class extends Command {
                             .setTitle(`Warning: No Goodbye channel set. Do ${this.client.commandPrefix}goodbye #channel to set the channel`)
                         );
                     }
-                    return message.embed(new RichEmbed()
-                        .setColor('GREEN')
-                        .setTitle('Goodbye message set')).then(message => {
-                            message.channel.send(JSON.parse(argument).content || '', new RichEmbed(JSON.parse(argument)));
-                        });
+                    const embed = EuphemiaEmbed.build(argument);
+                    if (embed) {
+                        message.channel.send(new RichEmbed()
+                            .setColor('GREEN')
+                            .setTitle('Welcome message set')
+                        );
+                        return message.channel.send(embed.content || '', embed);
+                    } else {
+                        return message.channel.send(new RichEmbed()
+                            .setColor('RED')
+                            .setTitle('Please check your input')
+                        );
+                    }
                 } else {
                     this.client.provider.set(message.guild, 'guildMemberRemove', {message: argument, channel: null}).then(entry => {
-                        return message.embed(new RichEmbed()
-                            .setColor('GREEN')
-                            .setTitle('Goodbye message set')).then(message => {
-                                message.channel.send(JSON.parse(argument).content || '', new RichEmbed(JSON.parse(argument)));
-                            });
-                        })
-                    }
+                        const embed = EuphemiaEmbed.build(argument);
+                        if (embed) {
+                            message.channel.send(new RichEmbed()
+                                .setColor('GREEN')
+                                .setTitle('Welcome message set')
+                            );
+                            return message.channel.send(embed.content || '', embed);
+                        } else {
+                            return message.channel.send(new RichEmbed()
+                                .setColor('RED')
+                                .setTitle('Please check your input')
+                            );
+                        }
+                    })
+                }
             } else {
                 return message.embed(new RichEmbed()
                     .setColor('ORANGE')
