@@ -25,7 +25,8 @@ client.registry
         ['moderation', 'Moderation commands'],
         ['setup', 'Server utility setup commands'],
         ['utility', 'Utility commands'],
-        ['fun', 'Fun commands']
+        ['fun', 'Fun commands'],
+        ['owner', 'Owner only commands']
     ])
     .registerDefaultGroups()
     .registerDefaultCommands({
