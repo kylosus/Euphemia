@@ -24,7 +24,8 @@ module.exports = class extends Command {
             if (args[1].startsWith('{')) {
                 const json = args.splice(1).join(' ');
                 if (EuphemiaEmbed.validate(json)) {
-                    message.channel.send(EuphemiaEmbed.build(json));
+                    const embed = EuphemiaEmbed.build(json);
+                    return message.channel.send([embed.content], embed);
                 }
             } else {
                 return message.channel.send(args.splice(1).join(' '));
