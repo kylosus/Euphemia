@@ -8,15 +8,15 @@ module.exports = class extends Command {
             group: 'setup',
             memberName: 'welcome',
             description: 'Sets up welcome message.',
-            details: ' Takes a JSON String as an argument.\n`%MENTION%` -> mentions user;\n`%NAME%` -> user name and discriminator without tagging;\n$MEMBER_COUNT$ -> guild member count;\n$AVATAR$ -> avatar URL',
-            examples: [`\`\`\`JSON\n${client.commandPrefix}welcome {\n\t"content":"%MENTION% has joined the server",\n\t"image":"http://image-link.com"\n}\`\`\``],
+            details: 'Takes a JSON String as an argument.\n`%MENTION%` -> mentions user;\n`%NAME%` -> user name and discriminator without tagging;\n$MEMBER_COUNT$ -> guild member count;\n$AVATAR$ -> avatar URL',
+            examples: [`JSON\n${client.commandPrefix}welcome {\n\t"content":"%MENTION% has joined the server",\n\t"image":"http://image-link.com"\n}`],
             userPermissions: ['MANAGE_GUILD']
         });
     }
 
    async run(message) {
        if (!message.content.includes(' ')) {
-           message.client.provider.remove(message.guild, 'guildMemberAdd').then(oldValue => {
+           this.client.provider.remove(message.guild, 'guildMemberAdd').then(oldValue => {
                if (oldValue) {
                     return message.embed(new RichEmbed()
                         .setColor('RED')
@@ -30,35 +30,35 @@ module.exports = class extends Command {
                }
            })
         } else {
-            let argument = message.content.split(`${message.client.commandPrefix}welcome `)[1];
+            let argument = message.content.split(`${this.client.commandPrefix}welcome `)[1];
             if (argument.startsWith('<#')) {
-                let object = message.client.provider.get(message.guild, 'guildMemberAdd', false);
+                let object = this.client.provider.get(message.guild, 'guildMemberAdd', false);
                 if (object) {
                     object.channel = message.mentions.channels.array()[0].id;
-                    message.client.provider.set(message.guild, 'guildMemberAdd', object);
+                    this.client.provider.set(message.guild, 'guildMemberAdd', object);
                     return message.embed(new RichEmbed()
                         .setColor('GREEN')
                         .setTitle(`Welcome channel set to #${message.guild.channels.find(val => val.id === object.channel).name}`));
                 } else {
-                    message.client.provider.set(message.guild, 'guildMemberAdd', { message: null, channel: message.mentions.channels.array()[0].id }).then(entry =>{
+                    this.client.provider.set(message.guild, 'guildMemberAdd', { message: null, channel: message.mentions.channels.array()[0].id }).then(entry =>{
                         message.embed(new RichEmbed()
                             .setColor('GREEN')
                             .setTitle(`Welcome channel set to #${message.mentions.channels.array()[0].name}`));
                         return message.embed(new RichEmbed()
                             .setColor('ORANGE')
-                            .setTitle(`Warning: No Welcome message set. Do ${message.client.commandPrefix}welcome {JSON} to set the channel`)
+                            .setTitle(`Warning: No Welcome message set. Do ${this.client.commandPrefix}welcome {JSON} to set the channel`)
                         );
                     });
                 }
             } else if (argument.startsWith('{')) {
-                let entry = message.client.provider.get(message.guild, 'guildMemberAdd', false);
+                let entry = this.client.provider.get(message.guild, 'guildMemberAdd', false);
                 if (entry) {
                     entry.message = argument;
-                    let newEntry = message.client.provider.set(message.guild, 'guildMemberAdd', entry);
+                    let newEntry = this.client.provider.set(message.guild, 'guildMemberAdd', entry);
                     if (!entry.channel) {
                         message.embed(new RichEmbed()
                             .setColor('ORANGE')
-                            .setTitle(`Warning: No Welcome channel set. Do ${message.client.commandPrefix}welcome #channel to set the channel`)
+                            .setTitle(`Warning: No Welcome channel set. Do ${this.client.commandPrefix}welcome #channel to set the channel`)
                         );
                     }
                     return message.embed(new RichEmbed()
@@ -67,7 +67,7 @@ module.exports = class extends Command {
                             message.channel.send(JSON.parse(argument).content || '', new RichEmbed(JSON.parse(argument)));
                         });
                 } else {
-                    message.client.provider.set(message.guild, 'guildMemberAdd', {message: argument, channel: null}).then(entry => {
+                    this.client.provider.set(message.guild, 'guildMemberAdd', {message: argument, channel: null}).then(entry => {
                         return message.embed(new RichEmbed()
                             .setColor('GREEN')
                             .setTitle('Welcome message set')).then(message => {
@@ -78,7 +78,7 @@ module.exports = class extends Command {
             } else {
                 return message.embed(new RichEmbed()
                     .setColor('ORANGE')
-                    .setTitle(`See ${message.client.commandPrefix}help welcome for help`)
+                    .setTitle(`See ${this.client.commandPrefix}help welcome for help`)
                 )
             }
         }
