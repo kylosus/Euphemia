@@ -22,8 +22,11 @@ module.exports = class extends Command {
             return;
         } else {
             if (args[1].startsWith('{')) {
-                const embed = EuphemiaEmbed.build(args.splice(1).join(' '));
-                return message.channel.send([embed.content], embed);
+                const json = args.splice(1).join(' ');
+                if (EuphemiaEmbed.validate(json)) {
+                    const embed = EuphemiaEmbed.build(json);
+                    return message.channel.send([embed.content], embed);
+                }
             } else {
                 return message.channel.send(args.splice(1).join(' '));
             }
