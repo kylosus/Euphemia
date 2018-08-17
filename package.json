@@ -1,6 +1,6 @@
 {
   "name": "euphemia",
-  "version": "1.1.2",
+  "version": "2.0.0",
   "description": "Yet another Discord bot with moderation and utility commands",
   "main": "app.js",
   "scripts": {
@@ -10,6 +10,10 @@
     "discord bot",
     "discord.js"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jokersus/Euphemia"
+  },
   "author": "jokersus#3343",
   "license": "MIT",
   "dependencies": {
