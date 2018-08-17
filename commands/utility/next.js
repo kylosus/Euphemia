@@ -86,12 +86,13 @@ async function sendResponse(response, message) {
     let duration;
     let embed = new RichEmbed().setTitle('Today\'s schedule').setURL('http://anichart.net').setColor('GREEN');
     if (response.data.hasOwnProperty('Page')) {
-        response.data.Page.media.forEach(anime => {
-            if (anime.nextAiringEpisode && anime.nextAiringEpisode.timeUntilAiring < 82800) {
+        response.data.Page.media
+            .filter(a => a.nextAiringEpisode && a.nextAiringEpisode.timeUntilAiring < 82800)
+            .sort((a, b) => a.nextAiringEpisode.timeUntilAiring - b.nextAiringEpisode.timeUntilAiring)
+            .forEach(anime => {
                 duration = moment.duration(anime.nextAiringEpisode.timeUntilAiring, 'seconds').format('D [days] H [hours] m [minutes] s [seconds]');
                 embed.addField(`${anime.title.userPreferred} ${anime.nextAiringEpisode? (anime.nextAiringEpisode.episode || '') : '?'}`, duration, false);
-            }
-        });
+            });
 
         if (embed.fields.length < 1) {
             return sendError(message, 'No anime scheduled for today.');
@@ -114,6 +115,7 @@ async function sendResponse(response, message) {
             .setTitle(`${anime.title.userPreferred} ${anime.nextAiringEpisode? (anime.nextAiringEpisode.episode || '-') : '?'}`)
             .setThumbnail(anime.coverImage.medium)
             .setTitle(anime.title.userPreferred, anime.siteUrl)
+            .setURL(anime.siteUrl)
             .addField(`Next episode ${anime.nextAiringEpisode? (anime.nextAiringEpisode.episode || '-') : '?'} in`, duration, false)
 
         if (anime.id in settings) { 
