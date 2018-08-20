@@ -9,7 +9,10 @@ fs.readdir(directoryPath, function (err, files) {
     if (err) {
         return console.log('Unable to scan directory: ' + err);
     }
-    files.forEach(function (file) {
+    files.forEach(file => {
+        if (file === 'event.js' || file === 'bot') {
+            return;
+        }
         eventModules.push(file.replace(/\.[^/.]+$/, ""));
     });
 });
