@@ -2,7 +2,7 @@ const botEventHandler = event => require(`./bot/${event}`);
 const serverEventHandler = event => require(`../events/${event}`);
 module.exports = client => {
     client.on('ready', () => botEventHandler('ready')(client));
-    client.on('error', error => botEventHandler('error')(error, client));
+    client.on('error', error => botEventHandler('error')(error));
     client.on('reconnecting', () => botEventHandler('reconnecting'));
     client.on('disconnect', event => botEventHandler('disconnect')(event));
     client.on('guildCreate', guild => botEventHandler('guildCreate')(guild));
