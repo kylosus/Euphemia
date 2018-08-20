@@ -15,7 +15,7 @@ module.exports = class extends Command {
     };
 
     async run(message) {
-        if (message.mentions.members) {
+        if (message.mentions.members.length > 0) {
             let members = message.mentions.members.array();
             members.forEach(member => {
                 if (member.bannable) {
