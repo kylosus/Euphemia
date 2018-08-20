@@ -6,7 +6,7 @@ exports.build = input => {
         return false;
     } else {
         const embed = new RichEmbed().setColor(config.defaultColor);
-        const json = JSON.parse(input);
+        const json = typeof input === 'string'? JSON.parse(input) : typeof input === 'object'? input : null;
         embed.content = null;
 
         if (json.hasOwnProperty('author')) {
