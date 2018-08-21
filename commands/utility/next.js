@@ -11,7 +11,8 @@ module.exports = class extends Command {
             name: 'next',
             group: 'utility',
             memberName: 'next',
-            description: 'Returns remaining time for the next episode of given anime. Returns this day\'s schedule, if no anime is specified',
+            description: 'Returns remaining time for the next episode of given anime.',
+            details: 'Returns remaining time for the next episode of given anime. Returns this day\'s schedule, if no anime is specified',
             examples: [`${client.commandPrefix}next Anime Title`, `${client.commandPrefix}next`]
         });
     }
@@ -52,7 +53,7 @@ module.exports = class extends Command {
                 sendResponse(response, message);
             }).catch(() => {
                 sendError(message, 'Not found');
-            })
+            });
         });
     }
 }
