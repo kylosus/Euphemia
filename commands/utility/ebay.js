@@ -7,17 +7,18 @@ const ebayIcon = 'https://cdn.discordapp.com/attachments/352865308203024395/4800
 const Ebay = require("ebay-node-api");
 
 const ebay = config.ebay_client_id? new Ebay({
-    clientID: config.ebay_client_id,
-    limit: config.ebay_search_limit? config.ebay_search_limit : 6
+    clientID: process.env.EBAY_CLIENT_ID || config.ebay_client_id,
+    limit: process.env.EBAY_SEARCH_LIMIT || config.ebay_search_limit? config.ebay_search_limit : 6
 }) : null;
 
 module.exports = class extends Command {
     constructor(client) {
         super(client, {
-            name: 'ebay',
+            name: ebay? 'ebay' : '~~ebay~~',
             group: 'utility',
             memberName: 'ebay',
-            description: config.ebay_client_id? 'Searches for products on eBay' : '~~Searches for products on eBay (unavailable)~~'
+            description: config.ebay_client_id? 'Searches for products on eBay' : '~~Searches for products on eBay (unavailable)~~',
+            ownerOnly: !ebay
         });
     }
 
@@ -26,6 +27,7 @@ module.exports = class extends Command {
         if (!ebay) {
             return;
         }
+
         let args = message.content.split(' ');
         if (args.length === 1) {
             return message.channel.send(new RichEmbed()
