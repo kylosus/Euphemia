@@ -19,7 +19,7 @@ module.exports = class extends Command {
 
    async run(message) {
        let query, variables = {};
-       let args = message.content.split(' ');
+       const args = message.content.split(' ');
        if (args.length < 2) {
             query = `{
                 Page(perPage: 100) {
@@ -59,7 +59,7 @@ module.exports = class extends Command {
 }
 
 async function execute(query, variables) {
-    var options = {
+    const options = {
         method: 'POST',
         uri: 'https://graphql.anilist.co',
         body: {
@@ -72,20 +72,16 @@ async function execute(query, variables) {
     return request(options);
 }
 
-function hasError(response) {
-    return response.hasOwnProperty('errors');
-}
-
 async function sendError(message, error) {
-    return message.embed(new RichEmbed()
+    return message.channel.send(new RichEmbed()
         .setColor('RED')
         .addField('Error', error)
-    )
+    );
 } 
 
 async function sendResponse(response, message) {
     let duration;
-    let embed = new RichEmbed().setTitle('Today\'s schedule').setURL('http://anichart.net').setColor('GREEN');
+    const embed = new RichEmbed().setTitle('Today\'s schedule').setURL('http://anichart.net').setColor('GREEN');
     if (response.data.hasOwnProperty('Page')) {
         response.data.Page.media
             .filter(a => a.nextAiringEpisode && a.nextAiringEpisode.timeUntilAiring < 82800)
@@ -99,10 +95,10 @@ async function sendResponse(response, message) {
             return sendError(message, 'No anime scheduled for today.');
         }
 
-        return message.embed(embed);
+        return message.channel.send(embed);
 
     } else {
-        let anime = response.data.Media;
+        const anime = response.data.Media;
 
         if (anime.nextAiringEpisode) {
             duration = moment.duration(anime.nextAiringEpisode.timeUntilAiring, 'seconds');
@@ -123,6 +119,6 @@ async function sendResponse(response, message) {
             embed.setColor(settings[anime.id]);
         }
 
-        return message.embed(embed);
+        return message.channel.send(embed);
     }
 }
