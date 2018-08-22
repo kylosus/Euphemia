@@ -17,7 +17,6 @@ module.exports = class extends Command {
    async run(message) {
        const args = message.content.split(' ');
        if (args.length === 1) {
-           console.log(JSON.stringify(changelog[0]));
            return message.channel.send(build(changelog[0]));
        } else if (args[1] === 'list') {
             return message.channel.send(new RichEmbed()
