@@ -22,11 +22,12 @@ client.setProvider(
 client.registry
     .registerDefaultTypes()
     .registerGroups([
-        ['moderation', 'Moderation commands'],
-        ['setup', 'Server utility setup commands'],
-        ['utility', 'Utility commands'],
+        ['bot', 'Pulic bot commands'],
         ['fun', 'Fun commands'],
-        ['owner', 'Owner only commands']
+        ['moderation', 'Moderation commands'],
+        ['owner', 'Owner only commands'],
+        ['setup', 'Server utility setup commands'],
+        ['utility', 'Utility commands']
     ])
     .registerDefaultGroups()
     .registerDefaultCommands({
