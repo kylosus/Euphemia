@@ -9,7 +9,7 @@ module.exports = class extends Command {
     constructor(client) {
         super(client, {
             name: 'stats',
-            group: 'utility',
+            group: 'bot',
             memberName: 'stats',
             description: 'Returns bot stats.'
         });
