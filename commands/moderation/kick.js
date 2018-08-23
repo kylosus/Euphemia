@@ -15,8 +15,8 @@ module.exports = class extends Command {
     };
 
     async run(message) {
-        const members = message.mentions.members.array();
-        if (members.length > 0) {
+        if (message.mentions.members.length > 0) {
+            let members = message.mentions.members.array();
             members.forEach(member => {
                 if (member.bannable) {
                     member.kick().then(() => {
@@ -29,6 +29,7 @@ module.exports = class extends Command {
                         .setColor('ORANGE')
                         .setTitle(`User ${member.user.tag} was not kicked. Reason: unknown`)
                     )});
+                ;
                 } else {
                     message.embed(new RichEmbed()
                         .setColor('ORANGE')
