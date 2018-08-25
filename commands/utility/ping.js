@@ -13,7 +13,7 @@ module.exports = class extends Command {
     }
 
    async run(message) {
-        return message.embed(new RichEmbed()
+        return message.channel.send(new RichEmbed()
             .setDescription(`⏳ ${moment().diff(moment(message.createdAt), 'milliseconds')}`)
             .setColor(message.member? message.member.displayColor : global.BOT_DEFAULT_COLOR));
     }

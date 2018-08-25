@@ -15,27 +15,23 @@ module.exports = class extends Command {
     }
 
    async run(message) {
-       let args = message.content.split(' ');
-       let everyone = message.guild.roles.find(val => val.position === 0);
-        if (args[1] === 'on') {
-            message.channel.overwritePermissions(everyone, { 'SEND_MESSAGES': false }).then(channel => {
-                return message.embed(new RichEmbed()
-                    .setColor('RED')
-                    .setTitle('Channel locked down') 
-                );
-            });
-        } else if (args[1] === 'off') {
-            message.channel.overwritePermissions(everyone, { 'SEND_MESSAGES': true }).then(channel => {
-                return message.embed(new RichEmbed()
+       const self = message.member.highestRole;
+       const everyone = message.guild.roles.find(val => val.position === 0);
+       if (message.content.split(' ')[1] === 'off') {
+           message.channel.overwritePermissions(everyone, { 'SEND_MESSAGES': true }).then(channel => {
+                return message.channel.send(new RichEmbed()
                     .setColor('GREEN')
-                    .setTitle('Channel locked') 
+                    .setTitle('Channel unlocked')
                 );
             });
         } else {
-            return message.embed(new RichEmbed()
-                .setColor('ORANGE')
-                .setTitle(`See ${message.client.commandPrefix}help stop`)
-            );
+            message.channel.overwritePermissions(everyone, message.author, { 'SEND_MESSAGES': false }, 'Euphemia stop command').then(channel => {
+                channel.overwritePermissions(message.member.roles.filter(role => role.hasPermission('MANAGE_GUILD')).first() || message.author, { 'SEND_MESSAGES': true }, 'Euphemia stop command');
+                return channel.send(new RichEmbed()
+                    .setColor('RED')
+                    .setTitle('Channel locked down')
+                );
+            });
         }
     }
 };

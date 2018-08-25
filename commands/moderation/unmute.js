@@ -16,22 +16,21 @@ module.exports = class extends Command {
     }
 
    async run(message) {
-       let mutedRole = message.client.provider.get(message.guild, 'mutedRole', false);
-       if (!mutedRole) {
+       const entry = message.client.provider.get(message.guild, 'mutedRole', false);
+       if (!entry) {
            return roleNotFound(message);
         } else {
-            mutedRole = message.guild.roles.find(val => val.id === mutedRole);
+            const mutedRole = message.guild.roles.find(val => val.id === entry);
             if (!mutedRole) {
                 roleNotFound(message);
             } else {
-                if (!message.mentions.members) {
-                    return message.embed(new RichEmbed()
+                if (message.mentions.members.size) {
+                    return message.channel.send(new RichEmbed()
                         .setColor('ORANGE')
                         .setTitle('Please mention members to unmute')
                     );
                 } else {
-                    let mentions = message.mentions.members.array();
-                    mentions.forEach(member => {
+                    message.mentions.members.tap(member => {
                         if (!member.roles.has(mutedRole.id)) {
                             return message.embed(new RichEmbed()
                                 .setColor('ORANGE')
@@ -39,12 +38,12 @@ module.exports = class extends Command {
                             )
                         } else {
                             member.removeRole(mutedRole).then(member => {
-                                message.embed(new RichEmbed()
+                                message.channel.send(new RichEmbed()
                                     .setColor('GREEN')
                                     .setDescription(`**Unmuted ${member.toString()}**`)
                                 );
                                 guildMemberUnmuted(member);
-                            })
+                            });
                         }
                     })
                 }
@@ -54,8 +53,8 @@ module.exports = class extends Command {
 };
 
 function roleNotFound(message) {
-    return message.embed(new RichEmbed()
+    return message.channel.send(new RichEmbed()
         .setColor('ORANGE')
-        .addField('Muted role not found', 'Members cannot be muted if (un)muted role is missing', false)
+        .addField('Muted role not found', 'Members cannot be muted if muted role is missing', false)
     );
-}
+};

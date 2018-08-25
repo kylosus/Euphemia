@@ -16,7 +16,7 @@ module.exports = class extends Command {
     }
 
    async run(message) {
-       let args = message.content.split(' ');
+       const args = message.content.split(' ');
        if (args.length === 1) {
            return message.channel.send(new RichEmbed()
                 .setTitle('Please enter search terms')
@@ -24,7 +24,7 @@ module.exports = class extends Command {
             );
        } else {
             ud.term(args.splice(1).join(' ')).then((result) => {
-                EuphemiaPaginatedMessage(result.entries.map(entry => 
+                EuphemiaPaginatedMessage(result.entries.map(entry =>
                     new RichEmbed()
                         .setColor('GREEN')
                         .setAuthor(entry.word, udIcon)

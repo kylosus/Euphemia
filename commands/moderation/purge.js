@@ -15,17 +15,16 @@ module.exports = class extends Command {
     }
 
    async run(message) {
-       let args = message.content.split(' ');
-       if (args.length < 2) {
+       const args = message.content.split(' ');
+       if (args.length == 1) {
            message.channel.fetchMessages({ limit: 2 }).then(messages => {
-               let messageArray = messages.array();
-               messageArray.forEach(message => {
+               messages.tap(message => {
                    message.delete();
                });
             });
             return;
        } else {
-           let amount = parseInt(args[1]);
+           const amount = parseInt(args[1]);
            if (amount > 100) {
                return message.embed(new RichEmbed()
                     .setColor('RED')
@@ -33,8 +32,7 @@ module.exports = class extends Command {
                 );
            } else {
                 return message.channel.fetchMessages({ limit: (amount === 100)? amount : amount++ }).then(messages => {
-                    let messageArray = messages.array();
-                    messageArray.forEach(message => {
+                    messages.tap(message => {
                         message.delete();
                     });
                 });

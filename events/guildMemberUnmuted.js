@@ -1,7 +1,7 @@
 const { RichEmbed } = require('discord.js');
 
 module.exports = member => {
-    let entry = member.client.provider.get(member.guild, 'guildMemberUnmuted', false)
+    const entry = member.client.provider.get(member.guild, 'guildMemberUnmuted', false)
     if (entry && entry.log) {
         return member.guild.channels.find(val => val.id === entry.log).send(new RichEmbed()
             .setColor('GOLD')

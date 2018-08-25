@@ -14,7 +14,7 @@ module.exports = class extends Command {
     }
 
    async run(message) {
-       let entry = message.client.provider.get(message.guild, 'guildMemberAdd', false);
+       const entry = message.client.provider.get(message.guild, 'guildMemberAdd', false);
        if (!entry) {
 			message.client.provider.set(message.guild, 'guildMemberAdd', {automute: true}).then(entry => {
 				sendNotification(message, 'Enabled')
@@ -38,12 +38,11 @@ module.exports = class extends Command {
 			}
 		}
     }
-}
+};
 
 function sendNotification(message, text) {
     return message.embed(new RichEmbed()
         .setColor('DARK_RED')
-        .setTitle(`${text} automute on new member join`)
+        .setTitle(`${text} automute on new member join.`)
     );
-}
-
+};

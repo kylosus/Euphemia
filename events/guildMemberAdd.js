@@ -12,7 +12,7 @@ module.exports = member => {
         }
     }
     if (entry.log) {
-        let channel = member.guild.channels.find(val => val.id === entry.log);
+        const channel = member.guild.channels.find(val => val.id === entry.log);
         channel.send(new RichEmbed()
             .setColor('BLUE')
             .setTitle(`✅ User joined`)
@@ -23,7 +23,7 @@ module.exports = member => {
             .addField('Joined Discord', moment(member.user.createdAt).format('DD.MM.YYYY HH.MM.SS'), false)
             .setTimestamp(member.joinedAt)
         );
-        let accountAge = moment().diff(moment(member.user.createdAt), 'days');
+        const accountAge = moment().diff(moment(member.user.createdAt), 'days');
         if (accountAge <= 29) {
             channel.send(new RichEmbed()
                 .setColor('DARK_RED')

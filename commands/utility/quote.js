@@ -14,30 +14,30 @@ module.exports = class extends Command {
     }
 
    async run(message) {
-       let args = message.content.split(' ');
+       const args = message.content.split(' ');
        if (args.length < 2) {
-           return message.embed(new RichEmbed()
+           return message.channel.send(new RichEmbed()
                 .setColor('RED')
                 .setTitle('Please enter a message ID')
             );
        } else {
            message.channel.fetchMessage(args[1]).then(found => {
-               let embed = new RichEmbed()                   
-                                    .setColor(found.member.displayColor)
-                                    .setAuthor(found.author.username, found.author.avatarURL, null)
-                                    .setDescription(found.content)
-                                    .setFooter(`In #${found.channel.name}`)
-                                    .setTimestamp(found.createdAt);
+               const embed = new RichEmbed()
+                    .setColor(found.member.displayColor)
+                    .setAuthor(found.author.username, found.author.avatarURL, null)
+                    .setDescription(found.content)
+                    .setFooter(`In #${found.channel.name}`)
+                    .setTimestamp(found.createdAt);
                 if (found.embeds.length >= 1) {
                     if (found.embeds[0].image) {
                         embed.setImage(found.embeds[0].image.url);
                     }
                 }
 
-                let attachments = found.attachments.array();
-                if (attachments.length > 1) {
-                    let attachmentFieldBody = [];
-                    attachments.forEach(attachment => {
+                const attachments = found.attachments.array();
+                if (found.attachments.size > 1) {
+                    const attachmentFieldBody = [];
+                    found.attachments.tap(attachment => {
                         attachmentFieldBody.push(attachment.url);
                     });
                     embed.addField('Attachments', attachmentFieldBody.join('\n'));
@@ -48,7 +48,7 @@ module.exports = class extends Command {
                 }
                 message.embed(embed);
            }).catch(() => {
-               return message.embed(new RichEmbed()
+               return message.found.attachments(new RichEmbed()
                     .setColor('RED')
                     .setTitle('Message not found')
                 );

@@ -17,7 +17,7 @@ module.exports = class extends Command {
     };
 
     async run(message) {
-        let args = message.content.split(' ');
+        const args = message.content.split(' ');
         if (args.length === 1) {
             return;
         } else {

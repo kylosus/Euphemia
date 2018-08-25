@@ -15,33 +15,30 @@ module.exports = class extends Command {
     };
 
     async run(message) {
-        if (message.mentions.members.length > 0) {
-            let members = message.mentions.members.array();
-            members.forEach(member => {
+        if (message.mentions.members.size) {
+            message.mentions.members.tap(member => {
                 if (member.bannable) {
                     member.kick().then(() => {
                         message.embed(new RichEmbed()
                             .setColor('GREEN')
-                            .setTitle(`User ${member.user.tag} has been kicked by ${message.author.tag}`)
+                            .setTitle(`User ${member.user.tag} has been kicked by ${message.author.tag}.`)
                         );
                     }).catch(() => {
-                        message.embed(new RichEmbed()
-                        .setColor('ORANGE')
-                        .setTitle(`User ${member.user.tag} was not kicked. Reason: unknown`)
+                        message.channel.send(new RichEmbed()
+                            .setColor('ORANGE')
+                            .setTitle(`User ${member.user.tag} was not kicked. Reason: unknown.`)
                     )});
-                ;
                 } else {
-                    message.embed(new RichEmbed()
+                    return message.channel.send(new RichEmbed()
                         .setColor('ORANGE')
-                        .setTitle(`User ${member.user.tag} was not kicked. Reason: bot cannot kicked that member`)
-                    )
+                        .setTitle(`User ${member.user.tag} was not kicked. Reason: bot cannot kicked that member.`)
+                    );
                 }
             });
-            return;
         } else {
-            return message.embed(new RichEmbed()
+            return message.channel.send(new RichEmbed()
                 .setColor('RED')
-                .setTitle(`Please mention users to kick. See ${message.client.commandPrefix}`)
+                .setTitle(`Please mention users to kick.`)
             );
         }
     }

@@ -31,16 +31,16 @@ module.exports = class extends Command {
     };
 
     async run(message) {
-        let args = message.content.split(' ');
+        const args = message.content.split(' ');
         if (args.length < 2) {
-            return message.embed(new RichEmbed()
+            return message.channel.send(new RichEmbed()
                 .setColor('ORANGE')
                 .setTitle(`See ${message.client.commandPrefix}help log for help`)
             );
         } else {
             if (args[1] === 'list') {
                 let entry;
-                let body = eventModules.map(element => {
+                const body = eventModules.map(element => {
                     entry = message.client.provider.get(message.guild, element, false);
                     if (entry.log && entry.log !== undefined) {
                         entry = `<#${entry.log}>`;
@@ -48,24 +48,24 @@ module.exports = class extends Command {
                         entry = '*';
                     }
                     return `**${element}** ${entry}`
-                })
-                return message.embed(new RichEmbed()
+                });
+                return message.channel.send(new RichEmbed()
                     .setColor('GREEN')
                     .setTitle('Available log events')
                     .setDescription(body.join('\n'))
                 );
 
-             } else if (args[1] === 'enable') {
+            } else if (args[1] === 'enable') {
                 if (!checkArgs(message, args)) {
                     return;
                 }
-                let channel = message.mentions.channels.array()[0].id;
-                let entry = message.client.provider.get(message.guild, args[2], false)
+                const channel = message.mentions.channels.first().id;
+                const entry = message.client.provider.get(message.guild, args[2], false)
                 if (entry) {
                     entry.log = channel;
                 }
                 message.client.provider.set(message.guild, args[2], entry || {log: channel});
-                return message.embed(new RichEmbed()
+                return message.channel.send(new RichEmbed()
                     .setColor('GREEN')
                     .setDescription(`Enabled logging for event ${args[2]} <#${channel}>`)
                 );
@@ -74,13 +74,13 @@ module.exports = class extends Command {
                 if (!checkArgs(message, args)) {
                     return;
                 }
-                let entry = message.client.provider.get(message.guild, args[2], false)
+                const entry = message.client.provider.get(message.guild, args[2], false)
                 if (!entry) {
                     return sendInvalidEntryWarning(message, `Event ${args[2]} is not logged`);
                 }
                 entry.log = null;
                 message.client.provider.set(message.guild, args[2], entry);
-                return message.embed(new RichEmbed()
+                return message.channel.send(new RichEmbed()
                     .setColor('GREEN')
                     .setTitle(`Disabled logging for event ${args[2]}`)
                 );
@@ -92,7 +92,7 @@ module.exports = class extends Command {
 }
 
 function checkArgs(message, args) {
-    if (!(message.mentions.channels.array().length > 0) && args[1] === 'enable') {   
+    if (!(message.mentions.channels.size > 0) && args[1] === 'enable') {
         sendInvalidEntryWarning(message, `Please enter a channel. See ${message.client.commandPrefix}help log for help`);
         return false;
     }
@@ -101,11 +101,11 @@ function checkArgs(message, args) {
         return false;
     }
     return true;
-}
+};
 
 function sendInvalidEntryWarning(message, warning) {
-    return message.embed(new RichEmbed()
+    return message.channel.send(new RichEmbed()
         .setColor('ORANGE')
         .setTitle(warning)
     );
-}
+};

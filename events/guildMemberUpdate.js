@@ -1,10 +1,10 @@
 const { RichEmbed } = require('discord.js');
 
 module.exports = (oldMember, newMember, Client) => {
-    let entry = Client.provider.get(newMember.guild, 'guildMemberUpdate', false)
+    const entry = Client.provider.get(newMember.guild, 'guildMemberUpdate', false);
     if (entry && entry.log) {
         if (oldMember.nickname !== newMember.nickname) {
-            let body = newMember.nickname? `**${newMember.user.tag}** has changed their nickname` + (oldMember.nickname? ` from **${oldMember.nickname}**` : ``) + ` to **${newMember.nickname}**`
+            const body = newMember.nickname? `**${newMember.user.tag}** has changed their nickname` + (oldMember.nickname? ` from **${oldMember.nickname}**` : ``) + ` to **${newMember.nickname}**`
                 : `**${newMember.user.tag}** has removed their nickname, **${oldMember.nickname}**`;
             newMember.guild.channels.find(val => val.id === entry.log).send(new RichEmbed()
                 .setColor('GREEN')
@@ -14,6 +14,7 @@ module.exports = (oldMember, newMember, Client) => {
                 .setTimestamp((new Date()).toISOString())
             );
         }
+
         if (oldMember.user.tag !== newMember.user.tag) {
             newMember.guild.channels.find(val => val.id === entry.log).end(new RichEmbed()
                 .setColor('GREEN')
@@ -24,4 +25,4 @@ module.exports = (oldMember, newMember, Client) => {
             );
         }
     }
-  }
+};

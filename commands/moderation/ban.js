@@ -15,33 +15,30 @@ module.exports = class extends Command {
     };
 
     async run(message) {
-        if (message.mentions.members.length > 0) {
-            let members = message.mentions.members.array();
-            members.forEach(member => {
+        if (message.mentions.members.size) {
+            message.mentions.members.tap(member => {
                 if (member.bannable) {
                     member.ban(0).then(() => {
-                        message.embed(new RichEmbed()
+                        message.channel.send(new RichEmbed()
                             .setColor('GREEN')
-                            .setTitle(`User ${member.user.tag} has been banned by ${message.author.tag}`)
+                            .setTitle(`User ${member.user.tag} has been banned by ${message.author.tag}.`)
                         );
                     }).catch(() => {
-                        message.embed(new RichEmbed()
-                        .setColor('ORANGE')
-                        .setTitle(`User ${member.user.tag} was not banned. Reason: unknown`)
+                        message.channel.send(new RichEmbed()
+                            .setColor('ORANGE')
+                            .setTitle(`User ${member.user.tag} was not banned. Reason: unknown.`)
                     )});
-                ;
                 } else {
-                    message.embed(new RichEmbed()
+                    message.channel.send(new RichEmbed()
                         .setColor('ORANGE')
-                        .setTitle(`User ${member.user.tag} was not banned. Reason: bot cannot ban that member`)
+                        .setTitle(`User ${member.user.tag} was not banned. Reason: bot cannot ban that member.`)
                     )
                 }
             });
-            return;
         } else {
-            return message.embed(new RichEmbed()
+            return message.channel.send(new RichEmbed()
                 .setColor('RED')
-                .setTitle(`Please mention users to ban. See ${message.client.commandPrefix}`)
+                .setTitle(`Please mention users to ban.`)
             );
         }
     }

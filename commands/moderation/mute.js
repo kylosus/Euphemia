@@ -17,14 +17,14 @@ module.exports = class extends Command {
     }
 
    async run(message) {
-        let args = message.content.split(' ');
+        const args = message.content.split(' ');
         if (args[1] === 'set') {
-            let input = message.content.substring(10);
-            let role =  message.guild.roles.find(val => val.name == input);
+            const input = message.content.substring(10);
+            const role =  message.guild.roles.find(val => val.name == input);
             if (role) {
-                return setRole(message, message.client.provider, message.guild, role);
+                return setRole(message, this.client.provider, message.guild, role);
             } else if (/^\d+$/.test(args[1])) {
-                let role =  message.guild.roles.find(val => val.id === args[1]);
+                const role =  message.guild.roles.find(val => val.id === args[1]);
                 if (role) {
                     return setRole(message, message.client.provider, message.guild, role);
                 }
@@ -34,7 +34,7 @@ module.exports = class extends Command {
                     .setTitle('Role not found')
                 );
             }
-        } else if (!message.mentions.members) {
+        } else if (!message.mentions.members.size) {
             return message.embed(new RichEmbed()
                 .setColor('ORANGE')
                 .setTitle('Please mention members to mute')
@@ -44,18 +44,17 @@ module.exports = class extends Command {
             if (/^\d+$/.test(args[1])) {
                 timeout = parseInt(args[1]);
             }
-            let role = checkAndCreateRole(message);
-            let mentions = message.mentions.members.array();
-            let body = `has been muted` + (timeout? ` for ${timeout} minutes` : ``);
-            mentions.forEach(member => {
+            const role = checkAndCreateRole(message);
+            const body = `has been muted` + (timeout? ` for ${timeout} minutes` : ``);
+            message.mentions.members.tap(member => {
                 if (member.roles.has(role.id)) {
                     return message.embed(new RichEmbed()
                         .setColor('ORANGE')
-                        .setDescription(`**Member ${member.toString()} is already muted**`)
+                        .setDescription(`**Member ${member.toString()} is already muted**.`)
                     )
                 }
                 member.addRole(role).then(member => {
-                    message.embed(new RichEmbed()
+                    message.channel.send(new RichEmbed()
                         .setColor('GREEN')
                         .setDescription(`Member ${member.toString()} ${body}`)
                     );
@@ -68,29 +67,29 @@ module.exports = class extends Command {
                         });
                         }, (timeout || 0) * 60000, member, role, guildMemberUnmuted);
                     }
-                })
+                });
             });
-       }
+        }
     }
 };
 
 function setRole(message, provider, guild, role) {
     if (role.position >= guild.me.highestRole.position) {
-        return message.embed(new RichEmbed()
+        return message.channel.send(new RichEmbed()
             .setColor('ORANGE')
-            .setTitle('Role cannot be assigned as the mute role because it is higher than, or equal to the bot in the hierarchy')
+            .setTitle('Role cannot be assigned as the mute role because it is higher than, or equal to the bot in the hierarchy.')
         );
     }
     provider.set(guild, 'mutedRole', role.id);
-    return message.embed(new RichEmbed()
+    return message.channel.send(new RichEmbed()
         .setColor('GREEN')
-        .setTitle(`Mute role set to ${role.name}`)
+        .setTitle(`Mute role set to ${role.name}.`)
     );
-}
+};
 
 function checkAndCreateRole(message) {
-    let entry = message.client.provider.get(message.guild, 'mutedRole', false);
-    let role = message.guild.roles.find(val => val.id === entry);
+    const entry = message.client.provider.get(message.guild, 'mutedRole', false);
+    const role = message.guild.roles.find(val => val.id === entry);
     if (role) {
         return role;
     }
@@ -100,12 +99,12 @@ function checkAndCreateRole(message) {
             position: message.guild.me.highestRole.position - 1,
             permissions: 66560
         }).then(role => {
-            message.embed(new RichEmbed()
+            message.channel.send(new RichEmbed()
                 .setColor('BLUE')
-                .setTitle(`Created new role ${role.name}`)
+                .setTitle(`Created new role ${role.name}.`)
             );
             setRole(message, message.client.provider, message.guild, role);
             return role;
-        })
+        });
     }
-}
+};
