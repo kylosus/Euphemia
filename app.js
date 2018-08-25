@@ -9,9 +9,10 @@ const client = new Commando.Client({
     disableEveryone: true,
     unknownCommandResponse: false
 });
+
 require('./events/event.js')(client);
 global.BOT_DEFAULT_COLOR = config.defaultColor || [233, 91, 169];
-// client.defaultColor = config.defaultColor;
+
 
 client.setProvider(
     sqlite.open(path.join(__dirname, 'settings.sqlite3')).then(db => {
