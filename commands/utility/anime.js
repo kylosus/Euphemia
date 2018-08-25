@@ -51,8 +51,9 @@ module.exports = class extends Command {
 
         return execute(query, variables).then(response => {
             return sendResponse(response, message);
-        }).catch(() => {
+        }).catch(error => {
             sendError(message, 'Not found');
+            console.log(error.message);
         });
     }
 }
@@ -88,7 +89,7 @@ async function sendResponse(response, message) {
     }
 
     return message.channel.send(new RichEmbed()
-        .setColor(message.client.defaultColor)
+        .setColor(global.BOT_DEFAULT_COLOR)
         .setTitle(anime.title.userPreferred)
         .setThumbnail(anime.coverImage.large)
         .setDescription(`[AniList](${anime.siteUrl}) | [MyAnimeList](https://myanimelist.net/anime/${anime.idMal})`)

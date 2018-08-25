@@ -15,6 +15,6 @@ module.exports = class extends Command {
    async run(message) {
         return message.embed(new RichEmbed()
             .setDescription(`⏳ ${moment().diff(moment(message.createdAt), 'milliseconds')}`)
-            .setColor(message.member? message.member.displayColor : [233, 91, 169]));
+            .setColor(message.member? message.member.displayColor : global.BOT_DEFAULT_COLOR));
     }
 };

@@ -26,7 +26,7 @@ module.exports = class extends Command {
                 const embed = new RichEmbed()
                     .setTitle(`${message.client.user.username} commands`)
                     .setThumbnail(message.client.user.avatarURL || message.client.user.defaultAvatarURL)
-                    .setColor(message.client.defaultColor)
+                    .setColor(global.BOT_DEFAULT_COLOR)
                     .addBlankField()
                     .setFooter(`♥ Made with love by ${packageJSON.author}`);
 
@@ -51,7 +51,7 @@ module.exports = class extends Command {
                 const embed = new RichEmbed()
                     .setTitle(`Command name: ${result.name}`)
                     .setThumbnail(message.client.user.avatarURL || message.client.user.defaultAvatarURL)
-                    .setColor(message.client.defaultColor)
+                    .setColor(global.BOT_DEFAULT_COLOR)
                     .setDescription(result.description);
 
                 if (result.aliases.length > 0) {

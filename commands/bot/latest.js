@@ -20,7 +20,7 @@ module.exports = class extends Command {
            return message.channel.send(build(changelog[0]));
        } else if (args[1] === 'list') {
             return message.channel.send(new RichEmbed()
-                .setColor(this.client.defaultColor)
+                .setColor(global.BOT_DEFAULT_COLOR)
                 .addField('Available versions', changelog.map(log => `**${log.version}** ${log.note}`))
             );
        } else {
