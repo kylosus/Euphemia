@@ -8,14 +8,16 @@ module.exports = message => {
     }
 
     if (!message.guild && !message.author.bot) {
+        if (message.client.owners) {
         message.client.owners.forEach(owner => {
-            if (message.author.id !== owner) {
-                owner.send(new RichEmbed()
-                    .setColor('BLUE')
-                    .setTitle('Bot has received a DM')
-                    .addField(message.author.tag, message.content || '-')
-                );
-            }
-        });
+                if (message.client.isOwner(message.author)) {
+                    owner.send(new RichEmbed()
+                        .setColor('BLUE')
+                        .setTitle('Bot has received a DM')
+                        .addField(message.author.tag, message.content || '-')
+                    );
+                }
+            });
+        }
     }
 }
