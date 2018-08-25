@@ -18,12 +18,11 @@ module.exports = (message, reason) => {
             });
         }
     }
-}
-
+};
 
 function sendWarning(message, body) {
     return message.channel.send(message.author.toString(), new RichEmbed()
         .setColor(16777215)
         .addField('Command execution was blocked', body)
     );
-}
+};
