@@ -5,7 +5,7 @@ const sqlite = require('sqlite');
 const config = require('./config.json');
 const client = new Commando.Client({
     owner: process.env.BOT_OWNER || config.owner,
-    commandPrefix: config.prefix || ';',
+    commandPrefix: process.env.BOT_PREFIX || config.prefix || ';',
     disableEveryone: true,
     unknownCommandResponse: false
 });
@@ -38,4 +38,4 @@ client.registry
     .registerCommandsIn(path.join(__dirname, 'commands'));
 
 
-client.login(process.env.DISCORD_TOKEN || config.token).catch(console.error);
+client.login(process.env.BOT_TOKEN || config.token).catch(console.error);
