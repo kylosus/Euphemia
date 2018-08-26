@@ -10,7 +10,7 @@ module.exports = message => {
     if (!message.guild && !message.author.bot) {
         if (message.client.owners) {
         message.client.owners.forEach(owner => {
-                if (message.client.isOwner(message.author)) {
+                if (!message.client.isOwner(message.author)) {
                     owner.send(new RichEmbed()
                         .setColor('BLUE')
                         .setTitle('Bot has received a DM')
@@ -20,4 +20,4 @@ module.exports = message => {
             });
         }
     }
-}
+};
