@@ -1,5 +1,17 @@
 [
     {
+        "version": "2.1.0",
+        "note": "Version 2.1.0 adds bug fixes and new commands",
+        "major": [
+            "Added avatar command [`616e8be`](https://github.com/jokersus/Euphemia/commit/616e8be6b9c36a5ccfa50f1a8c09d750734de1a8)",
+            "Added discriminator command [`766cf1e`](https://github.com/jokersus/Euphemia/commit/766cf1e43bf0811f83ed648b4d0da8466a9f08eb)"
+        ],
+        "minor": [
+            "New anime module [`e0c2a91`](https://github.com/jokersus/Euphemia/commit/e0c2a910438115e50c81c385a1d5c296a1038bf5)",
+            "Overall module structure improvements [](https://github.com/jokersus/Euphemia/commit/e0c2a910438115e50c81c385a1d5c296a1038bf5)"
+        ]
+    },
+    {
         "version": "2.0.0",
         "note": "Version 2.0.0 comes with new commands and lots of small improvements. [Full changelog](https://github.com/jokersus/Euphemia/compare/v2.0.0)",
         "major": [
