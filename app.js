@@ -1,6 +1,6 @@
 const Discord = require('discord.js');
 const Commando = require('discord.js-commando');
-const path = require('path');   
+const path = require('path');
 const sqlite = require('sqlite');
 const config = require('./config.json');
 const client = new Commando.Client({
@@ -24,6 +24,7 @@ client.setProvider(
 client.registry
     .registerDefaultTypes()
     .registerGroups([
+        ['anime', 'Anime and Manga commands'],
         ['bot', 'Pulic bot commands'],
         ['fun', 'Fun commands'],
         ['moderation', 'Moderation commands'],

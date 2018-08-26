@@ -9,7 +9,7 @@ module.exports = class extends Command {
     constructor(client) {
         super(client, {
             name: 'next',
-            group: 'utility',
+            group: 'anime',
             memberName: 'next',
             description: 'Returns remaining time for the next episode of given anime.',
             details: 'Returns remaining time for the next episode of given anime. Returns this day\'s schedule, if no anime is specified',
@@ -68,7 +68,7 @@ async function execute(query, variables) {
         },
         json: true
     };
-         
+
     return request(options);
 }
 
@@ -77,7 +77,7 @@ async function sendError(message, error) {
         .setColor('RED')
         .addField('Error', error)
     );
-} 
+}
 
 async function sendResponse(response, message) {
     let duration;
@@ -102,7 +102,7 @@ async function sendResponse(response, message) {
 
         if (anime.nextAiringEpisode) {
             duration = moment.duration(anime.nextAiringEpisode.timeUntilAiring, 'seconds');
-            duration = duration.format('D [days] H [hours] m [minutes] s [seconds]');   
+            duration = duration.format('D [days] H [hours] m [minutes] s [seconds]');
         } else {
             duration = 'unknown';
             embed.setColor('ORANGE');
@@ -115,7 +115,7 @@ async function sendResponse(response, message) {
             .setURL(anime.siteUrl)
             .addField(`Next episode ${anime.nextAiringEpisode? (anime.nextAiringEpisode.episode || '-') : '?'} in`, duration, false)
 
-        if (anime.id in settings) { 
+        if (anime.id in settings) {
             embed.setColor(settings[anime.id]);
         }
 

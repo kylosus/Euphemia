@@ -8,7 +8,7 @@ module.exports = class extends Command {
     constructor(client) {
         super(client, {
             name: 'anime',
-            group: 'utility',
+            group: 'anime',
             memberName: 'anime',
             description: 'Searches anime AniList database',
             examples: [`${client.commandPrefix}anime Clannad`]
@@ -68,7 +68,7 @@ async function execute(query, variables) {
         },
         json: true
     };
-         
+
     return request(options);
 }
 
@@ -77,7 +77,7 @@ async function sendError(message, error) {
         .setColor('RED')
         .addField('Error', error)
     )
-} 
+}
 
 async function sendResponse(response, message) {
     const anime = response.data.Media;

@@ -7,7 +7,7 @@ module.exports = class extends Command {
     constructor(client) {
         super(client, {
             name: 'help',
-            group: 'utility',
+            group: 'bot',
             memberName: 'help',
             description: 'Lists available commands commands',
             examples: [`${client.commandPrefix}help`, `${client.commandPrefix}help ping`]
@@ -16,7 +16,7 @@ module.exports = class extends Command {
 
     async run(message) {
 
-        let args = message.content.split(' ');
+        const args = message.content.split(' ');
         if (args.length === 1) {
 
             if (cache) {
