@@ -40,6 +40,7 @@ client.registry
         ['moderation', 'Moderation commands'],
         ['owner', 'Owner only commands'],
         ['setup', 'Server utility setup commands'],
+        ['subscription', 'Tag subscription commands'],
         ['utility', 'Utility commands']
     ])
     .registerDefaultGroups()
