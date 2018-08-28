@@ -14,7 +14,7 @@ const client = new Commando.Client({
 
 MongoClient.connect(process.env.DATABASE_URL, { useNewUrlParser: true }).then(db => {
     client.db = db;
-    client.database = db.db('test');
+    client.database = db.db(process.env.DATABASE_NAME);
 }).catch(error => {
     throw `Failed connecting to database\n${error}`;
 });
