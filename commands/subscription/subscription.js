@@ -26,11 +26,9 @@ module.exports = class extends Command {
                query[tag] = {$exists: false};
                collection.findOne({_id: message.guild.id, [tag]: {$exists: true}}).then(entry => {
                    if (!entry) {
-                       const query = {};
-                       query[tag] = [];
                        return collection.updateOne(
                            {_id: message.guild.id},
-                           {$set: query},
+                           {$set: {[tag]: []}},
                            {upsert: true}
                        ).then(() => message.channel.send(new RichEmbed()
                             .setColor('GREEN')
