@@ -11,7 +11,8 @@ module.exports = class extends Command {
             group: 'utility',
             memberName: 'urban',
             description: 'Returns Urban Dictionary definitions',
-            aliases: ['ud']
+            aliases: ['ud'],
+            nsfw: true
         });
     }
 
