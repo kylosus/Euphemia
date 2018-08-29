@@ -64,6 +64,19 @@ module.exports = class extends Command {
             } else {
                 sendWarning(message.channel, 'Please enter a tag to add');
             }
+        } else if (args[1] === 'purge') {
+            collection.removeOne({_id: message.guild.id}).then(commandResult => {
+                if (commandResult.deletedCount) {
+                    return message.channel.send(new RichEmbed()
+                        .setColor('GREEN')
+                        .setTitle('Purged all tags from this server')
+                    )
+                } else {
+                    sendWarning(message.channel, 'This server does not have any registered tags')
+                }
+            });
+        } else {
+            return sendWarning(message.chanel, 'Please check your input');
         }
     }
 };
