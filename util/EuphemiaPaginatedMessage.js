@@ -31,6 +31,6 @@ module.exports = (embeds, message) => {
                 message.clearReactions();
             }
             message.client.removeListener('messageReactionAdd', listener);
-        }, 30000, botMessage, listener);
+        },  embeds.length <= 3 ? 30000 : embeds.length * 10000, botMessage, listener);
     });
 }
