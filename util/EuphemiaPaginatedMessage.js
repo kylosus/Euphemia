@@ -1,12 +1,13 @@
 const EuphemiaLinkedList = require('./EuphemiaLinkedList.js');
 
 module.exports = (embeds, message) => {
-    
+
     message.channel.send(embeds[0].setFooter(`1/${embeds.length}`)).then(async botMessage => {
         const embedList = new EuphemiaLinkedList(embeds);
-        await botMessage.react('⬅');
-        await botMessage.react('➡');
-
+        if (embeds.length > 1) {
+            await botMessage.react('⬅');
+            await botMessage.react('➡');
+        }
         const listener = ((messageReaction, reactionUser, ownMessage = botMessage, callerUserId = message.author.id, list = embedList) => {
             if (reactionUser.id === callerUserId) {
                 messageReaction.remove(reactionUser);
