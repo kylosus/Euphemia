@@ -10,7 +10,9 @@ module.exports = (embeds, message) => {
         }
         const listener = ((messageReaction, reactionUser, ownMessage = botMessage, callerUserId = message.author.id, list = embedList) => {
             if (reactionUser.id === callerUserId) {
-                messageReaction.remove(reactionUser);
+                if (messageReaction.message.guild && messageReaction.message.guild.me.hasPermission('MANAGE_MESSAGES')) {
+                    messageReaction.remove(reactionUser);
+                }
             }
             if (messageReaction.message.id === ownMessage.id) {
                 if (reactionUser.id === callerUserId) {
@@ -23,9 +25,11 @@ module.exports = (embeds, message) => {
             }
         });
         message.client.on('messageReactionAdd', listener);
-        
+
         message.client.setTimeout((message, listener) => {
-            message.clearReactions();
+            if (message.guild && message.guild.me.hasPermission('MANAGE_MESSAGES')) {
+                message.clearReactions();
+            }
             message.client.removeListener('messageReactionAdd', listener);
         }, 30000, botMessage, listener);
     });
