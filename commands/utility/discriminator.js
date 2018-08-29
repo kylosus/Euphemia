@@ -1,5 +1,7 @@
 const { Command } = require('discord.js-commando');
 const { RichEmbed } = require('discord.js');
+const EuphemiaPaginatedMessage = require('../../util/EuphemiaPaginatedMessage.js');
+const _ = require('lodash');
 
 module.exports = class extends Command {
     constructor(client) {
@@ -27,6 +29,11 @@ module.exports = class extends Command {
             .filter(member => member.user.discriminator === discriminator)
             .map(member => member.user.username)
             .sort();
+        const chunks = _.chunk(members, 20);
+        return EuphemiaPaginatedMessage(chunks.map(chunk => new RichEmbed()
+                    .addField(`Users with discriminator ${discriminator}`, '```' + chunk.join('\n') + '```')
+                    .setColor(global.BOT_DEFAULT_COLOR)
+        ), message);
         const joined = members.join('\n');
         message.channel.send(new RichEmbed()
             .setColor(global.BOT_DEFAULT_COLOR)
