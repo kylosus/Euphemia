@@ -1,3 +1,4 @@
+require('dotenv').config();
 const Discord = require('discord.js');
 const Commando = require('discord.js-commando');
 const path = require('path');

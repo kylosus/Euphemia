@@ -19,6 +19,7 @@
   "dependencies": {
     "discord.js": "^11.4.2",
     "discord.js-commando": "^0.10.0",
+    "dotenv": "^6.0.0",
     "ebay-node-api": "^2.3.1",
     "forever": "^0.15.3",
     "lodash": "^4.17.10",
