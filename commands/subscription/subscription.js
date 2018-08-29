@@ -39,7 +39,7 @@ module.exports = class extends Command {
                    }
                });
            } else {
-               return sendInvalidInputNotification(message.channel, 'Please enter a tag to add');
+               return sendWarning(message.channel, 'Please enter a tag to add');
            }
        } else if (args[1] === 'remove') {
            const tag = args.splice(2).join(' ').toLowerCase();
@@ -58,17 +58,17 @@ module.exports = class extends Command {
                             );
                         }).catch(console.error);
                     } else {
-                        sendInvalidInputNotification(message.channel, `Tag ${tag} does not exist`)
+                        sendWarning(message.channel, `Tag ${tag} does not exist`)
                     }
                 });
             } else {
-                sendInvalidInputNotification(message.channel, 'Please enter a tag to add');
+                sendWarning(message.channel, 'Please enter a tag to add');
             }
         }
     }
 };
 
-function sendInvalidInputNotification(channel, text) {
+function sendWarning(channel, text) {
     return channel.send(new RichEmbed()
         .setColor('RED')
         .setTitle(text)
