@@ -29,8 +29,7 @@ module.exports = class extends Command {
                     .setTitle('Please specify a smaller value')
                 );
            } else {
-               message.delete();
-               return message.channel.fetchMessages({ limit: amount }).then(messages => {
+               return message.channel.fetchMessages({ limit: amount + 1 }).then(messages => {
                     message.channel.bulkDelete(messages);
                 });
             }
