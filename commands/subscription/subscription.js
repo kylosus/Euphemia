@@ -35,7 +35,7 @@ module.exports = class extends Command {
                             .setTitle(`Added new tag ${tag}`)
                         ));
                    } else {
-                       return sendInvalidInputNotification(message.channel, `Tag ${tag} already exists`)
+                       return sendWarning(message.channel, `Tag ${tag} already exists`)
                    }
                });
            } else {
