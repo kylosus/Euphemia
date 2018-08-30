@@ -1,7 +1,6 @@
 const { Command } = require('discord.js-commando');
 const { RichEmbed } = require('discord.js');
 const rp = require('request-promise');
-const uri = 'https://nekos.moe/api/v1/random/image?count=1&nsfw='
 
 module.exports = class extends Command {
     constructor(client) {
@@ -11,6 +10,7 @@ module.exports = class extends Command {
             memberName: 'catgirl',
             description: 'Returns a random catgirl.',
             aliases: ['neko'],
+            nsfw: true,
             guildOnly: true
         });
     }
@@ -19,7 +19,7 @@ module.exports = class extends Command {
         const embed = new RichEmbed();
 
         const options = {
-            uri: `${uri}${message.channel.nsfw}`,
+            uri: 'https://nekos.moe/api/v1/random/image?count=1',
             json: true
         };
 
