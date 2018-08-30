@@ -26,7 +26,7 @@ module.exports = class extends Command {
        await rp(options)
             .then(response => {
                 embed.setImage('https://nekos.moe/image/' + response.images[0].id)
-                    .setColor(message.member.displayColor);
+                    .setColor(global.BOT_DEFAULT_COLOR);
             })
             .catch(error => {
                 embed.setColor('RED')
