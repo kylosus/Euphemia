@@ -17,6 +17,7 @@
   "author": "jokersus#3343",
   "license": "MIT",
   "dependencies": {
+    "dblapi.js": "^2.2.0",
     "discord.js": "^11.4.2",
     "discord.js-commando": "^0.10.0",
     "dotenv": "^6.0.0",
