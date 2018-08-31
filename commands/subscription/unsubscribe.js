@@ -12,7 +12,8 @@ module.exports = class extends Command {
             description: 'Unsubscribes user from a tag',
             examples: [`${client.commandPrefix}unsubscribe Clannad`],
             userPermissions: ['MANAGE_GUILD'],
-            aliases: ['unsub']
+            aliases: ['unsub'],
+            guildOnly: true
         });
     }
 

@@ -12,7 +12,8 @@ module.exports = class extends Command {
             description: 'Manages tag subscription commands',
             examples: [`${client.commandPrefix}subscription add Clannad`, `${client.commandPrefix}subscription remove Clannad`],
             userPermissions: ['MANAGE_GUILD'],
-            aliases: ['subn']
+            aliases: ['subn'],
+            guildOnly: true
         });
     }
 

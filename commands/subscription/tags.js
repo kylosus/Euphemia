@@ -12,7 +12,8 @@ module.exports = class extends Command {
             group: 'subscription',
             memberName: 'tags',
             description: 'Lists available tags',
-            examples: [`${client.commandPrefix}tags`]
+            examples: [`${client.commandPrefix}tags`],
+            guildOnly: true
         });
     }
 

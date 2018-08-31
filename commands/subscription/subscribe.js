@@ -13,7 +13,8 @@ module.exports = class extends Command {
             memberName: 'subscribe',
             description: 'Subscribes user to a tags',
             examples: [`${client.commandPrefix}subscribe Clannad`],
-            aliases: ['sub']
+            aliases: ['sub'],
+            guildOnly: true
         });
     }
 

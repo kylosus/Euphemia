@@ -15,7 +15,8 @@ module.exports = class extends Command {
             throttling: {
                 usages: 1,
                 duration: 60
-            }
+            },
+            guildOnly: true
         });
     }
 
