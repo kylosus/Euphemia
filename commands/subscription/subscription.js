@@ -1,4 +1,4 @@
-    const { Command } = require('discord.js-commando');
+const { Command } = require('discord.js-commando');
 const { RichEmbed } = require('discord.js');
 const { getField } = require('../../util/databaseHandler.js');
 const moduleHandler = module => require(`./modules/${module}`);
@@ -76,6 +76,31 @@ module.exports = class extends Command {
                     sendWarning(message.channel, 'This server does not have any registered tags')
                 }
             });
+        } else if (args[1] === 'clear') {
+            if (/\d{18}/.test(args[2])) {
+                collection.findOne({_id: message.guild.id}, {projection: {_id: false}}).then(entry => {
+                    const pullQuery = {};
+                    let tagCount = 0;
+                    for (let tag in entry) {
+                        if (entry[tag].indexOf(args[2]) !== -1) {
+                            pullQuery[tag] = args[2];
+                            tagCount++;
+                        }
+                    }
+                    if (tagCount) {
+                        collection.updateOne({_id: message.guild.id}, {$pull : pullQuery}).then(commandResult => {
+                            return message.channel.send(new RichEmbed()
+                                .setColor('GREEN')
+                                .setTitle(`Cleared user ${args[2]} from ${tagCount} tags`)
+                            );
+                        });
+                    } else {
+                        return sendWarning(message.channel, `User ${args[2]} is not registered in any tags`);
+                    }
+                })
+            } else {
+                return sendWarning(message.channel, 'Please enter a user to clear');
+            }
         } else {
             return sendWarning(message.chanel, 'Please check your input');
         }
