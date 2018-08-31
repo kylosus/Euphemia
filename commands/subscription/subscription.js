@@ -100,7 +100,7 @@ module.exports = class extends Command {
                 return sendWarning(message.channel, 'Please enter a user to clear');
             }
         } else {
-            return sendWarning(message.chanel, 'Please check your input');
+            return sendWarning(message.channel, 'Please check your input');
         }
     }
 };
