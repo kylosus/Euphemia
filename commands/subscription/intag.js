@@ -26,7 +26,7 @@ module.exports = class extends Command {
                         const pages = _.chunk(users, 90);
                         return EuphemiaPaginatedMessage(pages.map(chunk => new RichEmbed()
                             .setColor(global.BOT_DEFAULT_COLOR)
-                            .addField(`Users subscribed to ${tag}`, '```' + chunk.join(' ') + '```')
+                            .addField(`Users subscribed to ${tag}`, chunk.join(' '))
                         ), message);
                     } else {
                         return message.channel.send(new RichEmbed()
