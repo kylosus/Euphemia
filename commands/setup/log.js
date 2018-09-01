@@ -23,7 +23,7 @@ module.exports = class extends Command {
             name: 'log',
             group: 'setup',
             memberName: 'log',
-            description: 'Bind log events to channels',
+            description: 'Binds log events to channels',
             userPermissions: ['MANAGE_GUILD'],
             examples: [`${client.commandPrefix}log list`, `${client.commandPrefix}log enable event #channel`],
             guildOnly: true

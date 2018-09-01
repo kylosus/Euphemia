@@ -9,7 +9,7 @@ module.exports = class extends Command {
             name: 'help',
             group: 'bot',
             memberName: 'help',
-            description: 'Lists available commands commands',
+            description: 'Lists available commands',
             examples: [`${client.commandPrefix}help`, `${client.commandPrefix}help ping`]
         });
     }
