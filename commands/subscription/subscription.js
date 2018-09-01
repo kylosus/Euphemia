@@ -8,7 +8,7 @@ module.exports = class extends Command {
             group: 'subscription',
             memberName: 'subscription',
             description: 'Manages tag subscription commands',
-            examples: [`${client.commandPrefix}subscription add Clannad`, `${client.commandPrefix}subscription remove Clannad`],
+            examples: [`${client.commandPrefix}subscription add Clannad`, `${client.commandPrefix}subscription remove Clannad`, `${client.commandPrefix}subscription clear userID`],
             userPermissions: ['MANAGE_ROLES'],
             aliases: ['subn'],
             guildOnly: true
