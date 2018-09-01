@@ -10,7 +10,7 @@ module.exports = class extends Command {
             memberName: 'unmute',
             description: 'Unmutes mentioned users',
             userPermissions: ['MANAGE_GUILD'],
-            examples: [`${client.commandPrefix}unmute @user`, `${client.commandPrefix}unmute @user1 @user2 @user3]`],
+            examples: [`${client.commandPrefix}unmute @user`, `${client.commandPrefix}unmute @user1 @user2 @user3`],
             guildOnly: true
         });
     }
@@ -24,7 +24,7 @@ module.exports = class extends Command {
             if (!mutedRole) {
                 roleNotFound(message);
             } else {
-                if (message.mentions.members.size) {
+                if (!message.mentions.members.size) {
                     return message.channel.send(new RichEmbed()
                         .setColor('ORANGE')
                         .setTitle('Please mention members to unmute')
@@ -32,10 +32,10 @@ module.exports = class extends Command {
                 } else {
                     message.mentions.members.tap(member => {
                         if (!member.roles.has(mutedRole.id)) {
-                            return message.embed(new RichEmbed()
+                            return message.channel.send(new RichEmbed()
                                 .setColor('ORANGE')
                                 .setDescription(`**Member ${member.toString()} is not muted**`)
-                            )
+                            );
                         } else {
                             member.removeRole(mutedRole).then(member => {
                                 message.channel.send(new RichEmbed()
@@ -45,7 +45,7 @@ module.exports = class extends Command {
                                 guildMemberUnmuted(member);
                             });
                         }
-                    })
+                    });
                 }
             }
         }
