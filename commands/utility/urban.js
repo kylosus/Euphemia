@@ -24,10 +24,6 @@ module.exports = class extends Command {
                 .setColor('ORANGE')
             );
        } else {
-           if (args[1] === 'meliodic') return message.channel.send(new RichEmbed()
-                                                                   .setColor('GREEN')
-                                                                   .setTitle('Meliodic (adj.)')
-                                                                   .setDescription('Something superfluously gloomy.\nqThat song really does feel meliodic'))
             ud.term(args.splice(1).join(' ')).then((result) => {
                 EuphemiaPaginatedMessage(result.entries.map(entry =>
                     new RichEmbed()
@@ -40,7 +36,7 @@ module.exports = class extends Command {
                     .setColor('RED')
                     .addField('Error', error.message)
                 );
-            })
+            });
         }
     }
 };
