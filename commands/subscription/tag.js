@@ -31,10 +31,11 @@ module.exports = class extends Command {
                         messages.forEach(chunk => {
                             if (first) {
                                 message.channel.send(`🌸 **Users subscribed to ${tag}**\n${chunk.join(' ')}`);
+                                first = ;false
                             } else {
                                 message.channel.send(chunk.join(' '));
                             }
-                        })
+                        });
                     } else {
                         return message.channel.send(new RichEmbed()
                             .setColor('RED')
