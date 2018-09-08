@@ -23,7 +23,7 @@ module.exports = member => {
             .addField('Joined Discord', moment(member.user.createdAt).format('DD.MM.YYYY HH.MM.SS'), false)
             .setTimestamp(member.joinedAt)
         );
-        const accountAge = moment().diff(moment(member.user.createdAt), 'days');
+        let accountAge = moment().diff(moment(member.user.createdAt), 'days');
         if (accountAge <= 29) {
             channel.send(new RichEmbed()
                 .setColor('DARK_RED')
