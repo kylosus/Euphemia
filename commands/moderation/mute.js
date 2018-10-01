@@ -10,8 +10,8 @@ module.exports = class extends Command {
             group: 'moderation',
             memberName: 'mute',
             description: 'Mutes mentioned users for a given amount of minutes',
-            userPermissions: ['MANAGE_GUILD'],
-            examples: [`${client.commandPrefix}set role`, `${client.commandPrefix}mute 5 @user`, `${client.commandPrefix}mute @user1 @user2 @user3`],
+            userPermissions: ['MANAGE_ROLES'],
+            examples: [`${client.commandPrefix}mute 5 @user`, `${client.commandPrefix}mute @user1 @user2 @user3]`],
             guildOnly: true
         });
     }

@@ -8,7 +8,7 @@ module.exports = class extends Command {
             group: 'moderation',
             memberName: 'stop',
             description: 'Denies message sending perms for @everyone',
-            userPermissions: ['MANAGE_GUILD'],
+            userPermissions: ['MANAGE_ROLES'],
             examples: [`${client.commandPrefix}stop on`, `${client.commandPrefix}stop off`],
             guildOnly: true
         });

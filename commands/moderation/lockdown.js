@@ -8,7 +8,7 @@ module.exports = class extends Command {
             group: 'moderation',
             memberName: 'lockdown',
             description: 'Automatically mutes every new member on join',
-            userPermissions: ['MANAGE_GUILD'],
+            userPermissions: ['MANAGE_ROLES'],
             guildOnly: true
         });
     }

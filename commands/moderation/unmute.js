@@ -9,7 +9,7 @@ module.exports = class extends Command {
             group: 'moderation',
             memberName: 'unmute',
             description: 'Unmutes mentioned users',
-            userPermissions: ['MANAGE_GUILD'],
+            userPermissions: ['MANAGE_ROLES'],
             examples: [`${client.commandPrefix}unmute @user`, `${client.commandPrefix}unmute @user1 @user2 @user3`],
             guildOnly: true
         });
