@@ -20,6 +20,7 @@ module.exports = class extends Command {
 		const collection = this.client.database.collection('subscriptions');
 		collection.findOne({_id: message.guild.id}, {projection: {_id: false}}).then(entry => {
 			if (entry) {
+				
 				const tags = [];
 				for (const tag in entry) {
 					if (entry[tag].indexOf(message.author.id) > -1) {
@@ -32,7 +33,10 @@ module.exports = class extends Command {
 					return EuphemiaPaginatedMessage(messages.map(chunk => new RichEmbed()
 						.setAuthor(`${message.author.tag} List of tags you are subscribed to`, message.author.displayAvatarURL)
 						.setColor(global.BOT_DEFAULT_COLOR)
-						.setDescription(chunk.join('\n'))
+						.setDescription(chunk
+							.sort((a, b) => entry[b].length - entry[a].length)
+							.map(tag => `**${tag}** members: ${entry[tag].length}`)
+							.join('\n'))
 					), message);
 
 				} else {
