@@ -21,7 +21,7 @@ module.exports = class extends Command {
 		collection.findOne({_id: message.guild.id}, {projection: {_id: false}}).then(entry => {
 			if (entry) {
 				const tags = [];
-				for (tag in entry) {
+				for (const tag in entry) {
 					if (entry[tag].indexOf(message.author.id) > -1) {
 						tags.push(tag);
 					}
