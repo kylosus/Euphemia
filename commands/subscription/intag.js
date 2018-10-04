@@ -9,7 +9,7 @@ module.exports = class extends Command {
             name: 'intag',
             group: 'subscription',
             memberName: 'intag',
-            description: 'Lists all usrs subscribed to a tag',
+            description: 'Lists all users subscribed to a tag',
             examples: [`${client.commandPrefix}intag Clannad`],
             guildOnly: true
         });
