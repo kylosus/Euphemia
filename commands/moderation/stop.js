@@ -16,7 +16,7 @@ module.exports = class extends Command {
 
    async run(message) {
        const self = message.member.highestRole;
-       const everyone = message.guild.roles.find(val => val.position === 0);
+       const everyone = message.guild.roles.get(message.guild.id);
        if (message.content.split(' ')[1] === 'off') {
            message.channel.overwritePermissions(everyone, { 'SEND_MESSAGES': true }).then(channel => {
                 return message.channel.send(new RichEmbed()
@@ -25,7 +25,7 @@ module.exports = class extends Command {
                 );
             });
         } else {
-            message.channel.overwritePermissions(everyone, message.author, { 'SEND_MESSAGES': false }, 'Euphemia stop command').then(channel => {
+            message.channel.overwritePermissions(everyone, { 'SEND_MESSAGES': false }, 'Euphemia stop command').then(channel => {
                 channel.overwritePermissions(message.member.roles.filter(role => role.hasPermission('MANAGE_GUILD')).first() || message.author, { 'SEND_MESSAGES': true }, 'Euphemia stop command');
                 return channel.send(new RichEmbed()
                     .setColor('RED')
