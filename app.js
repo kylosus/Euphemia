@@ -41,6 +41,7 @@ client.registry
         ['fun', 'Fun commands'],
         ['moderation', 'Moderation commands'],
         ['owner', 'Owner only commands'],
+		['subscription', '.'],
         ['setup', 'Server utility setup commands'],
         ['utility', 'Utility commands']
     ])
