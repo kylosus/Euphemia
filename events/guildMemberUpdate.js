@@ -39,9 +39,14 @@ module.exports = (oldMember, newMember, Client) => {
 	if (diffLeveledRoles.size) {
 		const role = diffLeveledRoles.last();
 		if (!newMember.lastMessage) {
-			newMember.guild.channels.get('543485614625128457').send(`🆙 | ${newMember.toString()} is now \`${role.name}\`!`);
+			const channel = newMember.guild.channels.get('353852080961880075');
+			if (channel) {
+				channel.send(`🆙 | ${newMember.toString()} is now \`${role.name}\`!`);
+			}
+			
+			return;
 		}
-
+		
 		newMember.lastMessage.channel.send(`🆙  |  ${newMember.toString()} is now \`${role.name}\`!`);
 	}
 }
