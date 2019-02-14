@@ -22,7 +22,7 @@ MongoClient.connect(process.env.DATABASE_URL, { useNewUrlParser: true }).then(db
 
 
 require('./events/event.js')(client);
-require('./dbl.js')(process.env.DBL_TOKEN, process.env.DBL_PASSWORD, client);
+// require('./dbl.js')(process.env.DBL_TOKEN, process.env.DBL_PASSWORD, client);
 global.BOT_DEFAULT_COLOR = config.defaultColor || [233, 91, 169];
 
 
