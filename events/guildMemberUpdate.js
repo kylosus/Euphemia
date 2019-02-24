@@ -43,6 +43,10 @@ module.exports = (oldMember, newMember, Client) => {
 		if (!newMember.lastMessage) {
 			const channel = newMember.guild.channels.get(DEFAULT_LEVELUP_CHANNEL);
 
+			if (!channel) {
+				return;
+			}
+
 			// Very edge case, so apologies for mutating variables
 			newMember.lastMessage = { channel: channel };
 		}
