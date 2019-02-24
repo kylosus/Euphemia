@@ -41,13 +41,18 @@ module.exports = (oldMember, newMember, Client) => {
 	if (diffLeveledRoles.size) {
 		const role = diffLeveledRoles.last();
 		if (!newMember.lastMessage) {
-			if (channel) {
-				channel.send(`🆙 | ${newMember.toString()} is now \`${role.name}\`!`);
-			}
-			
-			return;
+			const channel = newMember.guild.channels.get(DEFAULT_LEVELUP_CHANNEL);
+
+			// Very edge case, so apologies for mutating variables
+			newMember.lastMessage = { channel: channel };
 		}
-		
-		newMember.lastMessage.channel.send(`🆙  |  ${newMember.toString()} is now \`${role.name}\`!`);
+
+		return newMember.lastMessage.channel.send(new RichEmbed()
+			.setColor(newMember.displayColor || global.BOT_DEFAULT_COLOR)
+			.setimage(newMember.avatarURL || newMember.defaultAvatarURL)
+			.setDescription(`${newMember.toString()} has now leveled up to role ${to.toString()}!`)
+		);
+
+		// newMember.lastMessage.channel.send(`🆙  |  ${newMember.toString()} is now \`${role.name}\`!`);
 	}
 }
