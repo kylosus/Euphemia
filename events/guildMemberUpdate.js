@@ -46,5 +46,13 @@ module.exports = (oldMember, newMember, Client) => {
 			// Very edge case, so apologies for mutating variables
 			newMember.lastMessage = { channel: channel };
 		}
+
+		return newMember.lastMessage.channel.send(new RichEmbed()
+			.setColor(newMember.displayColor || global.BOT_DEFAULT_COLOR)
+			.setimage(newMember.avatarURL || newMember.defaultAvatarURL)
+			.setDescription(`${newMember.toString()} has now leveled up to role ${to.toString()}!`)
+		);
+
+		// newMember.lastMessage.channel.send(`🆙  |  ${newMember.toString()} is now \`${role.name}\`!`);
 	}
 }
