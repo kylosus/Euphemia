@@ -1,9 +1,11 @@
 const { RichEmbed } = require('discord.js');
+
 const LEVELED_ROLES = [
 		"538665094784221196", "538665126837092385",
 		"538665163210096641", "538665192016576520",
 		"538665220445437973", "538665258668130304"
-	];
+];
+const DEFAULT_LEVELUP_CHANNEL = '353775506128109570';
 
 module.exports = (oldMember, newMember, Client) => {
 	const entry = Client.provider.get(newMember.guild, 'guildMemberUpdate', false);
@@ -39,7 +41,6 @@ module.exports = (oldMember, newMember, Client) => {
 	if (diffLeveledRoles.size) {
 		const role = diffLeveledRoles.last();
 		if (!newMember.lastMessage) {
-			const channel = newMember.guild.channels.get('353852080961880075');
 			if (channel) {
 				channel.send(`🆙 | ${newMember.toString()} is now \`${role.name}\`!`);
 			}
