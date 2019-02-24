@@ -41,13 +41,10 @@ module.exports = (oldMember, newMember, Client) => {
 	if (diffLeveledRoles.size) {
 		const role = diffLeveledRoles.last();
 		if (!newMember.lastMessage) {
-			if (channel) {
-				channel.send(`🆙 | ${newMember.toString()} is now \`${role.name}\`!`);
-			}
-			
-			return;
+			const channel = newMember.guild.channels.get(DEFAULT_LEVELUP_CHANNEL);
+
+			// Very edge case, so apologies for mutating variables
+			newMember.lastMessage = { channel: channel };
 		}
-		
-		newMember.lastMessage.channel.send(`🆙  |  ${newMember.toString()} is now \`${role.name}\`!`);
 	}
 }
