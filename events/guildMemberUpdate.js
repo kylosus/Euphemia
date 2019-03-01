@@ -53,7 +53,7 @@ module.exports = (oldMember, newMember, Client) => {
 
 		return newMember.lastMessage.channel.send(new RichEmbed()
 			.setColor(newMember.displayColor || global.BOT_DEFAULT_COLOR)
-			.setimage(newMember.avatarURL || newMember.defaultAvatarURL)
+			.setImage(newMember.avatarURL || newMember.defaultAvatarURL)
 			.setDescription(`\`${newMember.user.tag}\` has now ranked up to \`${role.name}!\``)
 		);
 
