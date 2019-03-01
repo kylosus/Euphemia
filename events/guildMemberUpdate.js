@@ -1,4 +1,4 @@
-const { RichEmbed } = require('discord.js');
+https://github.com/jokersus/Euphemia/blob/master/events/guildMemberUpdate.jshttps://github.com/jokersus/Euphemia/blob/master/events/guildMemberUpdate.jsconst { RichEmbed } = require('discord.js');
 
 const LEVELED_ROLES = [
 		"538665094784221196", "538665126837092385",
@@ -54,7 +54,6 @@ module.exports = (oldMember, newMember, Client) => {
 		return newMember.lastMessage.channel.send(new RichEmbed()
 			.setColor(newMember.displayColor || global.BOT_DEFAULT_COLOR)
 			.setAuthor(`${newMember.displayName} has now leveled up to ${role.name}`, newMember.user.avatarURL || newMember.user.defaultAvatarURL)
-			.setDescription(`\`${newMember.user.tag}\` has now ranked up to \`${role.name}!\``)
 		);
 
 		// newMember.lastMessage.channel.send(`🆙  |  ${newMember.toString()} is now \`${role.name}\`!`);
