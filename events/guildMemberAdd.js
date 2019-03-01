@@ -2,13 +2,14 @@ const { RichEmbed } = require('discord.js');
 const EuphemiaEmbed = require('../util/EuphemiaEmbed.js');
 const moment = require('moment');
 
-module.exports = member => {
+module.exports = async member => {
     const entry = member.client.provider.get(member.guild, 'guildMemberAdd', false);
     if (entry.message && entry.channel) {
         const message = entry.message.replace('$MENTION$', member.toString()).replace('$NAME$', member.user.tag).replace('$MEMBER_COUNT$', member.guild.memberCount).replace('$AVATAR$', member.user.avatarURL || member.user.defaultAvatarURL);
         const embed = EuphemiaEmbed.build(message);
         if (embed) {
-            member.guild.channels.find(val => val.id === entry.channel).send([embed.content], embed);
+            const message = await member.guild.channels.find(val => val.id === entry.channel).send([embed.content], embed);
+            message.react('👋');
         }
     }
     if (entry.log) {
@@ -23,6 +24,7 @@ module.exports = member => {
             .addField('Joined Discord', moment(member.user.createdAt).format('DD.MM.YYYY HH.MM.SS'), false)
             .setTimestamp(member.joinedAt)
         );
+        
         let accountAge = moment().diff(moment(member.user.createdAt), 'days');
         if (accountAge <= 29) {
             channel.send(new RichEmbed()
