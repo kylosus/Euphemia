@@ -6,6 +6,7 @@ const LEVELED_ROLES = [
 		"538665220445437973", "538665258668130304"
 ];
 const DEFAULT_LEVELUP_CHANNEL = '353775506128109570';
+const REACTION_EMOJI = '545408664803082241';
 
 module.exports = (oldMember, newMember, Client) => {
 	const entry = Client.provider.get(newMember.guild, 'guildMemberUpdate', false);
@@ -51,10 +52,12 @@ module.exports = (oldMember, newMember, Client) => {
 			newMember.lastMessage = { channel: channel };
 		}
 
-		return newMember.lastMessage.channel.send(new RichEmbed()
+		const message = await newMember.lastMessage.channel.send(new RichEmbed()
 			.setColor(newMember.displayColor || global.BOT_DEFAULT_COLOR)
-			.setAuthor(`${newMember.displayName} has now leveled up to ${role.name}`, newMember.user.avatarURL || newMember.user.defaultAvatarURL)
+			.setAuthor(`${newMember.displayName} has now leveled up to ${role.name}!`, newMember.user.avatarURL || newMember.user.defaultAvatarURL)
 		);
+		
+		message.react(message.guild.emojis.get(REACTION_EMOJI));
 
 		// newMember.lastMessage.channel.send(`🆙  |  ${newMember.toString()} is now \`${role.name}\`!`);
 	}
