@@ -6,7 +6,7 @@ const LEVELED_ROLES = [
 		"538665220445437973", "538665258668130304"
 ];
 const DEFAULT_LEVELUP_CHANNEL = '353775506128109570';
-const REACTION_EMOJI = '545408664803082241';
+const REACTION_EMOJI = '538775117853884416';
 
 module.exports = async (oldMember, newMember, Client) => {
 	const entry = Client.provider.get(newMember.guild, 'guildMemberUpdate', false);
@@ -57,7 +57,7 @@ module.exports = async (oldMember, newMember, Client) => {
 			.setAuthor(`${newMember.displayName} has now leveled up to ${role.name}!`, newMember.user.avatarURL || newMember.user.defaultAvatarURL)
 		);
 		
-		message.rereact('🎉');
+		message.react(message.guild.emojis.get(REACTION_EMOJI));
 
 		// newMember.lastMessage.channel.send(`🆙  |  ${newMember.toString()} is now \`${role.name}\`!`);
 	}
