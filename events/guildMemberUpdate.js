@@ -57,7 +57,7 @@ module.exports = async (oldMember, newMember, Client) => {
 			.setAuthor(`${newMember.displayName} has now leveled up to ${role.name}!`, newMember.user.avatarURL || newMember.user.defaultAvatarURL)
 		);
 		
-		message.react(message.guild.emojis.get(REACTION_EMOJI));
+		message.rereact('🎉');
 
 		// newMember.lastMessage.channel.send(`🆙  |  ${newMember.toString()} is now \`${role.name}\`!`);
 	}
