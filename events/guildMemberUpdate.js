@@ -1,4 +1,4 @@
-https://github.com/jokersus/Euphemia/blob/master/events/guildMemberUpdate.jshttps://github.com/jokersus/Euphemia/blob/master/events/guildMemberUpdate.jsconst { RichEmbed } = require('discord.js');
+const { RichEmbed } = require('discord.js');
 
 const LEVELED_ROLES = [
 		"538665094784221196", "538665126837092385",
