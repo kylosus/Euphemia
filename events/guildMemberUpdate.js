@@ -28,7 +28,7 @@ module.exports = async (oldMember, newMember, Client) => {
 				.setColor('GREEN')
 				.setThumbnail(newMember.user.avatarURL)
 				.setTitle('Username change')
-				.setDescription(`**${oldMember.user.tag}** has changed their username to **${newMember.user.tag}**`)
+				.setDescription(`**${oldMember.user.tag}** has now class ranked up to **${newMember.user.tag}**`)
 				.setTimestamp((new Date()).toISOString())
 			);
 		}
