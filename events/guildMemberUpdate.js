@@ -8,7 +8,7 @@ const LEVELED_ROLES = [
 const DEFAULT_LEVELUP_CHANNEL = '353775506128109570';
 const REACTION_EMOJI = '545408664803082241';
 
-module.exports = (oldMember, newMember, Client) => {
+module.exports = async (oldMember, newMember, Client) => {
 	const entry = Client.provider.get(newMember.guild, 'guildMemberUpdate', false);
 	if (entry && entry.log) {
 		if (oldMember.nickname !== newMember.nickname) {
