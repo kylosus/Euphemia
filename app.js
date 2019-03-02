@@ -6,7 +6,7 @@ const sqlite = require('sqlite');
 const config = require('./config.json');
 const MongoClient = require('mongodb').MongoClient;
 const client = new Commando.Client({
-    owner: process.env.BOT_OWNER || config.owner,
+    owner: ['159748997236523008', '275331662865367040'],
     commandPrefix: process.env.BOT_PREFIX || config.prefix || ';',
     disableEveryone: true,
     unknownCommandResponse: false
