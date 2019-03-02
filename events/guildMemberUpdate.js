@@ -28,7 +28,7 @@ module.exports = async (oldMember, newMember, Client) => {
 				.setColor('GREEN')
 				.setThumbnail(newMember.user.avatarURL)
 				.setTitle('Username change')
-				.setDescription(`**${oldMember.user.tag}** has now class ranked up to **${newMember.user.tag}**`)
+				.setDescription(`**${oldMember.user.tag}** has changed their username to **${newMember.user.tag}**`)
 				.setTimestamp((new Date()).toISOString())
 			);
 		}
@@ -54,7 +54,7 @@ module.exports = async (oldMember, newMember, Client) => {
 
 		const message = await newMember.lastMessage.channel.send(new RichEmbed()
 			.setColor(newMember.displayColor || global.BOT_DEFAULT_COLOR)
-			.setAuthor(`${newMember.displayName} has now leveled up to ${role.name}!`, newMember.user.avatarURL || newMember.user.defaultAvatarURL)
+			.setAuthor(`${newMember.displayName} has now class ranked up to ${role.name}!`, newMember.user.avatarURL || newMember.user.defaultAvatarURL)
 		);
 		
 		message.react(message.guild.emojis.get(REACTION_EMOJI));
