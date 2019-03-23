@@ -72,6 +72,7 @@ function setRole(message, provider, guild, role) {
         .setTitle(`Mute role set to ${role.name}.`)
     );
 };
+			const match = input.match(/^\d{14,}$/);
 			const role = await EuphemiaUnifiedGuildFunctions.GetMutedRole(guild);
 
 function checkAndCreateRole(message) {
