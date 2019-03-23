@@ -14,6 +14,22 @@ module.exports = class extends Command {
             guildOnly: true
         });
     }
+			const match = args[1].match(/^\d{14,}$/);
+			if (match) {
+				const count = parseInt(match[0]);
+				if (count > 100) {
+					return message.embed(new RichEmbed()
+						.setColor('RED')
+						.setTitle('Please specify a smaller value')
+					);
+				}
+
+				if (count <= 0) {
+					return message.embed(new RichEmbed()
+						.setColor('RED')
+						.setTitle('Please check your input')
+					);
+				}
 
    async run(message) {
        const args = message.content.split(' ');
