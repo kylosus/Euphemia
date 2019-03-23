@@ -4,7 +4,6 @@ module.exports = (oldUser, newUser) => {
     if (oldUser.tag !== newUser.tag) {
         newUser.client.guilds.filter(guild => {
             return guild.members.has(newUser.id)
-        }).tap(guild => {
             const entry = newUser.client.provider.get(guild, 'userUpdate', false);
             if (entry && entry.log) {
                 guild.channels.find(val => val.id === entry.log).send(new RichEmbed()
@@ -15,6 +14,9 @@ module.exports = (oldUser, newUser) => {
                     .setTimestamp((new Date()).toISOString())
                 );
             }
-        });
     }
+		newUser.client.guilds
+			.filter(guild => guild.members.has(newUser.id))
+			.tap(guild => {
+			});
 };
