@@ -8,22 +8,6 @@ module.exports = (embeds, message) => {
             await botMessage.react('⬅');
             await botMessage.react('➡');
         }
-        const listener = ((messageReaction, reactionUser, ownMessage = botMessage, callerUserId = message.author.id, list = embedList) => {
-            if (reactionUser.id === callerUserId) {
-                if (messageReaction.message.guild && messageReaction.message.guild.me.hasPermission('MANAGE_MESSAGES')) {
-                    messageReaction.remove(reactionUser);
-                }
-            }
-            if (messageReaction.message.id === ownMessage.id) {
-                if (reactionUser.id === callerUserId) {
-                    if (messageReaction.emoji.name === '➡') {
-                        ownMessage.edit(list.next().setFooter(`${list.getCurrentIndex()}/${list.getSize()}`));
-                    } else if (messageReaction.emoji.name === '⬅') {
-                        ownMessage.edit(list.previous());
-                    }
-                }
-            }
-        });
         message.client.on('messageReactionAdd', listener);
 
         message.client.setTimeout((message, listener) => {
@@ -34,3 +18,20 @@ module.exports = (embeds, message) => {
         },  embeds.length <= 3 ? 30000 : embeds.length * 10000, botMessage, listener);
     });
 }
+	const listener = (async (messageReaction, reactionUser) => {
+		if (reactionUser.id === message.author.id) {
+			if (messageReaction.message.guild && messageReaction.message.guild.me.hasPermission('MANAGE_MESSAGES')) {
+				messageReaction.remove(reactionUser);
+			}
+		}
+		if (messageReaction.message.id === botMessage.id) {
+			if (reactionUser.id === message.author.id) {
+				if (messageReaction.emoji.name === '➡') {
+					await botMessage.edit(embedList.next().setFooter(`${embedList.getCurrentIndex()}/${embedList.getSize()}`));
+				} else if (messageReaction.emoji.name === '⬅') {
+					await botMessage.edit(embedList.previous());
+					await botMessage.edit(embedList.previous());
+				}
+			}
+		}
+	});
