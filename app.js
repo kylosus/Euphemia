@@ -1,10 +1,4 @@
 require('dotenv').config();
-const client = new Commando.Client({
-    owner: process.env.BOT_OWNER || config.owner,
-    commandPrefix: process.env.BOT_PREFIX || config.prefix || ';',
-    disableEveryone: true,
-    unknownCommandResponse: false
-});
 
 const Commando		= require('discord.js-commando');
 const config		= require('./config.json');
@@ -18,6 +12,26 @@ const sqlite		= require('sqlite');
 //}).catch(error => {
     //throw `Failed connecting to database\n${error}`;
 //});
+const client = new Commando.Client({
+	owner: process.env.BOT_OWNER || config.owner,
+	commandPrefix: process.env.BOT_PREFIX || config.prefix || ';',
+	disableEveryone: true,
+	unknownCommandResponse: false,
+	disabledEvents : [
+		'GUILD_SYNC',
+		'GUILD_DELETE',
+		'CHANNEL_CREATE',
+		'CHANNEL_DELETE',
+		'CHANNEL_UPDATE',
+		'CHANNEL_PINS_UPDATE',
+		'MESSAGE_DELETE_BULK',
+		'USER_NOTE_UPDATE',
+		'USER_SETTINGS_UPDATE',
+		'PRESENCE_UPDATE',
+		'VOICE_STATE_UPDATE',
+		'TYPING_START'
+	]
+});
 
 
 require('./events/event.js')(client);
