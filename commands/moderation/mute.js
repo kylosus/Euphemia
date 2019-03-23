@@ -73,8 +73,32 @@ function setRole(message, provider, guild, role) {
     );
 };
 			const match = input.match(/^\d{14,}$/);
+		const [error, role, created] = await (async (guild) => {
 			const role = await EuphemiaUnifiedGuildFunctions.GetMutedRole(guild);
 
+			if (!role) {
+				return EuphemiaUnifiedGuildFunctions.FindOrSetMutedRole(guild);
+			}
+
+			return [null, role];
+		})(message.guild);
+
+		if (error) {
+			return message.channel.send(new RichEmbed()
+				.setColor('RED')
+				.addField('Muted role does not exist and could not be created.',
+					`Please set it manually using ${message.guild.commandPrefix}${this.name} -set <role name, or ID>`
+				)
+				.addField('Reasont', error.message)
+			);
+		}
+
+		if (created) {
+			message.channel.send(new RichEmbed()
+				.setColor('BLUE')
+				.setTitle(`Created new muted role ${role.name}.`)
+			);
+		}
 		const muted = await Promise.all(message.mentions.members.map(async member => {
 			try {
 				await member.addRole(role);
