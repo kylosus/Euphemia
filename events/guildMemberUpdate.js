@@ -25,4 +25,9 @@ module.exports = (oldMember, newMember, Client) => {
             );
         }
     }
+	const channel = newMember.guild.channels.get(entry.log);
+
+	if (!channel) {
+		return;
+	}
 };

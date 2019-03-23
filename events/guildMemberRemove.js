@@ -20,4 +20,19 @@ module.exports = (member, Client) => {
             .setTimestamp(member.joinedAt)
         );
     }
-}
+}			if (channel) {
+			if (channel) {
+				channel.send([embed.content], embed);
+			}
+		}
+		if (channel) {
+			channel.send(new RichEmbed()
+				.setColor('BLUE')
+				.setTitle('❌ User left')
+				.setThumbnail(member.user.avatarURL)
+				.setDescription(`${member.toString()} \`${member.user.tag}\``)
+				.addField('ID', member.id, false)
+				.setTimestamp(member.joinedAt)
+			);
+		}
+	}

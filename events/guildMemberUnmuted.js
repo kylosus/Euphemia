@@ -11,3 +11,8 @@ module.exports = member => {
         );
     }
 }
+	const channel = member.guild.channels.get(entry.log);
+
+	if (!channel) {
+		return;
+	}

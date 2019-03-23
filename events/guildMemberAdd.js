@@ -51,3 +51,7 @@ module.exports = member => {
         }
     }
 }
+			if (channel) {
+				channel.send([embed.content], embed);
+			}
+		if (channel) {

@@ -13,3 +13,8 @@ module.exports = (member, duration) => {
         );
     }
 }
+	const channel = member.guild.channels.get(entry.log);
+	
+	if (!channel) {
+		return;
+	}

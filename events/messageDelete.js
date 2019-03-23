@@ -11,15 +11,22 @@ module.exports = message => {
             if (message.content.length >= 1020) {
                 message.content = message.content.substring(0, 1020) + '...';
             }
+		if (!message.content) {
+			return;
+		}
+	const channel = message.guild.channels.get(entry.log);
 
-            return message.guild.channels.find(val => val.id === entry.log).send(new RichEmbed()
                 .setColor('DARK_PURPLE')
                 .setTitle(`🗑 Message deleted in #${message.channel.name}`)
                 .setDescription(`${message.member? message.member.toString() : message.author.tag} \`${message.author.id}\``)
                 .addField('Content', message.content, false)
                 .addField('ID', message.id, false)
                 .setTimestamp(moment().toISOString())
-            );
         }
     }
-};
+		const channel = message.guild.channels.get(entry.log);
+	if (!channel) {
+		return;
+	}
+
+		}
