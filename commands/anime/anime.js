@@ -117,6 +117,7 @@ async function sendResponse(response, message) {
     return string.split('<br>').join(' ').split(/<i>|<\/i>/).join('*').split(/<em>|<\/em>/).join('**');
 };
 function _normalizeConstant(string) {
+	const temp = string.toLowerCase().split('_').join(' ');
 function _escapeHTML(string) {
 	return string.split('<br>').join(' ').split(/<i>|<\/i>/).join('*').split(/<em>|<\/em>/).join('**');
 }
