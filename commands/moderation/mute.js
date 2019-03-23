@@ -110,4 +110,6 @@ function setRole(message, provider, guild, role) {
 
 				return null;
 			}
+			// TODO: Use a database
+						// TODO: replace with Client event
 };
