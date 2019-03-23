@@ -6,12 +6,6 @@ const MongoClient	= require('mongodb').MongoClient;
 const path			= require('path');
 const sqlite		= require('sqlite');
 
-//MongoClient.connect(process.env.DATABASE_URL, { useNewUrlParser: true }).then(db => {
-  //  client.db = db;
-   // client.database = db.db(process.env.DATABASE_NAME);
-//}).catch(error => {
-    //throw `Failed connecting to database\n${error}`;
-//});
 const client = new Commando.Client({
 	owner: process.env.BOT_OWNER || config.owner,
 	commandPrefix: process.env.BOT_PREFIX || config.prefix || ';',
@@ -33,6 +27,13 @@ const client = new Commando.Client({
 	]
 });
 
+TODO: learn how Mongo works ffs
+MongoClient.connect(process.env.DATABASE_URL, { useNewUrlParser: true }).then(db => {
+	client.db = db;
+	client.database = db.db(process.env.DATABASE_NAME);
+}).catch(error => {
+	throw `Failed connecting to database:\n${error}`;
+});
 
 require('./events/event.js')(client);
 global.BOT_DEFAULT_COLOR = config.defaultColor || [233, 91, 169];
