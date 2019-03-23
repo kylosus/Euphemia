@@ -66,4 +66,6 @@ client.registry
     .registerCommandsIn(path.join(__dirname, 'commands'));
 
 
-client.login(process.env.BOT_TOKEN || config.token).catch(console.error);
+client.login(process.env.BOT_TOKEN || config.token).catch(error => {
+	throw `Failed logging in\n${error.message}`;
+});
