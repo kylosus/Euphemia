@@ -5,74 +5,79 @@ const guildMemberUnmuted			= require('../../events/guildMemberUnmuted');
 const EuphemiaUnifiedGuildFunctions	= require('../../util/EuphemiaUnifiedGuildFunctions.js');
 
 module.exports = class extends Command {
-    constructor(client) {
-        super(client, {
-            name: 'mute',
-            group: 'moderation',
-            memberName: 'mute',
-            description: 'Mutes mentioned users for a given amount of minutes',
-            userPermissions: ['MANAGE_ROLES'],
-            examples: [`${client.commandPrefix}mute 5 @user`, `${client.commandPrefix}mute @user1 @user2 @user3]`],
-            guildOnly: true
-        });
-    }
+	constructor(client) {
+		super(client, {
+			name: 'mute',
+			group: 'moderation',
+			memberName: 'mute',
+			description: 'Mutes mentioned users for a given amount of minutes',
+			userPermissions: ['MANAGE_ROLES'],
+			clientPermissions: ['MANAGE_ROLES', 'MANAGE_GUILD'],
+			examples: [
+				`${client.commandPrefix}mute -set <role name, or ID>`,
+				`${client.commandPrefix}mute 5 @user`,
+				`${client.commandPrefix}mute @user1 [@user2 @user3]`
+			],
+			guildOnly: true
+		});
+	}
 
-   async run(message) {
-        const args = message.content.split(' ');
-        if (args[1] === 'set') {
-            const input = message.content.substring(10);
-            const role =  message.guild.roles.find(val => val.name == input);
-            if (role) {
-                return setRole(message, this.client.provider, message.guild, role);
-            } else if (/^\d+$/.test(args[1])) {
-                const role =  message.guild.roles.find(val => val.id === args[1]);
-                if (role) {
-                    return setRole(message, message.client.provider, message.guild, role);
-                }
-            } else {
-                return message.embed(new RichEmbed()
-                    .setColor('ORANGE')
-                    .setTitle('Role not found')
-                );
-            }
-        } else if (!message.mentions.members.size) {
-            return message.embed(new RichEmbed()
-                .setColor('ORANGE')
-                .setTitle('Please mention members to mute')
-            );
-        } else {
-            let timeout;
-            if (/^\d+$/.test(args[1])) {
-                timeout = parseInt(args[1]);
-            }
-            const role = checkAndCreateRole(message);
-            const body = `has been muted` + (timeout? ` for ${timeout} minutes` : ``);
-            message.mentions.members.tap(member => {
-                if (member.roles.has(role.id)) {
-                    return message.embed(new RichEmbed()
-                        .setColor('ORANGE')
-                        .setDescription(`**Member ${member.toString()} is already muted**.`)
-                    )
-                }
-            });
-        }
-    }
-};
+	async run(message) {
+		const args = message.content.split(' ');
+		const input = args.slice(2).join(' ');
 
-function setRole(message, provider, guild, role) {
-    if (role.position >= guild.me.highestRole.position) {
-        return message.channel.send(new RichEmbed()
-            .setColor('ORANGE')
-            .setTitle('Role cannot be assigned as the mute role because it is higher than, or equal to the bot in the hierarchy.')
-        );
-    }
-    provider.set(guild, 'mutedRole', role.id);
-    return message.channel.send(new RichEmbed()
-        .setColor('GREEN')
-        .setTitle(`Mute role set to ${role.name}.`)
-    );
-};
+		if (args[1] === '-set') {
 			const match = input.match(/^\d{14,}$/);
+
+			const role = ((match, input) => {
+				if (match) {
+					const role = message.guild.roles.get(match[0]);
+					if (role) {
+						return role;
+					}
+				}
+
+				const inputLow = input.toLowerCase();
+				return message.guild.roles.find(role => role.name.toLowerCase().includes(inputLow)) || null;
+			})(match, input);
+
+			if (!role) {
+				return message.embed(new RichEmbed()
+					.setColor('RED')
+					.setTitle('Role not found')
+				);
+			}
+
+			if (role.position >= message.guild.me.highestRole.position) {
+				return message.channel.send(new RichEmbed()
+					.setColor('RED')
+					.setTitle('Role cannot be assigned as the mute role because it is higher than, or equal to the bot in the role hierarchy.')
+				);
+			}
+
+			message.guild.settings.set('mutedRole', role.id);
+
+			return message.channel.send(new RichEmbed()
+				.setColor('GREEN')
+				.setTitle(`Mute role set to ${role.name}.`)
+			);
+		}
+
+		if (!message.mentions.members.size) {
+			return message.channel.send(new RichEmbed()
+				.setColor('RED')
+				.setTitle('Please mention members to mute')
+			);
+		}
+
+		const duration = ((match) => {
+			if (match) {
+				return parseInt(match[0]);
+			}
+
+			return null;
+		})(input.match(/\s\d+\s?/));
+
 		const [error, role, created] = await (async (guild) => {
 			const role = await EuphemiaUnifiedGuildFunctions.GetMutedRole(guild);
 
@@ -99,7 +104,17 @@ function setRole(message, provider, guild, role) {
 				.setTitle(`Created new muted role ${role.name}.`)
 			);
 		}
+
 		const muted = await Promise.all(message.mentions.members.map(async member => {
+			if (member.roles.has(role.id)) {
+				message.channel.send(new RichEmbed()
+					.setColor('RED')
+					.setDescription(`**Member ${member.toString()} is already muted**.`)
+				);
+
+				return null;
+			}
+
 			try {
 				await member.addRole(role);
 			} catch (error) {
@@ -110,6 +125,34 @@ function setRole(message, provider, guild, role) {
 
 				return null;
 			}
+
+			guildMemberMuted(member, duration, message.member);
+
 			// TODO: Use a database
+			if (duration) {
+				message.client.setTimeout((member, role, guildMemberUnmuted) => {
+					member.removeRole(role).then(member => {
 						// TODO: replace with Client event
+						guildMemberMuted(member, duration);
+						guildMemberUnmuted(member);
+					});
+				}, duration * 60000, member, role, guildMemberUnmuted);
+			}
+
+			return await member.toString();
+		})).filter(member => member);
+
+		if (muted.length) {
+			const embed = new RichEmbed()
+				.setColor('GREEN')
+				.addField('Muted members', muted.join('\n'))
+				.addField('Moderator', message.member.toString());
+
+			if (duration) {
+				embed.addField('Duration', `${duration} minutes`);
+			}
+
+			return message.channel.send(embed);
+		}
+	}
 };

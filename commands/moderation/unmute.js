@@ -3,48 +3,41 @@ const { RichEmbed }					= require('discord.js');
 const guildMemberUnmuted			= require('../../events/guildMemberUnmuted');
 const EuphemiaUnifiedGuildFunctions	= require('../../util/EuphemiaUnifiedGuildFunctions.js');
 
-module.exports = class extends Command {
-    constructor(client) {
-        super(client, {
-            name: 'unmute',
-            group: 'moderation',
-            memberName: 'unmute',
-            description: 'Unmutes mentioned users',
-            userPermissions: ['MANAGE_ROLES'],
-            examples: [`${client.commandPrefix}unmute @user`, `${client.commandPrefix}unmute @user1 @user2 @user3`],
-            guildOnly: true
-        });
-    }
 
-   async run(message) {
-       const entry = message.client.provider.get(message.guild, 'mutedRole', false);
-       if (!entry) {
-           return roleNotFound(message);
-        } else {
-            const mutedRole = message.guild.roles.find(val => val.id === entry);
-            if (!mutedRole) {
-                roleNotFound(message);
-            } else {
-                if (!message.mentions.members.size) {
-                    return message.channel.send(new RichEmbed()
-                        .setColor('ORANGE')
-                        .setTitle('Please mention members to unmute')
-                    );
-                } else {
-                    message.mentions.members.tap(member => {
-                        if (!member.roles.has(mutedRole.id)) {
-                            return message.channel.send(new RichEmbed()
-                                .setColor('ORANGE')
-                                .setDescription(`**Member ${member.toString()} is not muted**`)
-                            );
-                        } else {
-                        }
-                    });
-                }
-            }
-        }
-    }
-};
+module.exports = class extends Command {
+	constructor(client) {
+		super(client, {
+			name: 'unmute',
+			group: 'moderation',
+			memberName: 'unmute',
+			description: 'Unmutes mentioned users',
+			userPermissions: ['MANAGE_ROLES'],
+			examples: [
+				`${client.commandPrefix}unmute @user`,
+				`${client.commandPrefix}unmute @user1 @user2 @user3`
+			],
+			guildOnly: true
+		});
+	}
+
+	async run(message) {
+		const role = EuphemiaUnifiedGuildFunctions.GetMutedRole(message.guild);
+
+		if (!role) {
+			return message.channel.send(new RichEmbed()
+				.setColor('RED')
+				.setTitle('Muted role not found')
+			);
+		}
+
+		if (!message.mentions.members.size) {
+			return message.channel.send(new RichEmbed()
+				.setColor('RED')
+				.setTitle('Please mention members to unmute')
+			);
+		}
+
+		// Use a database
 		const unmuted = Promise.all(message.mentions.members.map(async member => {
 			if (!member.roles.has(role.id)) {
 				message.channel.send(new RichEmbed()
@@ -52,11 +45,9 @@ module.exports = class extends Command {
 					.setDescription(`**Member ${member.toString()} is not muted**`)
 				);
 
-function roleNotFound(message) {
-    return message.channel.send(new RichEmbed()
-        .setColor('ORANGE')
-        .addField('Muted role not found', 'Members cannot be muted if muted role is missing', false)
-    );
+				return null
+			}
+
 			try {
 				await member.removeRole(role);
 			} catch (error) {
@@ -67,4 +58,15 @@ function roleNotFound(message) {
 
 				return null;
 			}
+
+			guildMemberUnmuted(member);
+			return member.toString();
+		})).filter(member => member);
+
+		return message.channel.send(new RichEmbed()
+			.setColor('GREEN')
+			.addField('Unmuted members', unmuted.join('\n'))
+			.addField('Moderator', message.member.toString())
+		);
+	}
 };

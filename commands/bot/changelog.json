@@ -1,33 +1,33 @@
 [
-    {
-        "version": "2.1.0",
-        "note": "Version 2.1.0 adds bug fixes and new commands",
-        "major": [
-            "Added avatar command [`616e8be`](https://github.com/jokersus/Euphemia/commit/616e8be6b9c36a5ccfa50f1a8c09d750734de1a8)",
-            "Added discriminator command [`766cf1e`](https://github.com/jokersus/Euphemia/commit/766cf1e43bf0811f83ed648b4d0da8466a9f08eb)"
-        ],
-        "minor": [
-            "New anime module [`e0c2a91`](https://github.com/jokersus/Euphemia/commit/e0c2a910438115e50c81c385a1d5c296a1038bf5)",
-            "Overall module structure improvements [](https://github.com/jokersus/Euphemia/commit/e0c2a910438115e50c81c385a1d5c296a1038bf5)"
-        ]
-    },
-    {
-        "version": "2.0.0",
-        "note": "Version 2.0.0 comes with new commands and lots of small improvements. [Full changelog](https://github.com/jokersus/Euphemia/compare/v2.0.0)",
-        "major": [
-            "Added this changelog",
-            "Custom embedded help command [`1c14b6c`](https://github.com/jokersus/Euphemia/commit/1c14b6c62ff55744eed347b926d3d97fdae3d620)",
-            "Custom embed builder and validator [`ef38cd0`](https://github.com/jokersus/Euphemia/commit/ef38cd07f39981bfe84f1da1be693639ad8ebc2d)",
-            "Add eBay product search command [`0077319`](https://github.com/jokersus/Euphemia/commit/00773195a4603114586689ec74140eae3deb7191)",
-            "Add Urban Dictionary search command [`26fc3e4`](https://github.com/jokersus/Euphemia/commit/26fc3e49f26fb811a7cde380d01de980dabbbf7d)",
-            "Add anime search command [`b6609fb`](https://github.com/jokersus/Euphemia/commit/b6609fb229c0d5b78ac369ea034fb425faf7ebd1)",
-            "Bullet points are cool"
+	{
+		"version": "2.1.0",
+		"note": "Version 2.1.0 adds bug fixes and new commands",
+		"major": [
+			"Added avatar command [`616e8be`](https://github.com/jokersus/Euphemia/commit/616e8be6b9c36a5ccfa50f1a8c09d750734de1a8)",
+			"Added discriminator command [`766cf1e`](https://github.com/jokersus/Euphemia/commit/766cf1e43bf0811f83ed648b4d0da8466a9f08eb)"
+		],
+		"minor": [
+			"New anime module [`e0c2a91`](https://github.com/jokersus/Euphemia/commit/e0c2a910438115e50c81c385a1d5c296a1038bf5)",
+			"Overall module structure improvements [](https://github.com/jokersus/Euphemia/commit/e0c2a910438115e50c81c385a1d5c296a1038bf5)"
+		]
+	},
+	{
+		"version": "2.0.0",
+		"note": "Version 2.0.0 comes with new commands and lots of small improvements. [Full changelog](https://github.com/jokersus/Euphemia/compare/v2.0.0)",
+		"major": [
+			"Added this changelog",
+			"Custom embedded help command [`1c14b6c`](https://github.com/jokersus/Euphemia/commit/1c14b6c62ff55744eed347b926d3d97fdae3d620)",
+			"Custom embed builder and validator [`ef38cd0`](https://github.com/jokersus/Euphemia/commit/ef38cd07f39981bfe84f1da1be693639ad8ebc2d)",
+			"Add eBay product search command [`0077319`](https://github.com/jokersus/Euphemia/commit/00773195a4603114586689ec74140eae3deb7191)",
+			"Add Urban Dictionary search command [`26fc3e4`](https://github.com/jokersus/Euphemia/commit/26fc3e49f26fb811a7cde380d01de980dabbbf7d)",
+			"Add anime search command [`b6609fb`](https://github.com/jokersus/Euphemia/commit/b6609fb229c0d5b78ac369ea034fb425faf7ebd1)",
+			"Bullet points are cool"
 
-        ],
-        "minor": [
-            "Split command detail and descriptions [`dbcedc2`](https://github.com/jokersus/Euphemia/commit/dbcedc2263ba9a586041dbbe286357f26d9a86c2)",
-            "Use default avatar instead of server icon in greeting messages when user avatar is empty [`ab297b9`](https://github.com/jokersus/Euphemia/commit/ef38cd07f39981bfe84f1da1be693639ad8ebc2d)",
-            "Next command results are now sorted [`54eecdf`](https://github.com/jokersus/Euphemia/commit/54eecdf8c1a8278eaea0af6fc8f4e78733bcd38b)"
-        ]
-    }
+		],
+		"minor": [
+			"Split command detail and descriptions [`dbcedc2`](https://github.com/jokersus/Euphemia/commit/dbcedc2263ba9a586041dbbe286357f26d9a86c2)",
+			"Use default avatar instead of server icon in greeting messages when user avatar is empty [`ab297b9`](https://github.com/jokersus/Euphemia/commit/ef38cd07f39981bfe84f1da1be693639ad8ebc2d)",
+			"Next command results are now sorted [`54eecdf`](https://github.com/jokersus/Euphemia/commit/54eecdf8c1a8278eaea0af6fc8f4e78733bcd38b)"
+		]
+	}
 ]

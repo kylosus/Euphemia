@@ -2,17 +2,17 @@ const { Command }	= require('discord.js-commando');
 const { RichEmbed }	= require('discord.js');
 
 module.exports = class extends Command {
-    constructor(client) {
-        super(client, {
-            name: 'kick',
-            group: 'moderation',
-            memberName: 'kick',
-            description: 'Kicks mentioned users',
-            userPermissions: ['KICK_MEMBERS'],
-            examples: [`${client.commandPrefix}kick @user`, `${client.commandPrefix}kick @user1 @user2 @user3`],
-            guildOnly: true
-        });
-    };
+	constructor(client) {
+		super(client, {
+			name: 'kick',
+			group: 'moderation',
+			memberName: 'kick',
+			description: 'Kicks mentioned users',
+			userPermissions: ['KICK_MEMBERS'],
+			examples: [`${client.commandPrefix}kick @user`, `${client.commandPrefix}kick @user1 @user2 @user3`],
+			guildOnly: true
+		});
+	}
 
 	async run(message) {
 		if (!message.mentions.members.size) {

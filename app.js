@@ -38,33 +38,32 @@ MongoClient.connect(process.env.DATABASE_URL, { useNewUrlParser: true }).then(db
 require('./events/event.js')(client);
 global.BOT_DEFAULT_COLOR = config.defaultColor || [233, 91, 169];
 
-
 client.setProvider(
-    sqlite.open(path.join(__dirname, 'settings.sqlite3')).then(db => {
-        return new Commando.SQLiteProvider(db)
-    })
-).catch(console.error);
-
+	sqlite.open(path.join(__dirname, 'settings.sqlite3')).then(db => {
+		return new Commando.SQLiteProvider(db);
+	})
+);
 
 client.registry
-    .registerDefaultTypes()
-    .registerGroups([
-        ['anime', 'Anime and Manga commands'],
-        ['bot', 'Pulic bot commands'],
-        ['fun', 'Fun commands'],
-        ['moderation', 'Moderation commands'],
-        ['owner', 'Owner only commands'],
-        ['setup', 'Server utility setup commands'],
-        ['subscription', 'Tag subscription commands'],
-        ['utility', 'Utility commands']
-    ])
-    .registerDefaultGroups()
-    .registerDefaultCommands({
-        ping: false,
-        help: false
-    })
-    .registerCommandsIn(path.join(__dirname, 'commands'));
+	.registerDefaultTypes()
+	.registerGroups([
+		['anime', 'Anime and Manga commands'],
+		['bot', 'Public bot commands'],
+		['fun', 'Fun commands'],
+		['moderation', 'Moderation commands'],
+		['owner', 'Owner only commands'],
+		['setup', 'Server utility setup commands'],
+		['subscription', 'Tag subscription commands'],
+		['utility', 'Utility commands']
+	])
+	.registerDefaultGroups()
+	.registerDefaultCommands({
+		ping: false,
+		help: false
+	})
+	.registerCommandsIn(path.join(__dirname, 'commands'));
 
+client.messageStats = { received: 0, sent: 0, commands: 0 };	// Possible data race, but it's good enough
 
 client.login(process.env.BOT_TOKEN || config.token).catch(error => {
 	throw `Failed logging in\n${error.message}`;

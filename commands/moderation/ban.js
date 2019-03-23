@@ -1,18 +1,19 @@
 const { Command }	= require('discord.js-commando');
 const { RichEmbed }	= require('discord.js');
+const DAYS_TO_PURGE	= 0;
 
 module.exports = class extends Command {
-    constructor(client) {
-        super(client, {
-            name: 'ban',
-            group: 'moderation',
-            memberName: 'ban',
-            description: 'Bans mentioned users',
-            userPermissions: ['BAN_MEMBERS'],
-            examples: [`${client.commandPrefix}ban @user`, `${client.commandPrefix}ban @user1 @user2 @user3`],
-            guildOnly: true
-        });
-    };
+	constructor(client) {
+		super(client, {
+			name: 'ban',
+			group: 'moderation',
+			memberName: 'ban',
+			description: 'Bans mentioned users',
+			userPermissions: ['BAN_MEMBERS'],
+			examples: [`${client.commandPrefix}ban @user`, `${client.commandPrefix}ban @user1 @user2 @user3`],
+			guildOnly: true
+		});
+	}
 
 	async run(message) {
 		if (!message.mentions.members.size) {
