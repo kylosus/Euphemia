@@ -1,9 +1,8 @@
-const { Command } = require('discord.js-commando');
-const { RichEmbed } = require('discord.js');
-const packageJSON = require('../../package.json');
-const moment = require('moment');
-const momentDurationFormatSetup = require('moment-duration-format');
-const os = require('os');
+const { Command }	= require('discord.js-commando');
+const { RichEmbed }	= require('discord.js');
+const moment		= require('moment');
+const os			= require('os');
+const pjson			= require('../../package.json');
 
 module.exports = class extends Command {
     constructor(client) {

@@ -1,9 +1,3 @@
-const { Command } = require('discord.js-commando');
-const { RichEmbed } = require('discord.js');
-const events = event => require(`../events/${event}`);
-const path = require('path');
-const fs = require('fs');
-const directoryPath = path.join(__dirname + '/../../events');
 const eventModules = [];
 fs.readdir(directoryPath, function (err, files) {
     if (err) {
@@ -15,6 +9,11 @@ fs.readdir(directoryPath, function (err, files) {
         }
         eventModules.push(file.replace(/\.[^/.]+$/, ""));
     });
+const { Command }	= require('discord.js-commando');
+const { RichEmbed }	= require('discord.js');
+const path			= require('path');
+const fs			= require('fs');
+const directoryPath	= path.join(__dirname + '/../../events');
 });
 
 module.exports = class extends Command {

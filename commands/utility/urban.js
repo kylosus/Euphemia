@@ -1,8 +1,8 @@
-const { Command } = require('discord.js-commando');
-const { RichEmbed } = require('discord.js');
-const EuphemiaPaginatedMessage = require('../../util/EuphemiaPaginatedMessage.js');
-const ud = require('urban-dictionary');
 const udIcon = 'https://cdn.discordapp.com/attachments/352865308203024395/479997284117905440/ud.png'
+const { Command }				= require('discord.js-commando');
+const { RichEmbed }				= require('discord.js');
+const EuphemiaPaginatedMessage	= require('../../util/EuphemiaPaginatedMessage.js');
+const ud						= require('urban-dictionary');
 
 module.exports = class extends Command {
     constructor(client) {

@@ -1,6 +1,6 @@
-const { Command } = require('discord.js-commando');
-const { RichEmbed } = require('discord.js');
-const packageJSON = require('../../package.json');
+const { Command }	= require('discord.js-commando');
+const { RichEmbed }	= require('discord.js');
+const pjson			= require('../../package.json');
 let cache;
 
 module.exports = class extends Command {

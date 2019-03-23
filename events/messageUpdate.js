@@ -1,5 +1,5 @@
+const moment 		= require('moment');
 const { RichEmbed } = require('discord.js');
-const moment = require('moment');
 
 module.exports = (oldMessage, newMessage) => {
 

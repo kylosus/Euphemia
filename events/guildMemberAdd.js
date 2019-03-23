@@ -1,6 +1,6 @@
-const { RichEmbed } = require('discord.js');
-const EuphemiaEmbed = require('../util/EuphemiaEmbed.js');
-const moment = require('moment');
+const EuphemiaEmbed =	require('../util/EuphemiaEmbed.js');
+const moment 		=	require('moment');
+const { RichEmbed }	=	require('discord.js');
 
 module.exports = member => {
     const entry = member.client.provider.get(member.guild, 'guildMemberAdd', false);

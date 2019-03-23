@@ -1,7 +1,7 @@
-const { Command } = require('discord.js-commando');
-const { RichEmbed } = require('discord.js');
-const changelog = require('./changelog.json');
-const packageJSON = require('../../package.json');
+const { Command }	= require('discord.js-commando');
+const { RichEmbed }	= require('discord.js');
+const changelog		= require('./changelog.json');
+const pjson			= require('../../package.json');
 
 module.exports = class extends Command {
     constructor(client) {

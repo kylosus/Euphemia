@@ -1,6 +1,7 @@
-const { Command } = require('discord.js-commando');
-const { RichEmbed } = require('discord.js');
-const guildMemberUnmuted = require('../../events/guildMemberUnmuted');
+const { Command }					= require('discord.js-commando');
+const { RichEmbed }					= require('discord.js');
+const guildMemberUnmuted			= require('../../events/guildMemberUnmuted');
+const EuphemiaUnifiedGuildFunctions	= require('../../util/EuphemiaUnifiedGuildFunctions.js');
 
 module.exports = class extends Command {
     constructor(client) {

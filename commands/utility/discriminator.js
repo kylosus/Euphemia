@@ -1,7 +1,7 @@
-const { Command } = require('discord.js-commando');
-const { RichEmbed } = require('discord.js');
-const EuphemiaPaginatedMessage = require('../../util/EuphemiaPaginatedMessage.js');
-const _ = require('lodash');
+const _ 						= require('lodash');
+const { Command } 				= require('discord.js-commando');
+const { RichEmbed } 			= require('discord.js');
+const EuphemiaPaginatedMessage	= require('../../util/EuphemiaPaginatedMessage.js');
 
 module.exports = class extends Command {
     constructor(client) {

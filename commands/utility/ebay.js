@@ -1,8 +1,7 @@
-const { Command } = require('discord.js-commando');
-const { RichEmbed } = require('discord.js');
-const config = require('../../optional.json');
-const EuphemiaPaginatedMessage = require('../../util/EuphemiaPaginatedMessage.js');
-const ebayIcon = 'https://cdn.discordapp.com/attachments/352865308203024395/480050217048080404/ebay.png'
+const { Command }				= require('discord.js-commando');
+const { RichEmbed }				= require('discord.js');
+const config					= require('../../optional.json');
+const EuphemiaPaginatedMessage	= require('../../util/EuphemiaPaginatedMessage.js');
 
 const Ebay = require("ebay-node-api");
 

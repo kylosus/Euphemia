@@ -1,9 +1,4 @@
 require('dotenv').config();
-const Commando = require('discord.js-commando');
-const path = require('path');
-const sqlite = require('sqlite');
-const config = require('./config.json');
-const MongoClient = require('mongodb').MongoClient;
 const client = new Commando.Client({
     owner: process.env.BOT_OWNER || config.owner,
     commandPrefix: process.env.BOT_PREFIX || config.prefix || ';',
@@ -11,6 +6,11 @@ const client = new Commando.Client({
     unknownCommandResponse: false
 });
 
+const Commando		= require('discord.js-commando');
+const config		= require('./config.json');
+const MongoClient	= require('mongodb').MongoClient;
+const path			= require('path');
+const sqlite		= require('sqlite');
 
 //MongoClient.connect(process.env.DATABASE_URL, { useNewUrlParser: true }).then(db => {
   //  client.db = db;
