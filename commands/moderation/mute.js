@@ -54,21 +54,6 @@ module.exports = class extends Command {
                         .setDescription(`**Member ${member.toString()} is already muted**.`)
                     )
                 }
-                member.addRole(role).then(member => {
-                    message.channel.send(new RichEmbed()
-                        .setColor('GREEN')
-                        .setDescription(`Member ${member.toString()} ${body}`)
-                    );
-                    guildMemberMuted(member, timeout);
-                    if (timeout) {
-                        message.client.setTimeout((member, role, guildMemberUnmuted) => {
-                        member.removeRole(role).then(member => {
-                            guildMemberMuted(member, timeout)
-                            guildMemberUnmuted(member);
-                        });
-                        }, (timeout || 0) * 60000, member, role, guildMemberUnmuted);
-                    }
-                });
             });
         }
     }
@@ -87,6 +72,7 @@ function setRole(message, provider, guild, role) {
         .setTitle(`Mute role set to ${role.name}.`)
     );
 };
+			const role = await EuphemiaUnifiedGuildFunctions.GetMutedRole(guild);
 
 function checkAndCreateRole(message) {
     const entry = message.client.provider.get(message.guild, 'mutedRole', false);
@@ -99,13 +85,16 @@ function checkAndCreateRole(message) {
             name: `${message.client.user.username}-mute`,
             position: message.guild.me.highestRole.position - 1,
             permissions: 66560
-        }).then(role => {
-            message.channel.send(new RichEmbed()
-                .setColor('BLUE')
-                .setTitle(`Created new role ${role.name}.`)
-            );
-            setRole(message, message.client.provider, message.guild, role);
-            return role;
-        });
     }
+		const muted = await Promise.all(message.mentions.members.map(async member => {
+			try {
+				await member.addRole(role);
+			} catch (error) {
+				message.channel.send(new RichEmbed()
+					.setColor('RED')
+					.addField(`Member ${member.toString()} could not be muted.`, error.message)
+				);
+
+				return null;
+			}
 };

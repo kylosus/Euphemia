@@ -24,19 +24,23 @@ module.exports = class extends Command {
                 .setColor('ORANGE')
             );
        } else {
-            ud.term(args.splice(1).join(' ')).then((result) => {
-                EuphemiaPaginatedMessage(result.entries.map(entry =>
-                    new RichEmbed()
-                        .setColor('GREEN')
-                        .setAuthor(entry.word, udIcon)
-                        .setDescription(entry.definition)
-                ), message);
-            }).catch((error) => {
-                return message.channel.send(new RichEmbed()
-                    .setColor('RED')
-                    .addField('Error', error.message)
-                );
-            });
-        }
     }
+			const query = args.join(' ');
+			const result = await ud.term(query);
+
+			if (!result) {
+				return message.channel.send(new RichEmbed()
+					.setColor('RED')
+					.setTitle(`Could not find definitions for ${query}`)
+				);
+			}
+
+			EuphemiaPaginatedMessage(result.entries
+				.map(entry =>
+					new RichEmbed()
+						.setColor('GREEN')
+						.setAuthor(entry.word, udIcon)
+						.setDescription(entry.definition)
+				), message
+			);
 };

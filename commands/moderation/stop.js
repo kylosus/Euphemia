@@ -18,20 +18,13 @@ module.exports = class extends Command {
        const self = message.member.highestRole;
        const everyone = message.guild.roles.get(message.guild.id);
        if (message.content.split(' ')[1] === 'off') {
-           message.channel.overwritePermissions(everyone, { 'SEND_MESSAGES': true }).then(channel => {
-                return message.channel.send(new RichEmbed()
-                    .setColor('GREEN')
-                    .setTitle('Channel unlocked')
-                );
-            });
         } else {
-            message.channel.overwritePermissions(everyone, { 'SEND_MESSAGES': false }, 'Euphemia stop command').then(channel => {
-                channel.overwritePermissions(message.member.roles.filter(role => role.hasPermission('MANAGE_GUILD')).first() || message.author, { 'SEND_MESSAGES': true }, 'Euphemia stop command');
-                return channel.send(new RichEmbed()
-                    .setColor('RED')
-                    .setTitle('Channel locked down')
-                );
-            });
         }
     }
+			await message.channel.overwritePermissions(everyone, { 'SEND_MESSAGES': true });
+			return message.channel.send(new RichEmbed()
+				.setColor('GREEN')
+				.setTitle('Channel unlocked')
+		const channel = await message.channel.overwritePermissions(everyone, { 'SEND_MESSAGES': false }, 'Euphemia stop command');
+		await channel.overwritePermissions(message.member.roles.filter(role => role.hasPermission('MANAGE_GUILD')).first() || message.author, { 'SEND_MESSAGES': true }, 'Euphemia stop command');
 };

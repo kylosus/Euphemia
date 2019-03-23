@@ -44,51 +44,41 @@ module.exports = class extends Command {
             }
         }
 
-        return execute(query, variables).then(response => {
-                return sendResponse(response, message);
-        }).catch(() => {
-            variables.status = 'NOT_YET_RELEASED';
-            return execute(query, variables).then(response => {
-                sendResponse(response, message);
-            }).catch(() => {
-                sendError(message, 'Not found');
-            });
-        });
-    }
-}
+		return execute(query, variables).then(response => {
+			return sendResponse(response, message);
+		}).catch(() => {
+			variables.status = 'NOT_YET_RELEASED';
+			return execute(query, variables).then(response => {
+				sendResponse(response, message);
+			}).catch(() => {
+				sendError(message, 'Not found');
+			});
+		});
+	}
+};
 
 async function execute(query, variables) {
-    const options = {
-        method: 'POST',
-        uri: 'https://graphql.anilist.co',
-        body: {
-            query: query,
-            variables: variables
-        },
-        json: true
-    };
+	const options = {
+		method: 'POST',
+		uri: 'https://graphql.anilist.co',
+		body: {
+			query: query,
+			variables: variables
+		},
+		json: true
+	};
 
-    return request(options);
+	return request(options);
 }
 
 async function sendError(message, error) {
-    return message.channel.send(new RichEmbed()
-        .setColor('RED')
-        .addField('Error', error)
-    );
+	return message.channel.send(new RichEmbed()
+		.setColor('RED')
+		.addField('Error', error)
+	);
 }
 
 async function sendResponse(response, message) {
-    let duration;
-    const embed = new RichEmbed().setTitle('Today\'s schedule').setURL('http://anichart.net').setColor('GREEN');
-    if (response.data.hasOwnProperty('Page')) {
-        response.data.Page.media
-            .filter(a => a.nextAiringEpisode && a.nextAiringEpisode.timeUntilAiring < 82800)
-            .sort((a, b) => a.nextAiringEpisode.timeUntilAiring - b.nextAiringEpisode.timeUntilAiring)
-            .forEach(anime => {
-                duration = moment.duration(anime.nextAiringEpisode.timeUntilAiring, 'seconds').format('D [days] H [hours] m [minutes] s [seconds]');
-                embed.addField(`${anime.title.userPreferred} ${anime.nextAiringEpisode? (anime.nextAiringEpisode.episode || '') : '?'}`, duration, false);
-            });
 
         if (embed.fields.length < 1) {
             return sendError(message, 'No anime scheduled for today.');

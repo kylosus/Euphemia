@@ -14,32 +14,41 @@ module.exports = class extends Command {
         });
     };
 
-    async run(message) {
-        if (message.mentions.members.size) {
-            message.mentions.members.tap(member => {
-                if (member.bannable) {
-                    member.ban(0).then(() => {
-                        message.channel.send(new RichEmbed()
-                            .setColor('GREEN')
-                            .setTitle(`User ${member.user.tag} has been banned by ${message.author.tag}.`)
-                        );
-                    }).catch(() => {
-                        message.channel.send(new RichEmbed()
-                            .setColor('ORANGE')
-                            .setTitle(`User ${member.user.tag} was not banned. Reason: unknown.`)
-                    )});
-                } else {
-                    message.channel.send(new RichEmbed()
-                        .setColor('ORANGE')
-                        .setTitle(`User ${member.user.tag} was not banned. Reason: bot cannot ban that member.`)
-                    )
-                }
-            });
-        } else {
-            return message.channel.send(new RichEmbed()
-                .setColor('RED')
-                .setTitle(`Please mention users to ban.`)
-            );
-        }
-    }
-}
+	async run(message) {
+		if (!message.mentions.members.size) {
+			return message.channel.send(new RichEmbed()
+				.setColor('RED')
+				.setTitle('Please mention members to kick')
+			);
+		}
+
+		const banned = [];
+
+		message.mentions.members.tap(async member => {
+			if (!member.bannable) {
+				return message.channel.send(new RichEmbed()
+					.setColor('RED')
+					.setTitle(`User ${member.user.tag} was not banned. Reason: member is higher than the bot in the role hierarchy.`)
+				);
+			}
+
+			try {
+				await member.ban(DAYS_TO_PURGE);
+				banned.push(member.user.tag);
+			} catch (error) {
+				message.channel.send(new RichEmbed()
+					.setColor('RED')
+					.setTitle(`User ${member.user.tag} was not banned. Reason: ${error}.`)
+				);
+			}
+
+		});
+
+		banned.forEach(tag => {
+			message.channel.send(new RichEmbed()
+				.setColor('GREEN')
+				.setTitle(`User ${tag} has been banned by ${message.author.tag}.`)
+			);
+		});
+	}
+};

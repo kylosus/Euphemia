@@ -13,27 +13,15 @@ module.exports = class extends Command {
         });
     }
 
-   async run(message) {
-       const entry = message.client.provider.get(message.guild, 'guildMemberAdd', false);
-       if (!entry) {
-			message.client.provider.set(message.guild, 'guildMemberAdd', {automute: true}).then(entry => {
-			});
-       } else if (!entry.hasOwnProperty('automute')) {
+	async run(message) {
+		const entry = message.client.provider.get(message.guild, 'guildMemberAdd', false);
+
+		if (!entry) {
+			await message.client.provider.set(message.guild, 'guildMemberAdd', { automute: true });
 			return _sendNotification(message, 'Enabled');
+		}
 			entry.automute = true;
-			message.client.provider.set(message.guild, 'guildMemberAdd', entry).then(entry => {
-        		sendNotification(message, 'Enabled');
-            });
-       } else {
-		   if (entry.automute) {
-				entry.automute = false;
-				message.client.provider.set(message.guild, 'guildMemberAdd', entry).then(entry => {
-				});
-			} else {
-				entry.automute = true;
-                message.client.provider.set(message.guild, 'guildMemberAdd', entry).then(entry => {
-                });
-			}
+			await message.client.provider.set(message.guild, 'guildMemberAdd', entry);
 			return _sendNotification(message, 'Enabled');
 		}
     }
@@ -43,7 +31,13 @@ module.exports = class extends Command {
         .setColor('DARK_RED')
         .setTitle(`${text} automute on new member join.`)
     );
+		if (entry.automute) {
+			entry.automute = false;
+			await message.client.provider.set(message.guild, 'guildMemberAdd', entry);
 			return _sendNotification(message, 'Disabled');
+		} else {
+			entry.automute = true;
+			await message.client.provider.set(message.guild, 'guildMemberAdd', entry);
 			_sendNotification(message, 'Enabled');
 };
 function _sendNotification(message, text) {

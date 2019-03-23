@@ -38,13 +38,6 @@ module.exports = class extends Command {
                                 .setDescription(`**Member ${member.toString()} is not muted**`)
                             );
                         } else {
-                            member.removeRole(mutedRole).then(member => {
-                                message.channel.send(new RichEmbed()
-                                    .setColor('GREEN')
-                                    .setDescription(`**Unmuted ${member.toString()}**`)
-                                );
-                                guildMemberUnmuted(member);
-                            });
                         }
                     });
                 }
@@ -52,10 +45,26 @@ module.exports = class extends Command {
         }
     }
 };
+		const unmuted = Promise.all(message.mentions.members.map(async member => {
+			if (!member.roles.has(role.id)) {
+				message.channel.send(new RichEmbed()
+					.setColor('RED')
+					.setDescription(`**Member ${member.toString()} is not muted**`)
+				);
 
 function roleNotFound(message) {
     return message.channel.send(new RichEmbed()
         .setColor('ORANGE')
         .addField('Muted role not found', 'Members cannot be muted if muted role is missing', false)
     );
+			try {
+				await member.removeRole(role);
+			} catch (error) {
+				message.channel.send(new RichEmbed()
+					.setColor('RED')
+					.addField(`Could not unmute ${member.toString()}`, error.message)
+				);
+
+				return null;
+			}
 };

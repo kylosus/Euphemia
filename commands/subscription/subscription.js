@@ -23,43 +23,6 @@ module.exports = class extends Command {
            if (tag) {
                const query = {};
                query[tag] = {$exists: false};
-               collection.findOne({_id: message.guild.id, [tag]: {$exists: true}}).then(entry => {
-                   if (!entry) {
-                       return collection.updateOne(
-                           {_id: message.guild.id},
-                           {$set: {[tag]: []}},
-                           {upsert: true}
-                       ).then(() => message.channel.send(new RichEmbed()
-                            .setColor('GREEN')
-                            .setTitle(`Added new tag ${tag}`)
-                        ));
-                   } else {
-                       return sendWarning(message.channel, `Tag ${tag} already exists`)
-                   }
-               });
-           } else {
-               return sendWarning(message.channel, 'Please enter a tag to add');
-           }
-       } else if (args[1] === 'remove') {
-           const tag = args.splice(2).join(' ').toLowerCase();
-           if (tag) {
-               collection.findOne({_id: message.guild.id, [tag]: {$exists: true}}).then(entry => {
-                   if (entry) {
-                       const query = {};
-                       query[tag] = [];
-                       collection.updateOne(
-                           {_id: message.guild.id},
-                           {$unset: query}
-                       ).then(() => {
-                           return message.channel.send(new RichEmbed()
-                                .setColor('GREEN')
-                                .addField(`Removed tag ${tag}`, `Tag had ${entry[tag]? entry[tag].length : 0} members`)
-                            );
-                        }).catch(console.error);
-                    } else {
-                        sendWarning(message.channel, `Tag ${tag} does not exist`)
-                    }
-                });
             } else {
                 sendWarning(message.channel, 'Please enter a tag to add');
             }
@@ -104,10 +67,55 @@ module.exports = class extends Command {
         }
     }
 };
+			const entry = await collection.findOne({_id: message.guild.id, [tag]: {$exists: true}});
+
+			if (entry) {
+				return _sendWarning(message.channel, `Tag ${tag} already exists`);
+			}
+
+			collection.updateOne(
+				{_id: message.guild.id},
+				{$set: {[tag]: []}},
+				{upsert: true}
+			);
+
+			return message.channel.send(new RichEmbed()
+				.setColor('GREEN')
+				.setTitle(`Added new tag ${tag}`)
+			);
+
+			const entry = await collection.findOne({_id: message.guild.id, [tag]: {$exists: true}});
 
 function sendWarning(channel, text) {
     return channel.send(new RichEmbed()
         .setColor('RED')
         .setTitle(text)
     );
+			const query = {};
+			query[tag] = [];
+			collection.updateOne(
+				{_id: message.guild.id},
+				{$unset: query}
+			);
+
+			return message.channel.send(new RichEmbed()
+				.setColor('GREEN')
+				.addField(`Removed tag ${tag}`, `Tag had ${entry[tag] ? entry[tag].length : 0} members`)
+			);
+		}
+
+			const result = await collection.removeOne({_id: message.guild.id});
+			if (!result.deletedCount) {
+				return _sendWarning(message.channel, 'This server does not have any registered tags');
+			}
+			const entry = await collection.findOne({_id: message.guild.id}, {projection: {_id: false}});
+
+			let tagCount = 0;
+			const pullQuery = {};
+
+			for (let tag in entry) {
+				if (entry[tag].indexOf(args[2]) !== -1) {
+					pullQuery[tag] = args[2];
+					tagCount++;
+				}
 };

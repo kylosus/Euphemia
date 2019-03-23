@@ -29,10 +29,10 @@ module.exports = class extends Command {
                     .setTitle('Please specify a smaller value')
                 );
            } else {
-               return message.channel.fetchMessages({ limit: amount + 1 }).then(messages => {
-                    message.channel.bulkDelete(messages);
                 });
             }
         }
     }
+				const deleted = await message.channel.bulkDelete(count);
+				const reply = await message.channel.send(new RichEmbed()
 };

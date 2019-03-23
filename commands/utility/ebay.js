@@ -35,25 +35,30 @@ module.exports = class extends Command {
             );
         } else {
             let a = args.splice(1).join(' ');
-            ebay.findItemsByKeywords(a).then((data) => {
-
-                if (!data[0].searchResult[0].item) {
-                    return message.channel.send(new RichEmbed()
-                        .setColor('RED')
-                        .addField('Error', 'Not found')
-                    );
-                }
-
-                EuphemiaPaginatedMessage(data[0].searchResult[0].item.map(entry =>
-                    new RichEmbed()
-                        .setColor('GREEN')
-                        .setAuthor(entry.title, ebayIcon, entry.viewItemURL[0])
-                        .setThumbnail(entry.galleryURL[0])
-                        .addField('Price', `${entry.sellingStatus[0].currentPrice[0].__value__} ${entry.sellingStatus[0].currentPrice[0]['@currencyId']}`, true)
-                        .addField('Condition', entry.condition? entry.condition[0].conditionDisplayName[0] : '-', true)
-                ), message);
-
-            }).catch(console.error);
         }
     }
-};
+};		const args = message.content.split(' ');
+		if (args.length === 1) {
+			return message.channel.send(new RichEmbed()
+				.setTitle('Please enter search terms')
+				.setColor('ORANGE')
+			);
+		} else {
+			const a = args.splice(1).join(' ');
+			const data = await ebay.findItemsByKeywords(a);
+
+			if (!data[0].searchResult[0].item) {
+				return message.channel.send(new RichEmbed()
+					.setColor('RED')
+					.addField('Error', 'Not found')
+				);
+			}
+
+			EuphemiaPaginatedMessage(data[0].searchResult[0].item.map(entry =>
+				new RichEmbed()
+					.setColor('GREEN')
+					.setAuthor(entry.title, ebayIcon, entry.viewItemURL[0])
+					.setThumbnail(entry.galleryURL[0])
+					.addField('Price', `${entry.sellingStatus[0].currentPrice[0].__value__} ${entry.sellingStatus[0].currentPrice[0]['@currencyId']}`, true)
+					.addField('Condition', entry.condition? entry.condition[0].conditionDisplayName[0] : '-', true)
+			), message);

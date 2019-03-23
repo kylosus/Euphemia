@@ -18,24 +18,6 @@ module.exports = class extends Command {
         const tag = message.content.split(' ').splice(1).join(' ').toLowerCase();
         const collection = this.client.database.collection('subscriptions');
         if (tag) {
-            collection.findOne({_id: message.guild.id, [tag]: {$exists: true}}).then(entry => {
-                if (entry) {
-                    collection.updateOne(
-                        {_id: message.guild.id},
-                        {$pull: {[tag]: message.author.id}}
-                    ).then(commandResult => {
-                        if (commandResult.result.nModified) {
-                            return message.channel.send(new RichEmbed()
-                                .setColor('GREEN')
-                                .setTitle(`Unsubscribed from ${tag}`)
-                            );
-                        } else {
-                            return message.channel.send(new RichEmbed()
-                                .setColor('ORANGE')
-                                .setTitle(`You are not subscribed to ${tag}`)
-                            );
-                        }
-                    });
                 } else {
                     return message.channel.send(new RichEmbed()
                         .setColor('RED')
@@ -50,4 +32,18 @@ module.exports = class extends Command {
             );
         }
     }
+		const entry = await collection.findOne({_id: message.guild.id, [tag]: {$exists: true}});
+		
+		// May fail. try try/catch
+		if (!entry) {
+			return message.channel.send(new RichEmbed()
+				.setColor('RED')
+				.setTitle(`Tag ${tag} does not exist`)
+			);
+		}
+
+		const result = await collection.updateOne(
+			{_id: message.guild.id},
+			{$pull: {[tag]: message.author.id}}
+		);
 };

@@ -14,32 +14,41 @@ module.exports = class extends Command {
         });
     };
 
-    async run(message) {
-        if (message.mentions.members.size) {
-            message.mentions.members.tap(member => {
-                if (member.bannable) {
-                    member.kick().then(() => {
-                        message.embed(new RichEmbed()
-                            .setColor('GREEN')
-                            .setTitle(`User ${member.user.tag} has been kicked by ${message.author.tag}.`)
-                        );
-                    }).catch(() => {
-                        message.channel.send(new RichEmbed()
-                            .setColor('ORANGE')
-                            .setTitle(`User ${member.user.tag} was not kicked. Reason: unknown.`)
-                    )});
-                } else {
-                    return message.channel.send(new RichEmbed()
-                        .setColor('ORANGE')
-                        .setTitle(`User ${member.user.tag} was not kicked. Reason: bot cannot kicked that member.`)
-                    );
-                }
-            });
-        } else {
-            return message.channel.send(new RichEmbed()
-                .setColor('RED')
-                .setTitle(`Please mention users to kick.`)
-            );
-        }
-    }
-}
+	async run(message) {
+		if (!message.mentions.members.size) {
+			return message.channel.send(new RichEmbed()
+				.setColor('RED')
+				.setTitle('Please mention members to kick')
+			);
+		}
+
+		const kicked = [];
+
+		message.mentions.members.tap(async member => {
+			if (!member.kickable) {
+				return message.channel.send(new RichEmbed()
+					.setColor('RED')
+					.setTitle(`User ${member.user.tag} was not kicked. Reason: member is higher than the bot in the role hierarchy.`)
+				);
+			}
+
+			try {
+				await member.kick();
+				kicked.push(member.user.tag);
+			} catch (error) {
+				message.channel.send(new RichEmbed()
+					.setColor('RED')
+					.setTitle(`User ${member.user.tag} was not kicked. Reason: ${error}.`)
+				);
+			}
+
+		});
+
+		kicked.forEach(tag => {
+			message.channel.send(new RichEmbed()
+				.setColor('GREEN')
+				.setTitle(`User ${tag} has been kicked by ${message.author.tag}.`)
+			);
+		});
+	}
+};

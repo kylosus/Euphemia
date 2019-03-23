@@ -68,24 +68,27 @@ async function execute(query, variables) {
         json: true
     };
 
-    return request(options);
-}
+		const variables = {
+			search: args.slice(1).join(' ')
+		};
 
-async function sendError(message, error) {
-    return message.embed(new RichEmbed()
-        .setColor('RED')
-        .addField('Error', error)
-    )
-}
+		const response = await request({
+			method: 'POST',
+			uri: 'https://graphql.anilist.co',
+			body: {
+				query: query,
+				variables: variables
+			},
+			json: true
+		});
 
-async function sendResponse(response, message) {
-    const anime = response.data.Media;
-    const ranking = anime.rankings.filter(ranking => ranking.context === 'most popular all time');
-    let duration;
-    if (anime.nextAiringEpisode) {
-        duration = moment.duration(anime.nextAiringEpisode.timeUntilAiring, 'seconds');
-        duration = duration.format('D [days] H [hours] m [minutes]');
-    }
+		// Test this
+		if (!response) {
+			return message.channel.send(new RichEmbed()
+				.setColor('RED')
+				.setTitle('Not found')
+			);
+		}
 
     return message.channel.send(new RichEmbed()
         .setColor(global.BOT_DEFAULT_COLOR)

@@ -18,19 +18,6 @@ module.exports = class extends Command {
 
    async run(message) {
        if (!message.content.includes(' ')) {
-           this.client.provider.remove(message.guild, 'guildMemberRemove').then(oldValue => {
-               if (oldValue) {
-                    return message.embed(new RichEmbed()
-                        .setColor('RED')
-                        .setTitle('Removed and disabled goodbye message for this guild')
-                    );
-               } else {
-                    return message.embed(new RichEmbed()
-                        .setColor('RED')
-                        .setTitle('Please specify a goodbye message, or channel')
-                    );
-               }
-           })
         } else {
             const argument = message.content.split(' ').splice(1).join(' ');
             if (argument.startsWith('<#')) {
@@ -42,15 +29,6 @@ module.exports = class extends Command {
                         .setColor('GREEN')
                         .setTitle(`Goodbye channel set to #${message.guild.channels.find(val => val.id === object.channel).name}`));
                 } else {
-                    this.client.provider.set(message.guild, 'guildMemberRemove', { message: null, channel: message.mentions.channels.array()[0].id }).then(entry =>{
-                        message.embed(new RichEmbed()
-                            .setColor('GREEN')
-                            .setTitle(`Goodbye channel set to #${message.mentions.channels.array()[0].name}`));
-                        return message.embed(new RichEmbed()
-                            .setColor('ORANGE')
-                            .setTitle(`Warning: No Welcome message set. Do ${this.client.commandPrefix}goodbye {JSON} to set the channel`)
-                        );
-                    });
                 }
             } else if (argument.startsWith('{')) {
                 const entry = this.client.provider.get(message.guild, 'guildMemberRemove', false);
@@ -100,4 +78,16 @@ module.exports = class extends Command {
             }
         }
     }
-}
+}			const oldValue = await this.client.provider.remove(message.guild, 'guildMemberRemove');
+			if (oldValue) {
+				return message.channel.send(new RichEmbed()
+					.setColor('RED')
+					.setTitle('Removed and disabled goodbye message for this guild')
+				);
+			} else {
+				return message.channel.send(new RichEmbed()
+					.setColor('RED')
+					.setTitle('Please specify a goodbye message, or channel')
+				);
+			}
+		}

@@ -22,33 +22,6 @@ module.exports = class extends Command {
         const tag = message.content.split(' ').splice(1).join(' ').toLowerCase();
         const collection = this.client.database.collection('subscriptions');
         if (tag) {
-            collection.findOne({_id: message.guild.id, [tag]: {$exists: true}}).then(entry => {
-                if (entry) {
-                    const users = entry[tag].map(user => `<@${user}>`);
-                    if (users.length) {
-                        const messages = _.chunk(users, 90);
-                        let first = true;
-                        messages.forEach(chunk => {
-                            if (first) {
-                                message.channel.send(`🌸 **Users subscribed to ${tag}**\n${chunk.join(' ')}`);
-                                first = false;
-                            } else {
-                                message.channel.send(chunk.join(' '));
-                            }
-                        });
-                    } else {
-                        return message.channel.send(new RichEmbed()
-                            .setColor('RED')
-                            .setTitle(`Tag ${tag} does not any members subscribed to it`)
-                        );
-                    }
-                } else {
-                    return message.channel.send(new RichEmbed()
-                        .setColor('RED')
-                        .setTitle(`Tag ${tag} does not exist`)
-                    );
-                }
-            })
         } else {
             return message.channel.send(new RichEmbed()
                 .setColor('RED')
@@ -56,4 +29,23 @@ module.exports = class extends Command {
             );
         }
     }
+		const collection = this.client.database.collection('subscriptions');
+
+		const entry = await collection.findOne({_id: message.guild.id, [tag]: {$exists: true}});
+
+		if (!entry) {
+			return message.channel.send(new RichEmbed()
+				.setColor('RED')
+				.setTitle(`Tag ${tag} does not exist`)
+			);
+		}
+
+		const users = entry[tag].map(user => `<@${user}>`);
+		if (!users.length) {
+			return message.channel.send(new RichEmbed()
+				.setColor('RED')
+				.setTitle(`Tag ${tag} does not any members subscribed to it`)
+			);
+		}
+
 };

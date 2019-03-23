@@ -18,21 +18,28 @@ module.exports = class extends Command {
     async run(message) {
         const embed = new RichEmbed();
 
-        const options = {
-            uri: 'https://nekos.moe/api/v1/random/image?count=1',
-            json: true
-        };
+	async run(message) {
+		const response = (async (options) => {
+			try {
+				return await rp(options);
+			} catch (error) {
+				return null;
+			}
+		})({
+			uri: NEKOS_MOE_ENDP,
+			json: true
+		});
 
-       await rp(options)
-            .then(response => {
-                embed.setImage('https://nekos.moe/image/' + response.images[0].id)
-                    .setColor(global.BOT_DEFAULT_COLOR);
-            })
-            .catch(error => {
-                embed.setColor('RED')
-                    .addField('An error occurred', error.toString(), false)
-            });
+		if (!response || !response.images) {		// Might break idk check https://docs.nekos.moe/images.html#get-random-images
+			return message.channel.send(new RichEmbed()
+				.setColor('RED')
+				.setTitle('An error occurred. Please try again later')
+			);
+		}
 
-        return message.channel.send(embed);
-    }
+		return message.channel.send(new RichEmbed()
+			.setColor(global.BOT_DEFAULT_COLOR)
+			.setImage(`${NEKOS_MOE_BASE}${response.images[0].id}`)
+		);
+	}
 };
