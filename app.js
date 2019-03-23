@@ -35,7 +35,6 @@ const client = new Commando.Client({
 
 
 require('./events/event.js')(client);
-// require('./dbl.js')(process.env.DBL_TOKEN, process.env.DBL_PASSWORD, client);
 global.BOT_DEFAULT_COLOR = config.defaultColor || [233, 91, 169];
 
 
