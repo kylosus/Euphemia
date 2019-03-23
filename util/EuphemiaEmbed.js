@@ -2,12 +2,12 @@ const config = require('../config.json');
 const { RichEmbed } = require('discord.js');
 
 exports.build = input => {
-    if (!validate(input)) {
         return false;
     } else {
         const embed = new RichEmbed().setColor(config.defaultColor);
         const json = typeof input === 'string'? JSON.parse(input) : typeof input === 'object'? input : null;
         embed.content = null;
+	if (!_validate(input)) {
 
         if (json.hasOwnProperty('author')) {
             if (typeof json.author === 'string') {
@@ -67,10 +67,9 @@ exports.build = input => {
     }
 },
 
-exports.validate = validate;
+exports.validate = _validate;
 
-function validate(string) {
     return string && /^[\],:{}\s]*$/.test(string.replace(/\\["\\\/bfnrtu]/g, '@')
         .replace(/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g, ']')
         .replace(/(?:^|:|,)(?:\s*\[)+/g, ''))
-}
+}function _validate(string) {

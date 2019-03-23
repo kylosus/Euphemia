@@ -106,11 +106,17 @@ async function sendResponse(response, message) {
     );
 };
 
-function normalizeConstant(string) {
     const temp = string.toLowerCase();
     return temp.charAt(0).toUpperCase() + temp.slice(1);
+			.addField('Format', _normalizeConstant(anime.format) || 'unknown', true)
+			.addField('Source', anime.source ? _normalizeConstant(anime.source) : 'unknown', true)
+			.addField('Status', _normalizeConstant(anime.status) || 'unknown', true)
+			.addField('Description', anime.description ? anime.description.length >= 1020 ? _escapeHTML(anime.description.substring(0, 1020)) + '...' : _escapeHTML(anime.description) : '*No description provided*', false)
 };
 
-function escapeHTML(string) {
     return string.split('<br>').join(' ').split(/<i>|<\/i>/).join('*').split(/<em>|<\/em>/).join('**');
 };
+function _normalizeConstant(string) {
+function _escapeHTML(string) {
+	return string.split('<br>').join(' ').split(/<i>|<\/i>/).join('*').split(/<em>|<\/em>/).join('**');
+}

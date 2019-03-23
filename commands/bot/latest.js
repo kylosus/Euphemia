@@ -17,7 +17,6 @@ module.exports = class extends Command {
    async run(message) {
        const args = message.content.split(' ');
        if (args.length === 1) {
-           return message.channel.send(build(changelog[0]));
        } else if (args[1] === 'list') {
             return message.channel.send(new RichEmbed()
                 .setColor(global.BOT_DEFAULT_COLOR)
@@ -26,7 +25,6 @@ module.exports = class extends Command {
        } else {
            const log = changelog.find(log => log.version === args[1]);
            if (log) {
-               return message.channel.send(build(log));
            } else {
                 return message.channel.send(new RichEmbed()
                     .setColor('ORANGE')
@@ -37,7 +35,6 @@ module.exports = class extends Command {
     }
 };
 
-function build(log) {
     return new RichEmbed()
         .setTitle(`Euphemia version ${log.version} by ${packageJSON.author}`)
         .setURL('https://github.com/jokersus/Euphemia')
@@ -46,3 +43,4 @@ function build(log) {
         .addField('Major changes', log.major.map(x => `• ${x}`).join('\n'))
         .addField('Minor changes', log.minor.map(x => `• ${x}`).join('\n'))
 };
+function _build(log) {

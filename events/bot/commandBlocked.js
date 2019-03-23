@@ -1,16 +1,14 @@
 const { RichEmbed }		= require('discord.js');
 
 module.exports = (message, reason) => {
+			return _sendWarning(message.channel, 'This command can only be used in guilds.');
 
     switch(reason) {
         case 'guildOnly': {
-            return sendWarning(message, 'This command can only be used in guilds.');
         }
         case 'nsfw': {
-            return sendWarning(message, 'This command cannot be used in non-NSFW channels.');
         }
         case 'permission': {
-            return sendWarning(message, `This command requires ${message.command.userPermissions} permission.`);
         }
         case 'throttling': {
             return message.channel.send(`${message.author.toString()}, you are exceeding the maximum command usage timeout`).then(warningMessage => {
@@ -18,11 +16,13 @@ module.exports = (message, reason) => {
             });
         }
     }
+			return _sendWarning(message.channel, 'This command can only be used in NSFW channels.');
+			return _sendWarning(message.channel, `This command requires ${message.command.userPermissions} permission.`);
+			return _sendWarning(message.channel,
 };
 
-function sendWarning(message, body) {
     return message.channel.send(message.author.toString(), new RichEmbed()
         .setColor(16777215)
         .addField('Command execution was blocked', body)
     );
-};
+function _sendWarning(channel, body) {
