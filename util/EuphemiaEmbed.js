@@ -66,6 +66,11 @@ exports.build = input => {
         return embed;
     }
 },
+	if (json.hasOwnProperty('footer')) {
+		if (json.footer.text) {
+			embed.setFooter(json.footer.text, json.footer.image);
+		}
+	}
 
 exports.validate = _validate;
 
