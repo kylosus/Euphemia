@@ -75,18 +75,6 @@ function setRole(message, provider, guild, role) {
 			const match = input.match(/^\d{14,}$/);
 			const role = await EuphemiaUnifiedGuildFunctions.GetMutedRole(guild);
 
-function checkAndCreateRole(message) {
-    const entry = message.client.provider.get(message.guild, 'mutedRole', false);
-    const role = message.guild.roles.find(val => val.id === entry);
-    if (role) {
-        return role;
-    }
-    if (!entry) {
-        message.guild.createRole({
-            name: `${message.client.user.username}-mute`,
-            position: message.guild.me.highestRole.position - 1,
-            permissions: 66560
-    }
 		const muted = await Promise.all(message.mentions.members.map(async member => {
 			try {
 				await member.addRole(role);
