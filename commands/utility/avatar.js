@@ -18,19 +18,13 @@ module.exports = class extends Command {
 			return message.channel.send(new RichEmbed()
 				.setDescription(`${member.toString()}'s avatar`)
 				.setColor(member.displayColor)
-				.setImage(member.user.avatarURL ?
-					`https://cdn.discordapp.com/avatars/${member.id}/${member.user.avatar}${member.user.avatar.startsWith('a') ? 
-						'.gif' : ''}?size=1024` : member.user.defaultAvatarURL
-				)
+				.setImage(member.user.displayAvatarURL)
 			);
 		} else {
 			return message.channel.send(new RichEmbed()
 				.setDescription('Your avatar')
 				.setColor(global.BOT_DEFAULT_COLOR)
-				.setImage(message.author.avatarURL ?
-					`https://cdn.discordapp.com/avatars/${message.author.id}/${message.author.avatar}${message.author.avatar.startsWith('a') ? 
-						'.gif' : ''}?size=1024` : message.author.defaultAvatarURL
-				)
+				.setImage(message.author.displayAvatarURL)
 			);
 		}
 	}
