@@ -27,7 +27,7 @@ const client = new Commando.Client({
 	]
 });
 
-TODO: learn how Mongo works ffs
+//TODO: learn how Mongo works ffs
 MongoClient.connect(process.env.DATABASE_URL, { useNewUrlParser: true }).then(db => {
 	client.db = db;
 	client.database = db.db(process.env.DATABASE_NAME);
