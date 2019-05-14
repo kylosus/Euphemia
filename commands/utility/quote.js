@@ -32,7 +32,6 @@ module.exports = class extends Command {
                     );
                 }
 
-                console.log(found)
                 const embed = new RichEmbed()
                     .setColor(found.member.displayColor || 0xffffff)
                     .setDescription(found.content || '*No content*')
