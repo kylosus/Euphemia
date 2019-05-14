@@ -64,7 +64,7 @@ module.exports = class extends Command {
 
                 message.channel.send(embed).catch(err => { });
             } catch (err) {
-                if (err.message = 'Unknown Message') {
+                if (err.message === 'Unknown Message') {
                     message.channel.send(new RichEmbed()
                         .setColor('RED')
                         .setTitle('Message not found')
