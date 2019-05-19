@@ -32,7 +32,6 @@ module.exports = class extends Command {
                     );
                 }
 
-                console.log(found)
                 const embed = new RichEmbed()
                     .setColor(found.member.displayColor || 0xffffff)
                     .setDescription(found.content || '*No content*')
@@ -53,7 +52,6 @@ module.exports = class extends Command {
 
                 if (found.attachments.size > 1) {
                     const attachmentFieldBody = found.attachments.map(attachment => attachment.url);
-
                     embed.addField('Attachments', attachmentFieldBody.join('\n'));
                 } else if (found.attachments.size === 1) {
                     const attachment = found.attachments.first();
@@ -61,7 +59,7 @@ module.exports = class extends Command {
                         embed.setImage(attachment.url);
                     }
                 }
-
+                embed.addField('Jump to', found.url)
                 message.channel.send(embed).catch(err => { });
             } catch (err) {
                 if (err.message === 'Unknown Message') {
