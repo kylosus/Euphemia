@@ -1,3 +1,6 @@
+# I'll work on the bot when I have I'll have time
+### There's a local branch with tons of additions and revisions, I promise
+
 # Euphemia
 ***
 ![](https://files.catbox.moe/mxzpmq.jpg)
