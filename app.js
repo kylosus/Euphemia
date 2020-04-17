@@ -2,7 +2,6 @@ require('dotenv').config();
 
 const Commando		= require('discord.js-commando');
 const config		= require('./config.json');
-const MongoClient	= require('mongodb').MongoClient;
 const path			= require('path');
 const sqlite		= require('sqlite');
 
@@ -11,7 +10,7 @@ const client = new Commando.Client({
 	commandPrefix: process.env.BOT_PREFIX || config.prefix || ';',
 	disableEveryone: true,
 	unknownCommandResponse: false,
-	disabledEvents : [
+	disabledEvents: [
 		'GUILD_SYNC',
 		'GUILD_DELETE',
 		'CHANNEL_CREATE',
@@ -25,14 +24,6 @@ const client = new Commando.Client({
 		'VOICE_STATE_UPDATE',
 		'TYPING_START'
 	]
-});
-
-TODO: learn how Mongo works ffs
-MongoClient.connect(process.env.DATABASE_URL, { useNewUrlParser: true }).then(db => {
-	client.db = db;
-	client.database = db.db(process.env.DATABASE_NAME);
-}).catch(error => {
-	throw `Failed connecting to database:\n${error}`;
 });
 
 require('./events/event.js')(client);
