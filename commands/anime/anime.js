@@ -3,6 +3,9 @@ const { RichEmbed }	= require('discord.js');
 const moment		= require('moment');
 const request		= require('request-promise');
 
+const GENRE_MAX		= 3;
+const DESC_MAX		= 300;
+
 module.exports = class extends Command {
 	constructor(client) {
 		super(client, {
@@ -92,7 +95,7 @@ module.exports = class extends Command {
 			.addField('End', anime.endDate.month ? `${('0' + anime.endDate.day).slice(-2) || '-'}.${('0' + anime.endDate.month).slice(-2) || '-'}.${anime.endDate.year || '-'}` : 'unknown', true)
 			.addField('Genres', anime.genres.join('\n'), true)
 			.addField(duration ? 'Next' : ((anime.status === 'FINISHED') ? 'Aired' : 'Will Air'), duration || moment(`${anime.startDate.year}${('0' + anime.startDate.month).slice(-2)}${('0' + anime.startDate.day).slice(-2)}`, 'YYYYMMDD').fromNow(), true)
-			.addField('Description', anime.description ? anime.description.length >= 1020 ? _escapeHTML(anime.description.substring(0, 1020)) + '...' : _escapeHTML(anime.description) : '*No description provided*', false)
+			.addField('Description', anime.description ? anime.description.length >= DESC_MAX ? _escapeHTML(anime.description.substring(0, DESC_MAX)) + '...' : _escapeHTML(anime.description) : '*No description provided*', false)
 		);
 	}
 };
