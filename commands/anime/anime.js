@@ -91,7 +91,7 @@ module.exports = class extends Command {
 			.addField('Status', _normalizeConstant(anime.status) || 'unknown', true)
 			.addField('Start', anime.startDate.month ? `${('0' + anime.startDate.day).slice(-2) || '-'}/${('0' + anime.startDate.month).slice(-2) || '-'}/${anime.startDate.year || '-'}` : 'unknown', true)
 			.addField('End', anime.endDate.month ? `${('0' + anime.endDate.day).slice(-2) || '-'}.${('0' + anime.endDate.month).slice(-2) || '-'}.${anime.endDate.year || '-'}` : 'unknown', true)
-			.addField('Genres', anime.genres.join('\n'), true)
+			.addField('Genres', anime.genres ? anime.genres.slice(0, GENRE_MAX).join('\n') : '-', true)
 			.addField(duration ? 'Next' : ((anime.status === 'FINISHED') ? 'Aired' : 'Will Air'), duration || moment(`${anime.startDate.year}${('0' + anime.startDate.month).slice(-2)}${('0' + anime.startDate.day).slice(-2)}`, 'YYYYMMDD').fromNow(), true)
 			.addField('Description', anime.description ? anime.description.length >= DESC_MAX ? _escapeHTML(anime.description.substring(0, DESC_MAX)) + '...' : _escapeHTML(anime.description) : '*No description provided*', false)
 		);
