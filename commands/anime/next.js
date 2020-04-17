@@ -16,20 +16,21 @@ module.exports = class extends Command {
 		});
 	}
 
-	async run(message) {
-		let query, variables = {};
-		const args = message.content.split(' ');
-		if (args.length < 2) {
-			query = `{
-				Page(perPage: 100) {
-					media(type: ANIME status: RELEASING sort:POPULARITY_DESC) {
-						title { userPreferred }
-						nextAiringEpisode { episode timeUntilAiring }
+
+	async run(message, arg) {
+		const [query, variables] = ((search) => {
+			if (!search.length) {
+				return [`{
+					Page(perPage: 100) {
+						media(type: ANIME status: RELEASING sort:SEARCH_MATCH) {
+							title { userPreferred }
+							nextAiringEpisode { episode timeUntilAiring }
+						}
 					}
-				}
-			}`;
-		} else {
-			query = `query ($search: String, $status: MediaStatus) {
+				}`, {}];
+			}
+
+			return [`query ($search: String, $status: MediaStatus) {
 					Media(type:ANIME status:$status search:$search) {
 						id
 						siteUrl

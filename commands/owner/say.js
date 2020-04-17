@@ -14,21 +14,20 @@ module.exports = class extends Command {
 			ownerOnly: true
 		});
 	}
+	
 
-	async run(message) {
-		const args = message.content.split(' ').slice(1);
-		if (!args.length) {
+	async run(message, arg) {
+		if (!arg.length) {
 			return message.reply('Say what?');
-		} else {
-			const body = args.join(' ');
-			if (body.startsWith('{')) {
-				if (EuphemiaEmbed.validate(body)) {
-					const embed = EuphemiaEmbed.build(body);
-					return message.channel.send([embed.content], embed);
-				}
-			} else {
-				return message.channel.send(body);
+		}
+
+		if (arg.startsWith('{')) {
+			if (EuphemiaEmbed.validate(arg)) {
+				const embed = EuphemiaEmbed.build(arg);
+				return message.channel.send([embed.content], embed);
 			}
 		}
+
+		return message.channel.send(arg);
 	}
 };

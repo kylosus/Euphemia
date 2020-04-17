@@ -14,11 +14,11 @@ module.exports = class extends Command {
 		});
 	}
 
-	async run(message) {
 
-		const args = message.content.split(' ');
-		if (args.length === 1) {
+	async run(message, arg) {
+		// const args = message.content.split(' ');
 
+		if (!arg.length) {
 			if (cache) {
 				return message.channel.send(cache);
 			}
@@ -37,31 +37,31 @@ module.exports = class extends Command {
 
 			cache = embed;
 			return message.channel.send(cache);
-
-		} else {
-			const result = message.client.registry.commands.get(args[1]);
-			if (!result) {
-				return message.channel.send(new RichEmbed()
-					.setColor('RED')
-					.setTitle('Command not found')
-				);
-			}
-
-			const embed = new RichEmbed()
-				.setTitle(`Command name: ${result.name}`)
-				.setThumbnail(message.client.user.avatarURL || message.client.user.defaultAvatarURL)
-				.setColor(global.BOT_DEFAULT_COLOR)
-				.setDescription(result.description);
-
-			if (result.aliases.length) {
-				embed.addField('Aliases', result.aliases.join('\n'), false);
-			}
-
-			if (result.examples) {
-				embed.addField('Examples', '```' + result.examples.join('\n') + '```', false);
-			}
-
-			return message.channel.send(embed);
 		}
+
+		const result = message.client.registry.commands.get(arg);
+
+		if (!result) {
+			return message.channel.send(new RichEmbed()
+				.setColor('RED')
+				.setTitle('Command not found')
+			);
+		}
+
+		const embed = new RichEmbed()
+			.setTitle(`Command name: ${result.name}`)
+			.setThumbnail(message.client.user.avatarURL || message.client.user.defaultAvatarURL)
+			.setColor(global.BOT_DEFAULT_COLOR)
+			.setDescription(result.description);
+
+		if (result.aliases.length) {
+			embed.addField('Aliases', result.aliases.join('\n'), false);
+		}
+
+		if (result.examples) {
+			embed.addField('Examples', '```' + result.examples.join('\n') + '```', false);
+		}
+
+		return message.channel.send(embed);
 	}
 };

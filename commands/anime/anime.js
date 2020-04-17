@@ -17,10 +17,8 @@ module.exports = class extends Command {
 		});
 	}
 
-	async run(message) {
-		let args = message.content.split(' ');
-
-		if (args.length < 2) {
+	async run(message, arg) {
+		if (arg.length < 2) {
 			return message.channel.send(new RichEmbed()
 				.setColor('RED')
 				.setTitle('Please enter search terms')
@@ -51,7 +49,7 @@ module.exports = class extends Command {
 		}`;
 
 		const variables = {
-			search: args.slice(1).join(' ')
+			search: arg
 		};
 
 		const response = await request({

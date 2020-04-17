@@ -14,11 +14,10 @@ module.exports = class extends Command {
 		});
 	}
 
-	async run(message) {
+	async run(message, arg) {
 		const everyone = message.guild.roles.get(message.guild.id);
 
-		if (message.content.split(' ')[1] === 'off') {
-
+		if (arg.toLowerCase().startsWith('off')) {
 			await message.channel.overwritePermissions(everyone, { 'SEND_MESSAGES': true });
 
 			return message.channel.send(new RichEmbed()
@@ -30,7 +29,12 @@ module.exports = class extends Command {
 		const channel = await message.channel.overwritePermissions(everyone, { 'SEND_MESSAGES': false }, 'Euphemia stop command');
 
 		// TODO: TRY-CATCH THIS
-		await channel.overwritePermissions(message.member.roles.filter(role => role.hasPermission('MANAGE_GUILD')).first() || message.author, { 'SEND_MESSAGES': true }, 'Euphemia stop command');
+		await channel.overwritePermissions(
+			message.member.roles
+				.filter(role => role.hasPermission('MANAGE_GUILD'))
+				.first() || message.author, { 'SEND_MESSAGES': true }, 'Euphemia stop command'
+		);
+
 		return channel.send(new RichEmbed()
 			.setColor('RED')
 			.setTitle('Channel locked down')
