@@ -15,6 +15,7 @@ module.exports = class extends Command {
 			}
 		});
 	}
+	
 
 	async run(message) {
 		return message.embed(new RichEmbed()

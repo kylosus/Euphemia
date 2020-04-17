@@ -15,6 +15,7 @@ module.exports = class extends Command {
 		});
 	}
 
+
 	async run(message) {
 		if (!message.mentions.members.size) {
 			return message.channel.send(new RichEmbed()

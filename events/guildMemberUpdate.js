@@ -2,7 +2,7 @@ const { RichEmbed } = require('discord.js');
 
 module.exports = (oldMember, newMember, Client) => {
 	const entry = Client.provider.get(newMember.guild, 'guildMemberUpdate', false);
-	
+
 	if (!entry || !entry.log) {
 		return;
 	}
@@ -14,6 +14,7 @@ module.exports = (oldMember, newMember, Client) => {
 	}
 
 	if (oldMember.nickname !== newMember.nickname) {
+		
 		// Sorry
 		const body = newMember.nickname ? `**${newMember.user.tag}** has changed their nickname` + (oldMember.nickname? ` from **${oldMember.nickname}**` : '') + ` to **${newMember.nickname}**`
 			: `**${newMember.user.tag}** has removed their nickname, **${oldMember.nickname}**`;

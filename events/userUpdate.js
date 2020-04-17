@@ -23,7 +23,6 @@ module.exports = (oldUser, newUser) => {
 					.setDescription(`**${oldUser.tag}** has changed their username to **${newUser.tag}**`)
 					.setTimestamp((new Date()))
 				);
-			}
-		);
+			});
 	}
 };

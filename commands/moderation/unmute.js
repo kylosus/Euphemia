@@ -45,7 +45,7 @@ module.exports = class extends Command {
 					.setDescription(`**Member ${member.toString()} is not muted**`)
 				);
 
-				return null
+				return null;
 			}
 
 			try {

@@ -16,6 +16,7 @@ module.exports = class extends Command {
 			examples: [`${client.commandPrefix}anime Clannad`]
 		});
 	}
+	
 
 	async run(message, arg) {
 		if (arg.length < 2) {
