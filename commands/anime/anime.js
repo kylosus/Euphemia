@@ -89,7 +89,7 @@ module.exports = class extends Command {
 			.addField('Source', anime.source ? _normalizeConstant(anime.source) : 'unknown', true)
 			.addField('Episodes', anime.episodes || 'unknown', true)
 			.addField('Status', _normalizeConstant(anime.status) || 'unknown', true)
-			.addField('Start', anime.startDate.month ? `${('0' + anime.startDate.day).slice(-2) || '-'}/${('0' + anime.startDate.month).slice(-2) || '-'}/${anime.startDate.year || '-'}` : 'unknown', true)
+			.addField('Start', anime.startDate.month ? `${('0' + anime.startDate.day).slice(-2) || '-'}.${('0' + anime.startDate.month).slice(-2) || '-'}.${anime.startDate.year || '-'}` : 'unknown', true)
 			.addField('End', anime.endDate.month ? `${('0' + anime.endDate.day).slice(-2) || '-'}.${('0' + anime.endDate.month).slice(-2) || '-'}.${anime.endDate.year || '-'}` : 'unknown', true)
 			.addField('Genres', anime.genres ? anime.genres.slice(0, GENRE_MAX).join('\n') : '-', true)
 			.addField(duration ? 'Next' : ((anime.status === 'FINISHED') ? 'Aired' : 'Will Air'), duration || moment(`${anime.startDate.year}${('0' + anime.startDate.month).slice(-2)}${('0' + anime.startDate.day).slice(-2)}`, 'YYYYMMDD').fromNow(), true)
