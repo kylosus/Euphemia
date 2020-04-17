@@ -26,7 +26,7 @@ module.exports = class extends Command {
 		}
 
 		const query = `query ($search: String) {
-			Media(type:ANIME search: $search, sort: POPULARITY_DESC) {
+			Media(type:ANIME search: $search, sort: SEARCH_MATCH) {
 				averageScore
 				coverImage { large }
 				description
