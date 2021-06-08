@@ -1,4 +1,5 @@
-# I'll work on the bot when I have I'll have time
+# ~~I'll work on the bot when I have time~~
+# Scratch that, I'm working on it now
 ### Check the dev branch in the meantime
 ### There's a local branch with tons of additions and revisions, I promise
 
