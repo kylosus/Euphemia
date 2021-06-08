@@ -4,3 +4,5 @@ settings.sqlite3
 .env
 /.idea/
 .eslintrc.json
+*.sqlite*
+*.db
