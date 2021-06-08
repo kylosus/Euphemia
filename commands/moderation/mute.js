@@ -22,12 +22,13 @@ module.exports = class extends Command {
 		});
 	}
 
-	async run(message) {
-		const args = message.content.split(' ');
-		const input = args.slice(2).join(' ');
+	async run(message, args) {
+		// const args = message.content.split(' ');
+		// const arg = args.slice(2).join(' ');
 
-		if (args[1] === '-set') {
-			const match = input.match(/^\d{14,}$/);
+		if (args.split(' ')[1] === '-set') {
+			// Look for id
+			const match = args.match(/^\d{7,}$/);
 
 			const role = ((match, input) => {
 				if (match) {
@@ -37,9 +38,10 @@ module.exports = class extends Command {
 					}
 				}
 
+				// Look for role name
 				const inputLow = input.toLowerCase();
 				return message.guild.roles.find(role => role.name.toLowerCase().includes(inputLow)) || null;
-			})(match, input);
+			})(match, args);
 
 			if (!role) {
 				return message.embed(new RichEmbed()
@@ -63,20 +65,32 @@ module.exports = class extends Command {
 			);
 		}
 
-		if (!message.mentions.members.size) {
-			return message.channel.send(new RichEmbed()
-				.setColor('RED')
-				.setTitle('Please mention members to mute')
-			);
-		}
+		// const members = args.match(/\d{7,}/g);
+		// if (!members.length) {
+		// 	return message.channel.send(new RichEmbed()
+		// 		.setColor('RED')
+		// 		.setTitle('Please mention members to mute')
+		// 	);
+		// }
 
-		const duration = ((match) => {
-			if (match) {
-				return parseInt(match[0]);
+		const members = ((match) => {
+			if (!match) {
+				return message.channel.send(new RichEmbed()
+					.setColor('RED')
+					.setTitle('Please mention members to mute')
+				);
 			}
 
-			return null;
-		})(input.match(/\s\d+\s?/));
+			return match.map(m =>message.guild.members.get(m)).filter(m => m);
+		})(args.match(/\d{7,}/g));
+
+		const duration = ((match) => {
+			if (!match) {
+				return null;
+			}
+
+			return parseInt(match[0]);
+		})(args.match(/\d{1,3}/));
 
 		const [error, role, created] = await (async (guild) => {
 			const role = await EuphemiaUnifiedGuildFunctions.GetMutedRole(guild);
@@ -94,7 +108,7 @@ module.exports = class extends Command {
 				.addField('Muted role does not exist and could not be created.',
 					`Please set it manually using ${message.guild.commandPrefix}${this.name} -set <role name, or ID>`
 				)
-				.addField('Reasont', error.message)
+				.addField('Reason', error.message)
 			);
 		}
 
@@ -105,7 +119,7 @@ module.exports = class extends Command {
 			);
 		}
 
-		const muted = await Promise.all(message.mentions.members.map(async member => {
+		const muted = await Promise.all(members.map(async member => {
 			if (member.roles.has(role.id)) {
 				message.channel.send(new RichEmbed()
 					.setColor('RED')
@@ -120,9 +134,10 @@ module.exports = class extends Command {
 			} catch (error) {
 				message.channel.send(new RichEmbed()
 					.setColor('RED')
-					.addField(`Member ${member.toString()} could not be muted.`, error.message)
+					.addField(`Member ${member.user.tag} could not be muted.`, error.message)
 				);
 
+				// This doesn't return properly and breaks
 				return null;
 			}
 
@@ -140,7 +155,7 @@ module.exports = class extends Command {
 			}
 
 			return await member.toString();
-		})).filter(member => member);
+		}).filter(m => m));
 
 		if (muted.length) {
 			const embed = new RichEmbed()

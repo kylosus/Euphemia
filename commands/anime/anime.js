@@ -12,7 +12,7 @@ module.exports = class extends Command {
 			name: 'anime',
 			group: 'anime',
 			memberName: 'anime',
-			description: 'Searches anime in AniList database',
+			description: 'Searches anime on AniList',
 			examples: [`${client.commandPrefix}anime Clannad`]
 		});
 	}
