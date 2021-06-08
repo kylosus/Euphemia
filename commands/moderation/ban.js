@@ -1,56 +1,79 @@
-const { Command }	= require('discord.js-commando');
-const { RichEmbed }	= require('discord.js');
-const DAYS_TO_PURGE	= 0;
+const { MessageEmbed } = require('discord.js');
 
-module.exports = class extends Command {
-	constructor(client) {
-		super(client, {
-			name: 'ban',
-			group: 'moderation',
-			memberName: 'ban',
-			description: 'Bans mentioned users',
+const ECommand = require('../../lib/ECommand');
+const ArgConsts = require('../../lib/Argument/ArgumentTypeConstants');
+
+module.exports = class extends ECommand {
+	constructor() {
+		super('ban', {
+			aliases: ['ban', 'b'],
+			description: {
+				content: 'Bans a member.',
+				usage: '<member> [reason]',
+				examples: ['ban @user', 'ban 275331662865367040'],
+			},
 			userPermissions: ['BAN_MEMBERS'],
-			examples: [`${client.commandPrefix}ban @user`, `${client.commandPrefix}ban @user1 @user2 @user3`],
-			guildOnly: true
+			clientPermissions: ['BAN_MEMBERS', 'EMBED_LINKS'],
+			args: [
+				{
+					id: 'members',
+					type: ArgConsts.MEMBERS,
+					message: 'Please mention members to ban'
+				},
+				{
+					id: 'reason',
+					type: ArgConsts.TEXT,
+					optional: true,
+					default: 'No reason provided'
+				},
+			],
+			guildOnly: true,
+			nsfw: false,
+			ownerOnly: false,
+			rateLimited: false,
+			fetchMembers: false,
+			cached: false
 		});
 	}
 
+	async run(message, args) {
+		const result = {p: [], f: [], reason: args.reason};
 
-	async run(message) {
-		if (!message.mentions.members.size) {
-			return message.channel.send(new RichEmbed()
-				.setColor('RED')
-				.setTitle('Please mention members to kick')
-			);
-		}
-
-		const banned = [];
-
-		message.mentions.members.tap(async member => {
-			if (!member.bannable) {
-				return message.channel.send(new RichEmbed()
-					.setColor('RED')
-					.setTitle(`User ${member.user.tag} was not banned. Reason: member is higher than the bot in the role hierarchy.`)
-				);
+		await Promise.all(args.members.map(async m => {
+			if (!m.bannable) {
+				return result.f.push({member: m, reason: 'Member too high in the hierarchy'});
 			}
 
 			try {
-				await member.ban(DAYS_TO_PURGE);
-				banned.push(member.user.tag);
-			} catch (error) {
-				message.channel.send(new RichEmbed()
-					.setColor('RED')
-					.setTitle(`User ${member.user.tag} was not banned. Reason: ${error}.`)
-				);
+				await m.ban(args.reason);
+			} catch (err) {
+				return result.f.push({member: m, reason: err});
 			}
 
-		});
+			result.p.push(m);
+		}));
 
-		banned.forEach(tag => {
-			message.channel.send(new RichEmbed()
-				.setColor('GREEN')
-				.setTitle(`User ${tag} has been banned by ${message.author.tag}.`)
-			);
-		});
+		return new Promise(resolve => resolve(result));
+	}
+
+	async ship(message, result) {
+		const color = ((res) => {
+			if (!res.f.length) {
+				return 'GREEN';
+			}
+
+			if (res.p.length) {
+				return 'ORANGE';
+			}
+
+			return 'RED';
+		})(result);
+
+		message.channel.send(new MessageEmbed()
+			.setColor(color)
+			.addField('Banned', result.p.map(p => p.toString()).join(' ') || '~')
+			.addField('Failed', result.f.map(p => `${p.member.toString()} - ${p.reason}`).join('\n') || '~')
+			.addField('Reason', result.reason || '~')
+		);
 	}
 };
