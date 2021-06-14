@@ -103,7 +103,8 @@ class Client extends EClient {
 }
 
 const client = new Client();
-client.login(process.env.BOT_TOKEN).then(c => console.log(`Logged in: ${c}`));
+// eslint-disable-next-line no-unused-vars
+client.login(process.env.BOT_TOKEN).then(_ => console.log('Logged in'));
 
 // console.log(client);
 
