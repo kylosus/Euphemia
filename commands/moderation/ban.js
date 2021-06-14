@@ -1,4 +1,4 @@
-const { MessageEmbed } = require('discord.js');
+const { MessageEmbed, Permissions } = require('discord.js');
 
 const ECommand = require('../../lib/ECommand');
 const ArgConsts = require('../../lib/Argument/ArgumentTypeConstants');
@@ -12,8 +12,8 @@ module.exports = class extends ECommand {
 				usage: '<member> [reason]',
 				examples: ['ban @user', 'ban 275331662865367040'],
 			},
-			userPermissions: ['BAN_MEMBERS'],
-			clientPermissions: ['BAN_MEMBERS', 'EMBED_LINKS'],
+			userPermissions: [Permissions.FLAGS.BAN_MEMBERS],
+			clientPermissions: [Permissions.FLAGS.BAN_MEMBERS],
 			args: [
 				{
 					id: 'members',
