@@ -3,10 +3,10 @@ require('dotenv').config();
 const EClient = require('./lib/EClient');
 const ECommandHandler = require('./lib/ECommandHandler');
 
-const Commando		= require('discord.js-commando');
-const config		= require('./config.json');
-const path			= require('path');
-const sqlite		= require('sqlite');
+const Commando = require('discord.js-commando');
+const config = require('./config.json');
+const path = require('path');
+// const sqlite		= require('sqlite');
 
 // const client = new Commando.Client({
 // 	owner: process.env.BOT_OWNER || config.owner,
@@ -70,6 +70,11 @@ return;
 
 const { join } = require('path');
 
+const sqlite3 = require('sqlite3');
+const sqlite = require('sqlite');
+
+const SQLiteProvider = require('./lib/Provider/SQLiteProvider');
+
 // const commandsPath = join(__dirname, '..', 'commands/');
 // const listenersPath = join(__dirname, '..', 'listeners/');
 
@@ -82,6 +87,16 @@ class Client extends EClient {
 			{
 				disableEveryone: true
 			}
+		);
+
+		// Race condition?
+		this.setProvider(
+			sqlite.open({
+				filename: path.join(__dirname, 'settings.sqlite3'),
+				driver: sqlite3.Database
+			}).then(db => {
+				return new SQLiteProvider(db);
+			})
 		);
 
 		this.commandHandler = new ECommandHandler(this, {
