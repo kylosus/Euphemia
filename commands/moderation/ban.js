@@ -4,8 +4,8 @@ const ECommand = require('../../lib/ECommand');
 const ArgConsts = require('../../lib/Argument/ArgumentTypeConstants');
 
 module.exports = class extends ECommand {
-	constructor() {
-		super('ban', {
+	constructor(client) {
+		super(client, {
 			aliases: ['ban', 'b'],
 			description: {
 				content: 'Bans a member.',
