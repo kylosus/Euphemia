@@ -69,7 +69,7 @@ module.exports = class extends ECommand {
 			return 'RED';
 		})(result);
 
-		message.channel.send(new MessageEmbed()
+		return message.channel.send(new MessageEmbed()
 			.setColor(color)
 			.addField('Banned', result.p.map(p => p.toString()).join(' ') || '~')
 			.addField('Failed', result.f.map(p => `${p.member.toString()} - ${p.reason}`).join('\n') || '~')
