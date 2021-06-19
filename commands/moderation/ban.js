@@ -24,7 +24,7 @@ module.exports = class extends ECommand {
 					id: 'reason',
 					type: ArgConsts.TEXT,
 					optional: true,
-					default: 'No reason provided'
+					default: () => 'No reason provided'
 				},
 			],
 			guildOnly: true,
