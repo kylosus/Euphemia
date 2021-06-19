@@ -1,47 +1,38 @@
-const { Command } = require('discord.js-commando');
-const { RichEmbed } = require('discord.js');
+const { MessageEmbed, Permissions } = require('discord.js');
 
-module.exports = class extends Command {
+const ECommand = require('../../lib/ECommand');
+
+module.exports = class extends ECommand {
 	constructor(client) {
 		super(client, {
-			name: 'lockdown',
-			group: 'moderation',
-			memberName: 'lockdown',
-			description: 'Automatically mutes every new member on join',
-			userPermissions: ['MANAGE_ROLES'],
-			guildOnly: true
+			aliases: ['lockdown', 'ld'],
+			description: {
+				content: 'Automatically mutes every new member on join.',
+				usage: '',
+				examples: ['lockdown'],
+			},
+			userPermissions: [Permissions.FLAGS.MANAGE_ROLES],
+			clientPermissions: [Permissions.FLAGS.MANAGE_ROLES],
+			guildOnly: true,
+			nsfw: false,
+			ownerOnly: false,
+			rateLimited: false,
+			fetchMembers: false,
+			cached: false,
 		});
 	}
 
 	async run(message) {
-		const entry = message.client.provider.get(message.guild, 'guildMemberAdd', false);
+		const entry = message.client.provider.get(message.guild, 'automute', false);
+		await message.client.provider.set(message.guild, 'automute', !entry);
 
-		if (!entry) {
-			await message.client.provider.set(message.guild, 'guildMemberAdd', { automute: true });
-			return _sendNotification(message, 'Enabled');
-		}
+		return new Promise(resolve => resolve(`${entry ? 'Disabled' : 'Enabled'} automute on new member join.`));
+	}
 
-		if (!entry.hasOwnProperty('automute')) {
-			entry.automute = true;
-			await message.client.provider.set(message.guild, 'guildMemberAdd', entry);
-			return _sendNotification(message, 'Enabled');
-		}
-
-		if (entry.automute) {
-			entry.automute = false;
-			await message.client.provider.set(message.guild, 'guildMemberAdd', entry);
-			return _sendNotification(message, 'Disabled');
-		} else {
-			entry.automute = true;
-			await message.client.provider.set(message.guild, 'guildMemberAdd', entry);
-			_sendNotification(message, 'Enabled');
-		}
+	async ship(message, result) {
+		return message.channel.send(new MessageEmbed()
+			.setColor('DARK_RED')
+			.setTitle(result)
+		);
 	}
 };
-
-function _sendNotification(message, text) {
-	return message.channel.send(new RichEmbed()
-		.setColor('DARK_RED')
-		.setTitle(`${text} automute on new member join.`)
-	);
-}

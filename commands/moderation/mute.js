@@ -1,173 +1,132 @@
-const { Command }					= require('discord.js-commando');
-const { RichEmbed }					= require('discord.js');
-const guildMemberMuted				= require('../../events/guildMemberMuted');
-const guildMemberUnmuted			= require('../../events/guildMemberUnmuted');
-const EuphemiaUnifiedGuildFunctions	= require('../../util/EuphemiaUnifiedGuildFunctions.js');
+const { MessageEmbed, Permissions } = require('discord.js');
 
-module.exports = class extends Command {
+const ECommand = require('../../lib/ECommand');
+const ArgConsts = require('../../lib/Argument/ArgumentTypeConstants');
+
+module.exports = class extends ECommand {
 	constructor(client) {
 		super(client, {
-			name: 'mute',
-			group: 'moderation',
-			memberName: 'mute',
-			description: 'Mutes mentioned users for a given amount of minutes',
-			userPermissions: ['MANAGE_ROLES'],
-			clientPermissions: ['MANAGE_ROLES', 'MANAGE_GUILD'],
-			examples: [
-				`${client.commandPrefix}mute -set <role name, or ID>`,
-				`${client.commandPrefix}mute 5 @user`,
-				`${client.commandPrefix}mute @user1 [@user2 @user3]`
+			aliases: ['mute'],
+			description: {
+				content: 'Mutes mentioned members for a given amount of minutes',
+				usage: '[minutes] <member1> [member2 ...]',
+				examples: ['mute @Person1', 'mute 5 @Person1 @Person2']
+			},
+			// 	userPermissions: ['MANAGE_ROLES'],
+			// 	clientPermissions: ['MANAGE_ROLES', 'MANAGE_GUILD'],
+			userPermissions: [Permissions.FLAGS.MANAGE_ROLES],
+			clientPermissions: [Permissions.FLAGS.MANAGE_ROLES, Permissions.FLAGS.MANAGE_GUILD],
+			args: [
+				{
+					id: 'members',
+					type: ArgConsts.MEMBERS,
+					message: 'Please mention members to mute'
+				},
+				{
+					id: 'duration',
+					type: ArgConsts.NUMBER,
+					optional: true,
+				},
+				{
+					id: 'reason',
+					type: ArgConsts.TEXT,
+					optional: true,
+					default: () => 'No reason provided'
+				},
 			],
-			guildOnly: true
+			guildOnly: true,
+			nsfw: false,
+			ownerOnly: false,
+			rateLimited: false,
+			fetchMembers: false,
+			cached: false,
 		});
 	}
 
 	async run(message, args) {
-		// const args = message.content.split(' ');
-		// const arg = args.slice(2).join(' ');
+		const result = {p: [], f: [], duration: args.duration, reason: args.reason};
 
-		if (args.split(' ')[1] === '-set') {
-			// Look for id
-			const match = args.match(/^\d{7,}$/);
+		const entry = await message.client.provider.get(message.guild, 'mutedRole');
 
-			const role = ((match, input) => {
-				if (match) {
-					const role = message.guild.roles.get(match[0]);
-					if (role) {
-						return role;
-					}
-				}
-
-				// Look for role name
-				const inputLow = input.toLowerCase();
-				return message.guild.roles.find(role => role.name.toLowerCase().includes(inputLow)) || null;
-			})(match, args);
-
-			if (!role) {
-				return message.embed(new RichEmbed()
-					.setColor('RED')
-					.setTitle('Role not found')
-				);
-			}
-
-			if (role.position >= message.guild.me.highestRole.position) {
-				return message.channel.send(new RichEmbed()
-					.setColor('RED')
-					.setTitle('Role cannot be assigned as the mute role because it is higher than, or equal to the bot in the role hierarchy.')
-				);
-			}
-
-			message.guild.settings.set('mutedRole', role.id);
-
-			return message.channel.send(new RichEmbed()
-				.setColor('GREEN')
-				.setTitle(`Mute role set to ${role.name}.`)
-			);
+		if (!entry) {
+			// Will take care of this later
+			throw 'Muted role not found';
 		}
 
-		// const members = args.match(/\d{7,}/g);
-		// if (!members.length) {
-		// 	return message.channel.send(new RichEmbed()
-		// 		.setColor('RED')
-		// 		.setTitle('Please mention members to mute')
-		// 	);
-		// }
+		const mutedRole = message.guild.roles.resolve(entry);
 
-		const members = ((match) => {
-			if (!match) {
-				return message.channel.send(new RichEmbed()
-					.setColor('RED')
-					.setTitle('Please mention members to mute')
-				);
-			}
-
-			return match.map(m =>message.guild.members.get(m)).filter(m => m);
-		})(args.match(/\d{7,}/g));
-
-		const duration = ((match) => {
-			if (!match) {
-				return null;
-			}
-
-			return parseInt(match[0]);
-		})(args.match(/\d{1,3}/));
-
-		const [error, role, created] = await (async (guild) => {
-			const role = await EuphemiaUnifiedGuildFunctions.GetMutedRole(guild);
-
-			if (!role) {
-				return EuphemiaUnifiedGuildFunctions.FindOrSetMutedRole(guild);
-			}
-
-			return [null, role];
-		})(message.guild);
-
-		if (error) {
-			return message.channel.send(new RichEmbed()
-				.setColor('RED')
-				.addField('Muted role does not exist and could not be created.',
-					`Please set it manually using ${message.guild.commandPrefix}${this.name} -set <role name, or ID>`
-				)
-				.addField('Reason', error.message)
-			);
+		if (!mutedRole) {
+			throw 'I cannot mute. Muted role has been deleted';
 		}
 
-		if (created) {
-			message.channel.send(new RichEmbed()
-				.setColor('BLUE')
-				.setTitle(`Created new muted role ${role.name}.`)
-			);
-		}
-
-		const muted = await Promise.all(members.map(async member => {
-			if (member.roles.has(role.id)) {
-				message.channel.send(new RichEmbed()
-					.setColor('RED')
-					.setDescription(`**Member ${member.toString()} is already muted**.`)
-				);
-
+		await Promise.all(args.members.map(async m => {
+			if (m.roles.cache.has(mutedRole.id)) {
+				result.f.push({member: m, reason: 'Already muted'});
 				return null;
 			}
 
 			try {
-				await member.addRole(role);
+				await m.roles.add(mutedRole, args.reason);
 			} catch (error) {
-				message.channel.send(new RichEmbed()
-					.setColor('RED')
-					.addField(`Member ${member.user.tag} could not be muted.`, error.message)
-				);
-
-				// This doesn't return properly and breaks
-				return null;
+				return result.f.push({member: m, reason: error.message});
 			}
 
-			guildMemberMuted(member, duration, message.member);
+			result.p.push(m);
+
+			this.client.emit('guildMemberMuted', m, args.duration, message.member);
+
+			// guildMemberMuted(member, duration, message.member);
 
 			// TODO: Use a database
-			if (duration) {
-				message.client.setTimeout((member, role, guildMemberUnmuted) => {
-					member.removeRole(role).then(member => {
-						// TODO: replace with Client event
-						guildMemberMuted(member, duration);
-						guildMemberUnmuted(member);
-					});
-				}, duration * 60000, member, role, guildMemberUnmuted);
+			// if (duration) {
+			// 	message.client.setTimeout((member, role, guildMemberUnmuted) => {
+			// 		member.removeRole(role).then(member => {
+			// 			// TODO: replace with Client event
+			// 			guildMemberMuted(member, duration);
+			// 			guildMemberUnmuted(member);
+			// 		});
+			// 	}, duration * 60000, member, role, guildMemberUnmuted);
+			// }
+
+			// return await member.toString();
+		}));
+
+		return new Promise(resolve => resolve(result));
+
+		// if (muted.length) {
+		// 	const embed = new RichEmbed()
+		// 		.setColor('GREEN')
+		// 		.addField('Muted members', muted.join('\n'))
+		// 		.addField('Moderator', message.member.toString());
+		//
+		// 	if (duration) {
+		// 		embed.addField('Duration', `${duration} minutes`);
+		// 	}
+		//
+		// 	return message.channel.send(embed);
+		// }
+	}
+
+	async ship(message, result) {
+		const color = ((res) => {
+			if (!res.f.length) {
+				return 'GREEN';
 			}
 
-			return await member.toString();
-		}).filter(m => m));
-
-		if (muted.length) {
-			const embed = new RichEmbed()
-				.setColor('GREEN')
-				.addField('Muted members', muted.join('\n'))
-				.addField('Moderator', message.member.toString());
-
-			if (duration) {
-				embed.addField('Duration', `${duration} minutes`);
+			if (res.p.length) {
+				return 'ORANGE';
 			}
 
-			return message.channel.send(embed);
-		}
+			return 'RED';
+		})(result);
+
+		return message.channel.send(new MessageEmbed()
+			.setColor(color)
+			.addField('Muted', result.p.map(p => p.toString()).join(' ') || '~')
+			.addField('Failed', result.f.map(p => `${p.member.toString()} - ${p.reason}`).join('\n') || '~')
+			.addField('Duration', result.duration || 'Forever')
+			// .addField('Moderator', message.member.toString(), true)
+			.addField('Reason', result.reason || '~', true)
+		);
 	}
 };

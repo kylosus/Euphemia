@@ -1,26 +1,38 @@
-const { Command }	= require('discord.js-commando');
-const { RichEmbed }	= require('discord.js');
+const { Permissions } = require('discord.js');
 
-module.exports = class extends Command {
+const ECommand = require('../../lib/ECommand');
+const ArgConsts = require('../../lib/Argument/ArgumentTypeConstants');
+
+module.exports = class extends ECommand {
 	constructor(client) {
+
 		super(client, {
-			name: 'cache',
-			group: 'moderation',
-			memberName: 'cache',
-			description: 'Caches messages in a channel',
-			examples: [`${client.commandPrefix}cache`],
+			aliases: ['cache'],
+			description: {
+				content: 'Caches messages in a channel',
+				usage: 'cache [channel]',
+				examples: ['cache', 'cache #general']
+			},
+			userPermissions: [Permissions.FLAGS.ADMINISTRATOR],
+			clientPermissions: [Permissions.FLAGS.READ_MESSAGE_HISTORY],
+			args: [
+				{
+					id: 'channel',
+					type: ArgConsts.CHANNEL,
+					default: m => m.channel
+				},
+			],
 			guildOnly: true,
-			ownerOnly: true
+			nsfw: false,
+			ownerOnly: true,
+			rateLimited: false,
+			fetchMembers: false,
+			cached: false,
 		});
 	}
 
-	async run(message) {
-		await message.channel.fetchMessages({ limit: 100 });
-		const reply = await message.channel.send(new RichEmbed()
-			.setColor('GREEN')
-			.setDescription('👌')
-		);
-
-		message.channel.bulkDelete([message, reply]);
+	async run(message, args) {
+		await args.channel.messages.fetch({limit: 100});
+		return new Promise(resolve => resolve('👌'));
 	}
 };
