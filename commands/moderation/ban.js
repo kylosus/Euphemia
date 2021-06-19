@@ -73,7 +73,8 @@ module.exports = class extends ECommand {
 			.setColor(color)
 			.addField('Banned', result.p.map(p => p.toString()).join(' ') || '~')
 			.addField('Failed', result.f.map(p => `${p.member.toString()} - ${p.reason}`).join('\n') || '~')
-			.addField('Reason', result.reason || '~')
+			.addField('Moderator', message.member.toString(), true)
+			.addField('Reason', result.reason || '~', true)
 		);
 	}
 };
