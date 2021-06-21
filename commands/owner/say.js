@@ -1,33 +1,37 @@
-const { Command }	= require('discord.js-commando');
-const EuphemiaEmbed	= require('../../util/EuphemiaEmbed.js');
+const { MessageEmbed, Permissions } = require('discord.js');
 
-module.exports = class extends Command {
+const ECommand = require('../../lib/ECommand');
+const ArgConsts = require('../../lib/Argument/ArgumentTypeConstants');
+
+module.exports = class extends ECommand {
 	constructor(client) {
 		super(client, {
-			name: 'say',
-			group: 'owner',
-			memberName: 'say',
-			description: 'Says something',
-			details: 'Says something. Supports embeds',
-			userPermissions: ['BAN_MEMBERS'],
-			examples: [`${client.commandPrefix}say something`, `${client.commandPrefix}say {JSON}`],
-			ownerOnly: true
+			aliases: ['say'],
+			description: {
+				content: 'Says something. Supports embeds',
+				usage: '<text>',
+				examples: ['say something', 'say {JSON}']
+			},
+			userPermissions: [Permissions.FLAGS.ADMINISTRATOR],
+			args: [
+				{
+					id: 'text',
+					type: ArgConsts.TEXT,
+					message: 'Please provide text'
+				}
+			],
+			guildOnly: false,
+			nsfw: false,
+			ownerOnly: true,
 		});
 	}
-	
 
-	async run(message, arg) {
-		if (!arg.length) {
-			return message.reply('Say what?');
-		}
+	async run(message, args) {
+		return args.text;
+	}
 
-		if (arg.startsWith('{')) {
-			if (EuphemiaEmbed.validate(arg)) {
-				const embed = EuphemiaEmbed.build(arg);
-				return message.channel.send([embed.content], embed);
-			}
-		}
-
-		return message.channel.send(arg);
+	async ship(message, result) {
+		const json = JSON.parse(result);
+		message.channel.send(json.content, new MessageEmbed(json));
 	}
 };
