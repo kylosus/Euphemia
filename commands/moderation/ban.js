@@ -45,7 +45,10 @@ module.exports = class extends ECommand {
 			}
 
 			try {
-				await m.ban(args.reason);
+				await m.ban({
+					days: 0,
+					reason: args.reason
+				});
 			} catch (err) {
 				return result.f.push({member: m, reason: err});
 			}
