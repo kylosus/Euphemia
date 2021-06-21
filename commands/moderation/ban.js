@@ -50,7 +50,7 @@ module.exports = class extends ECommand {
 					reason: args.reason
 				});
 			} catch (err) {
-				return result.f.push({member: m, reason: err});
+				return result.f.push({member: m, reason: err.message || 'Unknown error'});
 			}
 
 			result.p.push(m);
