@@ -5,7 +5,6 @@ const ArgConsts = require('../../lib/Argument/ArgumentTypeConstants');
 
 module.exports = class extends ECommand {
 	constructor(client) {
-
 		super(client, {
 			aliases: ['cache'],
 			description: {
