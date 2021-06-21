@@ -1,76 +1,60 @@
-const { Command } = require('discord.js-commando');
-const { RichEmbed } = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 
-module.exports = class extends Command {
-    constructor(client) {
-        super(client, {
-            name: 'quote',
-            group: 'utility',
-            memberName: 'quote',
-            description: 'Quotes a message by given ID',
-            examples: [`${client.commandPrefix}quote 329904853604368385`],
-            guildOnly: true
-        });
-    }
+const ECommand = require('../../lib/ECommand');
+const ArgConsts = require('../../lib/Argument/ArgumentTypeConstants');
 
-    async run(message) {
-        const args = message.content.split(' ');
+module.exports = class extends ECommand {
+	constructor(client) {
+		super(client, {
+			aliases: ['quote'],
+			description: {
+				content: 'Quotes a message',
+				usage: '<id> [#channel]',
+				examples: ['quote id', 'quote id #channel', 'quote #channel id']
+			},
+			args: [
+				{
+					id: 'channel',
+					type: ArgConsts.CHANNEL,
+					optional: true,
+					default: m => m.channel
+				},
+				{
+					id: 'id',
+					type: ArgConsts.TEXT,
+					message: 'Please provide a message id.'
+				}
+			],
+			guildOnly: true,
+			nsfw: false,
+			ownerOnly: false
+		});
+	}
 
-        if (args.length < 2) {
-            return message.channel.send(new RichEmbed()
-                .setColor('RED')
-                .setTitle('Please enter a message ID')
-            );
-        } else {
-            try {
-                const found = await message.channel.fetchMessage(args[1]);
+	async run(message, args) {
+		return await args.channel.messages.fetch(args.id);
+	}
 
-                if (!found) {
-                    return message.channel.send(new RichEmbed()
-                        .setColor('RED')
-                        .setTitle('Message not found')
-                    );
-                }
+	async ship(message, result) {
+		const embed = new MessageEmbed()
+			.setColor(result.member ? result.member.displayColor : 'WHITE')
+			.addField('Jump to message', '[Link](https://google.com)')
+			.setDescription(result.content || '*No content*')
+			.setFooter(`In #${result.channel.name}`)
+			.setTimestamp(result.createdAt);
 
-                const embed = new RichEmbed()
-                    .setColor(found.member.displayColor || 0xffffff)
-                    .setDescription(found.content || '*No content*')
-                    .setFooter(`In #${found.channel.name}`)
-                    .setTimestamp(found.createdAt);
+		if (result.author) {
+			embed.setAuthor(result.author.username, result.author.displayAvatarURL(), null);
+		} else {
+			embed.setAuthor('Unknown [deleted] user', null, null);
+		}
 
-                if (found.author) {
-                    embed.setAuthor(found.author.username, found.author.avatarURL || found.author.defaultAvatarURL, null);
-                } else {
-                    embed.setAuthor('Unknown [deleted] user', null, null);
-                }
+		const attachment = result.attachments.first();
 
-                if (found.embeds.length >= 1) {
-                    if (found.embeds[0].image) {
-                        embed.setImage(found.embeds[0].image.url);
-                    }
-                }
+		if (attachment && /\.(gif|jpg|jpeg|tiff|png|webm|webp)$/i.test(attachment.url)) {
+			embed.setImage(attachment.url);
+		}
 
-                if (found.attachments.size > 1) {
-                    const attachmentFieldBody = found.attachments.map(attachment => attachment.url);
-                    embed.addField('Attachments', attachmentFieldBody.join('\n'));
-                } else if (found.attachments.size === 1) {
-                    const attachment = found.attachments.first();
-                    if (/\.(gif|jpg|jpeg|tiff|png)$/i.test(attachment.url)) {
-                        embed.setImage(attachment.url);
-                    }
-                }
-                embed.addField('Jump to', found.url)
-                message.channel.send(embed).catch(err => { });
-            } catch (err) {
-                if (err.message === 'Unknown Message') {
-                    message.channel.send(new RichEmbed()
-                        .setColor('RED')
-                        .setTitle('Message not found')
-                    );
-                    return;
-                }
-                throw err;
-            }
-        }
-    }
+		return message.channel.send(embed);
+	}
 };
