@@ -1,49 +1,39 @@
-const { Command }	= require('discord.js-commando');
-const { RichEmbed }	= require('discord.js');
+const { Permissions } = require('discord.js');
 
-module.exports = class extends Command {
+const ECommand = require('../../lib/ECommand');
+const ArgConsts = require('../../lib/Argument/ArgumentTypeConstants');
+
+module.exports = class extends ECommand {
 	constructor(client) {
 		super(client, {
-			name: 'purge',
-			group: 'moderation',
-			memberName: 'purge',
-			description: 'Purges a specified amount of messages',
-			aliases: ['p'],
-			userPermissions: ['MANAGE_MESSAGES'],
-			clientPermissions: ['MANAGE_MESSAGES'],
-			guildOnly: true
+			aliases: ['purge', 'p'],
+			description: {
+				content: 'Purges messages in the channel.',
+				usage: '[amount]',
+				examples: ['purge', 'purge 100'],
+			},
+			userPermissions: [Permissions.FLAGS.MANAGE_MESSAGES, Permissions.FLAGS.READ_MESSAGE_HISTORY],
+			clientPermissions: [Permissions.FLAGS.MANAGE_MESSAGES, Permissions.FLAGS.READ_MESSAGE_HISTORY],
+			args: [
+				{
+					id: 'amount',
+					type: ArgConsts.NUMBER,
+					optional: true,
+					default: () => 1,
+				}
+			],
+			guildOnly: true,
+			nsfw: false,
+			ownerOnly: false,
+			rateLimited: false,
+			fetchMembers: false,
+			cached: false,
+			deleteAfter: 2000
 		});
 	}
 
-	async run(message, arg) {
-		if (!arg.length) {
-			message.channel.fetchMessages({limit: 2}).then(messages => {
-				message.channel.bulkDelete(messages);
-			});
-
-			return;
-		}
-
-		let num = Number(arg);
-
-		if (!num && num < 0) {
-			return message.embed(new RichEmbed()
-				.setColor('RED')
-				.setTitle('Please check your input')
-			);
-		}
-
-		num = num > 100 ? 100 : num;
-
-		const deleted = await message.channel.bulkDelete(num);
-
-		const reply = await message.channel.send(new RichEmbed()
-			.setColor('GREEN')
-			.setTitle(`Deleted ${deleted.size} messages`)
-		);
-
-		this.client.setTimeout((reply) => {
-			reply.delete();
-		}, 2000, reply);
+	async run(message, args) {
+		const deleted = await message.channel.bulkDelete(args.amount + 1);
+		return `Purged ${deleted.size - 1} messages`;
 	}
 };
