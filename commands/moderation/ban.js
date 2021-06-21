@@ -56,7 +56,7 @@ module.exports = class extends ECommand {
 			result.p.push(m);
 		}));
 
-		return new Promise(resolve => resolve(result));
+		return result;
 	}
 
 	async ship(message, result) {
