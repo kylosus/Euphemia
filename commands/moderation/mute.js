@@ -12,8 +12,6 @@ module.exports = class extends ECommand {
 				usage: '[minutes] <member1> [member2 ...]',
 				examples: ['mute @Person1', 'mute 5 @Person1 @Person2']
 			},
-			// 	userPermissions: ['MANAGE_ROLES'],
-			// 	clientPermissions: ['MANAGE_ROLES', 'MANAGE_GUILD'],
 			userPermissions: [Permissions.FLAGS.MANAGE_ROLES],
 			clientPermissions: [Permissions.FLAGS.MANAGE_ROLES, Permissions.FLAGS.MANAGE_GUILD],
 			args: [
@@ -74,37 +72,9 @@ module.exports = class extends ECommand {
 			result.p.push(m);
 
 			this.client.emit('guildMemberMuted', m, args.duration, message.member);
-
-			// guildMemberMuted(member, duration, message.member);
-
-			// TODO: Use a database
-			// if (duration) {
-			// 	message.client.setTimeout((member, role, guildMemberUnmuted) => {
-			// 		member.removeRole(role).then(member => {
-			// 			// TODO: replace with Client event
-			// 			guildMemberMuted(member, duration);
-			// 			guildMemberUnmuted(member);
-			// 		});
-			// 	}, duration * 60000, member, role, guildMemberUnmuted);
-			// }
-
-			// return await member.toString();
 		}));
 
 		return new Promise(resolve => resolve(result));
-
-		// if (muted.length) {
-		// 	const embed = new RichEmbed()
-		// 		.setColor('GREEN')
-		// 		.addField('Muted members', muted.join('\n'))
-		// 		.addField('Moderator', message.member.toString());
-		//
-		// 	if (duration) {
-		// 		embed.addField('Duration', `${duration} minutes`);
-		// 	}
-		//
-		// 	return message.channel.send(embed);
-		// }
 	}
 
 	async ship(message, result) {
