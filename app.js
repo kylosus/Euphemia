@@ -119,9 +119,9 @@ class Client extends EClient {
 
 const client = new Client();
 
-client.setInterval(() => {
-	console.log(client.guilds.cache.get('344556222755766283').settings);
-}, 2000);
+// client.setInterval(() => {
+// 	console.log(client.guilds.cache.get('344556222755766283').settings);
+// }, 2000);
 
 // eslint-disable-next-line no-unused-vars
 client.login(process.env.BOT_TOKEN).then(_ => console.log('Logged in'));
