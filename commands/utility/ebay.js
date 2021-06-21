@@ -1,3 +1,4 @@
+/*
 const { Command }				= require('discord.js-commando');
 const { RichEmbed }				= require('discord.js');
 const config					= require('../../optional.json');
@@ -57,3 +58,6 @@ module.exports = class extends Command {
 		}
 	}
 };
+*/
+
+// No
