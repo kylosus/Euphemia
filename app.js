@@ -83,7 +83,7 @@ class Client extends EClient {
 	constructor() {
 		super(
 			{
-				ownerID: '275331662865367040'
+				ownerIDs: ['275331662865367040']
 			},
 			{
 				disableEveryone: true
