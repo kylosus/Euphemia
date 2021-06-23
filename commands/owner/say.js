@@ -31,7 +31,11 @@ module.exports = class extends ECommand {
 	}
 
 	async ship(message, result) {
-		const json = JSON.parse(result);
-		message.channel.send(json.content, new MessageEmbed(json));
+		try {
+			const json = JSON.parse(result);
+			return message.channel.send(json.content, new MessageEmbed(json));
+		} catch (err) {
+			return message.channel.send(result);
+		}
 	}
 };
