@@ -42,9 +42,9 @@ module.exports = class extends ECommand {
 		await Promise.all(args.ids.map(async id => {
 			const member = message.guild.members.resolve(id);
 
-			// if (member && !member.bannable) {
-			// 	return result.f.push({id, reason: 'Member too high in the hierarchy'});
-			// }
+			if (member && !member.bannable) {
+				return result.f.push({id, reason: 'Member too high in the hierarchy'});
+			}
 
 			try {
 				await message.guild.members.ban(id,{
