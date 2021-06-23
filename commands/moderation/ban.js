@@ -16,9 +16,9 @@ module.exports = class extends ECommand {
 			clientPermissions: [Permissions.FLAGS.BAN_MEMBERS],
 			args: [
 				{
-					id: 'members',
-					type: ArgConsts.MEMBERS,
-					message: 'Please mention members to ban'
+					id: 'ids',
+					type: ArgConsts.IDS,
+					message: 'Please mention users to ban'
 				},
 				{
 					id: 'reason',
@@ -39,21 +39,23 @@ module.exports = class extends ECommand {
 	async run(message, args) {
 		const result = {p: [], f: [], reason: args.reason};
 
-		await Promise.all(args.members.map(async m => {
-			if (!m.bannable) {
-				return result.f.push({member: m, reason: 'Member too high in the hierarchy'});
-			}
+		await Promise.all(args.ids.map(async id => {
+			const member = message.guild.members.resolve(id);
+
+			// if (member && !member.bannable) {
+			// 	return result.f.push({id, reason: 'Member too high in the hierarchy'});
+			// }
 
 			try {
-				await m.ban({
+				await message.guild.members.ban(id,{
 					days: 0,
 					reason: args.reason
 				});
 			} catch (err) {
-				return result.f.push({member: m, reason: err.message || 'Unknown error'});
+				return result.f.push({id, reason: err.message || 'Unknown error'});
 			}
 
-			result.p.push(m);
+			result.p.push(id);
 		}));
 
 		return result;
@@ -74,8 +76,8 @@ module.exports = class extends ECommand {
 
 		return message.channel.send(new MessageEmbed()
 			.setColor(color)
-			.addField('Banned', result.p.map(p => p.toString()).join(' ') || '~')
-			.addField('Failed', result.f.map(p => `${p.member.toString()} - ${p.reason}`).join('\n') || '~')
+			.addField('Banned', result.p.map(p => `<@${p}>`).join(' ') || '~')
+			.addField('Failed', result.f.map(p => `<@${p.id}> - ${p.reason}`).join('\n') || '~')
 			.addField('Moderator', message.member.toString(), true)
 			.addField('Reason', result.reason || '~', true)
 		);
