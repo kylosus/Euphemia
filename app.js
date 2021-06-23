@@ -78,6 +78,7 @@ const SQLiteProvider = require('./lib/Provider/SQLiteProvider');
 // const commandsPath = join(__dirname, '..', 'commands/');
 // const listenersPath = join(__dirname, '..', 'listeners/');
 
+// enable partials
 class Client extends EClient {
 	constructor() {
 		super(
