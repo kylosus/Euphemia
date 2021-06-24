@@ -1,3 +1,4 @@
+/*
 const { Command }	= require('discord.js-commando');
 const { RichEmbed }	= require('discord.js');
 const changelog		= require('./changelog.json');
@@ -56,3 +57,6 @@ function _build(log) {
 		.addField('Major changes', log.major.map(x => `• ${x}`).join('\n'))
 		.addField('Minor changes', log.minor.map(x => `• ${x}`).join('\n'));
 }
+ */
+
+// no need for this
