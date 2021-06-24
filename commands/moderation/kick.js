@@ -9,8 +9,8 @@ module.exports = class extends ECommand {
 			aliases: ['kick'],
 			description: {
 				content: 'Kicks a member.',
-				usage: '<member> [reason]',
-				examples: ['kick @user', 'kick 275331662865367040'],
+				usage: '<member> [member2...] [reason]',
+				examples: ['kick @member', 'kick @member1 @member2',  'kick 275331662865367040'],
 			},
 			userPermissions: [Permissions.FLAGS.KICK_MEMBERS],
 			clientPermissions: [Permissions.FLAGS.KICK_MEMBERS],

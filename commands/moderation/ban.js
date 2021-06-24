@@ -8,9 +8,9 @@ module.exports = class extends ECommand {
 		super(client, {
 			aliases: ['ban', 'b'],
 			description: {
-				content: 'Bans a member.',
-				usage: '<member> [reason]',
-				examples: ['ban @user', 'ban 275331662865367040'],
+				content: 'Bans a user.',
+				usage: '<user> [user2...] [reason]',
+				examples: ['ban @user', 'ban @user1 @user2', 'ban 275331662865367040'],
 			},
 			userPermissions: [Permissions.FLAGS.BAN_MEMBERS],
 			clientPermissions: [Permissions.FLAGS.BAN_MEMBERS],
