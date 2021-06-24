@@ -83,7 +83,8 @@ class Client extends EClient {
 	constructor() {
 		super(
 			{
-				ownerIDs: ['275331662865367040']
+				ownerIDs: ['275331662865367040'],
+				defaultColor: [233, 91, 169]
 			},
 			{
 				disableEveryone: true
