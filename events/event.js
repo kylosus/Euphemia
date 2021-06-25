@@ -1,5 +1,7 @@
-const botEventHandler 		= event => require(`./bot/${event}`);
+// const botEventHandler 		= event => require(`./bot/${event}`);
 const serverEventHandler	= event => require(`./loggable/${event}`);
+
+const botEventHandler = () => (() => {});
 
 module.exports = client => {
 	client.on('ready',				()		=> botEventHandler('ready')(client));
@@ -15,7 +17,7 @@ module.exports = client => {
 	client.on('messageDelete',		(m)		=> serverEventHandler('messageDelete')(m));
 	client.on('messageUpdate',		(o, n)	=> serverEventHandler('messageUpdate')(o, n));
 	client.on('userUpdate',			(o, n)	=> serverEventHandler('userUpdate')(o, n));
-	client.on('commandRun',			()		=> client.messageStats.commands++);
+	// client.on('commandRun',			()		=> client.messageStats.commands++);
 	// client.on('commandBlocked',	(m, r)	=> botEventHandler('commandBlocked')(m, r));
 	client.on('message',			(botEventHandler('message')));
 };
