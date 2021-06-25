@@ -52,7 +52,7 @@ module.exports = class extends ECommand {
 		const attachment = result.attachments.first();
 
 		if (attachment && /\.(gif|jpg|jpeg|tiff|png|webm|webp)$/i.test(attachment.url)) {
-			embed.setImage(attachment.url);
+			embed.setImage(attachment.proxyURL);
 		}
 
 		return message.channel.send(embed);
