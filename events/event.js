@@ -10,8 +10,8 @@ module.exports = client => {
 	client.on('disconnect',			(e)		=> botEventHandler('disconnect')(e));
 	client.on('guildCreate',		(g)		=> botEventHandler('guildCreate')(g));
 	client.on('guildMemberAdd',		(m)		=> serverEventHandler('guildMemberAdd')(m));
-	client.on('guildMemberRemove',	(m)		=> serverEventHandler('guildMemberRemove')(m, client));
-	client.on('guildMemberUpdate',	(o, n)	=> serverEventHandler('guildMemberUpdate')(o, n, client));
+	client.on('guildMemberRemove',	(m)		=> serverEventHandler('guildMemberRemove')(m));
+	client.on('guildMemberUpdate',	(o, n)	=> serverEventHandler('guildMemberUpdate')(o, n));
 	client.on('guildBanAdd',		(g, u)	=> serverEventHandler('guildBanAdd')(g, u));
 	client.on('guildBanRemove',		(g, u)	=> serverEventHandler('guildBanRemove')(g, u));
 	client.on('messageDelete',		(m)		=> serverEventHandler('messageDelete')(m));
