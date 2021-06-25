@@ -12,7 +12,7 @@ module.exports = guild => {
 			.addField('Guild name', guild.name)
 			.addField('Guild id', guild.id || '-')
 			.addField('Member count', guild.memberCount || '-')
-			.addField('Owner', guild.owner ? guild.owner.user.tag : '*Unknown owner*')
+			.addField('Owner', guild.owner ? guild.owner.user.tag : guild.ownerID)
 		);
 	});
 };
