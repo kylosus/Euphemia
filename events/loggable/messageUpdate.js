@@ -1,19 +1,17 @@
-const moment 		= require('moment');
-const { RichEmbed } = require('discord.js');
+const { MessageEmbed }	= require('discord.js');
 
 module.exports = (oldMessage, newMessage) => {
-
 	if (oldMessage.content === newMessage.content || !oldMessage.content || !newMessage.content) {
 		return;
 	}
 
-	const entry = newMessage.client.provider.get(newMessage.guild, 'messageUpdate', false);
+	const entry = newMessage.client.provider.get(newMessage.guild, 'log', {messageUpdate: false});
 
-	if (!entry || !entry.log) {
+	if (!entry.messageUpdate) {
 		return;
 	}
 
-	const channel = newMessage.guild.channels.get(entry.log);
+	const channel = newMessage.guild.channels.resolve(entry.messageUpdate);
 
 	if (!channel) {
 		return;
@@ -27,13 +25,13 @@ module.exports = (oldMessage, newMessage) => {
 		newMessage.content = newMessage.content.substring(0, 1020) + '...';
 	}
 
-	return channel.send(new RichEmbed()
+	return channel.send(new MessageEmbed()
 		.setColor('PURPLE')
 		.setTitle(`🖊 Message edited in #${newMessage.channel.name}`)
-		.setDescription(`${newMessage.member.toString()} \`${newMessage.author.id}\``)
+		.setDescription(`${newMessage.member.toString()} \`${newMessage.author.id}\` [Link](${newMessage.url})`)
 		.addField('Old message', oldMessage.content, false)
 		.addField('New message', newMessage.content, false)
 		.addField('ID', oldMessage.id, false)
-		.setTimestamp(moment().toDate())	// Do I need moment
+		.setTimestamp()	// Do I need moment // NO
 	);
 };

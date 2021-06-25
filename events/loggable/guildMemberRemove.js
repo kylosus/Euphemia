@@ -1,56 +1,43 @@
-const EuphemiaEmbed = require('../../util/EuphemiaEmbed.js');
-const { RichEmbed } = require('discord.js');
+const { MessageEmbed }	= require('discord.js');
 
-module.exports = (member, Client) => {
-	const entry = Client.provider.get(member.guild, 'guildMemberRemove', false);
+const { replaceTokens }	= require('../util');
 
-	if (!entry) {
-		return;
-	}
-
-	if (entry.message && entry.channel) {
-		const message = entry.message
-			.replace('$MENTION$', member.toString())
-			.replace('$NAME$', member.user.tag)
-			.replace('$MEMBER_COUNT$', _countNormalizer(member.guild.memberCount))
-			.replace('$AVATAR$', member.user.avatarURL || member.user.defaultAvatarURL);
-
-		const embed = EuphemiaEmbed.build(message);
-
-		if (embed) {
-			const channel = member.guild.channels.get(entry.channel);
-
-			if (channel) {
-				channel.send([embed.content], embed);
-			}
+module.exports = member => {
+	(entry => {
+		if (!entry.channel || !entry.message) {
+			return;
 		}
-	}
 
-	if (entry.log) {
-		const channel = member.guild.channels.get(entry.log);
+		const channel = member.guild.channels.resolve(entry.channel);
 
-		if (channel) {
-			channel.send(new RichEmbed()
-				.setColor('BLUE')
-				.setTitle('❌ User left')
-				.setThumbnail(member.user.avatarURL)
-				.setDescription(`${member.toString()} \`${member.user.tag}\``)
-				.addField('ID', member.id, false)
-				.setTimestamp(member.joinedAt)
-			);
+		if (!channel) {
+			return;
 		}
-	}
+
+		return channel.send(
+			replaceTokens(entry.message.content),
+			new MessageEmbed(replaceTokens(entry.message.embed))
+		);
+	})(member.client.provider.get(member.guild, 'goodbye', {channel: null, message: null}));
+
+	(entry => {
+		if (!entry.guildMemberRemove) {
+			return;
+		}
+
+		const channel = member.guild.channels.get(entry.guildMemberRemove);
+
+		if (!channel) {
+			return;
+		}
+
+		channel.send(new MessageEmbed()
+			.setColor('BLUE')
+			.setTitle('❌ User left')
+			.setThumbnail(member.user.avatarURL)
+			.setDescription(`${member.toString()} \`${member.user.tag}\``)
+			.addField('ID', member.id, false)
+			.setTimestamp(member.joinedAt)
+		);
+	})(member.client.provider.get(member.guild, 'log', {guildMemberRemove: null}));
 };
-
-function _countNormalizer(count) {
-	switch (count % 10) {
-		case 1:
-			return `${count}st`;
-		case 2:
-			return `${count}nd`;
-		case 3:
-			return `${count}rd`;
-		default:
-			return `${count}th`;
-	}
-}

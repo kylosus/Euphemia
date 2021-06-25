@@ -1,19 +1,19 @@
-const { RichEmbed } = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 
 module.exports = (guild, user) => {
-	const entry = guild.client.provider.get(guild, 'guildBanRemove', false);
+	const entry = guild.client.provider.get(guild, 'log', {guildBanRemove: null});
 	
-	if (!entry || !entry.log) {
+	if (!entry.guildBanRemove) {
 		return;
 	}
 
-	const channel = guild.channels.get(entry.log);
+	const channel = guild.channels.resolve(entry.guildBanRemove);
 
 	if (!channel) {
 		return;
 	}
 
-	channel.send(new RichEmbed()
+	channel.send(new MessageEmbed()
 		.setColor('GREEN')
 		.setTitle('♻ User unbanned')
 		.setThumbnail(user.avatarURL)

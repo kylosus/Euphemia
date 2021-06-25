@@ -1,22 +1,23 @@
-const { RichEmbed } = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 
-module.exports = member => {
-	const entry = member.client.provider.get(member.guild, 'guildMemberUnmuted', false);
+module.exports = (member, moderator) => {
+	const entry = member.client.provider.get(member.guild, 'log', {guildMemberUnmuted: null});
 
-	if (!entry || !entry.log) {
+	if (!entry.guildMemberUnmuted) {
 		return;
 	}
 
-	const channel = member.guild.channels.get(entry.log);
+	const channel = member.guild.channels.resolve(entry.guildMemberUnmuted);
 
 	if (!channel) {
 		return;
 	}
-	
-	channel.send(new RichEmbed()
+
+	channel.send(new MessageEmbed()
 		.setColor('GOLD')
 		.setTitle('🔈 User unmuted')
 		.setThumbnail(member.user.avatarURL)
 		.addField('User', `${member.toString()} \`${member.id}\``, false)
+		.addField('Moderator', moderator.toString())
 	);
 };

@@ -1,19 +1,19 @@
-const { RichEmbed } = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 
 module.exports = (member, duration, moderator) => {
-	const entry = member.client.provider.get(member.guild, 'guildMemberMuted', false);
+	const entry = member.client.provider.get(member.guild, 'log', {guildMemberMuted: null});
 
-	if (!entry || !entry.log) {
+	if (!entry.guildMemberMuted) {
 		return;
 	}
 
-	const channel = member.guild.channels.get(entry.log);
-	
+	const channel = member.guild.channels.resolve(entry.guildMemberMuted);
+
 	if (!channel) {
 		return;
 	}
 
-	channel.send(new RichEmbed()
+	return channel.send(new MessageEmbed()
 		.setColor('GOLD')
 		.setTitle('🔇 User muted')
 		.setThumbnail(member.user.avatarURL)
@@ -22,5 +22,3 @@ module.exports = (member, duration, moderator) => {
 		.addField('Moderator', moderator.toString())
 	);
 };
-
-// TODO: add mod

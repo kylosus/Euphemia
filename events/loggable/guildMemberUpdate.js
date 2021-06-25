@@ -1,40 +1,39 @@
-const { RichEmbed } = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 
-module.exports = (oldMember, newMember, Client) => {
-	const entry = Client.provider.get(newMember.guild, 'guildMemberUpdate', false);
+module.exports = (oldMember, newMember) => {
+	const entry = newMember.client.provider.get(newMember.guild, 'log', {guildMemberUpdate: null});
 
-	if (!entry || !entry.log) {
+	if (!entry.guildMemberUpdate) {
 		return;
 	}
 
-	const channel = newMember.guild.channels.get(entry.log);
+	const channel = newMember.guild.channels.resolve(entry.guildMemberUpdate);
 
 	if (!channel) {
 		return;
 	}
 
 	if (oldMember.nickname !== newMember.nickname) {
-		
 		// Sorry
 		const body = newMember.nickname ? `**${newMember.user.tag}** has changed their nickname` + (oldMember.nickname? ` from **${oldMember.nickname}**` : '') + ` to **${newMember.nickname}**`
 			: `**${newMember.user.tag}** has removed their nickname, **${oldMember.nickname}**`;
 
-		channel.send(new RichEmbed()
+		return channel.send(new MessageEmbed()
 			.setColor('GREEN')
 			.setThumbnail(newMember.user.avatarURL)
 			.setTitle('Nickname change')
 			.setDescription(body)
-			.setTimestamp((new Date()))
+			.setTimestamp()
 		);
 	}
 
 	if (oldMember.user.tag !== newMember.user.tag) {
-		channel.send(new RichEmbed()
+		return channel.send(new MessageEmbed()
 			.setColor('GREEN')
 			.setThumbnail(newMember.user.avatarURL)
 			.setTitle('Username change')
 			.setDescription(`**${oldMember.user.tag}** has changed their username to **${newMember.user.tag}**`)
-			.setTimestamp((new Date()))
+			.setTimestamp()
 		);
 	}
 };
