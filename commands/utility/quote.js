@@ -38,7 +38,7 @@ module.exports = class extends ECommand {
 	async ship(message, result) {
 		const embed = new MessageEmbed()
 			.setColor(result.member ? result.member.displayColor : 'WHITE')
-			.addField('Jump to message', '[Link](https://google.com)')
+			.addField('Jump to message', `[Link](${message.url})`)
 			.setDescription(result.content || '*No content*')
 			.setFooter(`In #${result.channel.name}`)
 			.setTimestamp(result.createdAt);
