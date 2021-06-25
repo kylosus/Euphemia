@@ -1,10 +1,11 @@
 const { MessageEmbed } = require('discord.js');
 
 module.exports = message => {
-	if (message.author.id === message.client.user.id) {
-		message.client.messageStats.sent++;
-	} else {
-		message.client.messageStats.received++;
+	// if (message.author.id === message.client.user.id) {
+	// 	message.client.messageStats.sent++;
+	// } else {
+	// 	message.client.messageStats.received++;
+	// }
 	}
 
 	if (!message.guild && message.author !== message.client.user.id) {
