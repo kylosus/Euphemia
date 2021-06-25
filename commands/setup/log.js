@@ -2,18 +2,27 @@ const { Command }	= require('discord.js-commando');
 const { RichEmbed }	= require('discord.js');
 const path			= require('path');
 const fs			= require('fs');
-let eventModules;
 const directoryPath	= path.join(__dirname + '/../../events/loggable');
 
-fs.readdir(directoryPath, { withFileTypes: true }, (err, files) => {
-	if (err) {
-		throw `Unable to scan directory:\n${err}`;
-	}
 
-	eventModules = files
-		.filter(dirent => dirent.isFile() && !dirent.name.startsWith('_'))
-		.map(dirent => dirent.name.replace(/\.[^/.]+$/, ''));
-});
+const events = fs.readdirSync(directoryPath, { withFileTypes: true })
+	.filter(dirent => dirent.isFile() && !dirent.name.startsWith('_'))
+	.map(dirent => dirent.name.replace(/\.[^/.]+$/, ''));
+
+// fs.readdir(directoryPath, { withFileTypes: true }, (err, files) => {
+// 	if (err) {
+// 		throw `Unable to scan directory:\n${err}`;
+// 	}
+//
+// 	events = files
+// 		.filter(dirent => dirent.isFile() && !dirent.name.startsWith('_'))
+// 		.map(dirent => dirent.name.replace(/\.[^/.]+$/, ''));
+// });
+
+const SETTINGS = events.reduce(function(acc, curr) {
+	acc[curr] = null;
+	return acc;
+}, {});
 
 module.exports =  class extends Command {
 	constructor(client) {
