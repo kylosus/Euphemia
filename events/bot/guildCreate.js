@@ -6,8 +6,8 @@ module.exports = guild => {
 
 	guild.client.owners.forEach(owner => {
 		owner.send(new RichEmbed()
-			.setColor(global.BOT_DEFAULT_COLOR)
 			.setImage(guild.iconURL || DISCORD_LOGO)
+			.setColor(guild.client.defaultColor)
 			.setTitle('Bot has joined a new guild')
 			.addField('Guild name', guild.name)
 			.addField('Guild id', guild.id || '-')
