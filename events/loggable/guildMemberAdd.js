@@ -1,4 +1,4 @@
-const EuphemiaEmbed =	require('../util/EuphemiaEmbed.js');
+const EuphemiaEmbed =	require('../../util/EuphemiaEmbed.js');
 const moment 		=	require('moment');
 const { RichEmbed }	=	require('discord.js');
 

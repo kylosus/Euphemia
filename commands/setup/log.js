@@ -2,8 +2,8 @@ const { Command }	= require('discord.js-commando');
 const { RichEmbed }	= require('discord.js');
 const path			= require('path');
 const fs			= require('fs');
-const directoryPath	= path.join(__dirname + '/../../events');
 let eventModules;
+const directoryPath	= path.join(__dirname + '/../../events/loggable');
 
 fs.readdir(directoryPath, { withFileTypes: true }, (err, files) => {
 	if (err) {

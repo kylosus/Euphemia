@@ -1,5 +1,5 @@
 const botEventHandler 		= event => require(`./bot/${event}`);
-const serverEventHandler	= event => require(`../events/${event}`);
+const serverEventHandler	= event => require(`./loggable/${event}`);
 
 module.exports = client => {
 	client.on('ready',				()		=> botEventHandler('ready')(client));
