@@ -120,6 +120,8 @@ class Client extends EClient {
 
 const client = new Client();
 
+require('./events/event.js')(client);
+
 // client.setInterval(() => {
 // 	console.log(client.guilds.cache.get('344556222755766283').settings);
 // }, 2000);
