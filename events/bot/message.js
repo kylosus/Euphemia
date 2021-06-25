@@ -6,33 +6,36 @@ module.exports = message => {
 	// } else {
 	// 	message.client.messageStats.received++;
 	// }
+
+	if (message.guild || message.author.id === message.client.user.id) {
+		return;
 	}
 
-	if (!message.guild && message.author !== message.client.user.id) {
-		if (message.client.owners) {
-			const embed = new RichEmbed()
-				.setColor('BLUE')
-				.setImage(message.author.avatarURL || message.author.defaultAvatarURL)
-				.setTitle('Bot has received a DM')
-				.addField(message.author.tag, message.content || '-');
+	if (!message.client.owners.length) {
+		return;
+	}
 
-			if (message.embeds.length >= 1) {
-				if (message.embeds[0].image) {
-					embed.setImage(message.embeds[0].image.url);
-				}
-			}
+	const embed = new MessageEmbed()
+		.setColor('BLUE')
+		.setThumbnail(message.author.displayAvatarURL())
+		.setTitle(`DM from ${message.author.tag}`)
+		.setDescription(message.content || '~');
 
-			embed.addField('Attachments',
-				message.attachments
-					.map(attachment => attachment.url)
-					.join('\n')
-			);
-
-			message.client.owners.forEach(owner => {
-				if (message.author.id !== owner.id) {
-					return owner.send(embed);
-				}
-			});
+	((attachment) => {
+		if (!attachment) {
+			return;
 		}
-	}
+
+		if (/\.(gif|jpg|jpeg|tiff|png|webm|webp)$/i.test(attachment.url)) {
+			return embed.setImage(attachment.proxyURL);
+		}
+
+		return embed.addField('Attachment', attachment.name + '\n' + `[Link](${attachment.proxyURL})`);
+	})(message.attachments.first());
+
+	message.client.owners.forEach(owner => {
+		if (message.author.id !== owner.id) {
+			return owner.send(embed);
+		}
+	});
 };
