@@ -3,7 +3,6 @@ require('dotenv').config();
 const EClient = require('./lib/EClient');
 const ECommandHandler = require('./lib/ECommandHandler');
 
-const Commando = require('discord.js-commando');
 const config = require('./config.json');
 const path = require('path');
 // const sqlite		= require('sqlite');
