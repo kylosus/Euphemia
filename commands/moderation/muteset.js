@@ -1,45 +1,60 @@
-// ok
+const { Permissions } = require('discord.js');
 
-/*
-		// const args = message.content.split(' ');
-		// const arg = args.slice(2).join(' ');
+const ECommand = require('../../lib/ECommand');
+const ArgConsts = require('../../lib/Argument/ArgumentTypeConstants');
 
-		if (args.split(' ')[1] === '-set') {
-			// Look for id
-			const match = args.match(/^\d{7,}$/);
+const { mutedRole } = require('../../modules/mute');
 
-			const role = ((match, input) => {
-				if (match) {
-					const role = message.guild.roles.get(match[0]);
-					if (role) {
-						return role;
-					}
+
+module.exports = class extends ECommand {
+	constructor(client) {
+		super(client, {
+			aliases: ['muteset'],
+			description: {
+				content: 'Sets muted role for the server',
+				usage: '[role]',
+				examples: ['muteset', 'muteset SomeRole', 'muteset 422621940868579338']
+			},
+			userPermissions: [Permissions.FLAGS.MANAGE_ROLES],
+			clientPermissions: [Permissions.FLAGS.MANAGE_ROLES, Permissions.FLAGS.MANAGE_GUILD],
+			args: [
+				{
+					id: 'role',
+					type: ArgConsts.TEXT,
+					optional: true,
+					default: () => null
 				}
+			],
+			guildOnly: true,
+			nsfw: false,
+			ownerOnly: false,
+			rateLimited: false,
+			fetchMembers: false,
+			cached: false,
+		});
+	}
 
-				// Look for role name
-				const inputLow = input.toLowerCase();
-				return message.guild.roles.find(role => role.name.toLowerCase().includes(inputLow)) || null;
-			})(match, args);
-
-			if (!role) {
-				return message.embed(new RichEmbed()
-					.setColor('RED')
-					.setTitle('Role not found')
-				);
-			}
-
-			if (role.position >= message.guild.me.highestRole.position) {
-				return message.channel.send(new RichEmbed()
-					.setColor('RED')
-					.setTitle('Role cannot be assigned as the mute role because it is higher than, or equal to the bot in the role hierarchy.')
-				);
-			}
-
-			message.guild.settings.set('mutedRole', role.id);
-
-			return message.channel.send(new RichEmbed()
-				.setColor('GREEN')
-				.setTitle(`Mute role set to ${role.name}.`)
-			);
+	async run(message, args) {
+		if (!args.role) {
+			const role = await mutedRole.setNewMutedRole(message.guild);
+			return `Created new muted role ${role.toString()}`;
 		}
- */
+
+		const role = await (async (role) => {
+			return message.guild.roles.cache.get(role) ||
+				message.guild.roles.cache.find(r => r.name.toLowerCase() === role.toLowerCase()) ||
+				message.guild.roles.cache.find(r => r.name.toLowerCase().startsWith(role.toLowerCase())) ||
+				(() => {
+					throw 'Role not found';
+				})();
+		})(args.role);
+
+		if (role.position >= message.guild.me.roles.highest.position) {
+			throw 'Cannot assign as the muted role. Role is too high in the hierarchy';
+		}
+
+		await mutedRole.setMutedRole(message.guild, role);
+
+		return `Set ${role.toString()} as the muted role`;
+	}
+};
