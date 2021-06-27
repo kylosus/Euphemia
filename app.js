@@ -77,6 +77,8 @@ const SQLiteProvider = require('./lib/Provider/SQLiteProvider');
 // const commandsPath = join(__dirname, '..', 'commands/');
 // const listenersPath = join(__dirname, '..', 'listeners/');
 
+const modules = require('./modules');
+
 // enable partials
 class Client extends EClient {
 	constructor() {
@@ -95,7 +97,8 @@ class Client extends EClient {
 			sqlite.open({
 				filename: path.join(__dirname, 'settings.sqlite3'),
 				driver: sqlite3.Database
-			}).then(db => {
+			}).then(async db => {
+				await modules.init(this, db);
 				return new SQLiteProvider(db);
 			})
 		);
