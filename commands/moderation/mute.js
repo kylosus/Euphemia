@@ -26,8 +26,9 @@ module.exports = class extends ECommand {
 				},
 				{
 					id: 'duration',
-					type: ArgConsts.NUMBER,
+					type: ArgConsts.DURATION,
 					optional: true,
+					default: () => null
 				},
 				{
 					id: 'reason',
@@ -91,10 +92,14 @@ module.exports = class extends ECommand {
 
 			result.p.push(m);
 
+			if (args.duration) {
+				await muteHandler.muteMember(message.guild, m, role, args.reason, result.duration);
+			}
+
 			this.client.emit('guildMemberMuted', m, args.duration, message.member);
 		}));
 
-		return new Promise(resolve => resolve(result));
+		return result;
 	}
 
 	async ship(message, result) {
@@ -110,13 +115,25 @@ module.exports = class extends ECommand {
 			return 'RED';
 		})(result);
 
-		return message.channel.send(new MessageEmbed()
-			.setColor(color)
-			.addField('Muted', result.p.map(p => p.toString()).join(' ') || '~')
-			.addField('Failed', result.f.map(p => `${p.member.toString()} - ${p.reason}`).join('\n') || '~')
-			.addField('Duration', result.duration || 'Forever')
+		const embed = new MessageEmbed()
+			.setColor(color);
 			// .addField('Moderator', message.member.toString(), true)
-			.addField('Reason', result.reason || '~', true)
-		);
+
+		if (result.p.length) {
+			const duration = result.duration ? result.duration.fromNow().replace('in', 'for') : 'Forever';
+			embed.addField(`Muted ${duration}`, result.p.map(p => p.toString()).join(' '));
+		}
+
+		if (result.f.length) {
+			embed.addField('Failed', result.f.map(p => `${p.member.toString()} - ${p.reason}`).join('\n'));
+		}
+
+		if (result.reason) {
+			embed.addField('Reason', result.reason, true);
+		}
+
+		// embed.addField('Duration', result.duration ? result.duration.fromNow().replace('in', 'for') : 'Forever');
+
+		return message.channel.send(embed);
 	}
 };
