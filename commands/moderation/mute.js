@@ -60,7 +60,7 @@ module.exports = class extends ECommand {
 				return role;
 			}
 
-			const newRole =  await mutedRole.setMutedRole(guild);
+			const newRole =  await mutedRole.setNewMutedRole(guild);
 			await this.sendNotice(message, `Muted role not found, created new role ${newRole.toString()}`);
 			return newRole;
 		})(message.guild);

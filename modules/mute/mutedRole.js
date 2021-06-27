@@ -8,7 +8,12 @@ const getMutedRole = async guild => {
 	return await guild.roles.fetch(entry);
 };
 
-const setMutedRole = async (guild, roleName = `${guild.client.user.username}-mute`) => {
+const setMutedRole = async (guild, role) => {
+	await guild.client.provider.set(guild, 'mutedRole', role.id);
+	return role;
+};
+
+const setNewMutedRole = async (guild, roleName = `${guild.client.user.username}-mute`) => {
 	const role = await guild.roles.create({
 		data: {
 			name: roleName,
@@ -18,16 +23,14 @@ const setMutedRole = async (guild, roleName = `${guild.client.user.username}-mut
 		reason: 'Automatic muted role creation'
 	});
 
-	await guild.client.provider.set(guild, 'mutedRole', role.id);
-
-	return role;
+	return await setMutedRole(guild, role);
 };
 
 const getOrSetMutedRole = async (guild /*, roleName = `${guild.client.user.username}-mute` */) => {
 	const role = await getMutedRole(guild);
 
 	if (!role) {
-		return await setMutedRole(guild);
+		return await setNewMutedRole(guild);
 	}
 
 	return role;
@@ -36,5 +39,6 @@ const getOrSetMutedRole = async (guild /*, roleName = `${guild.client.user.usern
 module.exports = {
 	getMutedRole,
 	setMutedRole,
+	setNewMutedRole,
 	getOrSetMutedRole
 };
