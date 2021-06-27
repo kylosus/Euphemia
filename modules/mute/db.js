@@ -16,6 +16,7 @@ const init = async (client, db) => {
 	`);
 
 	STATEMENTS.insert = await db.prepare(`INSERT OR REPLACE INTO ${TABLE_NAME} VALUES (?, ?, ?, ?, ?)`);
+	STATEMENTS.delete = await db.prepare(`DELETE FROM ${TABLE_NAME} WHERE guild = ? and member = ?`);
 	STATEMENTS.getExpired = await db.prepare(`
 		SELECT
 			CAST(guild as TEXT) as guild,
@@ -32,8 +33,14 @@ const insert = async (guild, member, mutedRole, reason, expires) => {
 const getExpired = async () => {
 	return await STATEMENTS.getExpired.all();
 };
+
+const remove = async (guild, member) => {
+	return await STATEMENTS.delete.run(guild, member);
+};
+
 module.exports = {
 	init,
 	insert,
 	getExpired,
+	remove
 };
