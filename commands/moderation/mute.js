@@ -65,25 +65,7 @@ module.exports = class extends ECommand {
 			return newRole;
 		})(message.guild);
 
-		// const entry = await message.client.provider.get(message.guild, 'mutedRole');
-		//
-		// if (!entry) {
-		// 	// Will take care of this later
-		// 	throw 'Muted role not found';
-		// }
-		//
-		// const mutedRole = message.guild.roles.resolve(entry);
-		//
-		// if (!mutedRole) {
-		// 	throw 'I cannot mute. Muted role has been deleted';
-		// }
-
 		await Promise.all(args.members.map(async m => {
-			if (m.roles.cache.has(role.id)) {
-				result.f.push({member: m, reason: 'Already muted'});
-				return null;
-			}
-
 			try {
 				await m.roles.add(role, args.reason);
 			} catch (error) {
@@ -117,7 +99,7 @@ module.exports = class extends ECommand {
 
 		const embed = new MessageEmbed()
 			.setColor(color);
-			// .addField('Moderator', message.member.toString(), true)
+			// .addField('Moderator', message.member.toString(), true);
 
 		if (result.p.length) {
 			const duration = result.duration ? result.duration.fromNow().replace('in', 'for') : 'Forever';
