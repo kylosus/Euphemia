@@ -3,6 +3,10 @@ const { MessageEmbed, Permissions } = require('discord.js');
 const ECommand = require('../../lib/ECommand');
 const ArgConsts = require('../../lib/Argument/ArgumentTypeConstants');
 
+const { mutedRole, muteHandler } = require('../../modules/mute');
+
+const moment = require('moment');
+
 module.exports = class extends ECommand {
 	constructor(client) {
 		super(client, {
@@ -44,27 +48,43 @@ module.exports = class extends ECommand {
 	async run(message, args) {
 		const result = {p: [], f: [], duration: args.duration, reason: args.reason};
 
-		const entry = await message.client.provider.get(message.guild, 'mutedRole');
-
-		if (!entry) {
-			// Will take care of this later
-			throw 'Muted role not found';
+		if (args.duration) {
+			result.duration = moment().add(args.duration);
 		}
 
-		const mutedRole = message.guild.roles.resolve(entry);
+		const role = await (async guild => {
+			const role = await mutedRole.getMutedRole(guild);
 
-		if (!mutedRole) {
-			throw 'I cannot mute. Muted role has been deleted';
-		}
+			if (role) {
+				return role;
+			}
+
+			const newRole =  await mutedRole.setMutedRole(guild);
+			await this.sendNotice(message, `Muted role not found, created new role ${newRole.toString()}`);
+			return newRole;
+		})(message.guild);
+
+		// const entry = await message.client.provider.get(message.guild, 'mutedRole');
+		//
+		// if (!entry) {
+		// 	// Will take care of this later
+		// 	throw 'Muted role not found';
+		// }
+		//
+		// const mutedRole = message.guild.roles.resolve(entry);
+		//
+		// if (!mutedRole) {
+		// 	throw 'I cannot mute. Muted role has been deleted';
+		// }
 
 		await Promise.all(args.members.map(async m => {
-			if (m.roles.cache.has(mutedRole.id)) {
+			if (m.roles.cache.has(role.id)) {
 				result.f.push({member: m, reason: 'Already muted'});
 				return null;
 			}
 
 			try {
-				await m.roles.add(mutedRole, args.reason);
+				await m.roles.add(role, args.reason);
 			} catch (error) {
 				return result.f.push({member: m, reason: error.message});
 			}
