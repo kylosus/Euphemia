@@ -2,3 +2,7 @@
 settings.sqlite3
 /.vscode/
 .env
+/.idea/
+.eslintrc.json
+*.sqlite*
+*.db

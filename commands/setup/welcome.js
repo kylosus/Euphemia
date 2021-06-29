@@ -1,103 +1,111 @@
-const { Command } = require('discord.js-commando');
-const { RichEmbed } = require('discord.js');
-const EuphemiaEmbed = require('../../util/EuphemiaEmbed.js');
+const { MessageEmbed, Permissions } = require('discord.js');
 
-module.exports = class extends Command {
-    constructor(client) {
-        super(client, {
-            name: 'welcome',
-            group: 'setup',
-            memberName: 'welcome',
-            description: 'Sets up welcome message.',
-            details: 'Takes a JSON String as an argument.\n`%MENTION%` -> mentions user;\n`%NAME%` -> user name and discriminator without tagging;\n$MEMBER_COUNT$ -> guild member count;\n$AVATAR$ -> avatar URL',
-            examples: [`JSON\n${client.commandPrefix}welcome {\n\t"content":"%MENTION% has joined the server",\n\t"image":"http://image-link.com"\n}`],
-            userPermissions: ['MANAGE_GUILD'],
-            guildOnly: true
-        });
-    }
+const ECommand = require('../../lib/ECommand');
+const ArgConsts = require('../../lib/Argument/ArgumentTypeConstants');
 
-   async run(message) {
-       if (!message.content.includes(' ')) {
-           this.client.provider.remove(message.guild, 'guildMemberAdd').then(oldValue => {
-               if (oldValue) {
-                    return message.embed(new RichEmbed()
-                        .setColor('RED')
-                        .setTitle('Removed and disabled welcome message for this guild')
-                    );
-               } else {
-                    return message.embed(new RichEmbed()
-                        .setColor('RED')
-                        .setTitle('Please specify a welcome message, or channel')
-                    );
-               }
-           })
-        } else {
-            const argument = message.content.split(' ').splice(1).join(' ');
-            if (argument.startsWith('<#')) {
-                const object = this.client.provider.get(message.guild, 'guildMemberAdd', false);
-                if (object) {
-                    object.channel = message.mentions.channels.array()[0].id;
-                    this.client.provider.set(message.guild, 'guildMemberAdd', object);
-                    return message.embed(new RichEmbed()
-                        .setColor('GREEN')
-                        .setTitle(`Welcome channel set to #${message.guild.channels.find(val => val.id === object.channel).name}`));
-                } else {
-                    this.client.provider.set(message.guild, 'guildMemberAdd', { message: null, channel: message.mentions.channels.array()[0].id }).then(entry =>{
-                        message.embed(new RichEmbed()
-                            .setColor('GREEN')
-                            .setTitle(`Welcome channel set to #${message.mentions.channels.array()[0].name}`));
-                        return message.embed(new RichEmbed()
-                            .setColor('ORANGE')
-                            .setTitle(`Warning: No Welcome message set. Do ${this.client.commandPrefix}welcome {JSON} to set the channel`)
-                        );
-                    });
-                }
-            } else if (argument.startsWith('{')) {
-                const entry = this.client.provider.get(message.guild, 'guildMemberAdd', false);
-                if (entry) {
-                    if (!entry.channel) {
-                        message.embed(new RichEmbed()
-                            .setColor('ORANGE')
-                            .setTitle(`Warning: No Welcome channel set. Do ${this.client.commandPrefix}welcome #channel to set the channel`)
-                        );
-                    }
-                    const embed = EuphemiaEmbed.build(argument);
-                    if (embed) {
-                        entry.message = argument;
-                        this.client.provider.set(message.guild, 'guildMemberAdd', entry);
-                        message.channel.send(new RichEmbed()
-                            .setColor('GREEN')
-                            .setTitle('Welcome message set')
-                        );
-                        return message.channel.send([embed.content], embed);
-                    } else {
-                        return message.channel.send(new RichEmbed()
-                            .setColor('RED')
-                            .setTitle('Please check your input')
-                        );
-                    }
-                } else {
-                    const embed = EuphemiaEmbed.build(argument);
-                    if (embed) {
-                        this.client.provider.set(message.guild, 'guildMemberAdd', {message: argument, channel: null})
-                        message.channel.send(new RichEmbed()
-                            .setColor('GREEN')
-                            .setTitle('Welcome message set')
-                        );
-                        return message.channel.send([embed.content], embed);
-                    } else {
-                        return message.channel.send(new RichEmbed()
-                            .setColor('RED')
-                            .setTitle('Please check your input')
-                        );
-                    }
-                }
-            } else {
-                return message.embed(new RichEmbed()
-                    .setColor('ORANGE')
-                    .setTitle(`See ${this.client.commandPrefix}help welcome for help`)
-                );
-            }
-        }
-    }
-}
+module.exports = class extends ECommand {
+	constructor(client) {
+		super(client, {
+			aliases: ['welcome'],
+			description: {
+				content: 'Sets up welcome channel and message. Send without arguments to disable it',
+				// usage: '[channel] [{JSON}]',
+				usage: [
+					'%MENTION       -> mentions user',
+					'%NAME%         -> user tag',
+					'$MEMBER_COUNT$ -> guild member count',
+					'$AVATAR$       -> avatar URL'
+				].join('\n'),
+				examples: [
+					'welcome',
+					'welcome #general',
+					'welcome {\n\t"content":"%MENTION% has joined!",\n\t"image":"https://image-link.com"\n}'
+				]
+			},
+			userPermissions: [Permissions.FLAGS.MANAGE_GUILD],
+			args: [
+				{
+					id: 'message',
+					type: ArgConsts.JSON,
+					optional: true,
+					default: () => null
+				},
+				{
+					id: 'channel',
+					type: ArgConsts.CHANNEL,
+					optional: true,
+					default: () => null
+				},
+			],
+			guildOnly: true,
+			nsfw: false,
+			ownerOnly: false,
+			rateLimited: false,
+			fetchMembers: false,
+			cached: false,
+		});
+	}
+
+	async run(message, args) {
+		const entry = this.client.provider.get(message.guild, 'welcome',
+			{channel: null, message: {content: null, embed: null}});
+
+		if (!args.channel && !args.message) {
+			entry.channel = null;
+			await this.client.provider.set(message.guild, 'welcome', entry);
+			return 'Disabled welcome message';
+		}
+
+		if (args.channel) {
+			entry.channel = args.channel.id;
+			await this.client.provider.set(message.guild, 'welcome', entry);
+		}
+
+		if (!args.message) {
+			return `Moved welcome message to ${args.channel.toString()}`;
+		}
+
+		// Parse the json
+		const json = JSON.parse(args.message);
+
+		// Extract the content and save the rest for the embed
+		entry.message.content = json.content;
+		delete json.content;
+
+		// If json is not empty save it and try sending it
+		if (Object.keys(json).length) {
+			await message.channel.send(entry.message.content, new MessageEmbed(json));
+			// If above doesn't fail, we can stringify the JSON and save it
+			// this would make more sense to save as a JSON, but we do some string manipulation later
+			// I'll make it iterate through object values instead of using the whole thing
+			// as a giant string later
+			entry.message.embed = JSON.stringify(json);
+		} else {
+			// is there a point?
+			entry.message.embed = null;
+			await message.channel.send(entry.message.content);
+		}
+
+		await this.client.provider.set(message.guild, 'welcome', entry);
+
+		if (!entry.channel) {
+			return 'Enabled welcome message. ' + '\n' +
+				'Warning, welcome channel not set. Run `welcome #channel`';
+		}
+
+		const channel = message.guild.channels.cache.get(entry.channel);
+
+		if (channel) {
+			return `Enabled welcome message in ${channel.toString()}`;
+		}
+
+		return `Enabled welcome message, but channel ${entry.channel} seems to have been deleted`;
+	}
+
+	async ship(message, result) {
+		return message.channel.send(new MessageEmbed()
+			.setColor('GREEN')
+			.setDescription(result)
+		);
+	}
+};

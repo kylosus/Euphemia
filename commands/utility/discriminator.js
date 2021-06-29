@@ -1,44 +1,56 @@
-const { Command } = require('discord.js-commando');
-const { RichEmbed } = require('discord.js');
-const EuphemiaPaginatedMessage = require('../../util/EuphemiaPaginatedMessage.js');
-const _ = require('lodash');
+const _ 						= require('lodash');
 
-module.exports = class extends Command {
-    constructor(client) {
-        super(client, {
-            name: 'discriminator',
-            group: 'utility',
-            memberName: 'discriminator',
-            description: 'Lists members with the same discriminator',
-            aliases: ['discrim'],
-            throttling: {
-                usages: 1,
-                duration: 15
-            },
-            guildOnly: true
-        });
-    }
+const { MessageEmbed } = require('discord.js');
 
-   async run(message) {
-       const match = message.content.match(/\d{4}/);
-       const discriminator = match ? match[0] : message.author.discriminator;
-       if (message.guild.members.size !== message.guild.memberCount) {
-           await message.guild.fetchMembers();
-       }
-       const members = message.guild.members
-            .filter(member => member.user.discriminator === discriminator)
-            .map(member => member.user.username)
-            .sort();
-        const chunks = _.chunk(members, 20);
-        return EuphemiaPaginatedMessage(chunks.map(chunk => new RichEmbed()
-                    .addField(`Users with discriminator ${discriminator}`, '```' + chunk.join('\n') + '```')
-                    .setColor(global.BOT_DEFAULT_COLOR)
-        ), message);
-        const joined = members.join('\n');
-        message.channel.send(new RichEmbed()
-            .setColor(global.BOT_DEFAULT_COLOR)
-            .addField(`Users with discriminator ${discriminator}`, '```' +
-                (joined.length <= 1800 ? (joined + '```') : (joined.substring(0, 1800) + '\n...```')))
-        );
-    }
+const EuphemiaPaginatedMessage = require('../../util/EuphemiaPaginatedMessage');
+
+const ECommand = require('../../lib/ECommand');
+const ArgumentType = require('../../lib/Argument/ArgumentType');
+
+const { flatten } = require('../../lib/Argument/ArgumentTypeConstants');
+
+module.exports = class extends ECommand {
+	constructor(client) {
+		super(client, {
+			aliases: ['discriminator', 'discrim'],
+			description: {
+				content: 'Lists members with the same discriminator',
+				usage: '[discriminator]',
+				examples: ['discrim', 'discrim 0001']
+			},
+			args: [
+				{
+					id: 'discriminator',
+					type: new ArgumentType(/\d{4}/, flatten),
+					optional: true,
+					default: m => m.author.discriminator
+				}
+			],
+			guildOnly: true,
+			nsfw: false,
+			ownerOnly: false,
+			fetchMembers: true
+		});
+	}
+
+	async run(message, args) {
+		const members = message.guild.members.cache
+			.filter(m => m.user.discriminator === args.discriminator)
+			.map(member => member.user.username)
+			.sort();
+
+		if (!members.length) {
+			throw 'No members found';
+		}
+
+		return [_.chunk(members, 20), args.discriminator];
+	}
+
+	async ship(message, result) {
+		return EuphemiaPaginatedMessage(result[0].map(chunk => new MessageEmbed()
+			.addField(`Users with discriminator #${result[1]}`, '```' + chunk.join('\n') + '```')
+			.setColor('PURPLE')
+		), message);
+	}
+
 };

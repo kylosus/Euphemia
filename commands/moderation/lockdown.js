@@ -1,48 +1,38 @@
-const { Command } = require('discord.js-commando');
-const { RichEmbed } = require('discord.js');
+const { MessageEmbed, Permissions } = require('discord.js');
 
-module.exports = class extends Command {
-    constructor(client) {
-        super(client, {
-            name: 'lockdown',
-            group: 'moderation',
-            memberName: 'lockdown',
-            description: 'Automatically mutes every new member on join',
-            userPermissions: ['MANAGE_ROLES'],
-            guildOnly: true
-        });
-    }
+const ECommand = require('../../lib/ECommand');
 
-   async run(message) {
-       const entry = message.client.provider.get(message.guild, 'guildMemberAdd', false);
-       if (!entry) {
-			message.client.provider.set(message.guild, 'guildMemberAdd', {automute: true}).then(entry => {
-				sendNotification(message, 'Enabled')
-			});
-       } else if (!entry.hasOwnProperty('automute')) {
-			entry.automute = true;
-			message.client.provider.set(message.guild, 'guildMemberAdd', entry).then(entry => {
-        		sendNotification(message, 'Enabled');
-            });
-       } else {
-		   if (entry.automute) {
-				entry.automute = false;
-				message.client.provider.set(message.guild, 'guildMemberAdd', entry).then(entry => {
-					sendNotification(message, 'Disabled');
-				});
-			} else {
-				entry.automute = true;
-                message.client.provider.set(message.guild, 'guildMemberAdd', entry).then(entry => {
-                    sendNotification(message, 'Enabled');
-                });
-			}
-		}
-    }
-};
+module.exports = class extends ECommand {
+	constructor(client) {
+		super(client, {
+			aliases: ['lockdown', 'ld'],
+			description: {
+				content: 'Automatically mutes every new member on join.',
+				usage: '',
+				examples: ['lockdown'],
+			},
+			userPermissions: [Permissions.FLAGS.MANAGE_ROLES],
+			clientPermissions: [Permissions.FLAGS.MANAGE_ROLES],
+			guildOnly: true,
+			nsfw: false,
+			ownerOnly: false,
+			rateLimited: false,
+			fetchMembers: false,
+			cached: false,
+		});
+	}
 
-function sendNotification(message, text) {
-    return message.embed(new RichEmbed()
-        .setColor('DARK_RED')
-        .setTitle(`${text} automute on new member join.`)
-    );
+	async run(message) {
+		const entry = message.client.provider.get(message.guild, 'automute', false);
+		await message.client.provider.set(message.guild, 'automute', !entry);
+
+		return new Promise(resolve => resolve(`${entry ? 'Disabled' : 'Enabled'} automute on new member join.`));
+	}
+
+	async ship(message, result) {
+		return message.channel.send(new MessageEmbed()
+			.setColor('DARK_RED')
+			.setTitle(result)
+		);
+	}
 };

@@ -1,68 +1,83 @@
-const { Command } = require('discord.js-commando');
-const { RichEmbed } = require('discord.js');
-const packageJSON = require('../../package.json');
-let cache;
+const { MessageEmbed } = require('discord.js');
 
-module.exports = class extends Command {
-    constructor(client) {
-        super(client, {
-            name: 'help',
-            group: 'bot',
-            memberName: 'help',
-            description: 'Lists available commands',
-            examples: [`${client.commandPrefix}help`, `${client.commandPrefix}help ping`]
-        });
-    }
+const {ArgConsts, ECommand} = require('../../lib');
 
-    async run(message) {
+const { capitalize } = require('../../lib/util/StringDoctor');
 
-        const args = message.content.split(' ');
-        if (args.length === 1) {
+const pjson			= require('../../package.json');
 
-            if (cache) {
-                return message.channel.send(cache)
-            } else {
+module.exports = class extends ECommand {
+	constructor(client) {
+		super(client, {
+			aliases: ['help', 'h'],
+			description: {
+				content: 'Lists available commands.',
+				usage: '[command/module]',
+				examples: ['help', 'help ping'],
+			},
+			args: [
+				{
+					id: 'command',
+					type: ArgConsts.TEXT,
+					optional: true,
+					default: () => null
+				},
+			],
+			guildOnly: false,
+			nsfw: false,
+			ownerOnly: false,
+			rateLimited: true,
+			fetchMembers: false,
+			cached: true
+		});
+	}
 
-                const embed = new RichEmbed()
-                    .setTitle(`${message.client.user.username} commands`)
-                    .setThumbnail(message.client.user.avatarURL || message.client.user.defaultAvatarURL)
-                    .setColor(global.BOT_DEFAULT_COLOR)
-                    .addBlankField()
-                    .setFooter(`♥ Made with love by ${packageJSON.author}`);
+	async run(message, args) {
+		if (!args.command) {
+			return null;
+		}
 
-                this.client.registry.groups.forEach(group => {
-                    embed.addField(group.name, group.commands.map(command => `**${command.name}**: ${command.description}`).join('\n'));
-                    embed.addBlankField();
-                });
+		const command = this.client.commandHandler.commands.get(args.command);
 
-                cache = embed;
-                return message.channel.send(cache);
-            }
+		if (!command) {
+			throw `Command ${args.command} not found`;
+		}
 
-        } else {
+		return command;
+	}
 
-            const result = message.client.registry.commands.get(args[1]);
-            if (!result) {
-                return message.channel.send(new RichEmbed()
-                    .setColor('RED')
-                    .setTitle('Command not found')
-                );
-            } else {
-                const embed = new RichEmbed()
-                    .setTitle(`Command name: ${result.name}`)
-                    .setThumbnail(message.client.user.avatarURL || message.client.user.defaultAvatarURL)
-                    .setColor(global.BOT_DEFAULT_COLOR)
-                    .setDescription(result.description);
+	async ship(message, result) {
+		const embed = new MessageEmbed()
+			.setColor(this.client.defaultColor)
+			.setThumbnail(message.client.user.displayAvatarURL());
 
-                if (result.aliases.length > 0) {
-                    embed.addField('Aliases', result.aliases.join('\n'), false)
-                }
-                if (result.examples) {
-                    embed.addField('Examples', '```' + result.examples.join('\n') + '```', false);
-                }
+		if (!result) {
+			embed
+				.addField('\u200B', '\u200B')
+				.setFooter(`♥ Made with love by ${pjson.author}`)
+				.setTitle(`${message.client.user.username} commands`)
+				.setThumbnail(message.client.user.displayAvatarURL())
+				.setColor(this.client.defaultColor)
+				.addField('\u200B', '\u200B')
+				.setFooter(`♥ Made with love by ${pjson.author}`);
 
-                return message.channel.send(embed);
-            }
-        }
-    }
-}
+			this.client.commandHandler.modules.forEach((module, name) => {
+				embed.addField(`${capitalize(name)} commands:`, module.map(command => `**${command.aliases[0]}**: ${command.description.content}`).join('\n'));
+				embed.addField('\u200B', '\u200B');
+			});
+
+			return message.channel.send(embed);
+		}
+
+		embed.setTitle(`Command name: ${result.aliases.join('/')}`);
+		embed.setDescription(result.description.content);
+
+		if (result.description.usage.length) {
+			embed.addField('Arguments', '```' + result.description.usage + '```');
+		}
+
+		embed.addField('Usage', '```' + result.description.examples.join('\n') + '```');
+
+		return message.channel.send(embed);
+	}
+};

@@ -1,20 +1,33 @@
-const { Command } = require('discord.js-commando');
-const { RichEmbed } = require('discord.js');
+const { MessageEmbed } = require('discord.js');
+
+const ECommand = require('../../lib/ECommand');
+
 const moment = require('moment');
 
-module.exports = class extends Command {
-    constructor(client) {
-        super(client, {
-            name: 'ping',
-            group: 'bot',
-            memberName: 'ping',
-            description: 'Replies with average ping.'
-        });
-    }
+module.exports = class extends ECommand {
+	constructor(client) {
+		super(client, {
+			aliases: ['ping'],
+			description: {
+				content: 'Replies with ping',
+				usage: '',
+				examples: ['ping']
+			},
+			args: [],
+			guildOnly: false,
+			nsfw: false,
+			ownerOnly: false,
+		});
+	}
 
-   async run(message) {
-        return message.channel.send(new RichEmbed()
-            .setDescription(`⏳ ${moment().diff(moment(message.createdAt), 'milliseconds')}`)
-            .setColor(message.member? message.member.displayColor : global.BOT_DEFAULT_COLOR));
-    }
+	async run(message) {
+		return moment().diff(moment(message.createdAt));
+	}
+
+	async ship(message, result) {
+		return message.channel.send(new MessageEmbed()
+			.setDescription(`⏳ ${result}`)
+			.setColor(message.member?.displayColor ?? 'WHITE')
+		);
+	}
 };

@@ -1,20 +1,24 @@
-const botEventHandler = event => require(`./bot/${event}`);
-const serverEventHandler = event => require(`../events/${event}`);
+const botEventHandler 		= event => require(`./bot/${event}`);
+const serverEventHandler	= event => require(`./loggable/${event}`);
+
+// const botEventHandler = () => (() => {});
+
 module.exports = client => {
-    client.on('ready', () => botEventHandler('ready')(client));
-    client.on('error', error => botEventHandler('error')(error));
-    client.on('reconnecting', () => botEventHandler('reconnecting'));
-    client.on('disconnect', event => botEventHandler('disconnect')(event));
-    client.on('guildCreate', guild => botEventHandler('guildCreate')(guild));
-    client.on('guildMemberAdd', member => serverEventHandler('guildMemberAdd')(member));
-    client.on('guildMemberRemove', member => serverEventHandler('guildMemberRemove')(member, client));
-    client.on('guildMemberUpdate', (oldMember, newMember) => serverEventHandler('guildMemberUpdate')(oldMember, newMember, client));
-    client.on('guildBanAdd', (guild, user) => serverEventHandler('guildBanAdd')(guild, user));
-    client.on('guildBanRemove', (guild, user) => serverEventHandler('guildBanRemove')(guild, user));
-    client.on('messageDelete', message => serverEventHandler('messageDelete')(message));
-    client.on('messageUpdate', (oldMessage, newMessage) => serverEventHandler('messageUpdate')(oldMessage, newMessage));
-    client.on('userUpdate', (oldUser, newUser) => serverEventHandler('userUpdate')(oldUser, newUser));
-    client.on('message', botEventHandler('message'));
-    client.on('commandRun', () => client.messageStats.commands++);
-    // client.on('commandBlocked', (message, reason) => botEventHandler('commandBlocked')(message, reason));
+	client.on('ready',				()		=> botEventHandler('ready')(client));
+	client.on('error',				(e)		=> botEventHandler('error')(e));
+	client.on('reconnecting',		()		=> botEventHandler('reconnecting'));
+	client.on('disconnect',			(e)		=> botEventHandler('disconnect')(e));
+	client.on('guildCreate',		(g)		=> botEventHandler('guildCreate')(g));
+	client.on('guildMemberAdd',		(m)		=> serverEventHandler('guildMemberAdd')(m));
+	client.on('guildMemberRemove',	(m)		=> serverEventHandler('guildMemberRemove')(m));
+	client.on('guildMemberUpdate',	(o, n)	=> serverEventHandler('guildMemberUpdate')(o, n));
+	client.on('guildMemberMuted',			   serverEventHandler('guildMemberMuted'));
+	client.on('guildBanAdd',		(g, u)	=> serverEventHandler('guildBanAdd')(g, u));
+	client.on('guildBanRemove',		(g, u)	=> serverEventHandler('guildBanRemove')(g, u));
+	client.on('messageDelete',		(m)		=> serverEventHandler('messageDelete')(m));
+	client.on('messageUpdate',		(o, n)	=> serverEventHandler('messageUpdate')(o, n));
+	client.on('userUpdate',			(o, n)	=> serverEventHandler('userUpdate')(o, n));
+	// client.on('commandRun',			()		=> client.messageStats.commands++);
+	// client.on('commandBlocked',	(m, r)	=> botEventHandler('commandBlocked')(m, r));
+	client.on('message',					   (botEventHandler('message')));
 };

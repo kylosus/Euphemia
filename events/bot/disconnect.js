@@ -1,3 +1,3 @@
 module.exports = event => {
-    console.log(`Disconnected with code ${event.code}\nReason: ${event.reason}`);
+	console.warn(`Disconnected with code ${event.code}\nReason: ${event.reason}`);
 };

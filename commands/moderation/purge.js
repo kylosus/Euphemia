@@ -1,38 +1,39 @@
-const { Command } = require('discord.js-commando');
-const { RichEmbed } = require('discord.js');
+const { Permissions } = require('discord.js');
 
-module.exports = class extends Command {
-    constructor(client) {
-        super(client, {
-            name: 'purge',
-            group: 'moderation',
-            memberName: 'purge',
-            description: 'Purges a specified amount of messages',
-            aliases: ['p'],
-            userPermissions: ['MANAGE_MESSAGES'],
-            clientPermissions: ['MANAGE_MESSAGES'],
-            guildOnly: true
-        });
-    }
+const ECommand = require('../../lib/ECommand');
+const ArgConsts = require('../../lib/Argument/ArgumentTypeConstants');
 
-   async run(message) {
-       const args = message.content.split(' ');
-       if (args.length == 1) {
-           message.channel.fetchMessages({ limit: 2 }).then(messages => {
-               message.channel.bulkDelete(messages);
-           });
-       } else {
-           const amount = parseInt(args[1]);
-           if (amount > 100) {
-               return message.embed(new RichEmbed()
-                    .setColor('RED')
-                    .setTitle('Please specify a smaller value')
-                );
-           } else {
-               return message.channel.fetchMessages({ limit: amount + 1 }).then(messages => {
-                    message.channel.bulkDelete(messages);
-                });
-            }
-        }
-    }
+module.exports = class extends ECommand {
+	constructor(client) {
+		super(client, {
+			aliases: ['purge', 'p'],
+			description: {
+				content: 'Purges messages in the channel.',
+				usage: '[amount]',
+				examples: ['purge', 'purge 100'],
+			},
+			userPermissions: [Permissions.FLAGS.MANAGE_MESSAGES, Permissions.FLAGS.READ_MESSAGE_HISTORY],
+			clientPermissions: [Permissions.FLAGS.MANAGE_MESSAGES, Permissions.FLAGS.READ_MESSAGE_HISTORY],
+			args: [
+				{
+					id: 'amount',
+					type: ArgConsts.NUMBER,
+					optional: true,
+					default: () => 1,
+				}
+			],
+			guildOnly: true,
+			nsfw: false,
+			ownerOnly: false,
+			rateLimited: false,
+			fetchMembers: false,
+			cached: false,
+			deleteAfter: 2000
+		});
+	}
+
+	async run(message, args) {
+		const deleted = (await message.channel.bulkDelete(args.amount + 1)).size - 1;
+		return `Purged ${deleted} message${deleted > 1 ? 's' : ''}`;
+	}
 };

@@ -1,124 +1,139 @@
-const { Command } = require('discord.js-commando');
-const { RichEmbed } = require('discord.js');
-const settings = require('./next-settings.json');
-const moment = require('moment');
-const momentDurationFormatSetup = require('moment-duration-format');
-const request = require('request-promise');
-
-module.exports = class extends Command {
-    constructor(client) {
-        super(client, {
-            name: 'next',
-            group: 'anime',
-            memberName: 'next',
-            description: 'Returns remaining time for the next episode of given anime.',
-            details: 'Returns remaining time for the next episode of given anime. Returns this day\'s schedule, if no anime is specified',
-            examples: [`${client.commandPrefix}next Anime Title`, `${client.commandPrefix}next`]
-        });
-    }
-
-   async run(message) {
-       let query, variables = {};
-       const args = message.content.split(' ');
-       if (args.length < 2) {
-            query = `{
-                Page(perPage: 100) {
-                    media(type: ANIME status: RELEASING sort:POPULARITY_DESC) {
-                        title { userPreferred }
-                        nextAiringEpisode { episode timeUntilAiring }
-                    }
-                }
-            }`;
-        } else {
-            query = `query ($search: String, $status: MediaStatus) {
-                    Media(type:ANIME status:$status search:$search) {
-                        id
-                        siteUrl
-                        coverImage { medium }
-                        title { userPreferred }
-                        nextAiringEpisode { episode timeUntilAiring }
-                    }
-                }`;
-            variables = {
-                search: args.slice(1).join(' '),
-                status: 'RELEASING'
-            }
-        }
-
-        return execute(query, variables).then(response => {
-                return sendResponse(response, message);
-        }).catch(() => {
-            variables.status = 'NOT_YET_RELEASED';
-            return execute(query, variables).then(response => {
-                sendResponse(response, message);
-            }).catch(() => {
-                sendError(message, 'Not found');
-            });
-        });
-    }
-}
-
-async function execute(query, variables) {
-    const options = {
-        method: 'POST',
-        uri: 'https://graphql.anilist.co',
-        body: {
-            query: query,
-            variables: variables
-        },
-        json: true
-    };
-
-    return request(options);
-}
-
-async function sendError(message, error) {
-    return message.channel.send(new RichEmbed()
-        .setColor('RED')
-        .addField('Error', error)
-    );
-}
-
-async function sendResponse(response, message) {
-    let duration;
-    const embed = new RichEmbed().setTitle('Today\'s schedule').setURL('http://anichart.net').setColor('GREEN');
-    if (response.data.hasOwnProperty('Page')) {
-        response.data.Page.media
-            .filter(a => a.nextAiringEpisode && a.nextAiringEpisode.timeUntilAiring < 82800)
-            .sort((a, b) => a.nextAiringEpisode.timeUntilAiring - b.nextAiringEpisode.timeUntilAiring)
-            .forEach(anime => {
-                duration = moment.duration(anime.nextAiringEpisode.timeUntilAiring, 'seconds').format('D [days] H [hours] m [minutes] s [seconds]');
-                embed.addField(`${anime.title.userPreferred} ${anime.nextAiringEpisode? (anime.nextAiringEpisode.episode || '') : '?'}`, duration, false);
-            });
-
-        if (embed.fields.length < 1) {
-            return sendError(message, 'No anime scheduled for today.');
-        }
-
-        return message.channel.send(embed);
-
-    } else {
-        const anime = response.data.Media;
-
-        if (anime.nextAiringEpisode) {
-            duration = moment.duration(anime.nextAiringEpisode.timeUntilAiring, 'seconds');
-            duration = duration.format('D [days] H [hours] m [minutes] s [seconds]');
-        } else {
-            duration = 'unknown';
-            embed.setColor('ORANGE');
-        }
-
-        embed
-            .setTitle(`${anime.title.userPreferred} ${anime.nextAiringEpisode? (anime.nextAiringEpisode.episode || '-') : '?'}`)
-            .setThumbnail(anime.coverImage.medium)
-            .setTitle(anime.title.userPreferred, anime.siteUrl)
-            .setURL(anime.siteUrl)
-            .addField(`Next episode ${anime.nextAiringEpisode? (anime.nextAiringEpisode.episode || '-') : '?'} in`, duration, false)
-
-        if (anime.id in settings) {
-            embed.setColor(settings[anime.id]);
-        }
-
-        return message.channel.send(embed);
-    }
-}
+// const { Command }	= require('discord.js-commando');
+// const { RichEmbed } = require('discord.js');
+//
+// const moment		= require('moment');
+// const request		= require('request-promise');
+// const { to }		= require('await-to-js');
+//
+// const ONE_DAY		= 82800;
+//
+//
+// module.exports = class extends Command {
+// 	constructor(client) {
+// 		super(client, {
+// 			name: 'next',
+// 			group: 'anime',
+// 			memberName: 'next',
+// 			description: 'Returns remaining time for the next episode of given anime.',
+// 			details: 'Returns remaining time for the next episode of given anime. Returns this day\'s schedule, if no anime is specified',
+// 			examples: [`${client.commandPrefix}next Anime Title`, `${client.commandPrefix}next`]
+// 		});
+// 	}
+//
+//
+// 	async run(message, arg) {
+// 		const [query, variables] = ((search) => {
+// 			if (!search.length) {
+// 				return [`{
+// 					Page(perPage: 100) {
+// 						media(type: ANIME status: RELEASING sort:SEARCH_MATCH) {
+// 							title { userPreferred }
+// 							nextAiringEpisode { episode timeUntilAiring }
+// 						}
+// 					}
+// 				}`, {}];
+// 			}
+//
+// 			return [`query ($search: String, $status: MediaStatus) {
+// 					Media(type:ANIME status:$status search:$search) {
+// 						id
+// 						siteUrl
+// 						coverImage { medium }
+// 						title { userPreferred }
+// 						nextAiringEpisode { episode timeUntilAiring }
+// 					}
+// 				}`, {
+// 				search,
+// 				status: 'RELEASING'
+// 			}];
+// 		})(arg);
+//
+// 		let err, res;
+// 		[err, res] = await to(execute(query, variables));
+//
+// 		if (!err) {
+// 			return message.channel.send(parseEmbed(parseResponse(res)));
+// 		}
+//
+// 		variables.status = 'NOT_YET_RELEASED';
+// 		[err, res] = await to(execute(query, variables));
+//
+// 		if (!err) {
+// 			return message.channel.send(parseEmbed(parseResponse(res)));
+// 		}
+//
+// 		return message.channel.send(new RichEmbed()
+// 			.setColor('RED')
+// 			.setTitle('Not found')
+// 		);
+// 	}
+// };
+//
+// async function execute(query, variables) {
+// 	const options = {
+// 		method: 'POST',
+// 		uri: 'https://graphql.anilist.co',
+// 		body: {
+// 			query: query,
+// 			variables: variables
+// 		},
+// 		json: true
+// 	};
+//
+// 	return request(options);
+// }
+//
+// function parseResponse(response) {
+// 	if (response.data.hasOwnProperty('Page')) {
+// 		response.data.Page.media
+// 			.filter(a => a.nextAiringEpisode && a.nextAiringEpisode.timeUntilAiring < ONE_DAY)
+// 			.sort((a, b) => a.nextAiringEpisode.timeUntilAiring - b.nextAiringEpisode.timeUntilAiring)
+// 			.map(a => ({
+// 				title: a.title.userPreferred,
+// 				isNext: a.nextAiringEpisode,
+// 				next: a.episode,
+// 				duration: moment.duration(a.nextAiringEpisode.timeUntilAiring, 'seconds')
+// 					.format('D [days] H [hours] m [minutes] s [seconds]')
+// 			}));
+// 	}
+//
+// 	const anime = response.data.Media;
+//
+// 	const duration = ((a) => {
+// 		if (!a.nextAiringEpisode) {
+// 			return 'unknown';
+// 		}
+//
+// 		return moment.duration(a.nextAiringEpisode.timeUntilAiring, 'seconds')
+// 			.format('D [days] H [hours] m [minutes] s [seconds]');
+// 	})(anime);
+//
+// 	return [{
+// 		title: anime.title.userPreferred,
+// 		cover: anime.coverImage.medium,
+// 		url: anime.siteUrl,
+// 		isNext: anime.nextAiringEpisode,
+// 		next: anime.episode,
+// 		duration
+// 	}];
+// }
+//
+// function parseEmbed(anime) {
+// 	const embed = new RichEmbed()
+// 		.setColor('GREEN');
+//
+// 	if (anime.length === 1) {
+// 		return embed
+// 			.setTitle(`${anime.title} ${anime.isNext ? (anime.next || '-') : '?'}`)
+// 			.setThumbnail(anime.cover)
+// 			.setTitle(anime.title)
+// 			.setURL(anime.url)
+// 			.addField(`Episode ${anime.isNext ? (anime.next || '-') : '?'} in`, anime.duration, false);
+// 	}
+//
+// 	anime.forEach(a => {
+// 		embed.addField(`${a.title} ${a.isNext ? (a.next || '') : '?'}`, a.duration, false);
+// 	});
+//
+// 	return embed;
+// }

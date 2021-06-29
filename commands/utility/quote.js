@@ -1,58 +1,60 @@
-const { Command } = require('discord.js-commando');
-const { RichEmbed } = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 
-module.exports = class extends Command {
-    constructor(client) {
-        super(client, {
-            name: 'quote',
-            group: 'utility',
-            memberName: 'quote',
-            description: 'Quotes a message by given ID',
-            examples: [`${client.commandPrefix}quote 12345678`],
-            guildOnly: true
-        });
-    }
+const ECommand = require('../../lib/ECommand');
+const ArgConsts = require('../../lib/Argument/ArgumentTypeConstants');
 
-   async run(message) {
-       const args = message.content.split(' ');
-       if (args.length < 2) {
-           return message.channel.send(new RichEmbed()
-                .setColor('RED')
-                .setTitle('Please enter a message ID')
-            );
-       } else {
-           message.channel.fetchMessage(args[1]).then(found => {
-               const embed = new RichEmbed()
-                    .setColor(found.member.displayColor)
-                    .setAuthor(found.author.username, found.author.avatarURL, null)
-                    .setDescription(found.content)
-                    .setFooter(`In #${found.channel.name}`)
-                    .setTimestamp(found.createdAt);
-                if (found.embeds.length >= 1) {
-                    if (found.embeds[0].image) {
-                        embed.setImage(found.embeds[0].image.url);
-                    }
-                }
+module.exports = class extends ECommand {
+	constructor(client) {
+		super(client, {
+			aliases: ['quote'],
+			description: {
+				content: 'Quotes a message',
+				usage: '<id> [#channel]',
+				examples: ['quote id', 'quote id #channel', 'quote #channel id']
+			},
+			args: [
+				{
+					id: 'channel',
+					type: ArgConsts.CHANNEL,
+					optional: true,
+					default: m => m.channel
+				},
+				{
+					id: 'id',
+					type: ArgConsts.TEXT,
+					message: 'Please provide a message id.'
+				}
+			],
+			guildOnly: true,
+			nsfw: false,
+			ownerOnly: false
+		});
+	}
 
-                const attachments = found.attachments.array();
-                if (found.attachments.size > 1) {
-                    const attachmentFieldBody = [];
-                    found.attachments.tap(attachment => {
-                        attachmentFieldBody.push(attachment.url);
-                    });
-                    embed.addField('Attachments', attachmentFieldBody.join('\n'));
-                } else if (attachments.length === 1) {
-                    if (/\.(gif|jpg|jpeg|tiff|png)$/i.test(attachments[0].url)) {
-                        embed.setImage(attachments[0].url);
-                    }
-                }
-                message.embed(embed);
-           }).catch(() => {
-               return message.found.attachments(new RichEmbed()
-                    .setColor('RED')
-                    .setTitle('Message not found')
-                );
-           })
-       }
-   }
-}
+	async run(message, args) {
+		return await args.channel.messages.fetch(args.id);
+	}
+
+	async ship(message, result) {
+		const embed = new MessageEmbed()
+			.setColor(result.member ? result.member.displayColor : 'WHITE')
+			.addField('Jump to message', `[Link](${message.url})`)
+			.setDescription(result.content || '*No content*')
+			.setFooter(`In #${result.channel.name}`)
+			.setTimestamp(result.createdAt);
+
+		if (result.author) {
+			embed.setAuthor(result.author.username, result.author.displayAvatarURL(), null);
+		} else {
+			embed.setAuthor('Unknown [deleted] user', null, null);
+		}
+
+		const attachment = result.attachments.first();
+
+		if (attachment && /\.(gif|jpg|jpeg|tiff|png|webm|webp)$/i.test(attachment.url)) {
+			embed.setImage(attachment.proxyURL);
+		}
+
+		return message.channel.send(embed);
+	}
+};
