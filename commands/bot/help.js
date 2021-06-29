@@ -1,7 +1,7 @@
-const { MessageEmbed, Permissions } = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 
-const ECommand = require('../../lib/ECommand');
-const ArgConsts = require('../../lib/Argument/ArgumentTypeConstants');
+const {ArgConsts, ECommand} = require('../../lib');
+
 const { capitalize } = require('../../lib/util/StringDoctor');
 
 const pjson			= require('../../package.json');
