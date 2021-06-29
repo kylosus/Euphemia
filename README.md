@@ -1,5 +1,6 @@
 # ~~I'll work on the bot when I have time~~
 # Scratch that, I'm working on it now
+# Use the stable branch if you want to host it, but you shouldn't before I finalize my updates
 ### Check the dev branch in the meantime
 ### There's a local branch with tons of additions and revisions, I promise
 
