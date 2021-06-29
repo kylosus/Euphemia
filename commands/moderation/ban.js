@@ -1,9 +1,9 @@
-const { MessageEmbed, Permissions } = require('discord.js');
+const {MessageEmbed, Permissions} = require('discord.js');
 
-const ECommand = require('../../lib/ECommand');
-const ArgConsts = require('../../lib/Argument/ArgumentTypeConstants');
+const {ArgConsts} = require('../../lib');
+const {ModerationCommand} = require('../../moderation/ModerationCommand');
 
-module.exports = class extends ECommand {
+module.exports = class extends ModerationCommand {
 	constructor(client) {
 		super(client, {
 			aliases: ['ban', 'b'],
@@ -47,7 +47,7 @@ module.exports = class extends ECommand {
 			}
 
 			try {
-				await message.guild.members.ban(id,{
+				await message.guild.members.ban(id, {
 					days: 0,
 					reason: args.reason
 				});
