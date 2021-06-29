@@ -33,7 +33,7 @@ module.exports = class extends ECommand {
 	}
 
 	async run(message, args) {
-		const deleted = await message.channel.bulkDelete(args.amount + 1);
-		return `Purged ${deleted.size - 1} messages`;
+		const deleted = (await message.channel.bulkDelete(args.amount + 1)).size - 1;
+		return `Purged ${deleted} message${deleted > 1 ? 's' : ''}`;
 	}
 };
