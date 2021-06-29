@@ -27,7 +27,7 @@ module.exports = class extends ECommand {
 	async ship(message, result) {
 		return message.channel.send(new MessageEmbed()
 			.setDescription(`⏳ ${result}`)
-			.setColor(message.member ? message.member.displayColor || 'WHITE' : 'WHITE')
+			.setColor(message.member?.displayColor ?? 'WHITE')
 		);
 	}
 };
