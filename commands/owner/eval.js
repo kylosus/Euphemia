@@ -50,7 +50,8 @@ module.exports = class extends ECommand {
 		return message.channel.send(new MessageEmbed()
 			.setColor('GREEN')
 			.setTitle(`Evaluated in ${elapsed}ms.`)
-			.setDescription('```' + _(JSON.stringify(result)).truncate(EmbedLimits.DESCRIPTION - 6) + '```')
+			// .setDescription('```' + _(JSON.stringify(result, null, 4)).truncate(EmbedLimits.DESCRIPTION - 6) + '```')
+			.setDescription('```' + _.truncate(JSON.stringify(result, null, 4), { length: EmbedLimits.DESCRIPTION - 6}) + '```')
 		);
 	}
 };
