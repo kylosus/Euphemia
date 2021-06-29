@@ -35,6 +35,20 @@ const muteExpire = async client => {
 };
 
 const onMemberAdd = async client => {
+	client.on('guildMemberAdd', async m => {
+		const result = await db.getMutedRoleIfNotExpired(m.id);
+
+		if (!result) {
+			return;
+		}
+
+		try {
+			await m.roles.add(result.mutedRole);
+			client.emit('guildMemberMuted', m, result.expires, 'Unexpired automute on member join');
+		} catch (err) {
+			client.emit('notice', `idk man ${err.message}`);
+		}
+	});
 };
 
 const init = async client => {

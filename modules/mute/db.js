@@ -15,6 +15,12 @@ const init = async (client, db) => {
                   )
 	`);
 
+	STATEMENTS.getMutedRoleIfNotExpired = await db.prepare(`
+		SELECT
+		    CAST(mutedrole as TEXT) as mutedRole,
+		    expires
+		FROM ${TABLE_NAME} where member = ? and expires > date('now')
+	`);
 	STATEMENTS.insert = await db.prepare(`INSERT OR REPLACE INTO ${TABLE_NAME} VALUES (?, ?, ?, ?, ?)`);
 	STATEMENTS.delete = await db.prepare(`DELETE FROM ${TABLE_NAME} WHERE guild = ? and member = ?`);
 	STATEMENTS.getExpired = await db.prepare(`
@@ -24,6 +30,10 @@ const init = async (client, db) => {
 			CAST(mutedRole as TEXT) as mutedRole
 		FROM ${TABLE_NAME} where expires < date('now')
 	`);
+};
+
+const getMutedRoleIfNotExpired = async member => {
+	return await STATEMENTS.getMutedRoleIfNotExpired.get(member);
 };
 
 const insert = async (guild, member, mutedRole, reason, expires) => {
@@ -40,6 +50,7 @@ const remove = async (guild, member) => {
 
 module.exports = {
 	init,
+	getMutedRoleIfNotExpired,
 	insert,
 	getExpired,
 	remove
