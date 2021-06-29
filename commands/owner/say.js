@@ -9,11 +9,17 @@ module.exports = class extends ECommand {
 			aliases: ['say'],
 			description: {
 				content: 'Says something. Supports embeds',
-				usage: '<text>',
-				examples: ['say something', 'say {JSON}']
+				usage: '[channel or current channel] <text>',
+				examples: ['say something', 'say #general {JSON}']
 			},
-			userPermissions: [Permissions.FLAGS.ADMINISTRATOR],
+			userPermissions: [Permissions.FLAGS.MANAGE_MESSAGES],
 			args: [
+				{
+					id: 'channel',
+					type: ArgConsts.CHANNEL,
+					optional: true,
+					default: m => m.channel
+				},
 				{
 					id: 'text',
 					type: ArgConsts.TEXT,
@@ -22,20 +28,20 @@ module.exports = class extends ECommand {
 			],
 			guildOnly: false,
 			nsfw: false,
-			ownerOnly: true,
+			ownerOnly: false,
 		});
 	}
 
 	async run(message, args) {
-		return args.text;
+		return [args.channel, args.text];
 	}
 
-	async ship(message, result) {
+	async ship(message, [channel, text]) {
 		try {
-			const json = JSON.parse(result);
-			return message.channel.send(json.content, new MessageEmbed(json));
+			const json = JSON.parse(text);
+			return channel.send(json.content, new MessageEmbed(json));
 		} catch (err) {
-			return message.channel.send(result);
+			return channel.send(text);
 		}
 	}
 };
