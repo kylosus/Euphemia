@@ -15,9 +15,15 @@ module.exports = member => {
 			return;
 		}
 
+		if (entry.message.embed) {
+			return channel.send(
+				replaceTokens(entry.message.content || '', member),
+				new MessageEmbed(replaceTokens(entry.message.embed || '', member))
+			);
+		}
+
 		return channel.send(
-			replaceTokens(entry.message.content),
-			new MessageEmbed(replaceTokens(entry.message.embed))
+			replaceTokens(entry.message.content || '', member)
 		);
 	})(member.client.provider.get(member.guild, 'welcome', {channel: null, message: null}));
 
@@ -38,8 +44,8 @@ module.exports = member => {
 			.setThumbnail(member.user.avatarURL)
 			.setDescription(`${member.toString()} \`${member.user.tag}\``)
 			.addField('ID', member.id, false)
-			.addField('Joined server', moment(member.joinedAt).format('DD.MM.YYYY HH.MM.SS'), true)
-			.addField('Joined Discord', moment(member.user.createdAt).format('DD.MM.YYYY HH.MM.SS'), false)
+			.addField('Joined server', moment(member.joinedAt).format('DD.MM.YYYY HH:mm:ss'), true)
+			.addField('Joined Discord', moment(member.user.createdAt).format('DD.MM.YYYY HH:mm:ss'), false)
 			.setTimestamp(member.joinedAt)
 		);
 

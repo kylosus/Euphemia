@@ -56,39 +56,56 @@ module.exports = class extends ECommand {
 			return 'Disabled welcome message';
 		}
 
-		entry.channel = args.channel.id;
-		await this.client.provider.set(message.guild, 'welcome', entry);
+		if (args.channel) {
+			entry.channel = args.channel.id;
+			await this.client.provider.set(message.guild, 'welcome', entry);
+		}
 
 		if (!args.message) {
 			return `Moved welcome message to ${args.channel.toString()}`;
 		}
 
+		// Parse the json
 		const json = JSON.parse(args.message);
-		const embed = new MessageEmbed(json);
 
+		// Extract the content and save the rest for the embed
 		entry.message.content = json.content;
-		entry.message.embed = embed.toJSON();
+		delete json.content;
 
-		if (!entry.channel) {
-			await this.sendNotice(message, 'Enabled welcome message. ' +
-				'Warning, welcome channel not set. Run `welcome #channel`');
+		// If json is not empty save it and try sending it
+		if (Object.keys(json).length) {
+			await message.channel.send(entry.message.content, new MessageEmbed(json));
+			// If above doesn't fail, we can stringify the JSON and save it
+			// this would make more sense to save as a JSON, but we do some string manipulation later
+			// I'll make it iterate through object values instead of using the whole thing
+			// as a giant string later
+			entry.message.embed = JSON.stringify(json);
 		} else {
-			await this.sendNotice(message, `Enabled welcome message in ${args.channel.toString()}`);
+			// is there a point?
+			entry.message.embed = null;
+			await message.channel.send(entry.message.content);
 		}
 
 		await this.client.provider.set(message.guild, 'welcome', entry);
 
-		return entry;
+		if (!entry.channel) {
+			return 'Enabled welcome message. ' + '\n' +
+				'Warning, welcome channel not set. Run `welcome #channel`';
+		}
+
+		const channel = message.guild.channels.cache.get(entry.channel);
+
+		if (channel) {
+			return `Enabled welcome message in ${channel.toString()}`;
+		}
+
+		return `Enabled welcome message, but channel ${entry.channel} seems to have been deleted`;
 	}
 
 	async ship(message, result) {
-		if (typeof result === 'string') {
-			return message.channel.send(new MessageEmbed()
-				.setColor('GREEN')
-				.setDescription(result)
-			);
-		}
-
-		return message.channel.send(result.message.content, new MessageEmbed(result.message.embed));
+		return message.channel.send(new MessageEmbed()
+			.setColor('GREEN')
+			.setDescription(result)
+		);
 	}
 };
