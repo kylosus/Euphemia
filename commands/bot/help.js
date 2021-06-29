@@ -62,7 +62,7 @@ module.exports = class extends ECommand {
 				.setFooter(`♥ Made with love by ${pjson.author}`);
 
 			this.client.commandHandler.modules.forEach((module, name) => {
-				embed.addField(capitalize(name), module.map(command => `**${command.aliases[0]}**: ${command.description.content}`).join('\n'));
+				embed.addField(`${capitalize(name)} commands:`, module.map(command => `**${command.aliases[0]}**: ${command.description.content}`).join('\n'));
 				embed.addField('\u200B', '\u200B');
 			});
 
