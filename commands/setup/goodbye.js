@@ -1,7 +1,6 @@
 const { MessageEmbed, Permissions } = require('discord.js');
 
-const ECommand = require('../../lib/ECommand');
-const ArgConsts = require('../../lib/Argument/ArgumentTypeConstants');
+const {ArgConsts, ECommand} = require('../../lib');
 
 module.exports = class extends ECommand {
 	constructor(client) {
@@ -9,6 +8,7 @@ module.exports = class extends ECommand {
 			aliases: ['goodbye'],
 			description: {
 				content: 'Sets up goodbye channel and message. Send without arguments to disable it',
+				// usage: '[channel] [{JSON}]',
 				usage: [
 					'%MENTION       -> mentions user',
 					'%NAME%         -> user tag',
@@ -16,9 +16,9 @@ module.exports = class extends ECommand {
 					'$AVATAR$       -> avatar URL'
 				].join('\n'),
 				examples: [
-					'goodbye',
-					'goodbye #general',
-					'goodbye {\n\t"content":"%MENTION% has left!",\n\t"image":"https://image-link.com"\n}'
+					'welcome',
+					'welcome #general',
+					'welcome {\n\t"content":"%MENTION% has left.",\n\t"image":"https://image-link.com"\n}'
 				]
 			},
 			userPermissions: [Permissions.FLAGS.MANAGE_GUILD],
@@ -51,43 +51,56 @@ module.exports = class extends ECommand {
 
 		if (!args.channel && !args.message) {
 			entry.channel = null;
-			await this.client.provider.set(message.guild, 'welcome', entry);
+			await this.client.provider.set(message.guild, 'goodbye', entry);
 			return 'Disabled goodbye message';
 		}
 
-		entry.channel = args.channel.id;
-		await this.client.provider.set(message.guild, 'goodbye', entry);
+		if (args.channel) {
+			entry.channel = args.channel.id;
+			await this.client.provider.set(message.guild, 'goodbye', entry);
+		}
 
 		if (!args.message) {
 			return `Moved goodbye message to ${args.channel.toString()}`;
 		}
 
+		// Parse the json
 		const json = JSON.parse(args.message);
-		const embed = new MessageEmbed(json);
 
+		// Extract the content and save the rest for the embed
 		entry.message.content = json.content;
-		entry.message.embed = embed.toJSON();
+		delete json.content;
 
-		if (!entry.channel) {
-			await this.sendNotice(message, 'Enabled goodbye message. ' +
-				'Warning, goodbye channel not set. Run `goodbye #channel`');
+		// If json is not empty save it and try sending it
+		if (Object.keys(json).length) {
+			await message.channel.send(entry.message.content, new MessageEmbed(json));
+			entry.message.embed = JSON.stringify(json);
 		} else {
-			await this.sendNotice(message, `Enabled goodbye message in ${args.channel.toString()}`);
+			// is there a point?
+			entry.message.embed = null;
+			await message.channel.send(entry.message.content);
 		}
 
 		await this.client.provider.set(message.guild, 'goodbye', entry);
 
-		return entry;
+		if (!entry.channel) {
+			return 'Enabled goodbye message. ' + '\n' +
+				'Warning, goodbye channel not set. Run `goodbye #channel`';
+		}
+
+		const channel = message.guild.channels.cache.get(entry.channel);
+
+		if (channel) {
+			return `Enabled goodbye message in ${channel.toString()}`;
+		}
+
+		return `Enabled goodbye message, but channel ${entry.channel} seems to have been deleted`;
 	}
 
 	async ship(message, result) {
-		if (typeof result === 'string') {
-			return message.channel.send(new MessageEmbed()
-				.setColor('GREEN')
-				.setDescription(result)
-			);
-		}
-
-		return message.channel.send(result.message.content, new MessageEmbed(result.message.embed));
+		return message.channel.send(new MessageEmbed()
+			.setColor('GREEN')
+			.setDescription(result)
+		);
 	}
 };
