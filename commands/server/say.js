@@ -1,7 +1,6 @@
-const { MessageEmbed, Permissions } = require('discord.js');
+const {MessageEmbed, Permissions} = require('discord.js');
 
-const ECommand = require('../../lib/ECommand');
-const ArgConsts = require('../../lib/Argument/ArgumentTypeConstants');
+const {ArgConsts, ECommand} = require('../../lib');
 
 module.exports = class extends ECommand {
 	constructor(client) {

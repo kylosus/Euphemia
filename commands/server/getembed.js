@@ -1,4 +1,4 @@
-const { MessageEmbed, Permissions } = require('discord.js');
+const {MessageEmbed, Permissions} = require('discord.js');
 
 const {ArgConsts, ECommand} = require('../../lib');
 

@@ -22,7 +22,6 @@ module.exports = class extends ECommand {
 
 	async run(message) {
 		return moment().diff(moment(message.createdAt));
-		// return moment.unix(message.createdAt).fromNow();
 	}
 
 	async ship(message, result) {
