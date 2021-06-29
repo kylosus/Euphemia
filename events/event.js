@@ -19,5 +19,5 @@ module.exports = client => {
 	client.on('userUpdate',			(o, n)	=> serverEventHandler('userUpdate')(o, n));
 	// client.on('commandRun',			()		=> client.messageStats.commands++);
 	// client.on('commandBlocked',	(m, r)	=> botEventHandler('commandBlocked')(m, r));
-	client.on('message',			(botEventHandler('message')));
+	client.on('message',					   (botEventHandler('message')));
 };
