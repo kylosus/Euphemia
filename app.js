@@ -6,9 +6,7 @@ const sqlite			= require('sqlite');
 
 const { Intents }		= require('discord.js');
 
-const EClient			= require('./lib/EClient');
-const ECommandHandler	= require('./lib/ECommandHandler');
-const SQLiteProvider	= require('./lib/Provider/SQLiteProvider');
+const {EClient, ECommandHandler, SQLiteProvider} = require('./lib');
 
 const config			= require('./config.json');
 const modules			= require('./modules');

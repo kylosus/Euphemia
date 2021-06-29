@@ -1,7 +1,6 @@
 const {MessageEmbed, Permissions} = require('discord.js');
 
-const ECommand = require('../../lib/ECommand');
-const ArgConsts = require('../../lib/Argument/ArgumentTypeConstants');
+const {ArgConsts, ECommand} = require('../../lib');
 
 module.exports = class extends ECommand {
 	constructor(client) {
@@ -10,7 +9,7 @@ module.exports = class extends ECommand {
 			description: {
 				content: 'Kicks a member.',
 				usage: '<member> [member2...] [reason]',
-				examples: ['kick @member', 'kick @member1 @member2',  'kick 275331662865367040'],
+				examples: ['kick @member', 'kick @member1 @member2', 'kick 275331662865367040'],
 			},
 			userPermissions: [Permissions.FLAGS.KICK_MEMBERS],
 			clientPermissions: [Permissions.FLAGS.KICK_MEMBERS],
