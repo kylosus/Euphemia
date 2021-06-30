@@ -6,11 +6,11 @@ const init = async (client, db) => {
 	await db.run(
 		`CREATE TABLE IF NOT EXISTS ${TABLE_NAME}
                   (
-                      guild INTEGER,
-                      member INTEGER,
-                      mutedRole INTEGER,
+                      guild INTEGER NOT NULL,
+                      member INTEGER NOT NULL,
+                      mutedRole INTEGER NOT NULL,
                       reason TEXT,
-                      expires TEXT,
+                      expires TEXT NOT NULL,
                       PRIMARY KEY (guild, member)
                   )
 	`);
