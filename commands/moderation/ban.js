@@ -61,26 +61,4 @@ module.exports = class extends ModerationCommand {
 
 		return result;
 	}
-
-	async ship(message, result) {
-		const color = ((res) => {
-			if (!res.f.length) {
-				return 'GREEN';
-			}
-
-			if (res.p.length) {
-				return 'ORANGE';
-			}
-
-			return 'RED';
-		})(result);
-
-		return message.channel.send(new MessageEmbed()
-			.setColor(color)
-			.addField('Banned', result.p.map(p => `<@${p}>`).join(' ') || '~')
-			.addField('Failed', result.f.map(p => `<@${p.id}> - ${p.reason}`).join('\n') || '~')
-			.addField('Moderator', message.member.toString(), true)
-			.addField('Reason', result.reason || '~', true)
-		);
-	}
 };

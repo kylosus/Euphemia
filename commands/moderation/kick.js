@@ -55,25 +55,4 @@ module.exports = class extends ECommand {
 		return result;
 	}
 
-	async ship(message, result) {
-		const color = ((res) => {
-			if (!res.f.length) {
-				return 'GREEN';
-			}
-
-			if (res.p.length) {
-				return 'ORANGE';
-			}
-
-			return 'RED';
-		})(result);
-
-		return message.channel.send(new MessageEmbed()
-			.setColor(color)
-			.addField('Kicked', result.p.map(p => p.toString()).join(' ') || '~')
-			.addField('Failed', result.f.map(p => `${p.member.toString()} - ${p.reason}`).join('\n') || '~')
-			.addField('Moderator', message.member.toString(), true)
-			.addField('Reason', result.reason || '~', true)
-		);
-	}
 };
