@@ -1,7 +1,7 @@
 const db = require('./db');
 
 const muteMember = async (guild, member, mutedRole, reason, duration) => {
-	await db.insert(guild.id, member.id, mutedRole.id, reason, duration.toISOString());
+	await db.insert(guild.id, member.id, mutedRole.id, reason, duration);
 };
 
 const unmuteMemberRaw = async (guild, member, mutedRole) => {
