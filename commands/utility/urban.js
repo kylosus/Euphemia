@@ -1,11 +1,10 @@
-const EuphemiaPaginatedMessage	= require('../../util/EuphemiaPaginatedMessage.js');
 const ud						= require('urban-dictionary');
 const udIcon					= 'https://cdn.discordapp.com/attachments/352865308203024395/479997284117905440/ud.png';
 
-const { MessageEmbed } = require('discord.js');
+const {MessageEmbed} = require('discord.js');
 
-const ECommand = require('../../lib/ECommand');
-const ArgConsts = require('../../lib/Argument/ArgumentTypeConstants');
+const {ArgConsts, ECommand} = require('../../lib');
+const {PaginatedMessage} = require('../../modules');
 
 module.exports = class extends ECommand {
 	constructor(client) {
@@ -38,13 +37,11 @@ module.exports = class extends ECommand {
 	}
 
 	async ship(message, result) {
-		return EuphemiaPaginatedMessage(result
-			.map(e =>
-				new MessageEmbed()
-					.setColor('GREEN')
-					.setAuthor(e.word, udIcon)
-					.setDescription(e.definition)
-			), message
-		);
+		return PaginatedMessage.register(message, s => {
+			return new MessageEmbed()
+				.setColor('GREEN')
+				.setAuthor(s.word, udIcon)
+				.setDescription(s.definition);
+		}, result);
 	}
 };
