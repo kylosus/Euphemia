@@ -41,7 +41,7 @@ module.exports = class extends ModerationCommand {
 		const result = {p: [], f: [], reason: args.reason};
 
 		await Promise.all(args.ids.map(async id => {
-			const member = message.guild.members.resolve(id);
+			const member = await message.guild.members.fetch(id);
 
 			if (member && !member.bannable) {
 				return result.f.push({id, reason: 'Member too high in the hierarchy'});
