@@ -23,9 +23,15 @@ module.exports = class extends ECommand {
 				},
 				{
 					id: 'toggle',
-					type: ArgConsts.TEXT,
+					type: ArgConsts.WORD,
 					optional: true,
 					default: () => 'on'
+				},
+				{
+					id: 'reason',
+					type: ArgConsts.TEXT,
+					optional: true,
+					default: () => null
 				}
 			],
 			guildOnly: true,
