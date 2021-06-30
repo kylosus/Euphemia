@@ -1,4 +1,4 @@
-const {ECommand} = require('../lib');
+const {ECommand} = require('../../lib');
 
 class ModerationCommand extends ECommand {
 	constructor(client, options) {
@@ -14,6 +14,7 @@ class ModerationCommand extends ECommand {
 		const result = await this.run(message, parsedArgs);
 
 		// The reason should be null reeeeeee
+		// should?
 		console.log(`The reason is ${parsedArgs.reason}`);
 		// save the result to db
 
