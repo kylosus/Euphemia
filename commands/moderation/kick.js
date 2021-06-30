@@ -1,10 +1,12 @@
 const {MessageEmbed, Permissions} = require('discord.js');
 
-const {ArgConsts, ECommand} = require('../../lib');
+const {ArgConsts} = require('../../lib');
+const {ModerationCommand, ModerationCommandResult} = require('../../modules/moderation');
 
-module.exports = class extends ECommand {
+module.exports = class extends ModerationCommand {
 	constructor(client) {
 		super(client, {
+			actionName: 'kick',
 			aliases: ['kick'],
 			description: {
 				content: 'Kicks a member.',
@@ -36,23 +38,22 @@ module.exports = class extends ECommand {
 	}
 
 	async run(message, args) {
-		const result = {p: [], f: [], reason: args.reason};
+		const result = new ModerationCommandResult(args.reason);
 
 		await Promise.all(args.members.map(async m => {
 			if (!m.kickable) {
-				return result.f.push({member: m, reason: 'Member too high in the hierarchy'});
+				return result.addFailed(m, 'Member too high in the hierarchy');
 			}
 
 			try {
 				await m.kick(args.reason);
 			} catch (err) {
-				return result.f.push({member: m, reason: err.message || 'Unknown error'});
+				return result.addFailed(m, err.message || 'Unknown error');
 			}
 
-			result.p.push(m);
+			result.addPassed(m);
 		}));
 
 		return result;
 	}
-
 };

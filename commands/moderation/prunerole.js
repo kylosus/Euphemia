@@ -1,14 +1,14 @@
 const { MessageEmbed, Permissions } = require('discord.js');
 
-const ECommand = require('../../lib/ECommand');
-const ArgumentType = require('../../lib/Argument/ArgumentType');
-const ArgConsts = require('../../lib/Argument/ArgumentTypeConstants');
+const {ArgConsts, ArgumentType} = require('../../lib');
+const {ModerationCommand, ModerationCommandResult} = require('../../modules/moderation');
 
 const MAX_MEMBERS_SHIP = 5;
 
-module.exports = class extends ECommand {
+module.exports = class extends ModerationCommand {
 	constructor(client) {
 		super(client, {
+			actionName: 'prunerole',
 			aliases: ['prunerole', 'purgerole'],
 			description: {
 				content: 'Removes all members in a role',
@@ -39,6 +39,12 @@ module.exports = class extends ECommand {
 							throw 'Please link to a message';
 						})()
 				},
+				{
+					id: 'reason',
+					type: ArgConsts.TEXT,
+					optional: true,
+					default: () => null
+				},
 			],
 			guildOnly: false,
 			nsfw: false,
@@ -46,14 +52,23 @@ module.exports = class extends ECommand {
 		});
 	}
 
-	async run(message, {role}) {
-		return [role, await Promise.all(role.members.map(async m => {
+	async run(message, {reason, role}) {
+		const result = new ModerationCommandResult(reason);
+
+		const members = await Promise.all(role.members.map(async m => {
 			await m.roles.remove(role);
 			return m;
-		}))];
+		}));
+
+		result.addPassed(role);
+		result.aux = members.length;
+
+		result._ = {role, members};
+
+		return result;
 	}
 
-	async ship(message, [role, members]) {
+	async ship(message, {_ : {role, members}}) {
 		const body = (members.length < MAX_MEMBERS_SHIP ? members : members.slice(0, MAX_MEMBERS_SHIP) + '...')
 			.map(m => m.toString()).join(' ');
 

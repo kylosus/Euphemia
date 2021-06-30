@@ -1,7 +1,7 @@
 const {MessageEmbed, Permissions} = require('discord.js');
 
 const {ArgConsts} = require('../../lib');
-const {ModerationCommand} = require('../../moderation/ModerationCommand');
+const {ModerationCommand, ModerationCommandResult} = require('../../modules/moderation');
 
 module.exports = class extends ModerationCommand {
 	constructor(client) {
@@ -25,7 +25,7 @@ module.exports = class extends ModerationCommand {
 					id: 'reason',
 					type: ArgConsts.TEXT,
 					optional: true,
-					default: () => 'No reason provided'
+					default: () => null,
 				},
 			],
 			guildOnly: true,
@@ -38,13 +38,13 @@ module.exports = class extends ModerationCommand {
 	}
 
 	async run(message, args) {
-		const result = {p: [], f: [], reason: args.reason};
+		const result = new ModerationCommandResult(args.reason);
 
 		await Promise.all(args.ids.map(async id => {
 			const member = await message.guild.members.fetch(id);
 
 			if (member && !member.bannable) {
-				return result.f.push({id, reason: 'Member too high in the hierarchy'});
+				return result.addFailed(id, 'Member too high in the hierarchy');
 			}
 
 			try {
@@ -53,10 +53,10 @@ module.exports = class extends ModerationCommand {
 					reason: args.reason
 				});
 			} catch (err) {
-				return result.f.push({id, reason: err.message || 'Unknown error'});
+				return result.addFailed(id, err.message || 'Unknown error');
 			}
 
-			result.p.push(id);
+			result.addPassed(id);
 		}));
 
 		return result;

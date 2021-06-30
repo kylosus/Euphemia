@@ -1,11 +1,12 @@
 const {MessageEmbed, Permissions} = require('discord.js');
 
-const ECommand = require('../../lib/ECommand');
-const ArgConsts = require('../../lib/Argument/ArgumentTypeConstants');
+const {ArgConsts} = require('../../lib');
+const {ModerationCommand, ModerationCommandResult} = require('../../modules/moderation');
 
-module.exports = class extends ECommand {
+module.exports = class extends ModerationCommand {
 	constructor(client) {
 		super(client, {
+			actionName: 'stop',
 			aliases: ['stop'],
 			description: {
 				content: 'Denies Send Message permissions for @everyone in specified channels.',
@@ -45,16 +46,16 @@ module.exports = class extends ECommand {
 
 	async run(message, args) {
 		const toggle = args.toggle !== 'on';
-		const result = {p: [], f: [], toggle};
+		const result = new ModerationCommandResult(args.reason, args.toggle);
 
 		await Promise.all(args.channels.map(async c => {
 			try {
 				await c.updateOverwrite(message.guild.id, {SEND_MESSAGES: toggle});
 			} catch (err) {
-				return result.f.push({channel: c, reason: err.message || 'Unknown error'});
+				return result.addFailed(c, err.message || 'Unknown error');
 			}
 
-			result.p.push(c);
+			result.addPassed(c);
 		}));
 		
 		return result;
@@ -84,28 +85,16 @@ module.exports = class extends ECommand {
 	}
 
 	async ship(message, result) {
-		const color = ((res) => {
-			if (!res.f.length) {
-				return 'GREEN';
-			}
-
-			if (res.p.length) {
-				return 'ORANGE';
-			}
-
-			return 'RED';
-		})(result);
-
 		const embed = new MessageEmbed()
-			.setColor(color);
+			.setColor(result.getColor());
 
-		if (result.p.length) {
-			embed.addField(`${result.toggle ? 'Allowed' : 'Denied'} message sending permissions in`,
-				result.p.map(p => p.toString()).join(' '));
+		if (result.passed.length) {
+			embed.addField(`${result.aux !== 'on' ? 'Allowed' : 'Denied'} message sending permissions in`,
+				result.passed.map(r => `<#${r.id}>`).join(' '));
 		}
 
-		if (result.f.length) {
-			embed.addField('Failed', result.f.map(f => `${f.channel.toString()} - ${f.reason}`).join('\n'));
+		if (result.failed.length) {
+			embed.addField('Failed', result.failed.map(r => `<#${r.id}> - ${r.reason}`).join(' '));
 		}
 
 		return message.channel.send(embed);

@@ -1,15 +1,16 @@
 const { MessageEmbed, Permissions } = require('discord.js');
 
-const ECommand = require('../../lib/ECommand');
-const ArgConsts = require('../../lib/Argument/ArgumentTypeConstants');
+const {ArgConsts} = require('../../lib');
+const {ModerationCommand, ModerationCommandResult} = require('../../modules/moderation');
 
 const { mutedRole, muteHandler } = require('../../modules/mute');
 
 const moment = require('moment');
 
-module.exports = class extends ECommand {
+module.exports = class extends ModerationCommand {
 	constructor(client) {
 		super(client, {
+			actionName: 'mute',
 			aliases: ['mute'],
 			description: {
 				content: 'Mutes mentioned members for a given amount of minutes',
@@ -34,7 +35,7 @@ module.exports = class extends ECommand {
 					id: 'reason',
 					type: ArgConsts.TEXT,
 					optional: true,
-					default: () => 'No reason provided'
+					default: () => null
 				},
 			],
 			guildOnly: true,
@@ -47,11 +48,8 @@ module.exports = class extends ECommand {
 	}
 
 	async run(message, args) {
-		const result = {p: [], f: [], duration: args.duration, reason: args.reason};
-
-		if (args.duration) {
-			result.duration = moment().add(args.duration);
-		}
+		const duration = moment().add(args?.duration).toISOString() ?? null;
+		const result = new ModerationCommandResult(args.reason, duration);
 
 		const role = await (async guild => {
 			const role = await mutedRole.getMutedRole(guild);
@@ -69,13 +67,13 @@ module.exports = class extends ECommand {
 			try {
 				await m.roles.add(role, args.reason);
 			} catch (error) {
-				return result.f.push({member: m, reason: error.message});
+				return result.addFailed(m, error.message);
 			}
 
-			result.p.push(m);
+			result.addPassed(m);
 
-			if (args.duration) {
-				await muteHandler.muteMember(message.guild, m, role, args.reason, result.duration);
+			if (duration) {
+				await muteHandler.muteMember(message.guild, m, role, args.reason, duration);
 			}
 
 			this.client.emit('guildMemberMuted', m, args.duration, message.member);
@@ -85,36 +83,20 @@ module.exports = class extends ECommand {
 	}
 
 	async ship(message, result) {
-		const color = ((res) => {
-			if (!res.f.length) {
-				return 'GREEN';
-			}
-
-			if (res.p.length) {
-				return 'ORANGE';
-			}
-
-			return 'RED';
-		})(result);
-
 		const embed = new MessageEmbed()
-			.setColor(color);
-			// .addField('Moderator', message.member.toString(), true);
+			.setColor(result.getColor());
 
-		if (result.p.length) {
+		if (result.passed.length) {
 			const duration = result.duration ? result.duration.fromNow().replace('in', 'for') : 'Forever';
-			embed.addField(`Muted ${duration}`, result.p.map(p => p.toString()).join(' '));
+			embed.addField(`Muted ${duration}`, result.passed.map(r => `<@${r.id}>`).join(' '));
 		}
 
-		if (result.f.length) {
-			embed.addField('Failed', result.f.map(p => `${p.member.toString()} - ${p.reason}`).join('\n'));
+		if (result.failed.length) {
+			embed.addField('Failed', result.failed.map(r => `<@${r.id}> - ${r.reason}`).join(' '));
 		}
 
-		if (result.reason) {
-			embed.addField('Reason', result.reason, true);
-		}
-
-		// embed.addField('Duration', result.duration ? result.duration.fromNow().replace('in', 'for') : 'Forever');
+		embed.addField('Moderator', message.member.toString(), true);
+		embed.addField('Reason', result?.reason ?? '*No reason provided*', true);
 
 		return message.channel.send(embed);
 	}
