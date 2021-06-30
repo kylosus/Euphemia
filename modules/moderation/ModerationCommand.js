@@ -1,8 +1,10 @@
 const {ECommand} = require('../../lib');
 
 class ModerationCommand extends ECommand {
-	constructor(client, options) {
+	constructor(client, {actionName = (() => { throw 'Moderation commands need an actionName option'; })(), ...options}) {
 		super(client, options);
+
+		this.actionName = actionName.toUpperCase();
 
 		if (!this.args.find(arg => arg.id === 'reason')) {
 			throw 'Need reason argument in Moderation Commands';

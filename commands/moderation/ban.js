@@ -6,6 +6,7 @@ const {ModerationCommand} = require('../../moderation/ModerationCommand');
 module.exports = class extends ModerationCommand {
 	constructor(client) {
 		super(client, {
+			actionName: 'ban',
 			aliases: ['ban', 'b'],
 			description: {
 				content: 'Bans a user.',
