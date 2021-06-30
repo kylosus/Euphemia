@@ -2,6 +2,8 @@ const {MessageEmbed} = require('discord.js');
 
 const {ECommand, StringDoctor: {capitalize}} = require('../../lib');
 
+const db = require('./db');
+
 class ModerationCommand extends ECommand {
 	constructor(client, {actionName = (() => { throw 'Moderation commands need an actionName option'; })(), ...options}) {
 		super(client, options);
@@ -38,14 +40,38 @@ class ModerationCommand extends ECommand {
 		const parsedArgs = await this.parser.parse(message, args);
 		const result = await this.run(message, parsedArgs);
 
-		// The reason should be null reeeeeee
-		// should?
-		console.log(`The reason is ${parsedArgs.reason}`);
-		// save the result to db
+		this.record(message.guild, message.member, result).catch(err => this.client.emit('error', err));
 
 		const reply = await this.ship(message, result);
+
 		this.hooks.forEach(h => h(reply));
 		return reply;
+	}
+
+	async record(guild, moderator, {aux, reason, ...result}) {
+		const passed = result.passed.map(r => ({
+			guild: guild.id,
+			action: this.actionName,
+			moderator: moderator.id,
+			target: r?.id ?? r,
+			aux,
+			reason,
+			passed: true,
+			failedReason: null
+		}));
+
+		const failed = result.failed.map(r => ({
+			guild: guild.id,
+			action: this.actionName,
+			moderator: moderator.id,
+			target: r?.id ?? r,
+			aux,
+			reason,
+			passed: false,
+			failedReason: r.reason
+		}));
+
+		return await db.bulkInsert(passed.concat(failed));
 	}
 }
 
