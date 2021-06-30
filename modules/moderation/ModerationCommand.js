@@ -49,6 +49,4 @@ class ModerationCommand extends ECommand {
 	}
 }
 
-module.exports = {
-	ModerationCommand
-};
+module.exports = ModerationCommand;
