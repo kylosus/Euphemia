@@ -23,7 +23,7 @@
     "discord.js": "^12.5.3",
     "dotenv": "^10.0.0",
     "ebay-node-api": "^2.8.11",
-    "eslint": "^7.27.0",
+    "eslint": "^7.29.0",
     "lodash": "^4.17.21",
     "moment": "^2.29.1",
     "moment-duration-format": "^2.3.2",
