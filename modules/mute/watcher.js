@@ -1,6 +1,6 @@
 const db = require('./db');
 
-const INTERVAL = 2000;
+const INTERVAL = 60000;	// 1 minute
 
 const muteExpire = async client => {
 	client.setInterval(async () => {
