@@ -1,4 +1,6 @@
-const {ECommand} = require('../../lib');
+const {MessageEmbed} = require('discord.js');
+
+const {ECommand, StringDoctor: {capitalize}} = require('../../lib');
 
 class ModerationCommand extends ECommand {
 	constructor(client, {actionName = (() => { throw 'Moderation commands need an actionName option'; })(), ...options}) {
@@ -9,6 +11,27 @@ class ModerationCommand extends ECommand {
 		if (!this.args.find(arg => arg.id === 'reason')) {
 			throw 'Need reason argument in Moderation Commands';
 		}
+	}
+
+	async ship(message, result) {
+		const embed = new MessageEmbed()
+			.setColor(result.getColor())
+			.setTitle(`${capitalize(this.aliases[0])} command executed`);
+
+		if (result.aux) {
+			embed.setDescription(result.aux.toString());
+		}
+
+		embed.addField('Passed', result.passed.map(r => `<@${r.id}>`).join(' ') || '~');
+
+		if (result.failed.length) {
+			embed.addField('Failed', result.failed.map(r => `<@${r.id}>`).join(' '));
+		}
+
+		embed.addField('Moderator', message.member.toString(), true);
+		embed.addField('Reason', result?.reason ?? '*No reason provided*', true);
+
+		return message.channel.send(embed);
 	}
 
 	async execute(message, args) {
