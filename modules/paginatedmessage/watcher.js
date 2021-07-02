@@ -12,15 +12,17 @@ const _watcher = async ({message, emoji}, user) => {
 	const {generator, args} = message.pagination;
 
 	if (emoji.name === FORWARD_EMOJI) {
-		const embed = generator(args.next())
-			.setFooter(`${args.current + 1}/${args.length}`);
+		const current = await args.next();
+
+		const embed = generator(current)
+			.setFooter(`${args.currentIndex + 1}/${args.length}`);
 
 		return message.edit(embed);
 	}
 
 	if (emoji.name === BACKWARD_EMOJI) {
-		const embed = generator(args.previous())
-			.setFooter(`${args.current + 1}/${args.length}`);
+		const embed = generator(await args.previous())
+			.setFooter(`${args.currentIndex + 1}/${args.length}`);
 
 		return message.edit(embed);
 	}
