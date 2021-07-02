@@ -1,46 +1,54 @@
 const {MessageEmbed, Permissions} = require('discord.js');
 
-const {ArgConsts, ECommand} = require('../../../lib');
+const {ArgConsts, ArgumentType, ECommand} = require('../../../lib');
 
 module.exports = class extends ECommand {
 	constructor(client) {
 		super(client, {
 			aliases: ['actions'],
 			description: {
-				content: 'Lists moderation in the server',
+				content: 'Lists moderation actions1 in the server',
 				usage: '[channel or current channel] <text>',
-				examples: ['say something', 'say #general {JSON}']
+				examples: ['actions', 'actions of=@moderator', 'actions of=@moderator to=@user']
 			},
 			userPermissions: [Permissions.FLAGS.MANAGE_MESSAGES],
 			args: [
 				{
-					id: 'channel',
-					type: ArgConsts.CHANNEL,
+					id: 'of',
+					type: new ArgumentType(
+						`of=${ArgConsts.idRegex}`,
+						ArgConsts.idExtractFlatten
+					),
 					optional: true,
-					default: m => m.channel
+					default: () => '*'
 				},
 				{
-					id: 'text',
-					type: ArgConsts.TEXT,
-					message: 'Please provide text'
-				}
+					id: 'to',
+					type: new ArgumentType(
+						`to=${ArgConsts.idRegex}`,
+						ArgConsts.idExtractFlatten
+					),
+					optional: true,
+					default: () => '*'
+				},
 			],
-			guildOnly: false,
+			guildOnly: true,
 			nsfw: false,
 			ownerOnly: false,
 		});
 	}
 
 	async run(message, args) {
-		return [args.channel, args.text];
+		console.log(args);
+		return 'a';
 	}
 
-	async ship(message, [channel, text]) {
-		try {
-			const json = JSON.parse(text);
-			return channel.send(json.content, new MessageEmbed(json));
-		} catch (err) {
-			return channel.send(text);
-		}
-	}
+	// async ship(message, [channel, text]) {
+	// 	try {
+	// 		const json = JSON.parse(text);
+	// 		return channel.send(json.content, new MessageEmbed(json));
+	// 	} catch (err) {
+	// 		return channel.send(text);
+	// 	}
+	// }
 };
