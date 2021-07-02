@@ -6,5 +6,7 @@ const init = async (client) => {
 
 module.exports = {
 	init,
+	CircularList: require('./CircularList'),
+	CircularListGenerator: require('./CircularListGenerator'),
 	PaginatedMessage: require('./EuphemiaPaginatedMessage')
 };
