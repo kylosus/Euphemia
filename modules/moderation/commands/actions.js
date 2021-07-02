@@ -2,6 +2,10 @@ const {MessageEmbed, Permissions} = require('discord.js');
 
 const {ArgConsts, ArgumentType, ECommand} = require('../../../lib');
 
+const {CircularListGenerator, PaginatedMessage} = require('../../paginatedmessage');
+
+const db = require('../db');
+
 module.exports = class extends ECommand {
 	constructor(client) {
 		super(client, {
@@ -39,16 +43,122 @@ module.exports = class extends ECommand {
 	}
 
 	async run(message, args) {
-		console.log(args);
-		return 'a';
+		const perPage = 10;
+		const {length} = await db.getIdMax(message.guild.id);
+
+		if (!length) {
+			throw 'No entries found';
+		}
+
+		const [next, prev] = (() => {
+			let lastId = Number.MAX_SAFE_INTEGER;
+
+			return [
+				async () => {
+					const results = await db.getModeratorTargetPage({
+						guild: message.guild.id,
+						moderator: args.moderator,
+						target: args.target,
+						perPage,
+						lastId
+					});
+
+					if (!results.length) {
+						return '[ empty ]';
+					}
+
+					lastId = results[results.length - 1].id;
+
+					return results;
+				},
+				async () => {
+					const results = await db.getModeratorTargetPage({
+						guild: message.guild.id,
+						moderator: args.moderator,
+						target: args.target,
+						perPage,
+						lastId
+					});
+
+					lastId = results.id;
+
+					return results;
+				}
+			];
+		})();
+
+		return new CircularListGenerator([], Math.ceil(length / perPage), next, prev);
+
+		// return new CircularListGenerator(
+		// 	[],
+		// 	10,
+		// 	(() => {
+		// 		let lastId = Number.MAX_SAFE_INTEGER;
+		// 		return async () => {
+		// 			const results = await db.getModeratorTargetPage({
+		// 				guild: message.guild.id,
+		// 				moderator: args.moderator,
+		// 				target: args.target,
+		// 				perPage: 10,
+		// 				lastId
+		// 			});
+		//
+		// 			lastId = results.id;
+		//
+		// 			return results;
+		// 		};
+		// 	})(),
+		// 	(() => {
+		// 		let lastId = Number.MAX_SAFE_INTEGER;
+		// 		return async () => {
+		// 			const results = await db.getModeratorTargetPage({
+		// 				guild: message.guild.id,
+		// 				moderator: args.moderator,
+		// 				target: args.target,
+		// 				perPage: 10,
+		// 				lastId
+		// 			});
+		//
+		// 			lastId = results.id;
+		//
+		// 			return results;
+		// 		};
+		// 	})()
+		// );
+
+		/*
+		const results = await db.getModeratorTargetPage({
+			guild: message.guild.id,
+			moderator: args.moderator,
+			target: args.target,
+			perPage: 5
+		});
+
+		if (!results.length) {
+			throw 'No entries found';
+		}
+		 */
 	}
 
-	// async ship(message, [channel, text]) {
-	// 	try {
-	// 		const json = JSON.parse(text);
-	// 		return channel.send(json.content, new MessageEmbed(json));
-	// 	} catch (err) {
-	// 		return channel.send(text);
-	// 	}
-	// }
+	async ship(message, result) {
+		const generator = s => {
+			const embed = new MessageEmbed()
+				.setColor('GREEN')
+				.setTitle(`Latest mod actions in ${message.guild}`);
+
+			const body = typeof s === 'string' ? s : s.map(({id, passed, action, moderator: moderatorID, target: targetID}) => {
+				const prefix = passed ? '✅' : '❎';	// Fix those later;
+				const moderator = `<@${moderatorID}>`;
+				const target = `<@${targetID}>`;
+
+				return `${prefix} ${id} ${action} ${moderator} -> ${target}`;
+			}).join('\n');
+
+			embed.setDescription(body);
+			return embed;
+		};
+
+		return PaginatedMessage.register(message, generator, result);
+	}
+
 };
