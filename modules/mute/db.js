@@ -41,6 +41,7 @@ const insert = async (guild, member, mutedRole, reason, expires) => {
 };
 
 const getExpired = async () => {
+	// replace with .each()?
 	return await STATEMENTS.getExpired.all();
 };
 
