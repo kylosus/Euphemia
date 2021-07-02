@@ -14,22 +14,22 @@ module.exports = class extends ECommand {
 			userPermissions: [Permissions.FLAGS.MANAGE_MESSAGES],
 			args: [
 				{
-					id: 'of',
+					id: 'moderator',
 					type: new ArgumentType(
-						`of=${ArgConsts.idRegex}`,
+						new RegExp(/of[=\s]?/.source + ArgConsts.userIdRegex.source),
 						ArgConsts.idExtractFlatten
 					),
 					optional: true,
-					default: () => '*'
+					default: () => undefined
 				},
 				{
-					id: 'to',
+					id: 'target',
 					type: new ArgumentType(
-						`to=${ArgConsts.idRegex}`,
+						new RegExp(/to[=\s]?/.source + ArgConsts.userIdRegex.source),
 						ArgConsts.idExtractFlatten
 					),
 					optional: true,
-					default: () => '*'
+					default: () => undefined
 				},
 			],
 			guildOnly: true,
