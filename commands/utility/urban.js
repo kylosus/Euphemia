@@ -1,3 +1,5 @@
+const _ = require('lodash');
+
 const ud						= require('urban-dictionary');
 const udIcon					= 'https://cdn.discordapp.com/attachments/352865308203024395/479997284117905440/ud.png';
 
@@ -41,7 +43,7 @@ module.exports = class extends ECommand {
 			return new MessageEmbed()
 				.setColor('GREEN')
 				.setAuthor(s.word, udIcon)
-				.setDescription(s.definition);
+				.setDescription(_.truncate(s.definition, {length: EmbedLimits.DESCRIPTION}));
 		}, new CircularList(result));
 	}
 };
