@@ -26,6 +26,15 @@ const init = async (client, db) => {
 		VALUES ((SELECT IFNULL(MAX(id), 0) + 1 FROM ${TABLE_NAME} where guild = ?), ?, ?, ?, ?, ?, ?, ?, ?, ?)
 	`);
 
+	STATEMENTS.getAction = await db.prepare(`
+		SELECT
+            id, action, aux, reason, passed, failedReason, timestamp,
+            CAST(moderator as TEXT) as moderator,
+            CAST(target as TEXT) as target
+        FROM ${TABLE_NAME}
+		WHERE guild = ? AND id = ?
+		LIMIT 1
+	`);
 	// guild, moderator, lastValue, perPage
 	STATEMENTS.getModeratorPage = await db.prepare(`
 		SELECT
@@ -74,6 +83,9 @@ const insert = async ({guild, action, moderator, target, aux, reason, passed, fa
 	await STATEMENTS.insert.run(guild, guild, action, moderator, target, aux, reason, passed, failedReason, (new Date()).toISOString());
 };
 
+const getAction = async (guild, id) => {
+	return await STATEMENTS.getAction.get(guild, id);
+};
 // this is stupid
 const bulkInsert = async (params = []) => {
 	return await Promise.all(params.map(async p => {
@@ -101,6 +113,7 @@ const getIdMax = async guild => {
 module.exports = {
 	init,
 	insert,
+	getAction,
 	bulkInsert,
 	getModeratorTargetPage,
 	getIdMax
