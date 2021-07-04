@@ -3,8 +3,8 @@ const udIcon					= 'https://cdn.discordapp.com/attachments/352865308203024395/47
 
 const {MessageEmbed} = require('discord.js');
 
-const {ArgConsts, ECommand} = require('../../lib');
-const {PaginatedMessage} = require('../../modules');
+const {ArgConsts, ECommand, EmbedLimits} = require('../../lib');
+const {CircularList, PaginatedMessage} = require('../../modules');
 
 module.exports = class extends ECommand {
 	constructor(client) {
@@ -42,6 +42,6 @@ module.exports = class extends ECommand {
 				.setColor('GREEN')
 				.setAuthor(s.word, udIcon)
 				.setDescription(s.definition);
-		}, result);
+		}, new CircularList(result));
 	}
 };
