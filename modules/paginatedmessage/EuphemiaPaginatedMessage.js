@@ -9,7 +9,7 @@ const register = async (message, generator, args) => {
 
 	const current = await args.current;
 
-	const firstEmbed = await generator(current)
+	const firstEmbed = generator(current)
 		.setFooter(`1/${args.length}`);
 
 	const botMessage = await message.channel.send(firstEmbed);
