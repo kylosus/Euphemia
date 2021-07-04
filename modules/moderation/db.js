@@ -26,7 +26,7 @@ const init = async (client, db) => {
 		VALUES ((SELECT IFNULL(MAX(id), 0) + 1 FROM ${TABLE_NAME} where guild = ?), ?, ?, ?, ?, ?, ?, ?, ?, ?)
 	`);
 
-	// guild, moderator, lastValue, limit
+	// guild, moderator, lastValue, perPage
 	STATEMENTS.getModeratorPage = await db.prepare(`
 		SELECT
 			id, action, aux, passed,
@@ -39,12 +39,30 @@ const init = async (client, db) => {
 		LIMIT ?
 	`);
 
+	// guild, target, lastValue, perPage
 	STATEMENTS.getTargetPage = await db.prepare(`
-		SELECT * FROM ${TABLE_NAME} where guild = ? and target = ?
+        SELECT
+            id, action, aux, passed,
+            CAST(moderator as TEXT) as moderator,
+            CAST(target as TEXT) as target
+        FROM ${TABLE_NAME}
+        WHERE guild = ? AND target = ?
+          AND id < ?
+        ORDER BY id DESC
+            LIMIT ?
 	`);
 
+	// guild, moderator, target, lastId, perPage
 	STATEMENTS.getModeratorTargetPage = await db.prepare(`
-		SELECT * FROM ${TABLE_NAME} where guild = ? and moderator = ? and target = ?
+        SELECT
+            id, action, aux, passed,
+            CAST(moderator as TEXT) as moderator,
+            CAST(target as TEXT) as target
+        FROM ${TABLE_NAME}
+        WHERE guild = ? AND moderator = ? AND target = ?
+          AND id < ?
+        ORDER BY id DESC
+            LIMIT ?
 	`);
 
 	STATEMENTS.getIdMax = await db.prepare(`SELECT MAX(id) as length from ${TABLE_NAME} where guild = ? LIMIT 1`);
@@ -65,19 +83,15 @@ const bulkInsert = async (params = []) => {
 
 // I am so sorry
 const getModeratorTargetPage = async ({guild, moderator, target, lastId = Number.MAX_SAFE_INTEGER, perPage = 5}) => {
-	return await STATEMENTS.getModeratorPage.all(guild, moderator, lastId, perPage);
-
-	/*
 	if (moderator && target) {
-		return await STATEMENTS.getModeratorTargetPage.all(guild, moderator, target);
+		return await STATEMENTS.getModeratorTargetPage.all(guild, moderator, target, lastId, perPage);
 	}
 
 	if (moderator) {
-		return await STATEMENTS.getModeratorPage.all(guild, moderator);
+		return await STATEMENTS.getModeratorPage.all(guild, moderator, lastId, perPage);
 	}
 
-	return await STATEMENTS.getTargetPage.all(guild, target);
-	 */
+	return await STATEMENTS.getTargetPage.all(guild, target, lastId, perPage);
 };
 
 const getIdMax = async guild => {
