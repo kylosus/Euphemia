@@ -94,56 +94,6 @@ module.exports = class extends ECommand {
 		})();
 
 		return new CircularListGenerator([], Math.ceil(length / perPage), next, prev);
-
-		// return new CircularListGenerator(
-		// 	[],
-		// 	10,
-		// 	(() => {
-		// 		let lastId = Number.MAX_SAFE_INTEGER;
-		// 		return async () => {
-		// 			const results = await db.getModeratorTargetPage({
-		// 				guild: message.guild.id,
-		// 				moderator: args.moderator,
-		// 				target: args.target,
-		// 				perPage: 10,
-		// 				lastId
-		// 			});
-		//
-		// 			lastId = results.id;
-		//
-		// 			return results;
-		// 		};
-		// 	})(),
-		// 	(() => {
-		// 		let lastId = Number.MAX_SAFE_INTEGER;
-		// 		return async () => {
-		// 			const results = await db.getModeratorTargetPage({
-		// 				guild: message.guild.id,
-		// 				moderator: args.moderator,
-		// 				target: args.target,
-		// 				perPage: 10,
-		// 				lastId
-		// 			});
-		//
-		// 			lastId = results.id;
-		//
-		// 			return results;
-		// 		};
-		// 	})()
-		// );
-
-		/*
-		const results = await db.getModeratorTargetPage({
-			guild: message.guild.id,
-			moderator: args.moderator,
-			target: args.target,
-			perPage: 5
-		});
-
-		if (!results.length) {
-			throw 'No entries found';
-		}
-		 */
 	}
 
 	async ship(message, result) {
