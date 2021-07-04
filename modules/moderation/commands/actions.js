@@ -42,7 +42,8 @@ module.exports = class extends ECommand {
 	}
 
 	async run(message, args) {
-		const perPage = 10;
+		const perPage = 20;
+
 		const {length} = await db.getIdMax(message.guild.id);
 
 		if (!length) {
