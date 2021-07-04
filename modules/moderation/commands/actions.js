@@ -63,8 +63,9 @@ module.exports = class extends ECommand {
 						lastId
 					});
 
+					// Failsafe
 					if (!results.length) {
-						return '[ empty ]';
+						return '```[ empty ]```';
 					}
 
 					lastId = results[results.length - 1].id;
@@ -80,7 +81,12 @@ module.exports = class extends ECommand {
 						lastId
 					});
 
-					lastId = results.id;
+					// Failsafe
+					if (!results.length) {
+						return '```[ empty ]```';
+					}
+
+					lastId = results[results.length - 1].id;
 
 					return results;
 				}
