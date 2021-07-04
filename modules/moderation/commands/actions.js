@@ -10,9 +10,9 @@ module.exports = class extends ECommand {
 		super(client, {
 			aliases: ['actions'],
 			description: {
-				content: 'Lists moderation actions1 in the server',
-				usage: '[channel or current channel] <text>',
-				examples: ['actions', 'actions of=@moderator', 'actions of=@moderator to=@user']
+				content: 'Lists moderation actions in the server',
+				usage: '[from @moderator] [to @member]',
+				examples: ['actions', 'actions from=@moderator', 'actions from @moderator to @user']
 			},
 			userPermissions: [Permissions.FLAGS.MANAGE_MESSAGES],
 			args: [
