@@ -19,7 +19,7 @@ module.exports = class extends ECommand {
 				{
 					id: 'moderator',
 					type: new ArgumentType(
-						new RegExp(/of[=\s]?/.source + ArgConsts.userIdRegex.source),
+						new RegExp(/from[=\s]?/.source + ArgConsts.userIdRegex.source),
 						ArgConsts.idExtractFlatten
 					),
 					optional: true,
