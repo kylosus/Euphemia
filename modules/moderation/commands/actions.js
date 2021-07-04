@@ -1,7 +1,6 @@
 const {MessageEmbed, Permissions} = require('discord.js');
 
 const {ArgConsts, ArgumentType, ECommand} = require('../../../lib');
-
 const {CircularListGenerator, PaginatedMessage} = require('../../paginatedmessage');
 
 const db = require('../db');
