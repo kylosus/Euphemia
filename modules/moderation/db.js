@@ -35,6 +35,11 @@ const init = async (client, db) => {
 		WHERE guild = ? AND id = ?
 		LIMIT 1
 	`);
+
+	STATEMENTS.updateReason = await db.prepare(`
+		UPDATE ${TABLE_NAME} SET reason = ? where guild = ? AND id = ?
+	`);
+
 	// guild, moderator, lastValue, perPage
 	STATEMENTS.getModeratorPage = await db.prepare(`
 		SELECT
@@ -86,6 +91,11 @@ const insert = async ({guild, action, moderator, target, aux, reason, passed, fa
 const getAction = async (guild, id) => {
 	return await STATEMENTS.getAction.get(guild, id);
 };
+
+const updateReason = async ({guild, id, reason}) => {
+	return await STATEMENTS.updateReason.run(reason, guild, id);
+};
+
 // this is stupid
 const bulkInsert = async (params = []) => {
 	return await Promise.all(params.map(async p => {
@@ -114,6 +124,7 @@ module.exports = {
 	init,
 	insert,
 	getAction,
+	updateReason,
 	bulkInsert,
 	getModeratorTargetPage,
 	getIdMax
