@@ -19,8 +19,7 @@ module.exports = class extends CircularList {
 			return this._current;
 		}
 
-		this._currentIndex = 0;
-		return this._first;
+		return this._current;
 	}
 
 	previous() {
@@ -28,7 +27,9 @@ module.exports = class extends CircularList {
 			return this._current;
 		}
 
-		return this._previous();
+		this._currentIndex--;
+		this._current = this._previous();
+		return this._current;
 	}
 
 	get current() {

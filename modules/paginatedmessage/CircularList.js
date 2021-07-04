@@ -7,9 +7,8 @@ module.exports = class {
 
 	next() {
 		if (this._current < this._end) {
-			const current = this._array[this._current];
 			this._current++;
-			return current;
+			return this._array[this._current];
 		}
 
 		this._current = 0;
@@ -22,10 +21,15 @@ module.exports = class {
 			return this._array[this._current];
 		}
 
+		this._current--;
 		return this._array[this._current];
 	}
 
 	get current() {
+		return this._array[this._current];
+	}
+
+	get currentIndex() {
 		return this._current;
 	}
 
