@@ -12,5 +12,6 @@ module.exports = {
 	init,
 	mute,
 	moderation,
+	CircularList: paginatedmessage.CircularList,
 	PaginatedMessage: paginatedmessage.PaginatedMessage
 };
