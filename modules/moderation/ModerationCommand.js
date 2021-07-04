@@ -27,7 +27,7 @@ class ModerationCommand extends ECommand {
 		embed.addField('Passed', result.passed.map(r => `<@${r.id}>`).join(' ') || '~');
 
 		if (result.failed.length) {
-			embed.addField('Failed', result.failed.map(r => `<@${r.id}>`).join(' '));
+			embed.addField('Failed', result.failed.map(r => `<@${r.id}> - ${r.reason}`).join(' '));
 		}
 
 		embed.addField('Moderator', message.member.toString(), true);
