@@ -73,6 +73,8 @@ module.exports = class extends ECommand {
 					return results;
 				},
 				async () => {
+					lastId += perPage * 2;
+
 					const results = await db.getModeratorTargetPage({
 						guild: message.guild.id,
 						moderator: args.moderator,
