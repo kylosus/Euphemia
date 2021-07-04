@@ -104,8 +104,14 @@ module.exports = class extends ECommand {
 				.setColor('GREEN')
 				.setTitle(`Latest mod actions in ${message.guild}`);
 
-			const body = typeof s === 'string' ? s : s.map(({id, passed, action, moderator: moderatorID, target: targetID}) => {
-				const prefix = passed ? '✅' : '❎';	// Fix those later;
+			const body = typeof s === 'string' ? s : s.map(({
+				id,
+				passed,
+				action,
+				moderator: moderatorID,
+				target: targetID
+			}) => {
+				const prefix = passed ? '✅' : '❌';	// Fix those later;
 				const moderator = `<@${moderatorID}>`;
 				const target = `<@${targetID}>`;
 
