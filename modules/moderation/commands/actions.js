@@ -115,7 +115,7 @@ module.exports = class extends ECommand {
 				const moderator = `<@${moderatorID}>`;
 				const target = `<@${targetID}>`;
 
-				return `${prefix} ${id} ${action} ${moderator} -> ${target}`;
+				return `${prefix} [${id}] ${action} ${moderator} -> ${target}`;
 			}).join('\n');
 
 			embed.setDescription(body);
