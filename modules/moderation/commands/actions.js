@@ -51,7 +51,7 @@ module.exports = class extends ECommand {
 		}
 
 		const [next, prev] = (() => {
-			let lastId = Number.MAX_SAFE_INTEGER;
+			let lastId = length + 1;
 
 			return [
 				async () => {
