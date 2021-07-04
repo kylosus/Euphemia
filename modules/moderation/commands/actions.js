@@ -14,7 +14,7 @@ module.exports = class extends ECommand {
 				usage: '[from @moderator] [to @member]',
 				examples: ['actions', 'actions from=@moderator', 'actions from @moderator to @user']
 			},
-			userPermissions: [Permissions.FLAGS.MANAGE_MESSAGES],
+			userPermissions: [Permissions.FLAGS.MANAGE_GUILD],
 			args: [
 				{
 					id: 'moderator',
