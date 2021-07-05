@@ -1,8 +1,6 @@
-const {MessageEmbed} = require('discord.js');
-
-const {ECommand, StringDoctor: {capitalize}} = require('../../lib');
-
-const db = require('./db');
+const {MessageEmbed}							= require('discord.js');
+const {ECommand, StringDoctor: {capitalize}}	= require('../../lib');
+const db										= require('./db');
 
 class ModerationCommand extends ECommand {
 	constructor(client, {actionName = (() => { throw 'Moderation commands need an actionName option'; })(), ...options}) {
