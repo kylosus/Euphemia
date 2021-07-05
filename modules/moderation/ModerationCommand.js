@@ -69,7 +69,9 @@ class ModerationCommand extends ECommand {
 			failedReason: r.reason
 		}));
 
-		return await db.bulkInsert(passed.concat(failed));
+		const all = passed.concat(failed);
+		db.bulkInsert(all).catch(console.err);
+		return all;
 	}
 }
 
