@@ -44,6 +44,10 @@ module.exports = class extends ECommand {
 		return health;
 	}
 
+	// By the way, this is kinda very bad. There is no logic in the array trimming (the first() calls)
+	// and I just append '...' in all cases. This needs a more comprehensive solution with lodash and
+	// so I will replace MessageEmbed with my own AutoEmbed or SafeEmbed implementation with automatic
+	// trims
 	async ship(message, {AdminRoles, ElevatedRoles, EmptyRoles}) {
 		return message.channel.send(new MessageEmbed()
 			.setColor('GREEN')
