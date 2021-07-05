@@ -1,6 +1,5 @@
-const { MessageEmbed } = require('discord.js');
-
-const moment = require('moment');
+const {MessageEmbed}	= require('discord.js');
+const moment			= require('moment');
 
 module.exports = (member, expires, moderator) => {
 	const {guildMemberMuted: channelID} = member.client.provider.get(member.guild, 'log', {guildMemberMuted: null});

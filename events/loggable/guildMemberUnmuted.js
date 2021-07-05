@@ -1,4 +1,4 @@
-const { MessageEmbed } = require('discord.js');
+const {MessageEmbed} = require('discord.js');
 
 module.exports = (member, moderator) => {
 	const entry = member.client.provider.get(member.guild, 'log', {guildMemberUnmuted: null});

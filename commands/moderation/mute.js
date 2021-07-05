@@ -1,11 +1,8 @@
-const { MessageEmbed, Permissions } = require('discord.js');
-
-const {ArgConsts} = require('../../lib');
-const {ModerationCommand, ModerationCommandResult} = require('../../modules/moderation');
-
-const { mutedRole, muteHandler } = require('../../modules/mute');
-
-const moment = require('moment');
+const {MessageEmbed, Permissions}					= require('discord.js');
+const {ArgConsts}									= require('../../lib');
+const {ModerationCommand, ModerationCommandResult}	= require('../../modules/moderation');
+const {mutedRole, muteHandler}						= require('../../modules/mute');
+const moment										= require('moment');
 
 module.exports = class extends ModerationCommand {
 	constructor(client) {
@@ -13,23 +10,23 @@ module.exports = class extends ModerationCommand {
 			actionName: 'mute',
 			aliases: ['mute'],
 			description: {
-				content: 'Mutes mentioned members for a given amount of minutes',
-				usage: '[minutes] <member1> [member2 ...]',
-				examples: ['mute @Person1', 'mute 5 @Person1 @Person2']
+				content:	'Mutes mentioned members for a given amount of minutes',
+				usage:		'[minutes] <member1> [member2 ...]',
+				examples:	['mute @Person1', 'mute 5 @Person1 @Person2']
 			},
-			userPermissions: [Permissions.FLAGS.MANAGE_ROLES],
-			clientPermissions: [Permissions.FLAGS.MANAGE_ROLES, Permissions.FLAGS.MANAGE_GUILD],
+			userPermissions:	[Permissions.FLAGS.MANAGE_ROLES],
+			clientPermissions:	[Permissions.FLAGS.MANAGE_ROLES, Permissions.FLAGS.MANAGE_GUILD],
 			args: [
 				{
-					id: 'members',
-					type: ArgConsts.MEMBERS,
-					message: 'Please mention members to mute'
+					id:			'members',
+					type:		ArgConsts.MEMBERS,
+					message:	'Please mention members to mute'
 				},
 				{
-					id: 'duration',
-					type: ArgConsts.DURATION,
-					optional: true,
-					default: () => null
+					id:			'duration',
+					type:		ArgConsts.DURATION,
+					optional:	true,
+					default:	() => null
 				},
 				{
 					id: 'reason',
@@ -39,17 +36,13 @@ module.exports = class extends ModerationCommand {
 				},
 			],
 			guildOnly: true,
-			nsfw: false,
 			ownerOnly: false,
-			rateLimited: false,
-			fetchMembers: false,
-			cached: false,
 		});
 	}
 
-	async run(message, args) {
+	async run(message, {members, reason, ...args}) {
 		const duration = moment().add(args?.duration).toISOString() ?? null;
-		const result = new ModerationCommandResult(args.reason, duration);
+		const result = new ModerationCommandResult(reason, duration);
 
 		const role = await (async guild => {
 			const role = await mutedRole.getMutedRole(guild);
@@ -58,14 +51,14 @@ module.exports = class extends ModerationCommand {
 				return role;
 			}
 
-			const newRole =  await mutedRole.setNewMutedRole(guild);
+			const newRole = await mutedRole.setNewMutedRole(guild);
 			await this.sendNotice(message, `Muted role not found, created new role ${newRole.toString()}`);
 			return newRole;
 		})(message.guild);
 
-		await Promise.all(args.members.map(async m => {
+		await Promise.all(members.map(async m => {
 			try {
-				await m.roles.add(role, args.reason);
+				await m.roles.add(role, reason);
 			} catch (error) {
 				return result.addFailed(m, error.message);
 			}
@@ -73,7 +66,7 @@ module.exports = class extends ModerationCommand {
 			result.addPassed(m);
 
 			if (duration) {
-				await muteHandler.muteMember(message.guild, m, role, args.reason, duration);
+				await muteHandler.muteMember(message.guild, m, role, reason, duration);
 			}
 
 			this.client.emit('guildMemberMuted', m, args.duration, message.member);

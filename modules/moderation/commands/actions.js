@@ -124,5 +124,4 @@ module.exports = class extends ECommand {
 
 		return PaginatedMessage.register(message, generator, result);
 	}
-
 };

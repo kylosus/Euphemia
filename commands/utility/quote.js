@@ -1,38 +1,35 @@
-const { MessageEmbed } = require('discord.js');
-
-const ECommand = require('../../lib/ECommand');
-const ArgConsts = require('../../lib/Argument/ArgumentTypeConstants');
+const {MessageEmbed}		= require('discord.js');
+const {ArgConsts, ECommand}	= require('../../lib');
 
 module.exports = class extends ECommand {
 	constructor(client) {
 		super(client, {
 			aliases: ['quote'],
 			description: {
-				content: 'Quotes a message',
-				usage: '<id> [#channel]',
-				examples: ['quote id', 'quote id #channel', 'quote #channel id']
+				content:	'Quotes a message',
+				usage:		'<id> [#channel]',
+				examples:	['quote id', 'quote id #channel', 'quote #channel id']
 			},
 			args: [
 				{
-					id: 'channel',
-					type: ArgConsts.CHANNEL,
-					optional: true,
-					default: m => m.channel
+					id:			'channel',
+					type:		ArgConsts.CHANNEL,
+					optional:	true,
+					default:	m => m.channel
 				},
 				{
-					id: 'id',
-					type: ArgConsts.TEXT,
-					message: 'Please provide a message id.'
+					id:			'id',
+					type:		ArgConsts.TEXT,
+					message:	'Please provide a message id.'
 				}
 			],
 			guildOnly: true,
-			nsfw: false,
 			ownerOnly: false
 		});
 	}
 
-	async run(message, args) {
-		return await args.channel.messages.fetch(args.id);
+	async run(message, {channel, id}) {
+		return await channel.messages.fetch(id);
 	}
 
 	async ship(message, result) {

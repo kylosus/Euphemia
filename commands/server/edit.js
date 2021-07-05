@@ -1,17 +1,14 @@
-const { MessageEmbed, Permissions } = require('discord.js');
-
-const ECommand = require('../../lib/ECommand');
-const ArgumentType = require('../../lib/Argument/ArgumentType');
-const ArgConsts = require('../../lib/Argument/ArgumentTypeConstants');
+const {MessageEmbed, Permissions}			= require('discord.js');
+const {ArgConsts, ArgumentType, ECommand}	= require('../../lib');
 
 module.exports = class extends ECommand {
 	constructor(client) {
 		super(client, {
 			aliases: ['edit'],
 			description: {
-				content: 'Edits messages. Supports embeds',
-				usage: '<message url or reply> <text>',
-				examples: ['edit https://discord.com/channels/292277485310312448/292277485310312448/850097454262386738 {JSON}']
+				content:	'Edits messages. Supports embeds',
+				usage:		'<message url or reply> <text>',
+				examples:	['edit https://discord.com/channels/292277485310312448/292277485310312448/850097454262386738 {JSON}']
 			},
 			userPermissions: [Permissions.FLAGS.ADMINISTRATOR],
 			args: [
@@ -38,22 +35,23 @@ module.exports = class extends ECommand {
 					optional: true,
 					default: m => m.reference ||
 						m.channel.messages.cache.find(i => i.author.id === this.client.user.id) ||
-						(() => { throw 'Please link to a message'; })()
+						(() => {
+							throw 'Please link to a message';
+						})()
 				},
 				{
-					id: 'text',
-					type: ArgConsts.TEXT,
-					message: 'Please provide text'
+					id:			'text',
+					type:		ArgConsts.TEXT,
+					message:	'Please provide text'
 				}
 			],
 			guildOnly: false,
-			nsfw: false,
 			ownerOnly: true,
 		});
 	}
 
-	async run(message, args) {
-		const {guildID, channelID, messageID} = args.url;
+	async run(message, {url, text}) {
+		const {guildID, channelID, messageID} = url;
 
 		if (guildID !== message.guild.id) {
 			throw 'Please link to a message in this server';
@@ -70,10 +68,10 @@ module.exports = class extends ECommand {
 		}
 
 		try {
-			const json = JSON.parse(args.text);
+			const json = JSON.parse(text);
 			await toEdit.edit(json.content, new MessageEmbed(json));
 		} catch (err) {
-			await toEdit.edit(args.text);
+			await toEdit.edit(text);
 		}
 
 		return 'Edited message';

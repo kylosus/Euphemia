@@ -1,8 +1,6 @@
-const { MessageEmbed } = require('discord.js');
-
-const ECommand = require('../../lib/ECommand');
-
-const moment = require('moment');
+const {MessageEmbed}	= require('discord.js');
+const {ECommand}		= require('../../lib');
+const moment			= require('moment');
 
 module.exports = class extends ECommand {
 	constructor(client) {
@@ -15,7 +13,6 @@ module.exports = class extends ECommand {
 			},
 			args: [],
 			guildOnly: false,
-			nsfw: false,
 			ownerOnly: false,
 		});
 	}

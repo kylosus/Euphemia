@@ -1,41 +1,33 @@
-const { Permissions } = require('discord.js');
-
-const ECommand = require('../../lib/ECommand');
-const ArgConsts = require('../../lib/Argument/ArgumentTypeConstants');
-
-const { mutedRole } = require('../../modules/mute');
-
+const {Permissions}			= require('discord.js');
+const {ArgConsts, ECommand}	= require('../../lib');
+const {mutedRole}			= require('../../modules/mute');
 
 module.exports = class extends ECommand {
 	constructor(client) {
 		super(client, {
 			aliases: ['muteset'],
 			description: {
-				content: 'Sets muted role for the server',
-				usage: '[role]',
-				examples: ['muteset', 'muteset SomeRole', 'muteset 422621940868579338']
+				content:	'Sets muted role for the server',
+				usage:		'[role]',
+				examples:	['muteset', 'muteset Some role', 'muteset 422621940868579338']
 			},
-			userPermissions: [Permissions.FLAGS.MANAGE_ROLES],
-			clientPermissions: [Permissions.FLAGS.MANAGE_ROLES, Permissions.FLAGS.MANAGE_GUILD],
+			userPermissions:	[Permissions.FLAGS.MANAGE_ROLES],
+			clientPermissions:	[Permissions.FLAGS.MANAGE_ROLES, Permissions.FLAGS.MANAGE_GUILD],
 			args: [
 				{
-					id: 'role',
-					type: ArgConsts.TEXT,
-					optional: true,
-					default: () => null
+					id:			'role',
+					type:		ArgConsts.TEXT,
+					optional:	true,
+					default:	() => null
 				}
 			],
 			guildOnly: true,
-			nsfw: false,
 			ownerOnly: false,
-			rateLimited: false,
-			fetchMembers: false,
-			cached: false,
 		});
 	}
 
-	async run(message, args) {
-		if (!args.role) {
+	async run(message, {role: _role}) {
+		if (!_role) {
 			const role = await mutedRole.setNewMutedRole(message.guild);
 			return `Created new muted role ${role.toString()}`;
 		}
@@ -47,7 +39,7 @@ module.exports = class extends ECommand {
 				(() => {
 					throw 'Role not found';
 				})();
-		})(args.role);
+		})(_role);
 
 		if (role.position >= message.guild.me.roles.highest.position) {
 			throw 'Cannot assign as the muted role. Role is too high in the hierarchy';

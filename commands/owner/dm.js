@@ -1,32 +1,29 @@
-const { MessageEmbed, Permissions } = require('discord.js');
-
-const ECommand = require('../../lib/ECommand');
-const ArgConsts = require('../../lib/Argument/ArgumentTypeConstants');
+const {MessageEmbed, Permissions}	= require('discord.js');
+const {ArgConsts, ECommand}			= require('../../lib');
 
 module.exports = class extends ECommand {
 	constructor(client) {
 		super(client, {
 			aliases: ['dm'],
 			description: {
-				content: 'DMs users. Supports embeds',
-				usage: '<user> [user2...] <text>',
-				examples: ['dm 275331662865367040 something', 'dm @user1 @user2 {JSON}']
+				content:	'DMs users. Supports embeds',
+				usage:		'<user> [user2...] <text>',
+				examples:	['dm 275331662865367040 something', 'dm @user1 @user2 {JSON}']
 			},
 			userPermissions: [Permissions.FLAGS.MANAGE_MESSAGES],
 			args: [
 				{
-					id: 'users',
-					type: ArgConsts.USERS,
-					message: 'Please mention users to DM to'
+					id:			'users',
+					type:		ArgConsts.USERS,
+					message:	'Please mention users to DM to'
 				},
 				{
-					id: 'text',
-					type: ArgConsts.TEXT,
-					message: 'Please provide text'
+					id:			'text',
+					type:		ArgConsts.TEXT,
+					message:	'Please provide text'
 				}
 			],
 			guildOnly: false,
-			nsfw: false,
 			ownerOnly: true,
 		});
 	}

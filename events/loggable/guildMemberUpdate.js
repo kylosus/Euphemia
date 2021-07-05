@@ -1,4 +1,4 @@
-const { MessageEmbed } = require('discord.js');
+const {MessageEmbed} = require('discord.js');
 
 module.exports = (oldMember, newMember) => {
 	const entry = newMember.client.provider.get(newMember.guild, 'log', {guildMemberUpdate: null});
@@ -15,7 +15,7 @@ module.exports = (oldMember, newMember) => {
 
 	if (oldMember.nickname !== newMember.nickname) {
 		// Sorry
-		const body = newMember.nickname ? `**${newMember.user.tag}** has changed their nickname` + (oldMember.nickname? ` from **${oldMember.nickname}**` : '') + ` to **${newMember.nickname}**`
+		const body = newMember.nickname ? `**${newMember.user.tag}** has changed their nickname` + (oldMember.nickname ? ` from **${oldMember.nickname}**` : '') + ` to **${newMember.nickname}**`
 			: `**${newMember.user.tag}** has removed their nickname, **${oldMember.nickname}**`;
 
 		return channel.send(new MessageEmbed()

@@ -1,7 +1,6 @@
-const {MessageEmbed, Permissions} = require('discord.js');
-
-const {ArgConsts} = require('../../lib');
-const {ModerationCommand, ModerationCommandResult} = require('../../modules/moderation');
+const {MessageEmbed, Permissions}					= require('discord.js');
+const {ArgConsts}									= require('../../lib');
+const {ModerationCommand, ModerationCommandResult}	= require('../../modules/moderation');
 
 module.exports = class extends ModerationCommand {
 	constructor(client) {
@@ -9,24 +8,24 @@ module.exports = class extends ModerationCommand {
 			actionName: 'stop',
 			aliases: ['stop'],
 			description: {
-				content: 'Denies Send Message permissions for @everyone in specified channels.',
-				usage: '[#channel]',
-				examples: ['stop', 'stop #channel'],
+				content:	'Denies Send Message permissions for @everyone in specified channels.',
+				usage:		'[#channel]',
+				examples:	['stop', 'stop #channel'],
 			},
-			userPermissions: [Permissions.FLAGS.MANAGE_ROLES],
-			clientPermissions: [Permissions.FLAGS.MANAGE_ROLES],
+			userPermissions:	[Permissions.FLAGS.MANAGE_ROLES],
+			clientPermissions:	[Permissions.FLAGS.MANAGE_ROLES],
 			args: [
 				{
-					id: 'channels',
-					type: ArgConsts.CHANNELS,
-					optional: true,
-					default: m => [m.channel]
+					id:			'channels',
+					type:		ArgConsts.CHANNELS,
+					optional:	true,
+					default:	m => [m.channel]
 				},
 				{
-					id: 'toggle',
-					type: ArgConsts.WORD,
-					optional: true,
-					default: () => 'on'
+					id:			'toggle',
+					type:		ArgConsts.WORD,
+					optional:	true,
+					default:	() => 'on'
 				},
 				{
 					id: 'reason',
@@ -36,19 +35,15 @@ module.exports = class extends ModerationCommand {
 				}
 			],
 			guildOnly: true,
-			nsfw: false,
 			ownerOnly: false,
-			rateLimited: false,
-			fetchMembers: false,
-			cached: false,
 		});
 	}
 
-	async run(message, args) {
-		const toggle = args.toggle !== 'on';
-		const result = new ModerationCommandResult(args.reason, args.toggle);
+	async run(message, {channels, toggle: _toggle, reason}) {
+		const toggle = _toggle !== 'on';
+		const result = new ModerationCommandResult(reason, _toggle);
 
-		await Promise.all(args.channels.map(async c => {
+		await Promise.all(channels.map(async c => {
 			try {
 				await c.updateOverwrite(message.guild.id, {SEND_MESSAGES: toggle});
 			} catch (err) {
@@ -57,7 +52,7 @@ module.exports = class extends ModerationCommand {
 
 			result.addPassed(c);
 		}));
-		
+
 		return result;
 	}
 

@@ -1,13 +1,8 @@
-const moment = require('moment');
-
 const {MessageEmbed, Permissions} = require('discord.js');
-
-const {ArgConsts, ArgumentType, ECommand} = require('../../../lib');
-const {CircularListGenerator, PaginatedMessage} = require('../../paginatedmessage');
+const {ArgConsts, ECommand} = require('../../../lib');
 
 const db = require('../db');
 
-const COLOR = '#2CDDD7';
 const EMOJI_OK = '✅';
 const EMOJI_NO = '❎';
 

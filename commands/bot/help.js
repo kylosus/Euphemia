@@ -1,10 +1,7 @@
-const { MessageEmbed } = require('discord.js');
-
-const {ArgConsts, ECommand} = require('../../lib');
-
-const { capitalize } = require('../../lib/util/StringDoctor');
-
-const pjson			= require('../../package.json');
+const {MessageEmbed}		= require('discord.js');
+const {ArgConsts, ECommand}	= require('../../lib');
+const {capitalize}			= require('../../lib/util/StringDoctor');
+const pjson					= require('../../package.json');
 
 module.exports = class extends ECommand {
 	constructor(client) {
@@ -24,26 +21,23 @@ module.exports = class extends ECommand {
 				},
 			],
 			guildOnly: false,
-			nsfw: false,
 			ownerOnly: false,
-			rateLimited: true,
-			fetchMembers: false,
 			cached: true
 		});
 	}
 
-	async run(message, args) {
-		if (!args.command) {
+	async run(message, {command}) {
+		if (!command) {
 			return null;
 		}
 
-		const command = this.client.commandHandler.commands.get(args.command);
+		const c = this.client.commandHandler.commands.get(command);
 
-		if (!command) {
-			throw `Command ${args.command} not found`;
+		if (!c) {
+			throw `Command ${command} not found`;
 		}
 
-		return command;
+		return c;
 	}
 
 	async ship(message, result) {

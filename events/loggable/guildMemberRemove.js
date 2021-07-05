@@ -1,6 +1,5 @@
-const { MessageEmbed }	= require('discord.js');
-
-const { replaceTokens }	= require('../util');
+const {MessageEmbed}	= require('discord.js');
+const {replaceTokens}	= require('../util');
 
 module.exports = member => {
 	(entry => {

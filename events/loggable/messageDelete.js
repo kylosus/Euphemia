@@ -1,4 +1,4 @@
-const { MessageEmbed }	= require('discord.js');
+const {MessageEmbed} = require('discord.js');
 
 const CONTENT_MAX = 1020;
 

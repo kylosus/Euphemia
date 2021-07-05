@@ -1,7 +1,6 @@
-const { MessageEmbed, Permissions } = require('discord.js');
-
-const {ArgConsts, ArgumentType} = require('../../lib');
-const {ModerationCommand, ModerationCommandResult} = require('../../modules/moderation');
+const {MessageEmbed, Permissions}					= require('discord.js');
+const {ArgConsts, ArgumentType}						= require('../../lib');
+const {ModerationCommand, ModerationCommandResult}	= require('../../modules/moderation');
 
 const MAX_MEMBERS_SHIP = 5;
 
@@ -11,9 +10,9 @@ module.exports = class extends ModerationCommand {
 			actionName: 'prunerole',
 			aliases: ['prunerole', 'purgerole'],
 			description: {
-				content: 'Removes all members in a role',
-				usage: '<role>',
-				examples: ['edit https://discord.com/channels/292277485310312448/292277485310312448/850097454262386738 {JSON}']
+				content:	'Removes all members in a role',
+				usage:		'<role>',
+				examples:	['edit https://discord.com/channels/292277485310312448/292277485310312448/850097454262386738 {JSON}']
 			},
 			userPermissions: [Permissions.FLAGS.ADMINISTRATOR],
 			args: [
@@ -40,14 +39,13 @@ module.exports = class extends ModerationCommand {
 						})()
 				},
 				{
-					id: 'reason',
-					type: ArgConsts.TEXT,
-					optional: true,
-					default: () => null
+					id:			'reason',
+					type:		ArgConsts.REASON,
+					optional:	true,
+					default:	() => null
 				},
 			],
 			guildOnly: false,
-			nsfw: false,
 			ownerOnly: true,
 		});
 	}
@@ -68,7 +66,7 @@ module.exports = class extends ModerationCommand {
 		return result;
 	}
 
-	async ship(message, {_ : {role, members}}) {
+	async ship(message, {_: {role, members}}) {
 		const body = (members.length < MAX_MEMBERS_SHIP ? members : members.slice(0, MAX_MEMBERS_SHIP) + '...')
 			.map(m => m.toString()).join(' ');
 
@@ -77,5 +75,4 @@ module.exports = class extends ModerationCommand {
 			.setDescription(`**Pruned ${members.length} members in ${role.toString()}:**\n${body}`)
 		);
 	}
-
 };

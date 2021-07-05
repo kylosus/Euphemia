@@ -1,28 +1,25 @@
-const _ = require('lodash');
-
-const { MessageEmbed, Permissions } = require('discord.js');
-
-const {ArgConsts, ECommand, EmbedLimits} = require('../../lib');
+const {MessageEmbed, Permissions}			= require('discord.js');
+const {ArgConsts, ECommand, EmbedLimits}	= require('../../lib');
+const _										= require('lodash');
 
 module.exports = class extends ECommand {
 	constructor(client) {
 		super(client, {
 			aliases: ['eval'],
 			description: {
-				content: 'Evaluates JavaScript code',
-				usage: '<code>',
-				examples: ['eval 1 + 1', 'eval message.delete()']
+				content:	'Evaluates JavaScript code',
+				usage:		'<code>',
+				examples:	['eval 1 + 1', 'eval message.delete()']
 			},
 			userPermissions: [Permissions.FLAGS.ADMINISTRATOR],
 			args: [
 				{
-					id: 'code',
-					type: ArgConsts.TEXT,
-					message: 'Please provide code'
+					id:			'code',
+					type:		ArgConsts.TEXT,
+					message:	'Please provide code'
 				}
 			],
 			guildOnly: false,
-			nsfw: false,
 			ownerOnly: true,
 		});
 	}
@@ -50,8 +47,11 @@ module.exports = class extends ECommand {
 		return message.channel.send(new MessageEmbed()
 			.setColor('GREEN')
 			.setTitle(`Evaluated in ${elapsed}ms.`)
-			// .setDescription('```' + _(JSON.stringify(result, null, 4)).truncate(EmbedLimits.DESCRIPTION - 6) + '```')
-			.setDescription('```' + _.truncate(JSON.stringify(result, null, 4), { length: EmbedLimits.DESCRIPTION - 6}) + '```')
+			.setDescription(
+				'```' +
+					_.truncate(JSON.stringify(result, null, 4), {length: EmbedLimits.DESCRIPTION - 6})
+				+ '```'
+			)
 		);
 	}
 };

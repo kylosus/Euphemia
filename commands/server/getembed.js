@@ -1,23 +1,22 @@
-const {MessageEmbed, Permissions} = require('discord.js');
-
-const {ArgConsts, ECommand} = require('../../lib');
+const {MessageEmbed, Permissions}	= require('discord.js');
+const {ArgConsts, ECommand}			= require('../../lib');
 
 module.exports = class extends ECommand {
 	constructor(client) {
 		super(client, {
 			aliases: ['getembed'],
 			description: {
-				content: 'Says something. Supports embeds',
-				usage: '[channel or current channel] <text>',
-				examples: ['say something', 'say #general {JSON}']
+				content:	'Says something. Supports embeds',
+				usage:		'[channel or current channel] <text>',
+				examples:	['say something', 'say #general {JSON}']
 			},
 			userPermissions: [Permissions.FLAGS.MANAGE_MESSAGES],
 			args: [
 				{
-					id: 'channel',
-					type: ArgConsts.CHANNEL,
-					optional: true,
-					default: m => m.channel
+					id:			'channel',
+					type:		ArgConsts.CHANNEL,
+					optional:	true,
+					default:	m => m.channel
 				},
 				{
 					id: 'id',
@@ -26,7 +25,6 @@ module.exports = class extends ECommand {
 				}
 			],
 			guildOnly: false,
-			nsfw: false,
 			ownerOnly: true,
 		});
 	}

@@ -1,15 +1,14 @@
 require('dotenv').config();
 
-const path				= require('path');
-const sqlite3			= require('sqlite3').verbose();
-const sqlite			= require('sqlite');
+const path		= require('path');
+const sqlite3	= require('sqlite3').verbose();
+const sqlite	= require('sqlite');
 
-const { Intents }		= require('discord.js');
-
+const {Intents}	= require('discord.js');
 const {EClient, ECommandHandler, SQLiteProvider} = require('./lib');
 
-const config			= require('./config.json');
-const modules			= require('./modules');
+const config	= require('./config.json');
+const modules	= require('./modules');
 
 class Client extends EClient {
 	constructor() {

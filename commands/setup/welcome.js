@@ -1,7 +1,5 @@
-const { MessageEmbed, Permissions } = require('discord.js');
-
-const ECommand = require('../../lib/ECommand');
-const ArgConsts = require('../../lib/Argument/ArgumentTypeConstants');
+const {MessageEmbed, Permissions}	= require('discord.js');
+const {ArgConsts, ECommand}			= require('../../lib');
 
 module.exports = class extends ECommand {
 	constructor(client) {
@@ -25,24 +23,20 @@ module.exports = class extends ECommand {
 			userPermissions: [Permissions.FLAGS.MANAGE_GUILD],
 			args: [
 				{
-					id: 'message',
-					type: ArgConsts.JSON,
-					optional: true,
-					default: () => null
+					id:			'message',
+					type:		ArgConsts.JSON,
+					optional:	true,
+					default:	() => null
 				},
 				{
-					id: 'channel',
-					type: ArgConsts.CHANNEL,
-					optional: true,
-					default: () => null
+					id:			'channel',
+					type:		ArgConsts.CHANNEL,
+					optional:	true,
+					default:	() => null
 				},
 			],
 			guildOnly: true,
-			nsfw: false,
 			ownerOnly: false,
-			rateLimited: false,
-			fetchMembers: false,
-			cached: false,
 		});
 	}
 

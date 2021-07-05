@@ -1,17 +1,14 @@
-const { Permissions } = require('discord.js');
+const {Permissions}			= require('discord.js');
+const {ArgConsts, ECommand}	= require('../../lib');
+const {getSettings}			= require('./log');
 
-const ECommand = require('../../lib/ECommand');
-const ArgConsts = require('../../lib/Argument/ArgumentTypeConstants');
-
-const { getSettings } = require('./log');
-
-module.exports =  class extends ECommand {
+module.exports = class extends ECommand {
 	constructor(client) {
 		super(client, {
 			aliases: ['logenable', 'logen'],
 			description: {
-				content: 'Enables log events in channels. Run without the second argument to enable everything',
-				usage: '[channel (or current channel)] [event name]',
+				content:	'Enables log events in channels. Run without the second argument to enable everything',
+				usage:		'[channel (or current channel)] [event name]',
 				examples: [
 					'log list',
 					'logenable #channel ',
@@ -21,50 +18,46 @@ module.exports =  class extends ECommand {
 			userPermissions: [Permissions.FLAGS.MANAGE_GUILD],
 			args: [
 				{
-					id: 'channel',
-					type: ArgConsts.CHANNEL,
-					optional: true,
-					default: m => m.channel
+					id:			'channel',
+					type: 		ArgConsts.CHANNEL,
+					optional:	true,
+					default:	m => m.channel
 				},
 				{
-					id: 'event',
-					type: ArgConsts.TEXT,
-					optional: true,
-					default: () => null
+					id:			'event',
+					type:		ArgConsts.TEXT,
+					optional:	true,
+					default:	() => null
 				},
 			],
 			guildOnly: true,
-			nsfw: false,
 			ownerOnly: false,
-			rateLimited: false,
-			fetchMembers: false,
-			cached: false,
 		});
 	}
 
-	async run(message, args) {
+	async run(message, {channel, event}) {
 		const entry = this.client.provider.get(message.guild, 'log', getSettings());
 
 		// Single event
-		if (args.event) {
-			if (!Object.hasOwnProperty.call(entry, args.event)) {
-				throw `Event ${args.event} not found`;
+		if (event) {
+			if (!Object.hasOwnProperty.call(entry, event)) {
+				throw `Event ${event} not found`;
 			}
 
-			entry[args.event] = args.channel.id;
+			entry[event] = channel.id;
 
 			await this.client.provider.set(message.guild, 'log', entry);
-			return `Enabled ${args.event} in ${args.channel.toString()}`;
+			return `Enabled ${event} in ${channel}`;
 		}
 
 		// All events
 		Object.entries(entry)
 			.forEach(([key]) => {
-				entry[key] = args.channel.id;
+				entry[key] = channel.id;
 			});
 
 		await this.client.provider.set(message.guild, 'log', entry);
 
-		return `Enabled all events in ${args.channel.toString()}`;
+		return `Enabled all events in ${channel}`;
 	}
 };

@@ -1,20 +1,17 @@
-const {MessageEmbed, Permissions} = require('discord.js');
-
-const {ECommand} = require('../../lib');
+const {MessageEmbed, Permissions}	= require('discord.js');
+const {ECommand}					= require('../../lib');
 
 module.exports = class extends ECommand {
 	constructor(client) {
 		super(client, {
 			aliases: ['healthcheck'],
 			description: {
-				content: 'Server health check',
-				usage: '',
-				examples: ['healthcheck']
+				content:	'Server health check',
+				usage:		'',
+				examples:	['healthcheck']
 			},
 			userPermissions: [Permissions.FLAGS.MANAGE_GUILD],
-			args: [],
 			guildOnly: true,
-			nsfw: false,
 			ownerOnly: false,
 			typing: true
 		});

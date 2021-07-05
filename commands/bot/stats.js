@@ -1,10 +1,9 @@
-const { MessageEmbed } = require('discord.js');
+const {MessageEmbed}	= require('discord.js');
+const {ECommand}		= require('../../lib');
+const moment			= require('moment'); require('moment-duration-format');
+const pjson				= require('../../package.json');
 
-const ECommand = require('../../lib/ECommand');
-
-const moment		= require('moment'); require('moment-duration-format');
-const pjson			= require('../../package.json');
-const THUMBNAIL 	= 'https://cdn.discordapp.com/attachments/469111529384443904/473072301315981312/Euphie-sama.png';
+const THUMBNAIL			= 'https://cdn.discordapp.com/attachments/469111529384443904/473072301315981312/Euphie-sama.png';
 
 module.exports = class extends ECommand {
 	constructor(client) {
@@ -15,9 +14,7 @@ module.exports = class extends ECommand {
 				usage: '',
 				examples: ['stats']
 			},
-			args: [],
 			guildOnly: false,
-			nsfw: false,
 			ownerOnly: false,
 		});
 	}

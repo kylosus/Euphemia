@@ -1,7 +1,6 @@
-const {MessageEmbed, Permissions} = require('discord.js');
-
-const {ArgConsts} = require('../../lib');
-const {ModerationCommand, ModerationCommandResult} = require('../../modules/moderation');
+const {Permissions}									= require('discord.js');
+const {ArgConsts}									= require('../../lib');
+const {ModerationCommand, ModerationCommandResult}	= require('../../modules/moderation');
 
 module.exports = class extends ModerationCommand {
 	constructor(client) {
@@ -9,38 +8,34 @@ module.exports = class extends ModerationCommand {
 			actionName: 'ban',
 			aliases: ['ban', 'b'],
 			description: {
-				content: 'Bans a user.',
-				usage: '<user> [user2...] [reason]',
-				examples: ['ban @user', 'ban @user1 @user2', 'ban 275331662865367040'],
+				content:	'Bans a user.',
+				usage:		'<user> [user2...] [reason]',
+				examples:	['ban @user', 'ban @user1 @user2', 'ban 275331662865367040'],
 			},
-			userPermissions: [Permissions.FLAGS.BAN_MEMBERS],
-			clientPermissions: [Permissions.FLAGS.BAN_MEMBERS],
+			userPermissions:	[Permissions.FLAGS.BAN_MEMBERS],
+			clientPermissions:	[Permissions.FLAGS.BAN_MEMBERS],
 			args: [
 				{
-					id: 'ids',
-					type: ArgConsts.IDS,
-					message: 'Please mention users to ban'
+					id:			'ids',
+					type:		ArgConsts.IDS,
+					message:	'Please mention users to ban'
 				},
 				{
-					id: 'reason',
-					type: ArgConsts.TEXT,
-					optional: true,
-					default: () => null,
+					id:			'reason',
+					type:		ArgConsts.TEXT,
+					optional:	true,
+					default:	() => null,
 				},
 			],
 			guildOnly: true,
-			nsfw: false,
 			ownerOnly: false,
-			rateLimited: false,
-			fetchMembers: false,
-			cached: false
 		});
 	}
 
-	async run(message, args) {
-		const result = new ModerationCommandResult(args.reason);
+	async run(message, {ids, reason}) {
+		const result = new ModerationCommandResult(reason);
 
-		await Promise.all(args.ids.map(async id => {
+		await Promise.all(ids.map(async id => {
 			const member = await message.guild.members.fetch(id);
 
 			if (member && !member.bannable) {
@@ -50,10 +45,10 @@ module.exports = class extends ModerationCommand {
 			try {
 				await message.guild.members.ban(id, {
 					days: 0,
-					reason: args.reason
+					reason
 				});
 			} catch (err) {
-				return result.addFailed(id, err.message || 'Unknown error');
+				return result.addFailed(id, err.message);
 			}
 
 			result.addPassed(id);
