@@ -41,7 +41,7 @@ module.exports = class extends ModerationCommand {
 	}
 
 	async run(message, {members, reason, ...args}) {
-		const duration = moment().add(args?.duration).toISOString() ?? null;
+		const duration = args.duration ? moment().add(args.duration).toISOString() : null;
 		const result = new ModerationCommandResult(reason, duration);
 
 		const role = await (async guild => {
