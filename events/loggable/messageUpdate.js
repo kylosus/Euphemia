@@ -11,7 +11,7 @@ module.exports = (oldMessage, newMessage) => {
 		return;
 	}
 
-	const channel = newMessage.guild.channels.resolve(entry.messageUpdate);
+	const channel = newMessage.guild.channels.cache.get(entry.messageUpdate);
 
 	if (!channel) {
 		return;
