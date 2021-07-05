@@ -17,6 +17,7 @@ module.exports = client => {
 	client.on('guildBanRemove',		(g, u)	=> serverEventHandler('guildBanRemove')(g, u));
 	client.on('messageDelete',		(m)		=> serverEventHandler('messageDelete')(m));
 	client.on('messageUpdate',		(o, n)	=> serverEventHandler('messageUpdate')(o, n));
+	client.on('modAction',					   serverEventHandler('modAction'));
 	client.on('userUpdate',			(o, n)	=> serverEventHandler('userUpdate')(o, n));
 	// client.on('commandRun',			()		=> client.messageStats.commands++);
 	// client.on('commandBlocked',	(m, r)	=> botEventHandler('commandBlocked')(m, r));
