@@ -39,11 +39,12 @@ module.exports = class extends ECommand {
 			Permissions.FLAGS.MENTION_EVERYONE,
 			Permissions.FLAGS.PRIORITY_SPEAKER
 		], false));
+		health.EmptyRoles = message.guild.roles.cache.filter(r => !r.members.size);
 
 		return health;
 	}
 
-	async ship(message, {AdminRoles, ElevatedRoles}) {
+	async ship(message, {AdminRoles, ElevatedRoles, EmptyRoles}) {
 		return message.channel.send(new MessageEmbed()
 			.setColor('GREEN')
 			.setAuthor(`${message.guild.name} server health check`, message.guild.iconURL())
@@ -56,6 +57,10 @@ module.exports = class extends ECommand {
 			.addField(
 				`Roles with other Elevated permissions (${ElevatedRoles.size})`,
 				ElevatedRoles.first(MAX_ROLES).map(r => `${r.toString()} - ${r.members.size}members`).join('\n') || '~'
+			)
+			.addField(
+				`Empty roles (${EmptyRoles.size})`,
+				(EmptyRoles.first(MAX_ROLES).map(r => r.toString()).join() + '...') || '~'
 			)
 		);
 	}
