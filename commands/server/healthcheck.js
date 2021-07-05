@@ -47,7 +47,7 @@ module.exports = class extends ECommand {
 		return message.channel.send(new MessageEmbed()
 			.setColor('GREEN')
 			.setAuthor(`${message.guild.name} server health check`, message.guild.iconURL())
-			.setDescription('Score here')
+			// .setDescription('Score here')
 			.setImage(message.guild.bannerURL())
 			.addField(
 				`Roles with Admin permissions (${AdminRoles.size})`,
