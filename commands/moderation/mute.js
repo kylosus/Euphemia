@@ -29,10 +29,10 @@ module.exports = class extends ModerationCommand {
 					default:	() => null
 				},
 				{
-					id: 'reason',
-					type: ArgConsts.TEXT,
-					optional: true,
-					default: () => null
+					id:			'reason',
+					type:		ArgConsts.REASON,
+					optional:	true,
+					default:	() => null
 				},
 			],
 			guildOnly: true,

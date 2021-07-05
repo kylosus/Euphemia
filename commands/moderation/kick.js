@@ -22,7 +22,7 @@ module.exports = class extends ModerationCommand {
 				},
 				{
 					id:			'reason',
-					type:		ArgConsts.TEXT,
+					type:		ArgConsts.REASON,
 					optional:	true,
 					default:	() => 'No reason provided'
 				},
