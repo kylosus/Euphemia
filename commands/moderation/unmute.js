@@ -56,7 +56,7 @@ module.exports = class extends ModerationCommand {
 
 			result.addPassed(m);
 
-			this.client.emit('guildMemberUnmuted', m, message.member);
+			// this.client.emit('guildMemberUnmuted', m, message.member);
 		}));
 
 		return result;

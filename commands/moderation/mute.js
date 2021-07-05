@@ -69,7 +69,7 @@ module.exports = class extends ModerationCommand {
 				await muteHandler.muteMember(message.guild, m, role, reason, duration);
 			}
 
-			this.client.emit('guildMemberMuted', m, args.duration, message.member);
+			// this.client.emit('guildMemberMuted', m, args.duration, message.member);
 		}));
 
 		return result;
