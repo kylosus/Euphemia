@@ -39,6 +39,7 @@ module.exports = message => {
 			return;
 		}
 
+		// TODO: check if the videos are embedded properly
 		if (/\.(gif|jpg|jpeg|tiff|png|webm|webp)$/i.test(attachment.url)) {
 			return embed.setImage(attachment.proxyURL);
 		}
