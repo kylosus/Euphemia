@@ -24,6 +24,7 @@ const init = async (client, db) => {
 		INSERT INTO
 		    ${TABLE_NAME} (id, guild, action, moderator, target, aux, reason, passed, failedReason, timestamp)
 		VALUES ((SELECT IFNULL(MAX(id), 0) + 1 FROM ${TABLE_NAME} where guild = ?), ?, ?, ?, ?, ?, ?, ?, ?, ?)
+-- 		RETURNING id
 	`);
 
 	STATEMENTS.getAction = await db.prepare(`
