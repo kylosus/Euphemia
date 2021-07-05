@@ -118,7 +118,7 @@ module.exports = class extends ECommand {
 				return `${prefix} [${id}] ${action} ${moderator} -> ${target}`;
 			}).join('\n');
 
-			embed.setDescription(body);
+			embed.setDescription(`__Run \`action <number>\` to get details__\n\n${body}`);
 			return embed;
 		};
 
