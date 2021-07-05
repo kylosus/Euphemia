@@ -43,7 +43,7 @@ module.exports = class extends ModerationCommand {
 			try {
 				await m.kick(reason);
 			} catch (err) {
-				return result.addFailed(m, err.message || 'Unknown error');
+				return result.addFailed(m, err.message);
 			}
 
 			result.addPassed(m);
