@@ -38,7 +38,9 @@ class ModerationCommand extends ECommand {
 		const parsedArgs = await this.parser.parse(message, args);
 		const result = await this.run(message, parsedArgs);
 
-		this.record(message.guild, message.member, result).catch(err => this.client.emit('error', err));
+		this.record(message.guild, message.member, result)
+			.then(r => r.forEach(r => this.client.emit('modAction', message.guild, message.member, r)))
+			.catch(err => this.client.emit('error', err));
 
 		const reply = await this.ship(message, result);
 
