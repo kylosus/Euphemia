@@ -1,133 +1,69 @@
-const { MessageEmbed, Permissions } = require('discord.js');
+const {MessageEmbed, Permissions}					= require('discord.js');
+const {ArgConsts}									= require('../../lib');
+const {ModerationCommand, ModerationCommandResult}	= require('../../modules/moderation');
+const {mutedRole}									= require('../../modules/mute');
 
-const ECommand = require('../../lib/ECommand');
-const ArgConsts = require('../../lib/Argument/ArgumentTypeConstants');
-
-
-
-module.exports = class extends ECommand {
+module.exports = class extends ModerationCommand {
 	constructor(client) {
 		super(client, {
+			actionName: 'unmute',
 			aliases: ['unmute'],
 			description: {
-				content: 'Unmutes mentioned users',
-				usage: '<member1> [member2 ...]',
-				examples: ['unmute @Person1', 'unmute @Person1 @Person2']
+				content:	'Unmutes mentioned users',
+				usage:		'<member1> [member2 ...]',
+				examples:	['unmute @Person1', 'unmute @Person1 @Person2']
 			},
-			userPermissions: [Permissions.FLAGS.MANAGE_ROLES],
-			clientPermissions: [Permissions.FLAGS.MANAGE_ROLES, Permissions.FLAGS.MANAGE_GUILD],
+			userPermissions:	[Permissions.FLAGS.MANAGE_ROLES],
+			clientPermissions:	[Permissions.FLAGS.MANAGE_ROLES, Permissions.FLAGS.MANAGE_GUILD],
 			args: [
 				{
-					id: 'members',
-					type: ArgConsts.MEMBERS,
-					message: 'Please mention members to unmute'
+					id:			'members',
+					type:		ArgConsts.MEMBERS,
+					message:	'Please mention members to unmute'
+				},
+				{
+					id:			'reason',
+					type:		ArgConsts.REASON,
+					optional:	true,
+					default:	() => null
 				}
 			],
 			guildOnly: true,
-			nsfw: false,
 			ownerOnly: false,
-			rateLimited: false,
-			fetchMembers: false,
-			cached: false,
 		});
 	}
 
-	async run(message, args) {
-		const result = {p: [], f: []};
+	async run(message, {members, reason}) {
+		const result = new ModerationCommandResult(reason);
 
-		const entry = await message.client.provider.get(message.guild, 'mutedRole');
+		const role = await mutedRole.getMutedRole(message.guild);
 
-		if (!entry) {
-			// Will take care of this later
+		if (!role) {
 			throw 'Muted role not found';
 		}
 
-		const mutedRole = message.guild.roles.resolve(entry);
-
-		if (!mutedRole) {
-			throw 'I cannot mute. Muted role has been deleted';
-		}
-
-		await Promise.all(args.members.map(async m => {
+		await Promise.all(members.map(async m => {
 			// Look up other roles that remove message send permissions
-			if (!mutedRole.members.has(m.id)) {
-				return result.f.push({member: m, reason: 'Not muted'});
+			if (!role.members.has(m.id)) {
+				return result.addFailed(m,'Not muted');
 			}
 
 			try {
-				await m.roles.remove(mutedRole, args.reason);
+				await m.roles.remove(role, reason);
 			} catch (error) {
-				return result.f.push({member: m, reason: error.message});
+				return result.addFailed(m, error.message);
 			}
 
-			result.p.push(m);
+			result.addPassed(m);
 
-			this.client.emit('guildMemberUnuted', m, args.duration, message.member);
+			this.client.emit('guildMemberUnmuted', m, message.member);
 		}));
 
 		return result;
-
-		// const role = EuphemiaUnifiedGuildFunctions.GetMutedRole(message.guild);
-		//
-		// if (!role) {
-		// 	return message.channel.send(new RichEmbed()
-		// 		.setColor('RED')
-		// 		.setTitle('Muted role not found')
-		// 	);
-		// }
-		//
-		// if (!message.mentions.members.size) {
-		// 	return message.channel.send(new RichEmbed()
-		// 		.setColor('RED')
-		// 		.setTitle('Please mention members to unmute')
-		// 	);
-		// }
-		//
-		// // Use a database
-		// const unmuted = Promise.all(message.mentions.members.map(async member => {
-		// 	if (!member.roles.has(role.id)) {
-		// 		message.channel.send(new RichEmbed()
-		// 			.setColor('RED')
-		// 			.setDescription(`**Member ${member.toString()} is not muted**`)
-		// 		);
-		//
-		// 		return null;
-		// 	}
-		//
-		// 	try {
-		// 		await member.removeRole(role);
-		// 	} catch (error) {
-		// 		message.channel.send(new RichEmbed()
-		// 			.setColor('RED')
-		// 			.addField(`Could not unmute ${member.toString()}`, error.message)
-		// 		);
-		//
-		// 		return null;
-		// 	}
-		//
-		// 	guildMemberUnmuted(member);
-		// 	return member.toString();
-		// })).filter(member => member);
-		//
-		// return message.channel.send(new RichEmbed()
-		// 	.setColor('GREEN')
-		// 	.addField('Unmuted members', unmuted.join('\n'))
-		// 	.addField('Moderator', message.member.toString())
-		// );
 	}
 
 	async ship(message, result) {
-		const color = ((res) => {
-			if (!res.f.length) {
-				return 'GREEN';
-			}
-
-			if (res.p.length) {
-				return 'ORANGE';
-			}
-
-			return 'RED';
-		})(result);
+		const color = result.getColor();
 
 		const embed = new MessageEmbed()
 			.setColor(color);
