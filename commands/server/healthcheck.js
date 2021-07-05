@@ -1,5 +1,7 @@
-const {MessageEmbed, Permissions}	= require('discord.js');
-const {ECommand}					= require('../../lib');
+const {Collection, MessageEmbed, Permissions}	= require('discord.js');
+const {ECommand}								= require('../../lib');
+
+const MAX_ROLES						= 30;
 
 module.exports = class extends ECommand {
 	constructor(client) {
@@ -19,8 +21,9 @@ module.exports = class extends ECommand {
 
 	async run(message) {
 		const health = {
-			AdminRoles: [],
-			ElevatedRoles: []
+			AdminRoles:		new Collection(),
+			ElevatedRoles:	new Collection(),
+			EmptyRoles:		new Collection()
 		};
 
 		health.AdminRoles = message.guild.roles.cache.filter(r => r.permissions.has(Permissions.FLAGS.ADMINISTRATOR));
@@ -46,8 +49,14 @@ module.exports = class extends ECommand {
 			.setAuthor(`${message.guild.name} server health check`, message.guild.iconURL())
 			.setDescription('Score here')
 			.setImage(message.guild.bannerURL())
-			.addField('Roles with Admin permissions', AdminRoles.map(r => `${r.toString()} - ${r.members.size}members`).join('\n') || '~')
-			.addField('Roles with other Elevated permissions', ElevatedRoles.map(r => `${r.toString()} - ${r.members.size}members`).join(' ') || '~')
+			.addField(
+				`Roles with Admin permissions (${AdminRoles.size})`,
+				AdminRoles.first(MAX_ROLES).map(r => `${r.toString()} - ${r.members.size}members`).join('\n') || '~'
+			)
+			.addField(
+				`Roles with other Elevated permissions (${ElevatedRoles.size})`,
+				ElevatedRoles.first(MAX_ROLES).map(r => `${r.toString()} - ${r.members.size}members`).join('\n') || '~'
+			)
 		);
 	}
 };
