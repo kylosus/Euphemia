@@ -85,7 +85,7 @@ const init = async (client, db) => {
 const insert = async ({guild, action, moderator, target, aux, reason, passed, failedReason}) => {
 	// using guild id twice here because there's an embedded query to get
 	// an autoincrement id
-	await STATEMENTS.insert.run(guild, guild, action, moderator, target, aux, reason, passed, failedReason, (new Date()).toISOString());
+	return await STATEMENTS.insert.run(guild, guild, action, moderator, target, aux, reason, passed, failedReason, (new Date()).toISOString());
 };
 
 const getAction = async (guild, id) => {
