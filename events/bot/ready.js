@@ -1,3 +1,3 @@
-module.exports = async client => {
+module.exports = client => {
 	console.log(`Logged in as ${client.user.tag}!`);
 };
