@@ -6,7 +6,7 @@ const MAX_ROLES						= 30;
 module.exports = class extends ECommand {
 	constructor(client) {
 		super(client, {
-			aliases: ['healthcheck'],
+			aliases: ['healthcheck', 'health'],
 			description: {
 				content:	'Server health check',
 				usage:		'',
