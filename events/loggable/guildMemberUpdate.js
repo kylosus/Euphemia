@@ -7,7 +7,7 @@ module.exports = (oldMember, newMember) => {
 		return;
 	}
 
-	const channel = newMember.guild.channels.resolve(entry.guildMemberUpdate);
+	const channel = newMember.guild.channels.cache.get(entry.guildMemberUpdate);
 
 	if (!channel) {
 		return;

@@ -15,7 +15,7 @@ module.exports = (oldUser, newUser) => {
 			return;
 		}
 
-		const channel = g.channels.resolve(entry.userUpdate);
+		const channel = g.channels.cache.get(entry.userUpdate);
 
 		if (!channel) {
 			return;

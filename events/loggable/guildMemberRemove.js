@@ -7,7 +7,7 @@ module.exports = member => {
 			return;
 		}
 
-		const channel = member.guild.channels.resolve(entry.channel);
+		const channel = member.guild.channels.cache.get(entry.channel);
 
 		if (!channel) {
 			return;
@@ -24,7 +24,7 @@ module.exports = member => {
 			return;
 		}
 
-		const channel = member.guild.channels.get(entry.guildMemberRemove);
+		const channel = member.guild.channels.cache.get(entry.guildMemberRemove);
 
 		if (!channel) {
 			return;

@@ -9,7 +9,7 @@ module.exports = message => {
 		return;
 	}
 
-	const channel = message.guild.channels.resolve(entry.messageDelete);
+	const channel = message.guild.channels.cache.get(entry.messageDelete);
 
 	if (!channel) {
 		return;

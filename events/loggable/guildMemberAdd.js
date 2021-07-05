@@ -8,7 +8,7 @@ module.exports = member => {
 			return;
 		}
 
-		const channel = member.guild.channels.resolve(entry.channel);
+		const channel = member.guild.channels.cache.get(entry.channel);
 
 		if (!channel) {
 			return;
@@ -31,7 +31,7 @@ module.exports = member => {
 			return;
 		}
 
-		const channel = member.guild.channels.resolve(entry.guildMemberAdd);
+		const channel = member.guild.channels.cache.get(entry.guildMemberAdd);
 
 		if (!channel) {
 			return;
@@ -64,34 +64,6 @@ module.exports = member => {
 		//
 		// }
 	})(member.client.provider.get(member.guild, 'automute', false));
-
-
-	// soon
-
-	// const mutedRole = member.client.provider.get(member.guild, 'mutedRole', false);
-
-	// if (!mutedRole) {
-	// 	const role = await member.guild.createRole({
-	// 		name: `${member.client.username}-mute`,
-	// 		position: member.guild.me.highestRole.position - 1,
-	// 		permissions: 104322113
-	// 	});
-	//
-	// 	if (entry.log) {	// What
-	// 		const channel = member.guild.channels.get(entry.log);
-	// 		if (channel) {
-	// 			channel.send(new RichEmbed()
-	// 				.setColor('BLUE')
-	// 				.setTitle(`Created new role ${role.name}`)
-	// 			);
-	// 		}
-	//
-	// 		member.client.provider.set(member.guild, 'mutedRole', role.id);
-	// 		member.addRole(role);
-	// 	}
-	// }
-	//
-	// member.addRole(mutedRole);
 };
 
 

@@ -7,7 +7,7 @@ module.exports = (member, moderator) => {
 		return;
 	}
 
-	const channel = member.guild.channels.resolve(entry.guildMemberUnmuted);
+	const channel = member.guild.channels.cache.get(entry.guildMemberUnmuted);
 
 	if (!channel) {
 		return;

@@ -2,12 +2,12 @@ const {MessageEmbed} = require('discord.js');
 
 module.exports = (guild, user) => {
 	const entry = guild.client.provider.get(guild, 'log', {guildBanAdd: null});
-	
+
 	if (!entry.guildBanAdd) {
 		return;
 	}
 
-	const channel = guild.channels.resolve(entry.guildBanAdd);
+	const channel = guild.channels.cache.get(entry.guildBanAdd);
 
 	if (!channel) {
 		return;
