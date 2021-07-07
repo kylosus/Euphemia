@@ -1,4 +1,3 @@
-const {MessageEmbed}			= require('discord.js');
 const {ArgConsts, ECommand}		= require('../../lib');
 
 module.exports = class extends ECommand {
