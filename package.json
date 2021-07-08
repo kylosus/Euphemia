@@ -4,7 +4,8 @@
   "description": "Yet another Discord bot with moderation and utility commands",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js"
+    "start": "node app.js",
+    "migrate": "note migrate.js"
   },
   "keywords": [
     "discord bot",
