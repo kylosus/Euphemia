@@ -2,7 +2,7 @@ const {MessageEmbed}	= require('discord.js');
 const moment			= require('moment');
 const {replaceTokens}	= require('../util');
 
-module.exports = member => {
+module.exports = async member => {
 	(entry => {
 		if (!entry.channel || !entry.message) {
 			return;

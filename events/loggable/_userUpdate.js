@@ -1,6 +1,6 @@
 const {MessageEmbed} = require('discord.js');
 
-module.exports = (oldUser, newUser) => {
+module.exports = async (oldUser, newUser) => {
 	if (oldUser.tag === newUser.tag) {
 		return;
 	}
