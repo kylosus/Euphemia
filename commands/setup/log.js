@@ -2,7 +2,7 @@ const {MessageEmbed, Permissions}	= require('discord.js');
 const {ECommand}					= require('../../lib');
 const path							= require('path');
 const fs							= require('fs');
-const directoryPath					= path.join(__dirname + '/../../events/loggable');
+const directoryPath					= path.join(__dirname, '/../../events/loggable');
 
 const events = fs.readdirSync(directoryPath, {withFileTypes: true})
 	.filter(dirent => dirent.isFile() && !dirent.name.startsWith('_'))
