@@ -30,7 +30,7 @@ module.exports = member => {
 			return;
 		}
 
-		channel.send(new MessageEmbed()
+		return channel.send(new MessageEmbed()
 			.setColor('BLUE')
 			.setTitle('❌ User left')
 			.setThumbnail(member.user.avatarURL)
