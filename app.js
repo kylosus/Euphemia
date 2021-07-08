@@ -14,7 +14,7 @@ class Client extends EClient {
 	constructor() {
 		super(
 			{
-				ownerIDs: process.env.BOT_OWNER?.split(',') ?? config.owners,
+				ownerIDs: process.env.BOT_OWNER ? process.env.BOT_OWNER.split(',') : config.owners,
 				defaultColor: config.defaultColor || [233, 91, 169]
 			},
 			{
@@ -69,4 +69,4 @@ class Client extends EClient {
 const client = new Client();
 require('./events/event.js')(client);
 
-client.login(process.env.BOT_TOKEN).catch(console.error);
+client.login(process.env.BOT_TOKEN || config.token).catch(console.error);
