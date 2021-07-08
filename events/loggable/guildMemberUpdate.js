@@ -1,18 +1,6 @@
 const {MessageEmbed} = require('discord.js');
 
-module.exports = (oldMember, newMember) => {
-	const entry = newMember.client.provider.get(newMember.guild, 'log', {guildMemberUpdate: null});
-
-	if (!entry.guildMemberUpdate) {
-		return;
-	}
-
-	const channel = newMember.guild.channels.cache.get(entry.guildMemberUpdate);
-
-	if (!channel) {
-		return;
-	}
-
+module.exports = (channel, oldMember, newMember) => {
 	if (oldMember.nickname !== newMember.nickname) {
 		// Sorry
 		const body = newMember.nickname ? `**${newMember.user.tag}** has changed their nickname` + (oldMember.nickname ? ` from **${oldMember.nickname}**` : '') + ` to **${newMember.nickname}**`

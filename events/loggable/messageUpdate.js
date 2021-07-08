@@ -1,19 +1,7 @@
 const {MessageEmbed} = require('discord.js');
 
-module.exports = (oldMessage, newMessage) => {
+module.exports = (channel, oldMessage, newMessage) => {
 	if (oldMessage.content === newMessage.content || !oldMessage.content || !newMessage.content) {
-		return;
-	}
-
-	const entry = newMessage.client.provider.get(newMessage.guild, 'log', {messageUpdate: false});
-
-	if (!entry.messageUpdate) {
-		return;
-	}
-
-	const channel = newMessage.guild.channels.cache.get(entry.messageUpdate);
-
-	if (!channel) {
 		return;
 	}
 

@@ -3,19 +3,7 @@ const moment			= require('moment');
 
 const COLOR = '#2CDDD7';
 
-module.exports = (guild, moderator, result) => {
-	const entry = guild.client.provider.get(guild, 'log', {modAction: null});
-
-	if (!entry.modAction) {
-		return;
-	}
-
-	const channel = guild.channels.cache.get(entry.modAction);
-
-	if (!channel) {
-		return;
-	}
-
+module.exports = (channel, guild, moderator, result) => {
 	const embed = new MessageEmbed()
 		.setColor(COLOR);
 

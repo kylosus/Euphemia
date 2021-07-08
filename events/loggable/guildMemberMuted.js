@@ -1,19 +1,7 @@
 const {MessageEmbed}	= require('discord.js');
 const moment			= require('moment');
 
-module.exports = (member, expires, moderator) => {
-	const {guildMemberMuted: channelID} = member.client.provider.get(member.guild, 'log', {guildMemberMuted: null});
-
-	if (!channelID) {
-		return;
-	}
-
-	const channel = member.guild.channels.cache.get(channelID);
-
-	if (!channel) {
-		return;
-	}
-
+module.exports = (channel, member, expires, moderator) => {
 	return channel.send(new MessageEmbed()
 		.setColor('GOLD')
 		.setTitle('🔇 User muted')

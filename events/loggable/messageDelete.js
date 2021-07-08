@@ -2,19 +2,7 @@ const {MessageEmbed} = require('discord.js');
 
 const CONTENT_MAX = 1020;
 
-module.exports = message => {
-	const entry = message.client.provider.get(message.guild, 'log', {messageDelete: null});
-
-	if (!entry.messageDelete) {
-		return;
-	}
-
-	const channel = message.guild.channels.cache.get(entry.messageDelete);
-
-	if (!channel) {
-		return;
-	}
-
+module.exports = (channel, message) => {
 	const embed = new MessageEmbed()
 		.setColor('DARK_PURPLE')
 		.setTitle(`🗑 Message deleted in #${message.channel.name}`)
