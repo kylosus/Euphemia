@@ -5,8 +5,8 @@ const fs							= require('fs');
 const directoryPath					= path.join(__dirname, '/../../events/loggable');
 
 const events = fs.readdirSync(directoryPath, {withFileTypes: true})
-	.filter(dirent => dirent.isFile() && !dirent.name.startsWith('_'))
-	.map(dirent => dirent.name.replace(/\.[^/.]+$/, ''));
+	// .filter(dirent => dirent.isFile() && !dirent.name.startsWith('_'))
+	.map(dirent => dirent.name.replace(/\.[^.]+$/, '').replace('_', ''));
 
 const SETTINGS = events.reduce(function (acc, curr) {
 	acc[curr] = null;
