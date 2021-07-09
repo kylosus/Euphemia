@@ -89,6 +89,10 @@ const insert = async ({ guild, action, moderator, target, aux, reason, passed, f
 	return await STATEMENTS.insert.run(guild, guild, action, moderator, target, aux, reason, passed, failedReason, (new Date()).toISOString());
 };
 
+const forceInsert = async ({ guild, action, moderator, target, aux, reason, passed, failedReason, timestamp }) => {
+	return await STATEMENTS.insert.run(guild, guild, action, moderator, target, aux, reason, passed, failedReason, timestamp);
+};
+
 const getAction = async (guild, id) => {
 	return await STATEMENTS.getAction.get(guild, id);
 };
@@ -124,6 +128,7 @@ const getIdMax = async guild => {
 module.exports = {
 	init,
 	insert,
+	forceInsert,
 	getAction,
 	updateReason,
 	bulkInsert,
