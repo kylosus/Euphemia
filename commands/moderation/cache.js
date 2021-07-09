@@ -10,7 +10,6 @@ module.exports = class extends ECommand {
 				usage:    'cache [channel]',
 				examples: ['cache', 'cache #general']
 			},
-			userPermissions:   [Permissions.FLAGS.ADMINISTRATOR],
 			clientPermissions: [Permissions.FLAGS.READ_MESSAGE_HISTORY],
 			args:              [
 				{
