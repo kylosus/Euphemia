@@ -59,11 +59,11 @@ module.exports = async member => {
 	})(member.client.provider.get(member.guild, 'log', { guildMemberAdd: null }));
 
 	// eslint-disable-next-line no-unused-vars
-	(entry => {
-		// if (!entry) {
-		//
-		// }
-	})(member.client.provider.get(member.guild, 'automute', false));
+	// (entry => {
+	// 	// if (!entry) {
+	// 	//
+	// 	// }
+	// })(member.client.provider.get(member.guild, 'automute', false));
 };
 
 
