@@ -10,6 +10,14 @@ const { EClient, ECommandHandler, SQLiteProvider } = require('./lib');
 const config  = require('./config.json');
 const modules = require('./modules');
 
+if (process.getuid && process.getuid() === 0) {
+	console.warn('===================================');
+	console.warn('===================================');
+	console.warn('====DO NOT RUN THE BOT AS ROOT====');
+	console.warn('===================================');
+	console.warn('===================================');
+}
+
 class Client extends EClient {
 	constructor() {
 		super(
