@@ -42,11 +42,13 @@ module.exports = class extends ECommand {
 	}
 
 	async run(message, { anime }) {
-		// const cached = cache.get(anime.toUpperCase());
-		//
-		// if (cached) {
-		// 	return cached;
-		// }
+		const cached = cache.get(anime.toUpperCase());
+
+		if (cached) {
+			if (cached.Media.nextAiringEpisode.airingAt * 1000 - Date.now() > 0) {
+				return cached;
+			}
+		}
 
 		const [query, variables] = ((search) => {
 			if (!search) {
@@ -80,7 +82,9 @@ module.exports = class extends ECommand {
 			return fetchAnime(query, variables).catch(() => {throw 'Anime not found';});
 		});
 
-		// cache.set(anime.toUpperCase(), data);
+		if (!data.Page) {
+			cache.set(anime.toUpperCase(), data);
+		}
 
 		return data;
 	}
