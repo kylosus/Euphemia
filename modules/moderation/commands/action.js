@@ -59,9 +59,15 @@ module.exports = class extends ECommand {
 		}
 
 		if (result.action === 'MUTE') {
-			const diff = moment.duration(moment(result.aux).diff(result.timestamp));
 
-			embed.addField('Muted for', `${diff.days()} days, ${diff.hours()} hours, ${diff.minutes()} minutes`);
+			embed.addField('Muted for', (time => {
+				if (!time) {
+					return 'Forever';
+				}
+
+				const diff = moment.duration(moment(time).diff(result.timestamp));
+				return `${diff.days()} days, ${diff.hours()} hours, ${diff.minutes()} minutes`;
+			})(result.aux));
 		}
 
 		embed.setTimestamp(result.timestamp);
