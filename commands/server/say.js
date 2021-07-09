@@ -24,7 +24,7 @@ module.exports = class extends ECommand {
 					message: 'Please provide text'
 				}
 			],
-			guildOnly:       false,
+			guildOnly:       true,
 			ownerOnly:       false,
 		});
 	}
