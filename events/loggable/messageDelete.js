@@ -6,7 +6,7 @@ module.exports = (channel, message) => {
 	const embed = new MessageEmbed()
 		.setColor('DARK_PURPLE')
 		.setTitle(`🗑 Message deleted in #${message.channel.name}`)
-		.setDescription(`${message.member ? message.member.toString() : message.author.tag} \`${message.author.id}\``)
+		.setDescription(`${message.member ? message.member : message.author.tag} \`${message.author.id}\``)
 		.addField('ID', message.id, false)
 		.setTimestamp();
 

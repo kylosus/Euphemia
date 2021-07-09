@@ -41,7 +41,7 @@ module.exports = async member => {
 			.setColor('BLUE')
 			.setTitle('✅ User joined')
 			.setThumbnail(member.user.avatarURL)
-			.setDescription(`${member.toString()} \`${member.user.tag}\``)
+			.setDescription(`${member} \`${member.user.tag}\``)
 			.addField('ID', member.id, false)
 			.addField('Joined server', moment(member.joinedAt).format('DD.MM.YYYY HH:mm:ss'), true)
 			.addField('Joined Discord', moment(member.user.createdAt).format('DD.MM.YYYY HH:mm:ss'), false)
@@ -53,7 +53,7 @@ module.exports = async member => {
 		if (accountAge < 30) {
 			return channel.send(new MessageEmbed()
 				.setColor('DARK_RED')
-				.setDescription(`**WARNING** User ${ member.toString() }'s account is less than ${ accountAge === 1 ? 'day' : ((accountAge + 1) + 'days') } old`)
+				.setDescription(`**WARNING** User ${member}'s account is less than ${accountAge === 1 ? 'day' : ((accountAge + 1) + 'days')} old`)
 			);
 		}
 	})(member.client.provider.get(member.guild, 'log', { guildMemberAdd: null }));

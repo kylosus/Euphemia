@@ -5,7 +5,7 @@ module.exports = (channel, member, moderator) => {
 		.setColor('GOLD')
 		.setTitle('🔈 User unmuted')
 		.setThumbnail(member.user.avatarURL)
-		.addField('User', `${member.toString()} \`${member.id}\``, false)
-		.addField('Moderator', moderator.toString())
+		.addField('User', `${member} \`${member.id}\``, false)
+		.addField('Moderator', moderator)
 	);
 };

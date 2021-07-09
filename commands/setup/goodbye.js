@@ -55,7 +55,7 @@ module.exports = class extends ECommand {
 		}
 
 		if (!args.message) {
-			return `Moved goodbye message to ${args.channel.toString()}`;
+			return `Moved goodbye message to ${ args.channel.toString() }`;
 		}
 
 		// Parse the json
@@ -85,7 +85,7 @@ module.exports = class extends ECommand {
 		const channel = message.guild.channels.cache.get(entry.channel);
 
 		if (channel) {
-			return `Enabled goodbye message in ${channel.toString()}`;
+			return `Enabled goodbye message in ${channel}`;
 		}
 
 		return `Enabled goodbye message, but channel ${entry.channel} seems to have been deleted`;

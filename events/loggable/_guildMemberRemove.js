@@ -34,7 +34,7 @@ module.exports = async member => {
 			.setColor('BLUE')
 			.setTitle('❌ User left')
 			.setThumbnail(member.user.avatarURL)
-			.setDescription(`${member.toString()} \`${member.user.tag}\``)
+			.setDescription(`${member} \`${member.user.tag}\``)
 			.addField('ID', member.id, false)
 			.setTimestamp(member.joinedAt)
 		);
