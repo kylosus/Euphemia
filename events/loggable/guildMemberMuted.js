@@ -1,5 +1,5 @@
-const {MessageEmbed}	= require('discord.js');
-const moment			= require('moment');
+const { MessageEmbed } = require('discord.js');
+const moment           = require('moment');
 
 module.exports = (channel, member, expires, moderator) => {
 	return channel.send(new MessageEmbed()
