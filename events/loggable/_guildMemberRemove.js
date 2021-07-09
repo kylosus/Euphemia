@@ -33,7 +33,7 @@ module.exports = async member => {
 		return channel.send(new MessageEmbed()
 			.setColor('BLUE')
 			.setTitle('❌ User left')
-			.setThumbnail(member.user.avatarURL)
+			.setThumbnail(member.user.displayAvatarURL())
 			.setDescription(`${member} \`${member.user.tag}\``)
 			.addField('ID', member.id, false)
 			.setTimestamp(member.joinedAt)

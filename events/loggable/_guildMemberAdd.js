@@ -40,7 +40,7 @@ module.exports = async member => {
 		channel.send(new MessageEmbed()
 			.setColor('BLUE')
 			.setTitle('✅ User joined')
-			.setThumbnail(member.user.avatarURL)
+			.setThumbnail(member.user.displayAvatarURL())
 			.setDescription(`${member} \`${member.user.tag}\``)
 			.addField('ID', member.id, false)
 			.addField('Joined server', moment(member.joinedAt).format('DD.MM.YYYY HH:mm:ss'), true)

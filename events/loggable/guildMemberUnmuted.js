@@ -4,7 +4,7 @@ module.exports = (channel, member, moderator) => {
 	return channel.send(new MessageEmbed()
 		.setColor('GOLD')
 		.setTitle('🔈 User unmuted')
-		.setThumbnail(member.user.avatarURL)
+		.setThumbnail(member.user.displayAvatarURL())
 		.addField('User', `${member} \`${member.id}\``, false)
 		.addField('Moderator', moderator)
 	);

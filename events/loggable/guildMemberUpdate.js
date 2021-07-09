@@ -8,7 +8,7 @@ module.exports = (channel, oldMember, newMember) => {
 
 		return channel.send(new MessageEmbed()
 			.setColor('GREEN')
-			.setThumbnail(newMember.user.avatarURL)
+			.setThumbnail(newMember.user.displayAvatarURL())
 			.setTitle('Nickname change')
 			.setDescription(body)
 			.setTimestamp()
@@ -18,7 +18,7 @@ module.exports = (channel, oldMember, newMember) => {
 	if (oldMember.user.tag !== newMember.user.tag) {
 		return channel.send(new MessageEmbed()
 			.setColor('GREEN')
-			.setThumbnail(newMember.user.avatarURL)
+			.setThumbnail(newMember.user.displayAvatarURL())
 			.setTitle('Username change')
 			.setDescription(`**${oldMember.user.tag}** has changed their username to **${newMember.user.tag}**`)
 			.setTimestamp()

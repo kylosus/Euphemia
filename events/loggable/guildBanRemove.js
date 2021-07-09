@@ -4,7 +4,7 @@ module.exports = (channel, guild, user) => {
 	return channel.send(new MessageEmbed()
 		.setColor('GREEN')
 		.setTitle('♻ User unbanned')
-		.setThumbnail(user.avatarURL)
+		.setThumbnail(user.displayAvatarURL())
 		.setDescription(user.tag)
 		.addField('ID', user.id, false)
 	);

@@ -3,7 +3,7 @@ module.exports.replaceTokens = (string, member) => {
 		.replace('$MENTION$', member)
 		.replace('$NAME$', member.user.tag)
 		.replace('$MEMBER_COUNT$', String(member.guild.memberCount))
-		.replace('$AVATAR$', member.user.avatarURL || member.user.defaultAvatarURL);
+		.replace('$AVATAR$', member.user.avatarURL || member.user.displayAvatarURL());
 };
 
 module.exports.countNormalizer = count => {
