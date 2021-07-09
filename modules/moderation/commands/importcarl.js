@@ -42,6 +42,7 @@ module.exports = class extends ECommand {
 				moderator: c.moderator_id || 'unknown-carl',
 				target:    c.offender_id,
 				reason:    c.reason,
+				passed:    true,
 				timestamp: c.timestamp
 			};
 		});
