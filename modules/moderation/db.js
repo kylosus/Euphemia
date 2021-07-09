@@ -80,6 +80,19 @@ const init = async (client, db) => {
             LIMIT ?
 	`);
 
+	// guild, lastId, perPage
+	STATEMENTS.getAllPage = await db.prepare(`
+        SELECT
+            id, action, aux, passed,
+            CAST(moderator as TEXT) as moderator,
+            CAST(target as TEXT) as target
+        FROM ${TABLE_NAME}
+        WHERE guild = ?
+          AND id < ?
+        ORDER BY id DESC
+            LIMIT ?
+	`);
+
 	STATEMENTS.getIdMax = await db.prepare(`SELECT MAX(id) as length from ${TABLE_NAME} where guild = ? LIMIT 1`);
 };
 
@@ -118,7 +131,11 @@ const getModeratorTargetPage = async ({ guild, moderator, target, lastId = Numbe
 		return await STATEMENTS.getModeratorPage.all(guild, moderator, lastId, perPage);
 	}
 
-	return await STATEMENTS.getTargetPage.all(guild, target, lastId, perPage);
+	if (target) {
+		return await STATEMENTS.getTargetPage.all(guild, target, lastId, perPage);
+	}
+
+	return await STATEMENTS.getAllPage.all(guild, lastId, perPage);
 };
 
 const getIdMax = async guild => {
