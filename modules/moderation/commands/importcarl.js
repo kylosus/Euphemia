@@ -2,6 +2,8 @@ const got                     = require('got');
 const { ArgConsts, ECommand } = require('../../../lib');
 const db                      = require('../db');
 
+const CARL_ID = '235148962103951360';
+
 module.exports = class extends ECommand {
 	constructor(client) {
 		super(client, {
@@ -39,7 +41,7 @@ module.exports = class extends ECommand {
 			return {
 				guild:     message.guild.id,
 				action:    c.action.toUpperCase(),
-				moderator: c.moderator_id || 'unknown-carl',
+				moderator: c.moderator_id || CARL_ID,
 				target:    c.offender_id,
 				reason:    c.reason,
 				passed:    true,
