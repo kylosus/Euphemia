@@ -6,8 +6,8 @@ module.exports = (channel, member, expires, moderator) => {
 		.setColor('GOLD')
 		.setTitle('🔇 User muted')
 		.setThumbnail(member.user.displayAvatarURL())
-		.addField('User', `${member.toString()} \`${member.id}\``, false)
+		.addField('User', `${member} \`${member.id}\``, false)
 		.addField('Expires', `${expires ? moment(expires).fromNow() : 'Never'}`)
-		.addField('Moderator', moderator.toString())
+		.addField('Moderator', moderator)
 	);
 };
