@@ -5,7 +5,8 @@
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
-    "migrate": "note migrate.js"
+    "migrate": "note migrate.js",
+    "update": "git pull; npm update"
   },
   "keywords": [
     "discord bot",
