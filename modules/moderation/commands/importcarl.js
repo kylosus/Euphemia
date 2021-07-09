@@ -51,6 +51,7 @@ module.exports = class extends ECommand {
 
 		this.sendNotice(message, `Inserting ${entry.length} entries`);
 
+		// Should probably use a transaction
 		await Promise.all(entry.map(e => db.forceInsert(e)));
 
 		return `Inserted ${entry.length} entries`;
