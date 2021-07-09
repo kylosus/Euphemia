@@ -117,7 +117,7 @@ module.exports = class extends ECommand {
 			.filter(r => r.nextAiringEpisode)
 			.sort((a, b) => a.nextAiringEpisode.timeUntilAiring - b.nextAiringEpisode.timeUntilAiring)
 			.forEach(r => embed.addField(
-				`${r.title.userPreferred} ${result.nextAiringEpisode?.episode ?? '?'}`,
+				`${r.title.userPreferred} ${r.nextAiringEpisode?.episode ?? '?'}`,
 				moment.duration(moment(r.nextAiringEpisode.airingAt * 1000).diff(moment()))
 					.format('D [days] H [hours] m [minutes] s [seconds]'),
 				true)
