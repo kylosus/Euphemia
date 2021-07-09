@@ -1,17 +1,17 @@
-const fs		= require('fs');
-const path		= require('path');
-const sqlite3	= require('sqlite3').verbose();
-const sqlite	= require('sqlite');
+const fs      = require('fs');
+const path    = require('path');
+const sqlite3 = require('sqlite3').verbose();
+const sqlite  = require('sqlite');
 
-fs.rmSync('settings_new.sqlite3', {force: true});
+fs.rmSync('settings_new.sqlite3', { force: true });
 
 sqlite.open({
 	filename: path.join(__dirname, 'settings.sqlite3'),
-	driver: sqlite3.Database
+	driver:   sqlite3.Database
 }).then(dbOld => {
 	sqlite.open({
 		filename: path.join(__dirname, 'settings_new.sqlite3'),
-		driver: sqlite3.Database
+		driver:   sqlite3.Database
 	}).then(async dbNew => {
 		await dbNew.run('CREATE TABLE settings (guild INTEGER PRIMARY KEY, settings TEXT)');
 
@@ -39,18 +39,18 @@ async function migrate(guild, oldSettings) {
 	}
 
 	if (oldSettings.guildMemberAdd?.message) {
-		const {content, ...embed} = JSON.parse(oldSettings.guildMemberAdd.message);
-		newSettings.welcome = {
+		const { content, ...embed } = JSON.parse(oldSettings.guildMemberAdd.message);
+		newSettings.welcome         = {
 			content,
 			embed,
-			channel: oldSettings.guildMemberAdd.channel,
+			channel:  oldSettings.guildMemberAdd.channel,
 			automute: oldSettings.guildMemberAdd.automute ?? false,
 		};
 	}
 
 	if (oldSettings.guildMemberRemove?.message) {
-		const {content, ...embed} = JSON.parse(oldSettings.guildMemberRemove.message);
-		newSettings.welcome = {
+		const { content, ...embed } = JSON.parse(oldSettings.guildMemberRemove.message);
+		newSettings.welcome         = {
 			content,
 			embed,
 			channel: oldSettings.guildMemberRemove.channel,
