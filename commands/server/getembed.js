@@ -24,8 +24,8 @@ module.exports = class extends ECommand {
 					message: 'Please provide a message id.'
 				}
 			],
-			guildOnly:       false,
-			ownerOnly:       true,
+			guildOnly:       true,
+			ownerOnly:       false,
 		});
 	}
 
