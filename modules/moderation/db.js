@@ -116,6 +116,7 @@ const updateReason = async ({ guild, id, reason }) => {
 
 // this is stupid
 const bulkInsert = async (params = []) => {
+	// Should be a transaction
 	return await Promise.all(params.map(async p => {
 		return await insert(p);
 	}));
