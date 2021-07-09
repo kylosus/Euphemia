@@ -1,5 +1,5 @@
-const {MessageEmbed}	= require('discord.js');
-const {replaceTokens}	= require('../util');
+const { MessageEmbed }  = require('discord.js');
+const { replaceTokens } = require('../util');
 
 module.exports = async member => {
 	(entry => {
@@ -17,7 +17,7 @@ module.exports = async member => {
 			replaceTokens(entry.message.content),
 			new MessageEmbed(replaceTokens(entry.message.embed))
 		);
-	})(member.client.provider.get(member.guild, 'goodbye', {channel: null, message: null}));
+	})(member.client.provider.get(member.guild, 'goodbye', { channel: null, message: null }));
 
 	(entry => {
 		if (!entry.guildMemberRemove) {
@@ -38,5 +38,5 @@ module.exports = async member => {
 			.addField('ID', member.id, false)
 			.setTimestamp(member.joinedAt)
 		);
-	})(member.client.provider.get(member.guild, 'log', {guildMemberRemove: null}));
+	})(member.client.provider.get(member.guild, 'log', { guildMemberRemove: null }));
 };

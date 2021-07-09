@@ -1,5 +1,5 @@
-const {MessageEmbed, Permissions} = require('discord.js');
-const {ArgConsts, ECommand} = require('../../../lib');
+const { MessageEmbed, Permissions } = require('discord.js');
+const { ArgConsts, ECommand }       = require('../../../lib');
 
 const db = require('../db');
 
@@ -9,32 +9,32 @@ const EMOJI_NO = '❎';
 module.exports = class extends ECommand {
 	constructor(client) {
 		super(client, {
-			aliases: ['reason'],
-			description: {
-				content: 'Changes reason for an action',
-				usage: '<action number>',
+			aliases:         ['reason'],
+			description:     {
+				content:  'Changes reason for an action',
+				usage:    '<action number>',
 				examples: ['action 1']
 			},
 			userPermissions: [Permissions.FLAGS.MANAGE_GUILD],
-			args: [
+			args:            [
 				{
-					id: 'number',
-					type: ArgConsts.NUMBER,
+					id:      'number',
+					type:    ArgConsts.NUMBER,
 					message: 'Please specify an action number'
 				},
 				{
-					id: 'newreason',
-					type: ArgConsts.TEXT,
+					id:      'newreason',
+					type:    ArgConsts.TEXT,
 					message: 'Please enter a reason'
 				}
 			],
-			guildOnly: true,
-			nsfw: false,
-			ownerOnly: false,
+			guildOnly:       true,
+			nsfw:            false,
+			ownerOnly:       false,
 		});
 	}
 
-	async run(message, {newreason, number}) {
+	async run(message, { newreason, number }) {
 		const result = await db.getAction(message.guild.id, number);
 
 		if (!result) {
@@ -57,7 +57,7 @@ module.exports = class extends ECommand {
 
 			const reactions = await notice.awaitReactions(
 				(r, u) => u.id === message.author.id,
-				{time: 3000}
+				{ time: 3000 }
 			);
 
 			if (!reactions.has(EMOJI_OK)) {
@@ -69,7 +69,7 @@ module.exports = class extends ECommand {
 
 		await db.updateReason({
 			guild: message.guild.id,
-			id: number,
+			id:    number,
 			reason
 		});
 

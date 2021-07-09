@@ -1,8 +1,8 @@
 module.exports = class {
 	constructor(array) {
-		this._array = array;
+		this._array   = array;
 		this._current = 0;
-		this._end = array.length - 1;
+		this._end     = array.length - 1;
 	}
 
 	next() {

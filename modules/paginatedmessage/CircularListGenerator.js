@@ -3,13 +3,13 @@ const CircularList = require('./CircularList');
 module.exports = class extends CircularList {
 	constructor(array, length, nextGen, previousGen) {
 		super(array);
-		this._first = nextGen();
-		this._current = this._first;
+		this._first        = nextGen();
+		this._current      = this._first;
 		this._currentIndex = 0;
-		this._length = length;
-		this._end = this._length - 1;
-		this._next = nextGen;
-		this._previous = previousGen;
+		this._length       = length;
+		this._end          = this._length - 1;
+		this._next         = nextGen;
+		this._previous     = previousGen;
 	}
 
 	next() {

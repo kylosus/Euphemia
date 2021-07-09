@@ -83,7 +83,7 @@ const init = async (client, db) => {
 	STATEMENTS.getIdMax = await db.prepare(`SELECT MAX(id) as length from ${TABLE_NAME} where guild = ? LIMIT 1`);
 };
 
-const insert = async ({guild, action, moderator, target, aux, reason, passed, failedReason}) => {
+const insert = async ({ guild, action, moderator, target, aux, reason, passed, failedReason }) => {
 	// using guild id twice here because there's an embedded query to get
 	// an autoincrement id
 	return await STATEMENTS.insert.run(guild, guild, action, moderator, target, aux, reason, passed, failedReason, (new Date()).toISOString());
@@ -93,7 +93,7 @@ const getAction = async (guild, id) => {
 	return await STATEMENTS.getAction.get(guild, id);
 };
 
-const updateReason = async ({guild, id, reason}) => {
+const updateReason = async ({ guild, id, reason }) => {
 	return await STATEMENTS.updateReason.run(reason, guild, id);
 };
 
@@ -105,7 +105,7 @@ const bulkInsert = async (params = []) => {
 };
 
 // I am so sorry
-const getModeratorTargetPage = async ({guild, moderator, target, lastId = Number.MAX_SAFE_INTEGER, perPage = 5}) => {
+const getModeratorTargetPage = async ({ guild, moderator, target, lastId = Number.MAX_SAFE_INTEGER, perPage = 5 }) => {
 	if (moderator && target) {
 		return await STATEMENTS.getModeratorTargetPage.all(guild, moderator, target, lastId, perPage);
 	}

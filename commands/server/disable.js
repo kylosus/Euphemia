@@ -1,29 +1,29 @@
-const {Permissions}			= require('discord.js');
-const {ArgConsts, ECommand}	= require('../../lib');
+const { Permissions }         = require('discord.js');
+const { ArgConsts, ECommand } = require('../../lib');
 
 module.exports = class extends ECommand {
 	constructor(client) {
 		super(client, {
-			aliases: ['disable'],
-			description: {
-				content:	'Disables a command in the server',
-				usage:		'<command name>',
-				examples:	['disable ping']
+			aliases:         ['disable'],
+			description:     {
+				content:  'Disables a command in the server',
+				usage:    '<command name>',
+				examples: ['disable ping']
 			},
 			userPermissions: [Permissions.FLAGS.MANAGE_GUILD],
-			args: [
+			args:            [
 				{
-					id:			'command',
-					type:		ArgConsts.WORD,
-					message:	'Please mention a command name'
+					id:      'command',
+					type:    ArgConsts.WORD,
+					message: 'Please mention a command name'
 				}
 			],
-			guildOnly: false,
-			ownerOnly: false,
+			guildOnly:       false,
+			ownerOnly:       false,
 		});
 	}
 
-	async run(message, {command}) {
+	async run(message, { command }) {
 		const c = this.client.commandHandler.commands.get(command);
 
 		if (!c) {

@@ -1,5 +1,5 @@
 // Buttons soon
-const FORWARD_EMOJI = '➡';
+const FORWARD_EMOJI  = '➡';
 const BACKWARD_EMOJI = '⬅';
 
 const register = async (message, generator, args) => {
@@ -19,7 +19,7 @@ const register = async (message, generator, args) => {
 	});
 
 	// Overriding cached message entry
-	botMessage.pagination = {generator, args};
+	botMessage.pagination = { generator, args };
 };
 
 module.exports = {

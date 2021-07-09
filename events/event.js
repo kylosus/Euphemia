@@ -1,16 +1,16 @@
-const fs					= require('fs');
-const path					= require('path');
-const directoryPath			= path.join(__dirname, 'loggable');
+const fs            = require('fs');
+const path          = require('path');
+const directoryPath = path.join(__dirname, 'loggable');
 
-const botEventHandler 		= event => require(`./bot/${event}`);
-const serverEventHandler	= event => require(`./loggable/${event}`);
+const botEventHandler    = event => require(`./bot/${event}`);
+const serverEventHandler = event => require(`./loggable/${event}`);
 
 // const botEventHandler = () => (() => {});
 
 const _err = name => err => console.warn(`Error while executing loggable event ${name}`, err);
 
 const registerLoggable = client => {
-	const events = fs.readdirSync(directoryPath, {withFileTypes: true})
+	const events = fs.readdirSync(directoryPath, { withFileTypes: true })
 		.filter(dirent => dirent.isFile() && !dirent.name.startsWith('_'))
 		.map(dirent => dirent.name.replace(/\.[^/.]+$/, ''));
 
@@ -22,7 +22,7 @@ const registerLoggable = client => {
 				return;
 			}
 
-			const entry = client.provider.get(guild, 'log', {[eventName]: null});
+			const entry = client.provider.get(guild, 'log', { [eventName]: null });
 
 			if (!entry[eventName]) {
 				return;
@@ -48,12 +48,12 @@ const registerLoggable = client => {
 
 module.exports = client => {
 	registerLoggable(client);		// This ignores events that start with '_'
-	client.on('ready',				() =>		botEventHandler('ready')(client));
-	client.on('error',							botEventHandler('error'));
-	client.on('reconnecting',					botEventHandler('reconnecting'));
-	client.on('disconnect',						botEventHandler('disconnect'));
-	client.on('guildCreate',					botEventHandler('guildCreate'));
-	client.on('guildMemberAdd',		m =>		serverEventHandler('_guildMemberAdd')(m).catch(_err('guildMemberAdd')));
-	client.on('guildMemberRemove',	m =>		serverEventHandler('_guildMemberRemove')(m).catch(_err('guildMemberRemove')));
-	client.on('userUpdate',			(o, n) =>	serverEventHandler('_userUpdate')(o, n).catch(_err('userUpdate')));
+	client.on('ready',              ()      => botEventHandler('ready')(client));
+	client.on('error',                         botEventHandler('error'));
+	client.on('reconnecting',                  botEventHandler('reconnecting'));
+	client.on('disconnect',                    botEventHandler('disconnect'));
+	client.on('guildCreate',                   botEventHandler('guildCreate'));
+	client.on('guildMemberAdd',     m       => serverEventHandler('_guildMemberAdd')(m).catch(_err('guildMemberAdd')));
+	client.on('guildMemberRemove',  m       => serverEventHandler('_guildMemberRemove')(m).catch(_err('guildMemberRemove')));
+	client.on('userUpdate',         (o, n)  => serverEventHandler('_userUpdate')(o, n).catch(_err('userUpdate')));
 };

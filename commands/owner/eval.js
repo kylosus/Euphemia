@@ -1,32 +1,32 @@
-const {MessageEmbed, Permissions}			= require('discord.js');
-const {ArgConsts, ECommand, EmbedLimits}	= require('../../lib');
-const _										= require('lodash');
+const { MessageEmbed, Permissions }        = require('discord.js');
+const { ArgConsts, ECommand, EmbedLimits } = require('../../lib');
+const _                                    = require('lodash');
 
 module.exports = class extends ECommand {
 	constructor(client) {
 		super(client, {
-			aliases: ['eval'],
-			description: {
-				content:	'Evaluates JavaScript code',
-				usage:		'<code>',
-				examples:	['eval 1 + 1', 'eval message.delete()']
+			aliases:         ['eval'],
+			description:     {
+				content:  'Evaluates JavaScript code',
+				usage:    '<code>',
+				examples: ['eval 1 + 1', 'eval message.delete()']
 			},
 			userPermissions: [Permissions.FLAGS.ADMINISTRATOR],
-			args: [
+			args:            [
 				{
-					id:			'code',
-					type:		ArgConsts.TEXT,
-					message:	'Please provide code'
+					id:      'code',
+					type:    ArgConsts.TEXT,
+					message: 'Please provide code'
 				}
 			],
-			guildOnly: false,
-			ownerOnly: true,
+			guildOnly:       false,
+			ownerOnly:       true,
 		});
 	}
 
-	async run(message, {code}) {
-		const start = process.hrtime();
-		const result = await eval(
+	async run(message, { code }) {
+		const start   = process.hrtime();
+		const result  = await eval(
 			`(async () => {
 				return ${code}
 			})();`
@@ -49,7 +49,7 @@ module.exports = class extends ECommand {
 			.setTitle(`Evaluated in ${elapsed}ms.`)
 			.setDescription(
 				'```' +
-					_.truncate(JSON.stringify(result, null, 4), {length: EmbedLimits.DESCRIPTION - 6})
+				_.truncate(JSON.stringify(result, null, 4), { length: EmbedLimits.DESCRIPTION - 6 })
 				+ '```'
 			)
 		);

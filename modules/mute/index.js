@@ -1,4 +1,4 @@
-const db = require('./db');
+const db      = require('./db');
 const watcher = require('./watcher');
 
 const init = async (client, _db) => {
@@ -8,6 +8,6 @@ const init = async (client, _db) => {
 
 module.exports = {
 	init,
-	mutedRole: require('./mutedRole'),
+	mutedRole:   require('./mutedRole'),
 	muteHandler: require('./muteHandler')
 };

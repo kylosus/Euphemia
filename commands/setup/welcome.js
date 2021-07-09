@@ -1,14 +1,14 @@
-const {MessageEmbed, Permissions}	= require('discord.js');
-const {ArgConsts, ECommand}			= require('../../lib');
+const { MessageEmbed, Permissions } = require('discord.js');
+const { ArgConsts, ECommand }       = require('../../lib');
 
 module.exports = class extends ECommand {
 	constructor(client) {
 		super(client, {
-			aliases: ['welcome'],
-			description: {
+			aliases:         ['welcome'],
+			description:     {
 				content: 'Sets up welcome channel and message. Send without arguments to disable it',
 				// usage: '[channel] [{JSON}]',
-				usage: [
+				usage:    [
 					'%MENTION       -> mentions user',
 					'%NAME%         -> user tag',
 					'$MEMBER_COUNT$ -> guild member count',
@@ -21,28 +21,28 @@ module.exports = class extends ECommand {
 				]
 			},
 			userPermissions: [Permissions.FLAGS.MANAGE_GUILD],
-			args: [
+			args:            [
 				{
-					id:			'message',
-					type:		ArgConsts.JSON,
-					optional:	true,
-					default:	() => null
+					id:       'message',
+					type:     ArgConsts.JSON,
+					optional: true,
+					default:  () => null
 				},
 				{
-					id:			'channel',
-					type:		ArgConsts.CHANNEL,
-					optional:	true,
-					default:	() => null
+					id:       'channel',
+					type:     ArgConsts.CHANNEL,
+					optional: true,
+					default:  () => null
 				},
 			],
-			guildOnly: true,
-			ownerOnly: false,
+			guildOnly:       true,
+			ownerOnly:       false,
 		});
 	}
 
 	async run(message, args) {
 		const entry = this.client.provider.get(message.guild, 'welcome',
-			{channel: null, message: {content: null, embed: null}});
+			{ channel: null, message: { content: null, embed: null } });
 
 		if (!args.channel && !args.message) {
 			entry.channel = null;

@@ -1,37 +1,37 @@
-const {MessageEmbed, Permissions}	= require('discord.js');
-const {ArgConsts, ECommand}			= require('../../lib');
+const { MessageEmbed, Permissions } = require('discord.js');
+const { ArgConsts, ECommand }       = require('../../lib');
 
 module.exports = class extends ECommand {
 	constructor(client) {
 		super(client, {
-			aliases: ['dm'],
-			description: {
-				content:	'DMs users. Supports embeds',
-				usage:		'<user> [user2...] <text>',
-				examples:	['dm 275331662865367040 something', 'dm @user1 @user2 {JSON}']
+			aliases:         ['dm'],
+			description:     {
+				content:  'DMs users. Supports embeds',
+				usage:    '<user> [user2...] <text>',
+				examples: ['dm 275331662865367040 something', 'dm @user1 @user2 {JSON}']
 			},
 			userPermissions: [Permissions.FLAGS.MANAGE_MESSAGES],
-			args: [
+			args:            [
 				{
-					id:			'users',
-					type:		ArgConsts.USERS,
-					message:	'Please mention users to DM to'
+					id:      'users',
+					type:    ArgConsts.USERS,
+					message: 'Please mention users to DM to'
 				},
 				{
-					id:			'text',
-					type:		ArgConsts.TEXT,
-					message:	'Please provide text'
+					id:      'text',
+					type:    ArgConsts.TEXT,
+					message: 'Please provide text'
 				}
 			],
-			guildOnly: false,
-			ownerOnly: true,
+			guildOnly:       false,
+			ownerOnly:       true,
 		});
 	}
 
-	async run(message, {users, text}) {
+	async run(message, { users, text }) {
 		const [content, embed] = await (async () => {
 			try {
-				const json = JSON.parse(text);
+				const json  = JSON.parse(text);
 				const embed = new MessageEmbed(json);
 				await message.channel.send(embed);
 				return [json.content, embed];
@@ -40,14 +40,14 @@ module.exports = class extends ECommand {
 			}
 		})();
 
-		const result = {p: [], f: []};
+		const result = { p: [], f: [] };
 
 		await Promise.all(users.map(async u => {
 			try {
 				await u.send(content, embed);
 				return result.p.push(u);
 			} catch (err) {
-				return result.f.push({user: u, reason: err.message || 'Unknown error'});
+				return result.f.push({ user: u, reason: err.message || 'Unknown error' });
 			}
 		}));
 
@@ -69,8 +69,8 @@ module.exports = class extends ECommand {
 
 		return message.channel.send(new MessageEmbed()
 			.setColor(color)
-			.addField(`Sent to ${result.p.length} users`, result.p.map(p => p.toString()).join(' ') || '~')
-			.addField('Failed', result.f.map(f => `${f.user.toString()} - ${f.reason}`).join('\n') || '~')
+			.addField(`Sent to ${ result.p.length } users`, result.p.map(p => p.toString()).join(' ') || '~')
+			.addField('Failed', result.f.map(f => `${ f.user.toString() } - ${ f.reason }`).join('\n') || '~')
 		);
 	}
 };

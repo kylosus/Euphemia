@@ -1,19 +1,19 @@
-const {MessageEmbed, Permissions}	= require('discord.js');
-const {ECommand}					= require('../../lib');
+const { MessageEmbed, Permissions } = require('discord.js');
+const { ECommand }                  = require('../../lib');
 
 module.exports = class extends ECommand {
 	constructor(client) {
 		super(client, {
-			aliases: ['lockdown', 'ld'],
-			description: {
-				content:	'Automatically mutes every new member on join.',
-				usage:		'',
-				examples:	['lockdown'],
+			aliases:           ['lockdown', 'ld'],
+			description:       {
+				content:  'Automatically mutes every new member on join.',
+				usage:    '',
+				examples: ['lockdown'],
 			},
-			userPermissions:	[Permissions.FLAGS.MANAGE_ROLES],
-			clientPermissions:	[Permissions.FLAGS.MANAGE_ROLES],
-			guildOnly: true,
-			ownerOnly: false,
+			userPermissions:   [Permissions.FLAGS.MANAGE_ROLES],
+			clientPermissions: [Permissions.FLAGS.MANAGE_ROLES],
+			guildOnly:         true,
+			ownerOnly:         false,
 		});
 	}
 
@@ -21,7 +21,7 @@ module.exports = class extends ECommand {
 		const entry = message.client.provider.get(message.guild, 'automute', false);
 		await message.client.provider.set(message.guild, 'automute', !entry);
 
-		return `${entry ? 'Disabled' : 'Enabled'} automute on new member join.`;
+		return `${ entry ? 'Disabled' : 'Enabled' } automute on new member join.`;
 	}
 
 	async ship(message, result) {

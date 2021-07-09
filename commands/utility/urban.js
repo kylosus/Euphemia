@@ -1,32 +1,32 @@
-const {MessageEmbed}						= require('discord.js');
-const {ArgConsts, ECommand, EmbedLimits}	= require('../../lib');
-const {CircularList, PaginatedMessage}		= require('../../modules');
-const ud									= require('urban-dictionary');
-const udIcon								= 'https://cdn.discordapp.com/attachments/352865308203024395/479997284117905440/ud.png';
-const _										= require('lodash');
+const { MessageEmbed }                     = require('discord.js');
+const { ArgConsts, ECommand, EmbedLimits } = require('../../lib');
+const { CircularList, PaginatedMessage }   = require('../../modules');
+const ud                                   = require('urban-dictionary');
+const udIcon                               = 'https://cdn.discordapp.com/attachments/352865308203024395/479997284117905440/ud.png';
+const _                                    = require('lodash');
 
 module.exports = class extends ECommand {
 	constructor(client) {
 		super(client, {
-			aliases: ['urban', 'ud'],
+			aliases:     ['urban', 'ud'],
 			description: {
-				content:	'Looks up Urban Dictionary definitions',
-				usage:		'[prompt]',
-				examples:	['ud malding']
+				content:  'Looks up Urban Dictionary definitions',
+				usage:    '[prompt]',
+				examples: ['ud malding']
 			},
-			args: [
+			args:        [
 				{
-					id: 		'text',
-					type:		ArgConsts.TEXT,
-					message:	'Please provide text to look up.'
+					id:      'text',
+					type:    ArgConsts.TEXT,
+					message: 'Please provide text to look up.'
 				}
 			],
-			guildOnly: false,
-			ownerOnly: false
+			guildOnly:   false,
+			ownerOnly:   false
 		});
 	}
 
-	async run(message, {text}) {
+	async run(message, { text }) {
 		try {
 			return await ud.define(text);
 		} catch (err) {
@@ -39,7 +39,7 @@ module.exports = class extends ECommand {
 			return new MessageEmbed()
 				.setColor('GREEN')
 				.setAuthor(s.word, udIcon)
-				.setDescription(_.truncate(s.definition, {length: EmbedLimits.DESCRIPTION}));
+				.setDescription(_.truncate(s.definition, { length: EmbedLimits.DESCRIPTION }));
 		}, new CircularList(result));
 	}
 };

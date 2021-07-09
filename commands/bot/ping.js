@@ -1,19 +1,19 @@
-const {MessageEmbed}	= require('discord.js');
-const {ECommand}		= require('../../lib');
-const moment			= require('moment');
+const { MessageEmbed } = require('discord.js');
+const { ECommand }     = require('../../lib');
+const moment           = require('moment');
 
 module.exports = class extends ECommand {
 	constructor(client) {
 		super(client, {
-			aliases: ['ping'],
+			aliases:     ['ping'],
 			description: {
-				content: 'Replies with ping',
-				usage: '',
+				content:  'Replies with ping',
+				usage:    '',
 				examples: ['ping']
 			},
-			args: [],
-			guildOnly: false,
-			ownerOnly: false,
+			args:        [],
+			guildOnly:   false,
+			ownerOnly:   false,
 		});
 	}
 

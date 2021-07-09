@@ -1,6 +1,6 @@
-const {BACKWARD_EMOJI, FORWARD_EMOJI} = require('./EuphemiaPaginatedMessage');
+const { BACKWARD_EMOJI, FORWARD_EMOJI } = require('./EuphemiaPaginatedMessage');
 
-const _watcher = async ({message, emoji}, user) => {
+const _watcher = async ({ message, emoji }, user) => {
 	if (!message.pagination) {
 		return;
 	}
@@ -9,7 +9,7 @@ const _watcher = async ({message, emoji}, user) => {
 		return;
 	}
 
-	const {generator, args} = message.pagination;
+	const { generator, args } = message.pagination;
 
 	if (emoji.name === FORWARD_EMOJI) {
 		const current = await args.next();

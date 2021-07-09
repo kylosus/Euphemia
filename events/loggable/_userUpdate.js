@@ -1,4 +1,4 @@
-const {MessageEmbed} = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 
 module.exports = async (oldUser, newUser) => {
 	if (oldUser.tag === newUser.tag) {
@@ -9,7 +9,7 @@ module.exports = async (oldUser, newUser) => {
 		.filter(g => g.members.cache.has(newUser.id));
 
 	guilds.forEach(g => {
-		const entry = g.client.provider.get(g, 'log', {userUpdate: null});
+		const entry = g.client.provider.get(g, 'log', { userUpdate: null });
 
 		if (!entry.userUpdate) {
 			return;

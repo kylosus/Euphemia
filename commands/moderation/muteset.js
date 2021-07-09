@@ -1,35 +1,35 @@
-const {Permissions}			= require('discord.js');
-const {ArgConsts, ECommand}	= require('../../lib');
-const {mutedRole}			= require('../../modules/mute');
+const { Permissions }         = require('discord.js');
+const { ArgConsts, ECommand } = require('../../lib');
+const { mutedRole }           = require('../../modules/mute');
 
 module.exports = class extends ECommand {
 	constructor(client) {
 		super(client, {
-			aliases: ['muteset'],
-			description: {
-				content:	'Sets muted role for the server',
-				usage:		'[role]',
-				examples:	['muteset', 'muteset Some role', 'muteset 422621940868579338']
+			aliases:           ['muteset'],
+			description:       {
+				content:  'Sets muted role for the server',
+				usage:    '[role]',
+				examples: ['muteset', 'muteset Some role', 'muteset 422621940868579338']
 			},
-			userPermissions:	[Permissions.FLAGS.MANAGE_ROLES],
-			clientPermissions:	[Permissions.FLAGS.MANAGE_ROLES, Permissions.FLAGS.MANAGE_GUILD],
-			args: [
+			userPermissions:   [Permissions.FLAGS.MANAGE_ROLES],
+			clientPermissions: [Permissions.FLAGS.MANAGE_ROLES, Permissions.FLAGS.MANAGE_GUILD],
+			args:              [
 				{
-					id:			'role',
-					type:		ArgConsts.TEXT,
-					optional:	true,
-					default:	() => null
+					id:       'role',
+					type:     ArgConsts.TEXT,
+					optional: true,
+					default:  () => null
 				}
 			],
-			guildOnly: true,
-			ownerOnly: false,
+			guildOnly:         true,
+			ownerOnly:         false,
 		});
 	}
 
-	async run(message, {role: _role}) {
+	async run(message, { role: _role }) {
 		if (!_role) {
 			const role = await mutedRole.setNewMutedRole(message.guild);
-			return `Created new muted role ${role.toString()}`;
+			return `Created new muted role ${ role.toString() }`;
 		}
 
 		const role = await (async (role) => {
@@ -47,6 +47,6 @@ module.exports = class extends ECommand {
 
 		await mutedRole.setMutedRole(message.guild, role);
 
-		return `Set ${role.toString()} as the muted role`;
+		return `Set ${ role.toString() } as the muted role`;
 	}
 };

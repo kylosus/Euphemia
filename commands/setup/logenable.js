@@ -1,14 +1,14 @@
-const {Permissions}			= require('discord.js');
-const {ArgConsts, ECommand}	= require('../../lib');
-const {getSettings}			= require('./log');
+const { Permissions }         = require('discord.js');
+const { ArgConsts, ECommand } = require('../../lib');
+const { getSettings }         = require('./log');
 
 module.exports = class extends ECommand {
 	constructor(client) {
 		super(client, {
-			aliases: ['logenable', 'logen'],
-			description: {
-				content:	'Enables log events in channels. Run without the second argument to enable everything',
-				usage:		'[channel (or current channel)] [event name]',
+			aliases:         ['logenable', 'logen'],
+			description:     {
+				content:  'Enables log events in channels. Run without the second argument to enable everything',
+				usage:    '[channel (or current channel)] [event name]',
 				examples: [
 					'log list',
 					'logenable #channel ',
@@ -16,26 +16,26 @@ module.exports = class extends ECommand {
 				]
 			},
 			userPermissions: [Permissions.FLAGS.MANAGE_GUILD],
-			args: [
+			args:            [
 				{
-					id:			'channel',
-					type: 		ArgConsts.CHANNEL,
-					optional:	true,
-					default:	m => m.channel
+					id:       'channel',
+					type:     ArgConsts.CHANNEL,
+					optional: true,
+					default:  m => m.channel
 				},
 				{
-					id:			'event',
-					type:		ArgConsts.TEXT,
-					optional:	true,
-					default:	() => null
+					id:       'event',
+					type:     ArgConsts.TEXT,
+					optional: true,
+					default:  () => null
 				},
 			],
-			guildOnly: true,
-			ownerOnly: false,
+			guildOnly:       true,
+			ownerOnly:       false,
 		});
 	}
 
-	async run(message, {channel, event}) {
+	async run(message, { channel, event }) {
 		const entry = this.client.provider.get(message.guild, 'log', getSettings());
 
 		// Single event
@@ -51,10 +51,9 @@ module.exports = class extends ECommand {
 		}
 
 		// All events
-		Object.entries(entry)
-			.forEach(([key]) => {
-				entry[key] = channel.id;
-			});
+		Object.entries(entry).forEach(([key]) => {
+			entry[key] = channel.id;
+		});
 
 		await this.client.provider.set(message.guild, 'log', entry);
 

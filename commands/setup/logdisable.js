@@ -1,14 +1,14 @@
-const {Permissions}			= require('discord.js');
-const {ArgConsts, ECommand}	= require('../../lib');
-const {getSettings}			= require('./log');
+const { Permissions }         = require('discord.js');
+const { ArgConsts, ECommand } = require('../../lib');
+const { getSettings }         = require('./log');
 
 module.exports = class extends ECommand {
 	constructor(client) {
 		super(client, {
-			aliases: ['logdisable', 'logdis'],
-			description: {
-				content:	'Disables log events in channels. Run without the second argument to disable everything',
-				usage:		'[channel (or current channel)] [event name]',
+			aliases:         ['logdisable', 'logdis'],
+			description:     {
+				content:  'Disables log events in channels. Run without the second argument to disable everything',
+				usage:    '[channel (or current channel)] [event name]',
 				examples: [
 					'log list',
 					'logdisable #channel ',
@@ -16,20 +16,20 @@ module.exports = class extends ECommand {
 				]
 			},
 			userPermissions: [Permissions.FLAGS.MANAGE_GUILD],
-			args: [
+			args:            [
 				{
-					id:			'event',
-					type:		ArgConsts.TEXT,
-					optional:	true,
-					default:	() => null
+					id:       'event',
+					type:     ArgConsts.TEXT,
+					optional: true,
+					default:  () => null
 				},
 			],
-			guildOnly: true,
-			ownerOnly: false,
+			guildOnly:       true,
+			ownerOnly:       false,
 		});
 	}
 
-	async run(message, {event}) {
+	async run(message, { event }) {
 		const entry = this.client.provider.get(message.guild, 'log', getSettings());
 
 		// Single event
@@ -45,10 +45,9 @@ module.exports = class extends ECommand {
 		}
 
 		// All events
-		Object.entries(entry)
-			.forEach(([key]) => {
-				entry[key] = null;
-			});
+		Object.entries(entry).forEach(([key]) => {
+			entry[key] = null;
+		});
 
 		await this.client.provider.set(message.guild, 'log', entry);
 

@@ -1,38 +1,38 @@
-const {Permissions}									= require('discord.js');
-const {ArgConsts}									= require('../../lib');
-const {ModerationCommand, ModerationCommandResult}	= require('../../modules/moderation');
+const { Permissions }                                = require('discord.js');
+const { ArgConsts }                                  = require('../../lib');
+const { ModerationCommand, ModerationCommandResult } = require('../../modules/moderation');
 
 module.exports = class extends ModerationCommand {
 	constructor(client) {
 		super(client, {
-			actionName: 'ban',
-			aliases: ['ban', 'b'],
-			description: {
-				content:	'Bans a user.',
-				usage:		'<user> [user2...] [reason]',
-				examples:	['ban @user', 'ban @user1 @user2', 'ban 275331662865367040'],
+			actionName:        'ban',
+			aliases:           ['ban', 'b'],
+			description:       {
+				content:  'Bans a user.',
+				usage:    '<user> [user2...] [reason]',
+				examples: ['ban @user', 'ban @user1 @user2', 'ban 275331662865367040'],
 			},
-			userPermissions:	[Permissions.FLAGS.BAN_MEMBERS],
-			clientPermissions:	[Permissions.FLAGS.BAN_MEMBERS],
-			args: [
+			userPermissions:   [Permissions.FLAGS.BAN_MEMBERS],
+			clientPermissions: [Permissions.FLAGS.BAN_MEMBERS],
+			args:              [
 				{
-					id:			'ids',
-					type:		ArgConsts.IDS,
-					message:	'Please mention users to ban'
+					id:      'ids',
+					type:    ArgConsts.IDS,
+					message: 'Please mention users to ban'
 				},
 				{
-					id:			'reason',
-					type:		ArgConsts.REASON,
-					optional:	true,
-					default:	() => null,
+					id:       'reason',
+					type:     ArgConsts.REASON,
+					optional: true,
+					default:  () => null,
 				},
 			],
-			guildOnly: true,
-			ownerOnly: false,
+			guildOnly:         true,
+			ownerOnly:         false,
 		});
 	}
 
-	async run(message, {ids, reason}) {
+	async run(message, { ids, reason }) {
 		const result = new ModerationCommandResult(reason);
 
 		await Promise.all(ids.map(async id => {

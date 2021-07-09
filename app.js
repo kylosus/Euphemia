@@ -1,20 +1,20 @@
 require('dotenv').config();
 
-const path		= require('path');
-const sqlite3	= require('sqlite3').verbose();
-const sqlite	= require('sqlite');
+const path    = require('path');
+const sqlite3 = require('sqlite3').verbose();
+const sqlite  = require('sqlite');
 
-const {Intents}	= require('discord.js');
-const {EClient, ECommandHandler, SQLiteProvider} = require('./lib');
+const { Intents }                                  = require('discord.js');
+const { EClient, ECommandHandler, SQLiteProvider } = require('./lib');
 
-const config	= require('./config.json');
-const modules	= require('./modules');
+const config  = require('./config.json');
+const modules = require('./modules');
 
 class Client extends EClient {
 	constructor() {
 		super(
 			{
-				ownerIDs: process.env.BOT_OWNER ? process.env.BOT_OWNER.split(',') : config.owners,
+				ownerIDs:     process.env.BOT_OWNER ? process.env.BOT_OWNER.split(',') : config.owners,
 				defaultColor: config.defaultColor || [233, 91, 169]
 			},
 			{
@@ -25,7 +25,7 @@ class Client extends EClient {
 					'GUILD_MEMBER',
 					'MESSAGE'
 				],
-				ws: {
+				ws:       {
 					intents: [
 						Intents.FLAGS.GUILDS,
 						Intents.FLAGS.GUILD_MEMBERS,
@@ -52,7 +52,7 @@ class Client extends EClient {
 		this.setProvider(
 			sqlite.open({
 				filename: path.join(__dirname, 'settings.sqlite3'),
-				driver: sqlite3.Database
+				driver:   sqlite3.Database
 			}).then(async db => {
 				await modules.init(this, db);
 				return new SQLiteProvider(db);
@@ -61,7 +61,7 @@ class Client extends EClient {
 
 		this.commandHandler = new ECommandHandler(this, {
 			prefix: process.env.BOT_PREFIX || config.prefix || ';',
-			path: path.join(__dirname, 'commands'),
+			path:   path.join(__dirname, 'commands'),
 		});
 	}
 }

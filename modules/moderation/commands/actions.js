@@ -1,50 +1,48 @@
-const {MessageEmbed, Permissions} = require('discord.js');
-
-const {ArgConsts, ArgumentType, ECommand} = require('../../../lib');
-const {CircularListGenerator, PaginatedMessage} = require('../../paginatedmessage');
-
-const db = require('../db');
+const { MessageEmbed, Permissions }               = require('discord.js');
+const { ArgConsts, ArgumentType, ECommand }       = require('../../../lib');
+const { CircularListGenerator, PaginatedMessage } = require('../../paginatedmessage');
+const db                                          = require('../db');
 
 module.exports = class extends ECommand {
 	constructor(client) {
 		super(client, {
-			aliases: ['actions'],
-			description: {
-				content: 'Lists moderation actions in the server',
-				usage: '[from @moderator] [to @member]',
+			aliases:         ['actions'],
+			description:     {
+				content:  'Lists moderation actions in the server',
+				usage:    '[from @moderator] [to @member]',
 				examples: ['actions', 'actions from=@moderator', 'actions from @moderator to @user']
 			},
 			userPermissions: [Permissions.FLAGS.MANAGE_GUILD],
-			args: [
+			args:            [
 				{
-					id: 'moderator',
-					type: new ArgumentType(
+					id:       'moderator',
+					type:     new ArgumentType(
 						new RegExp(/from[=\s]?/.source + ArgConsts.userIdRegex.source),
 						ArgConsts.idExtractFlatten
 					),
 					optional: true,
-					default: () => undefined
+					default:  () => undefined
 				},
 				{
-					id: 'target',
-					type: new ArgumentType(
+					id:       'target',
+					type:     new ArgumentType(
 						new RegExp(/to[=\s]?/.source + ArgConsts.userIdRegex.source),
 						ArgConsts.idExtractFlatten
 					),
 					optional: true,
-					default: () => undefined
+					default:  () => undefined
 				},
 			],
-			guildOnly: true,
-			nsfw: false,
-			ownerOnly: false,
+			guildOnly:       true,
+			nsfw:            false,
+			ownerOnly:       false,
 		});
 	}
 
 	async run(message, args) {
 		const perPage = 20;
 
-		const {length} = await db.getIdMax(message.guild.id);
+		const { length } = await db.getIdMax(message.guild.id);
 
 		if (!length) {
 			throw 'No entries found';
@@ -56,9 +54,9 @@ module.exports = class extends ECommand {
 			return [
 				async () => {
 					const results = await db.getModeratorTargetPage({
-						guild: message.guild.id,
+						guild:     message.guild.id,
 						moderator: args.moderator,
-						target: args.target,
+						target:    args.target,
 						perPage,
 						lastId
 					});
@@ -76,9 +74,9 @@ module.exports = class extends ECommand {
 					lastId += perPage * 2;
 
 					const results = await db.getModeratorTargetPage({
-						guild: message.guild.id,
+						guild:     message.guild.id,
 						moderator: args.moderator,
-						target: args.target,
+						target:    args.target,
 						perPage,
 						lastId
 					});
@@ -109,11 +107,11 @@ module.exports = class extends ECommand {
 				passed,
 				action,
 				moderator: moderatorID,
-				target: targetID
+				target:    targetID
 			}) => {
-				const prefix = passed ? '✅' : '❌';	// Fix those later;
+				const prefix    = passed ? '✅' : '❌';	// Fix those later;
 				const moderator = `<@${moderatorID}>`;
-				const target = `<@${targetID}>`;
+				const target    = `<@${targetID}>`;
 
 				return `${prefix} [${id}] ${action} ${moderator} -> ${target}`;
 			}).join('\n');

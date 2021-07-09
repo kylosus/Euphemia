@@ -1,32 +1,32 @@
-const {Collection, MessageEmbed, Permissions}	= require('discord.js');
-const {ECommand}								= require('../../lib');
+const { Collection, MessageEmbed, Permissions } = require('discord.js');
+const { ECommand }                              = require('../../lib');
 
-const MAX_ROLES						= 30;
+const MAX_ROLES = 30;
 
 module.exports = class extends ECommand {
 	constructor(client) {
 		super(client, {
-			aliases: ['healthcheck', 'health'],
-			description: {
-				content:	'Server health check',
-				usage:		'',
-				examples:	['healthcheck']
+			aliases:         ['healthcheck', 'health'],
+			description:     {
+				content:  'Server health check',
+				usage:    '',
+				examples: ['healthcheck']
 			},
 			userPermissions: [Permissions.FLAGS.MANAGE_GUILD],
-			guildOnly: true,
-			ownerOnly: false,
-			typing: true
+			guildOnly:       true,
+			ownerOnly:       false,
+			typing:          true
 		});
 	}
 
 	async run(message) {
 		const health = {
-			AdminRoles:		new Collection(),
-			ElevatedRoles:	new Collection(),
-			EmptyRoles:		new Collection()
+			AdminRoles:    new Collection(),
+			ElevatedRoles: new Collection(),
+			EmptyRoles:    new Collection()
 		};
 
-		health.AdminRoles = message.guild.roles.cache.filter(r => r.permissions.has(Permissions.FLAGS.ADMINISTRATOR));
+		health.AdminRoles    = message.guild.roles.cache.filter(r => r.permissions.has(Permissions.FLAGS.ADMINISTRATOR));
 		health.ElevatedRoles = message.guild.roles.cache.filter(r => r.permissions.has([
 			Permissions.FLAGS.MANAGE_GUILD,
 			Permissions.FLAGS.MANAGE_MESSAGES,
@@ -39,7 +39,7 @@ module.exports = class extends ECommand {
 			Permissions.FLAGS.MENTION_EVERYONE,
 			Permissions.FLAGS.PRIORITY_SPEAKER
 		], false));
-		health.EmptyRoles = message.guild.roles.cache.filter(r => !r.members.size);
+		health.EmptyRoles    = message.guild.roles.cache.filter(r => !r.members.size);
 
 		return health;
 	}
@@ -48,7 +48,7 @@ module.exports = class extends ECommand {
 	// and I just append '...' in all cases. This needs a more comprehensive solution with lodash and
 	// so I will replace MessageEmbed with my own AutoEmbed or SafeEmbed implementation with automatic
 	// trims
-	async ship(message, {AdminRoles, ElevatedRoles, EmptyRoles}) {
+	async ship(message, { AdminRoles, ElevatedRoles, EmptyRoles }) {
 		return message.channel.send(new MessageEmbed()
 			.setColor('GREEN')
 			.setAuthor(`${message.guild.name} server health check`, message.guild.iconURL())

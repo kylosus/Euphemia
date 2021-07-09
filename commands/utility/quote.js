@@ -1,40 +1,39 @@
-const {MessageEmbed}		= require('discord.js');
-const {ArgConsts, ECommand}	= require('../../lib');
+const { MessageEmbed }        = require('discord.js');
+const { ArgConsts, ECommand } = require('../../lib');
 
 module.exports = class extends ECommand {
 	constructor(client) {
 		super(client, {
-			aliases: ['quote'],
+			aliases:     ['quote'],
 			description: {
-				content:	'Quotes a message',
-				usage:		'<id> [#channel]',
-				examples:	['quote id', 'quote id #channel', 'quote #channel id']
+				content:  'Quotes a message',
+				usage:    '<id> [#channel]',
+				examples: ['quote id', 'quote id #channel', 'quote #channel id']
 			},
-			args: [
+			args:        [
 				{
-					id:			'channel',
-					type:		ArgConsts.CHANNEL,
-					optional:	true,
-					default:	m => m.channel
+					id:       'channel',
+					type:     ArgConsts.CHANNEL,
+					optional: true,
+					default:  m => m.channel
 				},
 				{
-					id:			'id',
-					type:		ArgConsts.TEXT,
-					message:	'Please provide a message id.'
+					id:      'id',
+					type:    ArgConsts.TEXT,
+					message: 'Please provide a message id.'
 				}
 			],
-			guildOnly: true,
-			ownerOnly: false
+			guildOnly:   true,
+			ownerOnly:   false
 		});
 	}
 
-	async run(message, {channel, id}) {
+	async run(message, { channel, id }) {
 		return await channel.messages.fetch(id);
 	}
 
 	async ship(message, result) {
-		const embed = new MessageEmbed()
-			.setColor(result.member ? result.member.displayColor : 'WHITE')
+		const embed = new MessageEmbed().setColor(result.member ? result.member.displayColor : 'WHITE')
 			.addField('Jump to message', `[Link](${message.url})`)
 			.setDescription(result.content || '*No content*')
 			.setFooter(`In #${result.channel.name}`)

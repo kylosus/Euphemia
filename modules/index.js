@@ -1,5 +1,5 @@
-const mute = require('./mute');
-const moderation = require('./moderation');
+const mute             = require('./mute');
+const moderation       = require('./moderation');
 const paginatedmessage = require('./paginatedmessage');
 
 const init = async (client, _db) => {
@@ -12,6 +12,6 @@ module.exports = {
 	init,
 	mute,
 	moderation,
-	CircularList: paginatedmessage.CircularList,
+	CircularList:     paginatedmessage.CircularList,
 	PaginatedMessage: paginatedmessage.PaginatedMessage
 };

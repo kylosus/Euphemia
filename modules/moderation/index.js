@@ -1,5 +1,5 @@
-const db = require('./db');
-const {join} = require('path');
+const db       = require('./db');
+const { join } = require('path');
 
 const init = async (client, _db) => {
 	await db.init(client, _db);
@@ -8,6 +8,6 @@ const init = async (client, _db) => {
 
 module.exports = {
 	init,
-	ModerationCommand: require('./ModerationCommand'),
+	ModerationCommand:       require('./ModerationCommand'),
 	ModerationCommandResult: require('./ModerationCommandResult')
 };

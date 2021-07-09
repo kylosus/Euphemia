@@ -15,9 +15,9 @@ const setMutedRole = async (guild, role) => {
 
 const setNewMutedRole = async (guild, roleName = `${guild.client.user.username}-mute`) => {
 	const role = await guild.roles.create({
-		data: {
-			name: roleName,
-			position: guild.me.roles.highest.position - 1,
+		data:   {
+			name:        roleName,
+			position:    guild.me.roles.highest.position - 1,
 			permissions: 66560 // Replace this
 		},
 		reason: 'Automatic muted role creation'

@@ -1,20 +1,20 @@
-const {Permissions}	= require('discord.js');
-const {ECommand}	= require('../../lib');
+const { Permissions } = require('discord.js');
+const { ECommand }    = require('../../lib');
 
 module.exports = class extends ECommand {
 	constructor(client) {
 		super(client, {
-			actionName: 'setup',
-			aliases: ['setup'],
-			description: {
-				content:	'Sets up guild settings',
-				usage:		'',
-				examples:	['setup'],
+			actionName:      'setup',
+			aliases:         ['setup'],
+			description:     {
+				content:  'Sets up guild settings',
+				usage:    '',
+				examples: ['setup'],
 			},
-			userPermissions:	[Permissions.FLAGS.MANAGE_GUILD],
-			guildOnly: true,
-			ownerOnly: false,
-			disabled: true
+			userPermissions: [Permissions.FLAGS.MANAGE_GUILD],
+			guildOnly:       true,
+			ownerOnly:       false,
+			disabled:        true
 		});
 	}
 

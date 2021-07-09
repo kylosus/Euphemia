@@ -1,29 +1,29 @@
-const {MessageEmbed}		= require('discord.js');
-const {ArgConsts, ECommand}	= require('../../lib');
+const { MessageEmbed }        = require('discord.js');
+const { ArgConsts, ECommand } = require('../../lib');
 
 module.exports = class extends ECommand {
 	constructor(client) {
 		super(client, {
-			aliases: ['avatar'],
+			aliases:     ['avatar'],
 			description: {
-				content:	'Shows avatar of a given user',
-				usage:		'[user]',
-				examples:	['avatar', 'avatar @Person', 'avatar 275331662865367040']
+				content:  'Shows avatar of a given user',
+				usage:    '[user]',
+				examples: ['avatar', 'avatar @Person', 'avatar 275331662865367040']
 			},
-			args: [
+			args:        [
 				{
-					id:			'user',
-					type:		ArgConsts.USER,
-					optional:	true,
-					default:	m => m.author
+					id:       'user',
+					type:     ArgConsts.USER,
+					optional: true,
+					default:  m => m.author
 				}
 			],
-			guildOnly: false,
-			ownerOnly: false
+			guildOnly:   false,
+			ownerOnly:   false
 		});
 	}
 
-	async run(message, {user}) {
+	async run(message, { user }) {
 		const color = ((user) => {
 			const member = message.guild.member(user);
 
@@ -36,7 +36,7 @@ module.exports = class extends ECommand {
 
 		return [user.displayAvatarURL({
 			dynamic: true,
-			size: 4096
+			size:    4096
 		}), color];
 	}
 

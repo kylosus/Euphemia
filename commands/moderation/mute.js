@@ -1,48 +1,48 @@
-const {MessageEmbed, Permissions}					= require('discord.js');
-const {ArgConsts}									= require('../../lib');
-const {ModerationCommand, ModerationCommandResult}	= require('../../modules/moderation');
-const {mutedRole, muteHandler}						= require('../../modules/mute');
-const moment										= require('moment');
+const { MessageEmbed, Permissions }                  = require('discord.js');
+const { ArgConsts }                                  = require('../../lib');
+const { ModerationCommand, ModerationCommandResult } = require('../../modules/moderation');
+const { mutedRole, muteHandler }                     = require('../../modules/mute');
+const moment                                         = require('moment');
 
 module.exports = class extends ModerationCommand {
 	constructor(client) {
 		super(client, {
-			actionName: 'mute',
-			aliases: ['mute'],
-			description: {
-				content:	'Mutes mentioned members for a given amount of minutes',
-				usage:		'[minutes] <member1> [member2 ...]',
-				examples:	['mute @Person1', 'mute 5 @Person1 @Person2']
+			actionName:        'mute',
+			aliases:           ['mute'],
+			description:       {
+				content:  'Mutes mentioned members for a given amount of minutes',
+				usage:    '[minutes] <member1> [member2 ...]',
+				examples: ['mute @Person1', 'mute 5 @Person1 @Person2']
 			},
-			userPermissions:	[Permissions.FLAGS.MANAGE_ROLES],
-			clientPermissions:	[Permissions.FLAGS.MANAGE_ROLES, Permissions.FLAGS.MANAGE_GUILD],
-			args: [
+			userPermissions:   [Permissions.FLAGS.MANAGE_ROLES],
+			clientPermissions: [Permissions.FLAGS.MANAGE_ROLES, Permissions.FLAGS.MANAGE_GUILD],
+			args:              [
 				{
-					id:			'members',
-					type:		ArgConsts.MEMBERS,
-					message:	'Please mention members to mute'
+					id:      'members',
+					type:    ArgConsts.MEMBERS,
+					message: 'Please mention members to mute'
 				},
 				{
-					id:			'duration',
-					type:		ArgConsts.DURATION,
-					optional:	true,
-					default:	() => null
+					id:       'duration',
+					type:     ArgConsts.DURATION,
+					optional: true,
+					default:  () => null
 				},
 				{
-					id:			'reason',
-					type:		ArgConsts.REASON,
-					optional:	true,
-					default:	() => null
+					id:       'reason',
+					type:     ArgConsts.REASON,
+					optional: true,
+					default:  () => null
 				},
 			],
-			guildOnly: true,
-			ownerOnly: false,
+			guildOnly:         true,
+			ownerOnly:         false,
 		});
 	}
 
-	async run(message, {members, reason, ...args}) {
+	async run(message, { members, reason, ...args }) {
 		const duration = args.duration ? moment().add(args.duration).toISOString() : null;
-		const result = new ModerationCommandResult(reason, duration);
+		const result   = new ModerationCommandResult(reason, duration);
 
 		const role = await (async guild => {
 			const role = await mutedRole.getMutedRole(guild);
@@ -52,7 +52,7 @@ module.exports = class extends ModerationCommand {
 			}
 
 			const newRole = await mutedRole.setNewMutedRole(guild);
-			await this.sendNotice(message, `Muted role not found, created new role ${newRole.toString()}`);
+			await this.sendNotice(message, `Muted role not found, created new role ${ newRole.toString() }`);
 			return newRole;
 		})(message.guild);
 
@@ -77,15 +77,15 @@ module.exports = class extends ModerationCommand {
 
 	async ship(message, result) {
 		const embed = new MessageEmbed()
-			.setColor(result.getColor());
+		.setColor(result.getColor());
 
 		if (result.passed.length) {
 			const duration = result.duration ? result.duration.fromNow().replace('in', 'for') : 'Forever';
-			embed.addField(`Muted ${duration}`, result.passed.map(r => `<@${r.id}>`).join(' '));
+			embed.addField(`Muted ${ duration }`, result.passed.map(r => `<@${ r.id }>`).join(' '));
 		}
 
 		if (result.failed.length) {
-			embed.addField('Failed', result.failed.map(r => `<@${r.id}> - ${r.reason}`).join(' '));
+			embed.addField('Failed', result.failed.map(r => `<@${ r.id }> - ${ r.reason }`).join(' '));
 		}
 
 		embed.addField('Moderator', message.member.toString(), true);

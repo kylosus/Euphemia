@@ -1,32 +1,32 @@
-const {MessageEmbed}		= require('discord.js');
-const {ArgConsts, ECommand}	= require('../../lib');
-const {capitalize}			= require('../../lib/util/StringDoctor');
-const pjson					= require('../../package.json');
+const { MessageEmbed }        = require('discord.js');
+const { ArgConsts, ECommand } = require('../../lib');
+const { capitalize }          = require('../../lib/util/StringDoctor');
+const pjson                   = require('../../package.json');
 
 module.exports = class extends ECommand {
 	constructor(client) {
 		super(client, {
-			aliases: ['help', 'h'],
+			aliases:     ['help', 'h'],
 			description: {
-				content: 'Lists available commands.',
-				usage: '[command/module]',
+				content:  'Lists available commands.',
+				usage:    '[command/module]',
 				examples: ['help', 'help ping'],
 			},
-			args: [
+			args:        [
 				{
-					id: 'command',
-					type: ArgConsts.TEXT,
+					id:       'command',
+					type:     ArgConsts.TEXT,
 					optional: true,
-					default: () => null
+					default:  () => null
 				},
 			],
-			guildOnly: false,
-			ownerOnly: false,
-			cached: true
+			guildOnly:   false,
+			ownerOnly:   false,
+			cached:      true
 		});
 	}
 
-	async run(message, {command}) {
+	async run(message, { command }) {
 		if (!command) {
 			return null;
 		}

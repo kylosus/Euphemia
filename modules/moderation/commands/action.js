@@ -1,36 +1,34 @@
-const moment = require('moment');
-
-const {MessageEmbed, Permissions} = require('discord.js');
-const {ArgConsts, ECommand} = require('../../../lib');
-
-const db = require('../db');
+const { MessageEmbed, Permissions } = require('discord.js');
+const { ArgConsts, ECommand }       = require('../../../lib');
+const moment                        = require('moment');
+const db                            = require('../db');
 
 const COLOR = '#2CDDD7';
 
 module.exports = class extends ECommand {
 	constructor(client) {
 		super(client, {
-			aliases: ['action'],
-			description: {
-				content: 'Shows details of a specified action',
-				usage: '<action number>',
+			aliases:         ['action'],
+			description:     {
+				content:  'Shows details of a specified action',
+				usage:    '<action number>',
 				examples: ['action 1']
 			},
 			userPermissions: [Permissions.FLAGS.MANAGE_GUILD],
-			args: [
+			args:            [
 				{
-					id: 'number',
-					type: ArgConsts.NUMBER,
+					id:      'number',
+					type:    ArgConsts.NUMBER,
 					message: 'Please specify an action number'
 				}
 			],
-			guildOnly: true,
-			nsfw: false,
-			ownerOnly: false,
+			guildOnly:       true,
+			nsfw:            false,
+			ownerOnly:       false,
 		});
 	}
 
-	async run(message, {number}) {
+	async run(message, { number }) {
 		const result = await db.getAction(message.guild.id, number);
 
 		if (!result) {

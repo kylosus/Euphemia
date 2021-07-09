@@ -1,4 +1,4 @@
-const {MessageEmbed} = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 
 module.exports = (channel, oldMessage, newMessage) => {
 	if (oldMessage.content === newMessage.content || !oldMessage.content || !newMessage.content) {
