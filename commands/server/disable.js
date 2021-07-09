@@ -18,7 +18,7 @@ module.exports = class extends ECommand {
 					message: 'Please mention a command name'
 				}
 			],
-			guildOnly:       false,
+			guildOnly:       true,
 			ownerOnly:       false,
 		});
 	}
