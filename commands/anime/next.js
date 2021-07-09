@@ -52,7 +52,7 @@ module.exports = class extends ECommand {
 			if (!search) {
 				return [`{
 					Page(perPage: 100) {
-						media(type: ANIME status: RELEASING sort:SEARCH_MATCH) {
+						media(type: ANIME status: RELEASING sort:TRENDING_DESC) {
 							title { userPreferred }
 							nextAiringEpisode { episode airingAt }
 						}
