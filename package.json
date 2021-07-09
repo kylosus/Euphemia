@@ -1,6 +1,6 @@
 {
   "name": "euphemia",
-  "version": "2.1.0",
+  "version": "3.0.0",
   "description": "Yet another Discord bot with moderation and utility commands",
   "main": "app.js",
   "scripts": {
