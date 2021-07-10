@@ -3,16 +3,17 @@ const TABLE_NAME = 'muted_members';
 const STATEMENTS = {};
 
 const init = async (client, db) => {
-	await db.run(
-		`CREATE TABLE IF NOT EXISTS ${TABLE_NAME}
-                  (
-                      guild INTEGER NOT NULL,
-                      member INTEGER NOT NULL,
-                      mutedRole INTEGER NOT NULL,
-                      reason TEXT,
-                      expires TEXT NOT NULL,
-                      PRIMARY KEY (guild, member)
-                  )
+	await db.run(`
+		CREATE TABLE IF NOT EXISTS ${TABLE_NAME}
+			(
+			  guild INTEGER NOT NULL,
+			  member INTEGER NOT NULL,
+			  mutedRole INTEGER NOT NULL,
+			  reason TEXT,
+			  expires TEXT NOT NULL,
+			  PRIMARY KEY (guild, member)
+			);
+	`);
 	`);
 
 	STATEMENTS.getMutedRoleIfNotExpired = await db.prepare(`
@@ -21,6 +22,7 @@ const init = async (client, db) => {
 		    expires
 		FROM ${TABLE_NAME} where member = ? and expires > date('now')
 	`);
+
 	STATEMENTS.insert = await db.prepare(`INSERT OR REPLACE INTO ${TABLE_NAME} VALUES (?, ?, ?, ?, ?)`);
 	STATEMENTS.delete = await db.prepare(`DELETE FROM ${TABLE_NAME} WHERE guild = ? and member = ?`);
 	STATEMENTS.getExpired = await db.prepare(`

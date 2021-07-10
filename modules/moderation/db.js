@@ -3,8 +3,8 @@ const TABLE_NAME = 'mod_action';
 const STATEMENTS = {};
 
 const init = async (client, db) => {
-	await db.run(
-		`CREATE TABLE IF NOT EXISTS ${TABLE_NAME}
+	await db.run(`
+		CREATE TABLE IF NOT EXISTS ${TABLE_NAME}
             (
                 id        INTEGER NOT NULL,
                 guild     INTEGER NOT NULL,
@@ -17,7 +17,8 @@ const init = async (client, db) => {
                 failedReason TEXT DEFAULT NULL,
                 timestamp TEXT DEFAULT CURRENT_TIMESTAMP,
                 PRIMARY KEY (id, guild)
-            )
+            );
+	`);
 	`);
 
 	STATEMENTS.insert = await db.prepare(`
@@ -93,7 +94,7 @@ const init = async (client, db) => {
             LIMIT ?
 	`);
 
-	STATEMENTS.getIdMax = await db.prepare(`SELECT MAX(id) as length from ${TABLE_NAME} where guild = ? LIMIT 1`);
+	STATEMENTS.getIdMax = await db.prepare(`SELECT MAX(id) as length FROM ${TABLE_NAME} WHERE guild = ? LIMIT 1`);
 };
 
 const insert = async ({ guild, action, moderator, target, aux, reason, passed, failedReason }) => {
