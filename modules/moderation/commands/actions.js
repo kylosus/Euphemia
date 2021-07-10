@@ -113,7 +113,7 @@ module.exports = class extends ECommand {
 				const moderator = `<@${moderatorID}>`;
 				const target    = `<@${targetID}>`;
 
-				return `${prefix} [${id}] ${action} ${moderator} -> ${target}`;
+				return `${prefix} \`[${id}]\` ${action.toLowerCase()} ${moderator} -> ${target}`;
 			}).join('\n');
 
 			embed.setDescription(`__Run \`action <number>\` to get details__\n\n${body}`);
