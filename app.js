@@ -77,4 +77,7 @@ class Client extends EClient {
 const client = new Client();
 require('./events/event.js')(client);
 
-client.login(process.env.BOT_TOKEN || config.token).catch(console.error);
+client.login(process.env.BOT_TOKEN || config.token).catch(err => {
+	console.error('Failed to log in', err);
+	process.exit(1);
+});
