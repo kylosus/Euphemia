@@ -14,6 +14,14 @@ const init = async (client, db) => {
 			  PRIMARY KEY (guild, member)
 			);
 	`);
+
+	// Index for the table above
+	await db.run(`
+        CREATE INDEX IF NOT EXISTS ${TABLE_NAME}_guild_idx   ON ${TABLE_NAME} (guild);
+	`);
+
+	await db.run(`
+		CREATE INDEX IF NOT EXISTS ${TABLE_NAME}_expires_idx ON ${TABLE_NAME} (expires);
 	`);
 
 	STATEMENTS.getMutedRoleIfNotExpired = await db.prepare(`

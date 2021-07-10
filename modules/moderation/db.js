@@ -19,6 +19,22 @@ const init = async (client, db) => {
                 PRIMARY KEY (id, guild)
             );
 	`);
+
+	// Indexes for table above
+	await db.run(`
+        CREATE INDEX IF NOT EXISTS ${TABLE_NAME}_id_idx        ON ${TABLE_NAME} (id);	-- Might be unnecessary
+	`);
+
+	await db.run(`
+        CREATE INDEX IF NOT EXISTS ${TABLE_NAME}_guild_idx     ON ${TABLE_NAME} (guild);
+	`);
+
+	await db.run(`
+		CREATE INDEX IF NOT EXISTS ${TABLE_NAME}_moderator_idx ON ${TABLE_NAME} (moderator);
+	`);
+
+	await db.run(`
+		CREATE INDEX IF NOT EXISTS ${TABLE_NAME}_target_idx    ON ${TABLE_NAME} (target);
 	`);
 
 	STATEMENTS.insert = await db.prepare(`
