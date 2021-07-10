@@ -53,7 +53,7 @@ module.exports = class extends ECommand {
 		const [query, variables] = ((search) => {
 			if (!search) {
 				return [`{
-					Page(perPage: 100) {
+					Page(perPage: 12) {
 						media(type: ANIME status: RELEASING sort:TRENDING_DESC) {
 							title { userPreferred }
 							nextAiringEpisode { episode airingAt }
