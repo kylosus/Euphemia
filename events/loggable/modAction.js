@@ -3,7 +3,7 @@ const moment           = require('moment');
 
 const COLOR = '#2CDDD7';
 
-module.exports = (channel, guild, moderator, result) => {
+module.exports = async (channel, guild, moderator, result) => {
 	const embed = new MessageEmbed()
 		.setColor(COLOR);
 

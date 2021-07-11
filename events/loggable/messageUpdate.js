@@ -1,6 +1,6 @@
 const { MessageEmbed } = require('discord.js');
 
-module.exports = (channel, oldMessage, newMessage) => {
+module.exports = async (channel, oldMessage, newMessage) => {
 	if (oldMessage.content === newMessage.content || !oldMessage.content || !newMessage.content) {
 		return;
 	}

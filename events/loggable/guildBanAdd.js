@@ -1,6 +1,6 @@
 const { MessageEmbed } = require('discord.js');
 
-module.exports = (channel, guild, user) => {
+module.exports = async (channel, guild, user) => {
 	return channel.send(new MessageEmbed()
 		.setColor('BROWN')
 		.setTitle('🔨 User banned')

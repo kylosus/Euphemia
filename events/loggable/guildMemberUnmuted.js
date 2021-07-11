@@ -1,6 +1,6 @@
 const { MessageEmbed } = require('discord.js');
 
-module.exports = (channel, member, moderator) => {
+module.exports = async (channel, member, moderator) => {
 	return channel.send(new MessageEmbed()
 		.setColor('GOLD')
 		.setTitle('🔈 User unmuted')

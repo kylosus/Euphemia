@@ -2,7 +2,7 @@ const { MessageEmbed } = require('discord.js');
 
 const CONTENT_MAX = 1020;
 
-module.exports = (channel, message) => {
+module.exports = async (channel, message) => {
 	const embed = new MessageEmbed()
 		.setColor('DARK_PURPLE')
 		.setTitle(`🗑 Message deleted in #${message.channel.name}`)
