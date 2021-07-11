@@ -1,6 +1,6 @@
 const { MessageEmbed } = require('discord.js');
 
-module.exports = (channel, oldMember, newMember) => {
+module.exports = async (channel, oldMember, newMember) => {
 	if (oldMember.nickname !== newMember.nickname) {
 		// Sorry
 		const body = newMember.nickname ? `**${newMember.user.tag}** has changed their nickname` + (oldMember.nickname ? ` from **${oldMember.nickname}**` : '') + ` to **${newMember.nickname}**`
