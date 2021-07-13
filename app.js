@@ -28,11 +28,11 @@ class Client extends EClient {
 			{
 				// disableMentions: 'all',
 				// untested, might break
-				partials: [
-					'MESSAGE',
-					'GUILD_MEMBER',
-					'MESSAGE'
-				],
+				//partials: [
+				//	'MESSAGE',
+				//	'GUILD_MEMBER',
+				//	'MESSAGE'
+				//],
 				ws:       {
 					intents: [
 						Intents.FLAGS.GUILDS,
