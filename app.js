@@ -26,7 +26,7 @@ class Client extends EClient {
 				defaultColor: config.defaultColor || [233, 91, 169]
 			},
 			{
-				disableMentions: 'all',
+				// disableMentions: 'all',
 				// untested, might break
 				partials: [
 					'MESSAGE',
