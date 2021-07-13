@@ -5,3 +5,4 @@ settings.sqlite3
 /.idea/
 *.sqlite*
 *.db
+*.log
