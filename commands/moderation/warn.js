@@ -1,5 +1,4 @@
-const { Permissions } = require('discord.js');
-
+const { MessageEmbed, Permissions }                  = require('discord.js');
 const { ArgConsts }                                  = require('../../lib');
 const { ModerationCommand, ModerationCommandResult } = require('../../modules/moderation');
 
@@ -33,7 +32,20 @@ module.exports = class extends ModerationCommand {
 
 	async run(message, { members, reason }) {
 		const result = new ModerationCommandResult(reason);
-		members.forEach(m => result.addPassed(m));
+
+		await Promise.all(members.map(async m => {
+			try {
+				await m.user.send(new MessageEmbed()
+					.setColor('RED')
+					.setTitle(`❗ You have been warned in ${message.guild}`)
+					.setDescription('```' + reason + '```')
+				);
+			} catch (err) {
+				return result.addFailed(m, err.message);
+			}
+
+			result.addPassed(m);
+		}));
 
 		return result;
 	}
