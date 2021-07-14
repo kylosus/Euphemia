@@ -28,7 +28,7 @@ module.exports = class extends ECommand {
 		const start   = process.hrtime();
 		const result  = await eval(
 			`(async () => {
-				return ${code}
+				${code}
 			})();`
 		);
 		const elapsed = process.hrtime(start)[1] / 1000000;	// millisecond
