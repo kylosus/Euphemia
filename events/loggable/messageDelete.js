@@ -6,8 +6,8 @@ module.exports = async (channel, message) => {
 	const embed = new MessageEmbed()
 		.setColor('DARK_PURPLE')
 		.setTitle(`🗑 Message deleted in #${message.channel.name}`)
-		.setDescription(`${message.member ? message.member : message.author.tag} \`${message.author.id}\``)
-		.addField('ID', message.id, false)
+		.setDescription(message.author || 'Unknown user')
+		.addField('ID', `${message.channel.id}/${message.id}`, false)
 		.setTimestamp();
 
 	const content = ((message) => {
