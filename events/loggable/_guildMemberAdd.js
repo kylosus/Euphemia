@@ -3,7 +3,7 @@ const moment            = require('moment');
 const { replaceTokens } = require('../util');
 
 module.exports = async member => {
-	(entry => {
+	const p1 = (async entry => {
 		if (!entry.channel || !entry.message) {
 			return;
 		}
@@ -26,7 +26,7 @@ module.exports = async member => {
 		);
 	})(member.client.provider.get(member.guild, 'welcome', { channel: null, message: null }));
 
-	(entry => {
+	const p2 = (async entry => {
 		if (!entry.guildMemberAdd) {
 			return;
 		}
@@ -57,6 +57,9 @@ module.exports = async member => {
 			);
 		}
 	})(member.client.provider.get(member.guild, 'log', { guildMemberAdd: null }));
+
+	// This is a historic moment, I finally found a use for deferred promise awaits
+	return Promise.all([p1, p2]);
 
 	// eslint-disable-next-line no-unused-vars
 	// (entry => {

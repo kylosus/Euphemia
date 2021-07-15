@@ -8,7 +8,7 @@ module.exports = async (oldUser, newUser) => {
 	const guilds = newUser.client.guilds.cache
 		.filter(g => g.members.cache.has(newUser.id));
 
-	guilds.forEach(g => {
+	return Promise.all(guilds.map(async g => {
 		const entry = g.client.provider.get(g, 'log', { userUpdate: null });
 
 		if (!entry.userUpdate) {
@@ -28,5 +28,5 @@ module.exports = async (oldUser, newUser) => {
 			.setDescription(`**${oldUser.tag}** has changed their username to **${newUser.tag}**`)
 			.setTimestamp((new Date()))
 		);
-	});
+	}));
 };

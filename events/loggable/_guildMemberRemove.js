@@ -2,7 +2,7 @@ const { MessageEmbed }  = require('discord.js');
 const { replaceTokens } = require('../util');
 
 module.exports = async member => {
-	(entry => {
+	const p1 = (async entry => {
 		if (!entry.channel || !entry.message) {
 			return;
 		}
@@ -19,7 +19,7 @@ module.exports = async member => {
 		);
 	})(member.client.provider.get(member.guild, 'goodbye', { channel: null, message: null }));
 
-	(entry => {
+	const p2 = (async entry => {
 		if (!entry.guildMemberRemove) {
 			return;
 		}
@@ -39,4 +39,6 @@ module.exports = async member => {
 			.setTimestamp(member.joinedAt)
 		);
 	})(member.client.provider.get(member.guild, 'log', { guildMemberRemove: null }));
+
+	return Promise.all([p1, p2]);
 };
