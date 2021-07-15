@@ -42,21 +42,21 @@ const init = async (client, db) => {
 	`);
 };
 
-const getMutedRoleIfNotExpired = async member => {
-	return await STATEMENTS.getMutedRoleIfNotExpired.get(member);
+const getMutedRoleIfNotExpired = member => {
+	return STATEMENTS.getMutedRoleIfNotExpired.get(member);
 };
 
-const insert = async (guild, member, mutedRole, reason, expires) => {
-	await STATEMENTS.insert.run(guild, member, mutedRole, reason, expires);
+const insert = (guild, member, mutedRole, reason, expires) => {
+	return STATEMENTS.insert.run(guild, member, mutedRole, reason, expires);
 };
 
-const getExpired = async () => {
+const getExpired = () => {
 	// replace with .each()?
-	return await STATEMENTS.getExpired.all();
+	return STATEMENTS.getExpired.all();
 };
 
-const remove = async (guild, member) => {
-	return await STATEMENTS.delete.run(guild, member);
+const remove = (guild, member) => {
+	return STATEMENTS.delete.run(guild, member);
 };
 
 module.exports = {

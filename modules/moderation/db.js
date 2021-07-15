@@ -113,51 +113,51 @@ const init = async (client, db) => {
 	STATEMENTS.getIdMax = await db.prepare(`SELECT MAX(id) as length FROM ${TABLE_NAME} WHERE guild = ? LIMIT 1`);
 };
 
-const insert = async ({ guild, action, moderator, target, aux, reason, passed, failedReason }) => {
+const insert = ({ guild, action, moderator, target, aux, reason, passed, failedReason }) => {
 	// using guild id twice here because there's an embedded query to get
 	// an autoincrement id
-	return await STATEMENTS.insert.run(guild, guild, action, moderator, target, aux, reason, passed, failedReason, (new Date()).toISOString());
+	return STATEMENTS.insert.run(guild, guild, action, moderator, target, aux, reason, passed, failedReason, (new Date()).toISOString());
 };
 
-const forceInsert = async ({ guild, action, moderator, target, aux, reason, passed, failedReason, timestamp }) => {
-	return await STATEMENTS.insert.run(guild, guild, action, moderator, target, aux, reason, passed, failedReason, timestamp);
+const forceInsert = ({ guild, action, moderator, target, aux, reason, passed, failedReason, timestamp }) => {
+	return STATEMENTS.insert.run(guild, guild, action, moderator, target, aux, reason, passed, failedReason, timestamp);
 };
 
-const getAction = async (guild, id) => {
-	return await STATEMENTS.getAction.get(guild, id);
+const getAction = (guild, id) => {
+	return STATEMENTS.getAction.get(guild, id);
 };
 
-const updateReason = async ({ guild, id, reason }) => {
-	return await STATEMENTS.updateReason.run(reason, guild, id);
+const updateReason = ({ guild, id, reason }) => {
+	return STATEMENTS.updateReason.run(reason, guild, id);
 };
 
 // this is stupid
 const bulkInsert = async (params = []) => {
 	// Should be a transaction
-	return await Promise.all(params.map(async p => {
-		return await insert(p);
+	return Promise.all(params.map(async p => {
+		return insert(p);
 	}));
 };
 
 // I am so sorry
-const getModeratorTargetPage = async ({ guild, moderator, target, lastId = Number.MAX_SAFE_INTEGER, perPage = 5 }) => {
+const getModeratorTargetPage = ({ guild, moderator, target, lastId = Number.MAX_SAFE_INTEGER, perPage = 5 }) => {
 	if (moderator && target) {
-		return await STATEMENTS.getModeratorTargetPage.all(guild, moderator, target, lastId, perPage);
+		return STATEMENTS.getModeratorTargetPage.all(guild, moderator, target, lastId, perPage);
 	}
 
 	if (moderator) {
-		return await STATEMENTS.getModeratorPage.all(guild, moderator, lastId, perPage);
+		return STATEMENTS.getModeratorPage.all(guild, moderator, lastId, perPage);
 	}
 
 	if (target) {
-		return await STATEMENTS.getTargetPage.all(guild, target, lastId, perPage);
+		return STATEMENTS.getTargetPage.all(guild, target, lastId, perPage);
 	}
 
-	return await STATEMENTS.getAllPage.all(guild, lastId, perPage);
+	return STATEMENTS.getAllPage.all(guild, lastId, perPage);
 };
 
-const getIdMax = async guild => {
-	return await STATEMENTS.getIdMax.get(guild);
+const getIdMax = guild => {
+	return STATEMENTS.getIdMax.get(guild);
 };
 
 module.exports = {

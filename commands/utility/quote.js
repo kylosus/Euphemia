@@ -29,7 +29,7 @@ module.exports = class extends ECommand {
 	}
 
 	async run(message, { channel, id }) {
-		return await channel.messages.fetch(id);
+		return channel.messages.fetch(id);
 	}
 
 	async ship(message, result) {
