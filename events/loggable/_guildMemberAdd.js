@@ -17,7 +17,7 @@ module.exports = async member => {
 		if (entry.message.embed) {
 			return channel.send(
 				replaceTokens(entry.message.content || '', member),
-				new MessageEmbed(JSON.parse(replaceTokens(entry.message.embed || '', member)))
+				new MessageEmbed(JSON.parse(replaceTokens(entry.message.embed, member)))
 			);
 		}
 
