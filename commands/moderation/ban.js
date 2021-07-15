@@ -6,7 +6,7 @@ module.exports = class extends ModerationCommand {
 	constructor(client) {
 		super(client, {
 			actionName:        'ban',
-			aliases:           ['ban', 'b'],
+			aliases:           ['ban', 'b', 'deport'],
 			description:       {
 				content:  'Bans a user.',
 				usage:    '<user> [user2...] [reason]',
