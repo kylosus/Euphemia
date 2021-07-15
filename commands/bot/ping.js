@@ -11,7 +11,6 @@ module.exports = class extends ECommand {
 				usage:    '',
 				examples: ['ping']
 			},
-			args:        [],
 			guildOnly:   false,
 			ownerOnly:   false,
 		});
