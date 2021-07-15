@@ -1,6 +1,6 @@
+const { EmbedLimits }  = require('../../lib');
 const { MessageEmbed } = require('discord.js');
-
-const CONTENT_MAX = 1020;
+const _                = require('lodash');
 
 module.exports = async (channel, message) => {
 	const embed = new MessageEmbed()
@@ -10,16 +10,11 @@ module.exports = async (channel, message) => {
 		.addField('ID', `${message.channel.id}/${message.id}`, false)
 		.setTimestamp();
 
-	const content = ((message) => {
-		if (message.content.length >= CONTENT_MAX) {
-			return message.content.substring(0, CONTENT_MAX) + '...';
-		}
-
-		return message.content;
-	})(message);
-
-	if (content) {
-		embed.addField('Content', content, false);
+	if (message.content) {
+		embed.addField(
+			'Content',
+			_.truncate(message.content, { length: EmbedLimits.FIELD_VALUE - 6 })
+			, false);
 	}
 
 	((attachment) => {
