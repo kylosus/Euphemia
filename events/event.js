@@ -1,6 +1,8 @@
 const fs            = require('fs');
 const path          = require('path');
+const { Guild }     = require('discord.js');
 const directoryPath = path.join(__dirname, 'loggable');
+
 
 const botEventHandler    = event => require(`./bot/${event}`);
 const serverEventHandler = event => require(`./loggable/${event}`);
@@ -18,7 +20,8 @@ const registerLoggable = client => {
 		return (...args) => {
 			const guild = args[0]?.guild ?? args[0];
 
-			if (!guild) {
+			// I am so extremely sorry
+			if (!(guild instanceof Guild)) {
 				return;
 			}
 
