@@ -77,10 +77,10 @@ module.exports = class extends ModerationCommand {
 
 	async ship(message, result) {
 		const embed = new MessageEmbed()
-		.setColor(result.getColor());
+			.setColor(result.getColor());
 
 		if (result.passed.length) {
-			const duration = result.duration ? result.duration.fromNow().replace('in', 'for') : 'Forever';
+			const duration = result.aux ? moment(result.aux).fromNow().replace('in', 'for') : 'Forever';
 			embed.addField(`Muted ${ duration }`, result.passed.map(r => `<@${ r.id }>`).join(' '));
 		}
 
