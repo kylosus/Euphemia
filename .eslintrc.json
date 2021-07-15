@@ -35,6 +35,7 @@
             "error",
             "always"
         ],
+        "no-return-await": "error",
         "no-console": "off",
         "no-useless-escape": "off"
     }
