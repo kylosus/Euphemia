@@ -42,13 +42,13 @@ module.exports = class extends ECommand {
 		const embed = new MessageEmbed()
 			.setColor(COLOR);
 
-		const user = await this.client.users.fetch(result.moderator);
+		embed.setAuthor(...(user => {
+			if (user) {
+				return [`${user.tag} (${result.moderator})}`, user.displayAvatarURL()];
+			}
 
-		if (user) {
-			embed.setAuthor(`${user.tag} (${result.moderator})}`, user.displayAvatarURL());
-		} else {
-			embed.setAuthor('```' + result.moderator + '```');
-		}
+			return [`Unknown user: ${result.moderator}`];
+		})(await this.client.users.fetch(result.moderator).catch(() => {})));
 
 		const prefix = result.passed ? '✅' : '❌';	// Fix those later
 		embed.setDescription(`${prefix} Action \`[${result.id}]\` ${result.action.toLowerCase()} -> <@${result.target}>`);
@@ -59,7 +59,6 @@ module.exports = class extends ECommand {
 		}
 
 		if (result.action === 'MUTE') {
-
 			embed.addField('Muted for', (time => {
 				if (!time) {
 					return 'Forever';
