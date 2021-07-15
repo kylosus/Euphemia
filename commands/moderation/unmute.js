@@ -61,21 +61,4 @@ module.exports = class extends ModerationCommand {
 
 		return result;
 	}
-
-	async ship(message, result) {
-		const color = result.getColor();
-
-		const embed = new MessageEmbed()
-		.setColor(color);
-
-		if (result.p.length) {
-			embed.addField('Unmuted', result.p.map(p => p.toString()).join(' '));
-		}
-
-		if (result.f.length) {
-			embed.addField('Failed', result.f.map(f => `${ f.member.toString() } - ${ f.reason }`).join('\n'));
-		}
-
-		return message.channel.send(embed);
-	}
 };
