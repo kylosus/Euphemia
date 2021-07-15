@@ -1,7 +1,7 @@
-const { MessageEmbed, Permissions }                  = require('discord.js');
+const { Permissions }                                = require('discord.js');
 const { ArgConsts }                                  = require('../../lib');
 const { ModerationCommand, ModerationCommandResult } = require('../../modules/moderation');
-const { mutedRole }                                  = require('../../modules/mute');
+const { mutedRole, muteHandler }                     = require('../../modules/mute');
 
 module.exports = class extends ModerationCommand {
 	constructor(client) {
@@ -49,14 +49,12 @@ module.exports = class extends ModerationCommand {
 			}
 
 			try {
-				await m.roles.remove(role, reason);
+				await muteHandler.unmuteMember(message.guild, m, role, reason);
 			} catch (error) {
 				return result.addFailed(m, error.message);
 			}
 
 			result.addPassed(m);
-
-			// this.client.emit('guildMemberUnmuted', m, message.member);
 		}));
 
 		return result;
