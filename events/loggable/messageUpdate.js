@@ -13,7 +13,7 @@ module.exports = async (channel, oldMessage, newMessage) => {
 	return channel.send(new MessageEmbed()
 		.setColor('PURPLE')
 		.setTitle(`🖊 Message edited in #${newMessage.channel.name}`)
-		.setDescription(`${newMessage.member.toString()} \`${newMessage.author.id}\` [Link](${newMessage.url})`)
+		.setDescription(`${newMessage.member || 'Unknown user'} \`${newMessage.author?.id ?? 'Unknown id'}\` [Link](${newMessage.url})`)
 		.addField('Old message', oldMessage.content, false)
 		.addField('New message', newMessage.content, false)
 		.addField('ID', oldMessage.id, false)
