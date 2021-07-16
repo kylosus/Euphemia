@@ -1,6 +1,6 @@
-const { MessageEmbed, Permissions }        = require('discord.js');
-const { ArgConsts, ECommand, EmbedLimits } = require('../../lib');
-const _                                    = require('lodash');
+const { MessageEmbed, Permissions }                   = require('discord.js');
+const { ArgConsts, AutoEmbed, ECommand, EmbedLimits } = require('../../lib');
+const _                                               = require('lodash');
 
 module.exports = class extends ECommand {
 	constructor(client) {
@@ -44,14 +44,20 @@ module.exports = class extends ECommand {
 	}
 
 	async ship(message, [elapsed, result]) {
-		return message.channel.send(new MessageEmbed()
+		// return message.channel.send(new MessageEmbed()
+		// 	.setColor('GREEN')
+		// 	.setTitle(`Evaluated in ${elapsed}ms.`)
+		// 	.setDescription(
+		// 		'```' +
+		// 		_.truncate(JSON.stringify(result, null, 4), { length: EmbedLimits.DESCRIPTION - 6 })
+		// 		+ '```'
+		// 	)
+		// );
+
+		return message.channel.send(new AutoEmbed()
 			.setColor('GREEN')
 			.setTitle(`Evaluated in ${elapsed}ms.`)
-			.setDescription(
-				'```' +
-				_.truncate(JSON.stringify(result, null, 4), { length: EmbedLimits.DESCRIPTION - 6 })
-				+ '```'
-			)
+			.setDescriptionWrap(JSON.stringify(result, null, 4))
 		);
 	}
 };
