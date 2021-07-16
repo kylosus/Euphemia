@@ -36,7 +36,7 @@ module.exports = class extends ECommand {
 	}
 
 	async run(message, { channel, event }) {
-		const entry = this.client.provider.get(message.guild, 'log', getSettings());
+		const entry = getSettings(message.guild);
 
 		// Single event
 		if (event) {
