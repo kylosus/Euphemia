@@ -1,3 +1,5 @@
+const moment = require('moment');
+
 const TABLE_NAME = 'muted_members';
 
 const STATEMENTS = {};
@@ -28,7 +30,7 @@ const init = async (client, db) => {
 		SELECT
 		    CAST(mutedrole as TEXT) as mutedRole,
 		    expires
-		FROM ${TABLE_NAME} where member = ? and expires > date('now')
+		FROM ${TABLE_NAME} where member = ? and expires > '${moment().toISOString()}'
 	`);
 
 	STATEMENTS.insert = await db.prepare(`INSERT OR REPLACE INTO ${TABLE_NAME} VALUES (?, ?, ?, ?, ?)`);
@@ -38,7 +40,7 @@ const init = async (client, db) => {
 			CAST(guild as TEXT) as guild,
 			CAST(member as TEXT) as member,
 			CAST(mutedRole as TEXT) as mutedRole
-		FROM ${TABLE_NAME} where expires < date('now')
+		FROM ${TABLE_NAME} where expires < '${moment().toISOString()}'
 	`);
 };
 
