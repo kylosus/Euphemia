@@ -2,7 +2,7 @@ const db = require('./db');
 
 const INTERVAL = 60000;	// 1 minute
 
-const muteExpire = async client => {
+const muteExpire = client => {
 	client.setInterval(async () => {
 		const result = await db.getExpired();
 
@@ -52,7 +52,7 @@ const onMemberAdd = async client => {
 };
 
 const init = async client => {
-	await muteExpire(client);
+	client.once('ready', () => muteExpire(client));
 	await onMemberAdd(client);
 };
 
