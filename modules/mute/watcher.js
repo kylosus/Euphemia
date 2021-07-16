@@ -15,7 +15,7 @@ const muteExpire = client => {
 				return;
 			}
 
-			const member = await guild.members.fetch(r.member);
+			const member = await guild.members.fetch(r.member).catch(() => null);
 
 			if (!member) {
 				return;
@@ -27,9 +27,7 @@ const muteExpire = client => {
 				return;
 			}
 
-			await member.roles.remove(mutedRole, 'Mute expired');
-
-			client.emit('muteExpired', member);
+			await member.roles.remove(mutedRole, 'Mute expired').catch(console.error);
 		}));
 	}, INTERVAL);
 };
