@@ -37,7 +37,6 @@ module.exports = class extends ECommand {
 			],
 			guildOnly:   false,
 			ownerOnly:   false,
-			typing:      true
 		});
 	}
 
