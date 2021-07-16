@@ -18,8 +18,8 @@ module.exports = class extends ECommand {
 	}
 
 	async run(message) {
-		const entry = message.client.provider.get(message.guild, 'automute', false);
-		await message.client.provider.set(message.guild, 'automute', !entry);
+		const entry = message.client.provider.get(message.guild, 'lockdown', false);
+		await message.client.provider.set(message.guild, 'lockdown', !entry);
 
 		return `${ entry ? 'Disabled' : 'Enabled' } automute on new member join.`;
 	}
