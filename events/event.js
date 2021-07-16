@@ -17,8 +17,16 @@ const registerLoggable = client => {
 		.map(dirent => dirent.name.replace(/\.[^/.]+$/, ''));
 
 	const wrapper = (eventName, func) => {
+		const getGuild = (...args) => {
+			if (eventName === 'messageDeleteBulk') {
+				return args[0].values().next().value.guild;
+			}
+
+			return args[0]?.guild ?? args[0];
+		};
+
 		return (...args) => {
-			const guild = args[0]?.guild ?? args[0];
+			const guild = getGuild(...args);
 
 			// I am so extremely sorry
 			if (!(guild instanceof Guild)) {
