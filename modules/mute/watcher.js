@@ -7,7 +7,7 @@ const muteExpire = client => {
 		const result = await db.getExpired();
 
 		await Promise.all(result.map(async r => {
-			db.remove(r.guild, r.member).then();
+			db.remove(r.guild, r.member);
 
 			const guild = client.guilds.cache.get(r.guild);
 
