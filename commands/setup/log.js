@@ -12,6 +12,11 @@ const SETTINGS = events.reduce(function (acc, curr) {
 	return acc;
 }, {});
 
+const getSettings = guild => {
+	const settings = guild.provider.get('log', {});
+	return { ...SETTINGS, ...settings };
+};
+
 module.exports = class extends ECommand {
 	constructor(client) {
 		super(client, {
@@ -28,7 +33,7 @@ module.exports = class extends ECommand {
 	}
 
 	async run(message) {
-		return this.client.provider.get(message.guild, 'log', SETTINGS);
+		return getSettings(message.guild);
 	}
 
 	async ship(message, result) {
@@ -48,4 +53,4 @@ module.exports = class extends ECommand {
 	}
 };
 
-module.exports.getSettings = () => SETTINGS;
+module.exports.getSettings = getSettings;
