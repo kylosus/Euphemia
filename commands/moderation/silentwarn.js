@@ -10,7 +10,7 @@ module.exports = class extends ModerationCommand {
 			description:     {
 				content:  'Warns a member without sending a DM.',
 				usage:    '<member> [member2...] <reason>',
-				examples: ['warn @member Some reason', 'warn @member1 @member2 Some other reason']
+				examples: ['silentwarn @member Some reason', 'silentwarn @member1 @member2 Some other reason']
 			},
 			userPermissions: [Permissions.FLAGS.MANAGE_GUILD],
 			args:            [
