@@ -30,13 +30,7 @@ module.exports = class extends ModerationCommand {
 								})();
 						}
 					),
-					message:  'Please provide message url',
-					optional: true,
-					default:  m => m.reference ||
-						m.channel.messages.cache.find(i => i.author.id === this.client.user.id) ||
-						(() => {
-							throw 'Please link to a message';
-						})()
+					message:  'Please provide a role',
 				},
 				{
 					id:       'reason',
@@ -45,7 +39,7 @@ module.exports = class extends ModerationCommand {
 					default:  () => null
 				},
 			],
-			guildOnly:       false,
+			guildOnly:       true,
 			ownerOnly:       true,
 		});
 	}
