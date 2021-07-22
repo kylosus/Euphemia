@@ -44,7 +44,7 @@ module.exports = class extends ECommand {
 		const cached = cache.get(anime.toUpperCase());
 
 		if (cached) {
-			if (cached.Media.nextAiringEpisode.airingAt * 1000 - Date.now() > 0) {
+			if ((cached.Media.nextAiringEpisode?.airingAt ?? 0) * 1000 - Date.now() > 0) {
 				return cached;
 			}
 		}
