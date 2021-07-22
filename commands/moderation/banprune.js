@@ -18,7 +18,7 @@ module.exports = class extends ModerationCommand {
 				{
 					id:      'id',
 					type:    ArgConsts.ID,
-					message: 'Please mention a user to to prune'
+					message: 'Please mention a user to prune'
 				},
 				{
 					id:       'reason',
