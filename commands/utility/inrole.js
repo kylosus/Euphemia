@@ -44,7 +44,7 @@ module.exports = class extends ECommand {
 		return PaginatedMessage.register(message, s => {
 			return new MessageEmbed()
 				.setColor(result.hexColor)
-				.setTitle(`List of members in ${result.name}`)
+				.setTitle(`List of members in ${result.name} (${result.members.size})`)
 				// .setDescription(s.map(ss => `${ss}, \`${ss.user.tag}\``).join('\n'));
 				.setDescription(s.map(s => s.user.tag));
 		}, new CircularList(_.chunk(result.members.array(), 20)));
