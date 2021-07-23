@@ -27,7 +27,7 @@ module.exports = class extends ECommand {
 
 	async run(message, { member }) {
 		if (message.member.id === member.id) {
-			return 'Are you trying to spank yourself?';
+			throw 'Are you trying to spank yourself?';
 		}
 
 		const toMute = (() => {
