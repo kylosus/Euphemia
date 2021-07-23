@@ -30,7 +30,7 @@ const init = async (client, db) => {
 		SELECT
 		    CAST(mutedrole as TEXT) as mutedRole,
 		    expires
-		FROM ${TABLE_NAME} where member = ? and expires > '${moment().toISOString()}'
+		FROM ${TABLE_NAME} where member = ? and expires > ?
 	`);
 
 	STATEMENTS.insert = await db.prepare(`INSERT OR REPLACE INTO ${TABLE_NAME} VALUES (?, ?, ?, ?, ?)`);
@@ -40,12 +40,12 @@ const init = async (client, db) => {
 			CAST(guild as TEXT) as guild,
 			CAST(member as TEXT) as member,
 			CAST(mutedRole as TEXT) as mutedRole
-		FROM ${TABLE_NAME} where expires < '${moment().toISOString()}'
+		FROM ${TABLE_NAME} where expires < ?
 	`);
 };
 
 const getMutedRoleIfNotExpired = member => {
-	return STATEMENTS.getMutedRoleIfNotExpired.get(member);
+	return STATEMENTS.getMutedRoleIfNotExpired.get(member, moment().toISOString());
 };
 
 const insert = (guild, member, mutedRole, reason, expires) => {
@@ -54,7 +54,7 @@ const insert = (guild, member, mutedRole, reason, expires) => {
 
 const getExpired = () => {
 	// replace with .each()?
-	return STATEMENTS.getExpired.all();
+	return STATEMENTS.getExpired.all(moment().toISOString());
 };
 
 const remove = (guild, member) => {
