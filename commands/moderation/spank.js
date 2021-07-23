@@ -40,7 +40,7 @@ module.exports = class extends ECommand {
 
 		const role = await mutedRole.getOrSetMutedRole(message.guild);
 
-		await member.roles.add(role, 'Spanked');
+		await toMute.roles.add(role, 'Spanked');
 
 		const duration = moment().add(1, 'minutes').toISOString();
 		await muteHandler.muteMember(message.guild, toMute, role, 'Spanked', duration);
