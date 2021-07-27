@@ -30,7 +30,7 @@ module.exports = class extends ECommand {
 
 	async run(message, { anime: search }) {
 		const query = `query ($search: String) {
-			Media(type:ANIME search: $search, sort: TRENDING_DESC) {
+			Media(type:ANIME search: $search, sort: SEARCH_MATCH) {
 				averageScore
 				coverImage { large }
 				description
