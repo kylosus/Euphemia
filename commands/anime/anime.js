@@ -43,7 +43,6 @@ module.exports = class extends ECommand {
 				idMal
 				nextAiringEpisode { episode timeUntilAiring }
 				popularity
-				rankings { context rank }
 				siteUrl
 				source
 				status
