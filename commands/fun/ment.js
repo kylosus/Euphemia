@@ -1,26 +1,29 @@
-// const { Command }	= require('discord.js-commando');
-// const { RichEmbed }	= require('discord.js');
-// const QUOTES		= require('./ment.js.json');
-//
-// module.exports = class extends Command {
-// 	constructor(client) {
-// 		super(client, {
-// 			name: 'ment',
-// 			group: 'fun',
-// 			memberName: 'ment',
-// 			description: 'Replies with a random MENT dialogue.',
-// 			throttling: {
-// 				usages: 1,
-// 				duration: 15
-// 			}
-// 		});
-// 	}
-//
-//
-// 	async run(message) {
-// 		return message.embed(new RichEmbed()
-// 			.setColor('RANDOM')
-// 			.setTitle(QUOTES[Math.floor(Math.random() * QUOTES.length)])
-// 		);
-// 	}
-// };
+const { MessageEmbed } = require('discord.js');
+const { ECommand }     = require('../../lib');
+const QUOTES           = require('./ment.js.json');
+
+module.exports = class extends ECommand {
+	constructor(client) {
+		super(client, {
+			aliases:     ['ment'],
+			description: {
+				content:  'Replies with a random Code Ment quote',
+				usage:    '',
+				examples: ['ment']
+			},
+			guildOnly:   false,
+			ownerOnly:   false
+		});
+	}
+
+	async run() {
+		return QUOTES[Math.floor(Math.random() * QUOTES.length)];
+	}
+
+	async ship(message, result) {
+		return message.channel.send(new MessageEmbed()
+			.setColor('RANDOM')
+			.setDescription(result)
+		);
+	}
+};
