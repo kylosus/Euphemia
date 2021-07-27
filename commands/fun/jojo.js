@@ -1,26 +1,29 @@
-// const { Command }	= require('discord.js-commando');
-// const { RichEmbed }	= require('discord.js');
-// const QUOTES		= require('./jojo.js.json');
-//
-// module.exports = class extends Command {
-// 	constructor(client) {
-// 		super(client, {
-// 			name: 'jojo',
-// 			group: 'fun',
-// 			memberName: 'jojo',
-// 			description: 'Replies with a random JoJo quote.',
-// 			aliases: ['duwang', 'nani'],
-// 			throttling: {
-// 				usages: 1,
-// 				duration: 15
-// 			}
-// 		});
-// 	}
-//
-// 	async run(message) {
-// 		return message.channel.send(new RichEmbed()
-// 			.setColor('RANDOM')
-// 			.setTitle(QUOTES[Math.floor(Math.random() * QUOTES.length)])
-// 		);
-// 	}
-// };
+const { MessageEmbed } = require('discord.js');
+const { ECommand }     = require('../../lib');
+const QUOTES           = require('./jojo.js.json');
+
+module.exports = class extends ECommand {
+	constructor(client) {
+		super(client, {
+			aliases:     ['jojo', 'duwang', 'nani'],
+			description: {
+				content:  'Replies with a random JoJo quote',
+				usage:    '',
+				examples: ['jojo']
+			},
+			guildOnly:   false,
+			ownerOnly:   false
+		});
+	}
+
+	async run() {
+		return QUOTES[Math.floor(Math.random() * QUOTES.length)];
+	}
+
+	async ship(message, result) {
+		return message.channel.send(new MessageEmbed()
+			.setColor('RANDOM')
+			.setDescription(result)
+		);
+	}
+};
