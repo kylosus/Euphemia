@@ -114,11 +114,7 @@ module.exports = class extends ECommand {
 			return ['Will Air', date];
 		})();
 
-		embed.addField(
-			duration[0],
-			duration[1],
-			true
-		);
+		embed.addField(...duration, true);
 
 		return message.channel.send(embed);
 	}
