@@ -2,8 +2,6 @@ const { MessageEmbed, Permissions }                  = require('discord.js');
 const { ArgConsts, ArgumentType }                    = require('../../lib');
 const { ModerationCommand, ModerationCommandResult } = require('../../modules/moderation');
 
-const MAX_MEMBERS_SHIP = 5;
-
 module.exports = class extends ModerationCommand {
 	constructor(client) {
 		super(client, {
@@ -61,12 +59,9 @@ module.exports = class extends ModerationCommand {
 	}
 
 	async ship(message, { _: { role, members } }) {
-		const body = (members.length < MAX_MEMBERS_SHIP ? members : members.slice(0, MAX_MEMBERS_SHIP) + '...')
-		.map(m => m.toString()).join(' ');
-
 		return message.channel.send(new MessageEmbed()
 			.setColor('GREEN')
-			.setDescription(`**Pruned ${ members.length } members in ${ role.toString() }:**\n${ body }`)
+			.setDescription(`Pruned ${members.length} members in ${role}:`)
 		);
 	}
 };
