@@ -1,18 +1,10 @@
-# ~~I'll work on the bot when I have time~~
-# Scratch that, I'm working on it now
-# Use the stable branch if you want to host it, but you shouldn't before I finalize my updates
-### Check the dev branch in the meantime
-### There's a local branch with tons of additions and revisions, I promise
-
 # Euphemia
 ***
-![](https://files.catbox.moe/mxzpmq.jpg)
-
-Yet another discord.js bot. And best girl.
+Yet another discord.js bot.
 ***
 #### [Click here to add Euphemia to your server](https://discordapp.com/oauth2/authorize?client_id=469059467544100864&scope=bot&permissions=2146827511)
 ***
-### Command list
+### Command list (not up-to-date)
 *   ##### Moderation
     * `;ban [@member] <@member2> <@member3> <...>` Bans mentioned members.
     * `;kick [@member1] <@member2> <@member3> <...>` Kicks mentioned members.
@@ -59,5 +51,4 @@ Yet another discord.js bot. And best girl.
 ### Libraries and frameworks used
 * [discord.js](https://github.com/discordjs/discord.js/) and [discord.js-commando](https://github.com/discordjs/Commando)
 * [moment](https://github.com/moment/moment/) and [moment-duration-format](https://github.com/jsmreese/moment-duration-format)
-* [request](https://github.com/request/request) and [request-prmise](https://github.com/request/request-promise)
 *   [node-sqlite](https://github.com/kriasoft/node-sqlite/)
