@@ -23,7 +23,7 @@
     "dotenv": "^10.0.0",
     "got": "^11.8.2",
     "lodash": "^4.17.21",
-    "moment": "^2.29.1",
+    "moment": "^2.29.2",
     "moment-duration-format": "^2.3.2",
     "sqlite": "^4.0.23",
     "sqlite3": "^5.0.2",
