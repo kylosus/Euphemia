@@ -57,17 +57,6 @@ class Client extends EClient {
 			}
 		);
 
-		// Race condition?
-		this.setProvider(
-			sqlite.open({
-				filename: path.join(__dirname, 'settings.sqlite3'),
-				driver:   sqlite3.Database
-			}).then(async db => {
-				await modules.init(this, db);
-				return new SQLiteProvider(db);
-			})
-		).catch(console.error);
-
 		this.commandHandler = new ECommandHandler(this, {
 			prefix: process.env.BOT_PREFIX || config.prefix || ';',
 			path:   new URL('commands', import.meta.url).pathname
@@ -76,6 +65,20 @@ class Client extends EClient {
 }
 
 const client = new Client();
+
+await client.commandHandler.loadModules();
+
+await client.setProvider(
+	sqlite.open({
+		filename: new URL('settings.sqlite3', import.meta.url).pathname,
+		driver:   sqlite3.Database
+	}).then(async db => {
+		await modules.init(client, db);
+		return new SQLiteProvider(db);
+	})
+);
+
+await registerEvents(client);
 
 client.login(process.env.BOT_TOKEN || config.token).catch(err => {
 	console.error('Failed to log in', err);
