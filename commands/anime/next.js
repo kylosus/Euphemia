@@ -125,7 +125,7 @@ export default class extends ECommand {
 				true)
 			);
 
-		return message.channel.send(embed);
+		return message.channel.send({ embeds: [embed] });
 	}
 
 	async ship(message, result) {

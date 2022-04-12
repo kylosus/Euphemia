@@ -22,9 +22,11 @@ export default class extends ECommand {
 	}
 
 	async ship(message, result) {
-		return message.channel.send(new MessageEmbed()
-			.setColor('RANDOM')
-			.setDescription(result)
-		);
+		return message.channel.send({
+			embeds: [new MessageEmbed()
+				.setColor('RANDOM')
+				.setDescription(result)
+			]
+		});
 	}
 }

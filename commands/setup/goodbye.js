@@ -67,12 +67,12 @@ export default class extends ECommand {
 
 		// If json is not empty save it and try sending it
 		if (Object.keys(json).length) {
-			await message.channel.send(entry.message.content, new MessageEmbed(json));
-			entry.message.embed = JSON.stringify(json);
+			await message.channel.send({ content: entry.message.content, embeds: [new MessageEmbed(json)] });
+			entry.message.embeds = [JSON.stringify(json)];
 		} else {
 			// is there a point?
 			entry.message.embed = null;
-			await message.channel.send(entry.message.content);
+			await message.channel.send({ content: entry.message.content });
 		}
 
 		await this.client.provider.set(message.guild, 'goodbye', entry);
@@ -92,9 +92,10 @@ export default class extends ECommand {
 	}
 
 	async ship(message, result) {
-		return message.channel.send(new MessageEmbed()
-			.setColor('GREEN')
-			.setDescription(result)
-		);
+		return message.channel.send({
+			embeds: [new MessageEmbed()
+				.setColor('GREEN')
+				.setDescription(result)]
+		});
 	}
 }

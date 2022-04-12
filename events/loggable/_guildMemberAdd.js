@@ -14,16 +14,13 @@ export default async member => {
 			return;
 		}
 
-		if (entry.message.embed) {
-			return channel.send(
-				replaceTokens(entry.message.content || '', member),
-				new MessageEmbed(JSON.parse(replaceTokens(entry.message.embed, member)))
-			);
-		}
+		replaceTokens(entry.message.content ?? '', member);
+		replaceTokens(entry.message.embeds?.[0] ?? '', member);
 
-		return channel.send(
-			replaceTokens(entry.message.content || '', member)
-		);
+		return channel.send({
+			content: entry.message.content,
+			embeds:  entry.message.embeds.map(e => JSON.parse(replaceTokens(e, member)))
+		});
 	})(member.client.provider.get(member.guild, 'welcome', { channel: null, message: null }));
 
 	const p2 = (async entry => {
@@ -37,25 +34,29 @@ export default async member => {
 			return;
 		}
 
-		channel.send(new MessageEmbed()
+		const embeds = [];
+
+		embeds.push(new MessageEmbed()
 			.setColor('BLUE')
 			.setTitle('✅ User joined')
 			.setThumbnail(member.user.displayAvatarURL())
-			.setDescription(`${member} \`${member.user.tag}\``)
+			.setDescription(`${member} ${Formatters.blockQuote(member.user.tag)}`)
 			.addField('ID', member.id, false)
-			.addField('Joined server', moment(member.joinedAt).format('DD.MM.YYYY HH:mm:ss'), true)
-			.addField('Joined Discord', moment(member.user.createdAt).format('DD.MM.YYYY HH:mm:ss'), false)
+			.addField('Joined server', Formatters.time(member.joinedAt, Formatters.TimestampStyles.LongDateTime), true)
+			.addField('Joined Discord', Formatters.time(member.user.createdAt, Formatters.TimestampStyles.LongDateTime), false)
 			.setTimestamp(member.joinedAt)
 		);
 
-		const accountAge = moment().diff(moment(member.user.createdAt), 'days');
+		const accountAge = dayjs().diff(dayjs(member.user.createdAt), 'days');
 
 		if (accountAge < 30) {
-			return channel.send(new MessageEmbed()
+			embeds.push(new MessageEmbed()
 				.setColor('DARK_RED')
 				.setDescription(`**WARNING** User ${member}'s account is less than ${accountAge === 1 ? 'day' : ((accountAge + 1) + 'days')} old`)
 			);
 		}
+
+		return channel.send({ embeds });
 	})(member.client.provider.get(member.guild, 'log', { guildMemberAdd: null }));
 
 	// This is a historic moment, I finally found a use for deferred promise awaits

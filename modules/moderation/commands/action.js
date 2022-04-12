@@ -42,13 +42,16 @@ export default class extends ECommand {
 		const embed = new MessageEmbed()
 			.setColor(COLOR);
 
-		embed.setAuthor(...(user => {
+		embed.setAuthor((user => {
 			if (user) {
-				return [`${user.tag} (${result.moderator})}`, user.displayAvatarURL()];
+				return {
+					name:    `${user.tag} (${result.moderator})}`,
+					iconURL: user.displayAvatarURL()
+				};
 			}
 
-			return [`Unknown user: ${result.moderator}`];
-		})(await this.client.users.fetch(result.moderator).catch(() => {})));
+			return { name: `Unknown user: ${result.moderator}` };
+		})(await this.client.users.fetch(result.moderator).catch(console.error)));
 
 		const prefix = result.passed ? '✅' : '❌';	// Fix those later
 		embed.setDescription(`${prefix} Action \`[${result.id}]\` ${result.action.toLowerCase()} -> <@${result.target}>`);
@@ -71,6 +74,6 @@ export default class extends ECommand {
 
 		embed.setTimestamp(result.timestamp);
 
-		return message.channel.send(embed);
+		return message.channel.send({ embeds: [embed] });
 	}
 }

@@ -21,12 +21,13 @@ export default async (oldUser, newUser) => {
 			return;
 		}
 
-		return channel.send(new MessageEmbed()
-			.setColor('GREEN')
-			.setThumbnail(newUser.displayAvatarURL())
-			.setTitle('Username change')
-			.setDescription(`**${oldUser.tag}** has changed their username to **${newUser.tag}**`)
-			.setTimestamp((new Date()))
-		);
+		return channel.send({
+			embed: [new MessageEmbed()
+				.setColor('GREEN')
+				.setThumbnail(newUser.displayAvatarURL())
+				.setTitle('Username change')
+				.setDescription(`**${oldUser.tag}** has changed their username to **${newUser.tag}**`)
+				.setTimestamp((new Date()))]
+		});
 	}));
 };

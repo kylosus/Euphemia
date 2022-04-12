@@ -31,7 +31,7 @@ export default class extends ECommand {
 		}
 
 		const toMute = (() => {
-			if (!message.member.hasPermission(Permissions.FLAGS.MANAGE_ROLES)) {
+			if (!message.member.permissions.has(Permissions.FLAGS.MANAGE_ROLES)) {
 				return message.member;
 			}
 

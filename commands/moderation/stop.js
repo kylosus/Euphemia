@@ -69,6 +69,6 @@ export default class extends ModerationCommand {
 			embed.addField('Failed', result.failed.map(r => `<#${ r.id }> - ${ r.reason }`).join(' '));
 		}
 
-		return message.channel.send(embed);
+		return message.channel.send({ embeds: [embed] });
 	}
 }

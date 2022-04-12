@@ -13,10 +13,13 @@ export default async member => {
 			return;
 		}
 
-		return channel.send(
-			replaceTokens(entry.message.content),
-			new MessageEmbed(replaceTokens(entry.message.embed))
-		);
+		replaceTokens(entry.message.content ?? '', member);
+		replaceTokens(entry.message.embeds?.[0] ?? '', member);
+
+		return channel.send({
+			content: entry.message.content,
+			embeds:  entry.message.embeds.map(e => JSON.parse(replaceTokens(e, member)))
+		});
 	})(member.client.provider.get(member.guild, 'goodbye', { channel: null, message: null }));
 
 	const p2 = (async entry => {
@@ -30,14 +33,15 @@ export default async member => {
 			return;
 		}
 
-		return channel.send(new MessageEmbed()
-			.setColor('BLUE')
-			.setTitle('❌ User left')
-			.setThumbnail(member.user.displayAvatarURL())
-			.setDescription(`${member} \`${member.user.tag}\``)
-			.addField('ID', member.id, false)
-			.setTimestamp(member.joinedAt)
-		);
+		return channel.send({
+			embeds: [new MessageEmbed()
+				.setColor('BLUE')
+				.setTitle('❌ User left')
+				.setThumbnail(member.user.displayAvatarURL())
+				.setDescription(`${member}  ${Formatters.blockQuote(member.user.tag)}`)
+				.addField('ID', member.id, false)
+				.setTimestamp(member.joinedAt)]
+		});
 	})(member.client.provider.get(member.guild, 'log', { guildMemberRemove: null }));
 
 	return Promise.all([p1, p2]);

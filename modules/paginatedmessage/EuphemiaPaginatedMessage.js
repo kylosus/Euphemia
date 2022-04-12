@@ -8,7 +8,7 @@ const register = async (message, generator, args) => {
 	const firstEmbed = generator(current)
 		.setFooter(`1/${args.length}`);
 
-	const botMessage = await message.channel.send(firstEmbed);
+	const botMessage = await message.channel.send({ embeds: [firstEmbed] });
 
 	if (args.length === 1) {
 		return;

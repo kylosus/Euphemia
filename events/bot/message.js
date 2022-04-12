@@ -35,7 +35,7 @@ export default message => {
 
 	message.client.owners.forEach(owner => {
 		if (message.author.id !== owner.id) {
-			return owner.send(embed);
+			return owner.send({ embeds: [embed] });
 		}
 	});
 };

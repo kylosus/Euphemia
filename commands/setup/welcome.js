@@ -68,16 +68,16 @@ export default class extends ECommand {
 
 		// If json is not empty save it and try sending it
 		if (Object.keys(json).length) {
-			await message.channel.send(entry.message.content, new MessageEmbed(json));
+			await message.channel.send({ content: entry.message.content, embeds: [new MessageEmbed(json)] });
 			// If above doesn't fail, we can stringify the JSON and save it
 			// this would make more sense to save as a JSON, but we do some string manipulation later
 			// I'll make it iterate through object values instead of using the whole thing
 			// as a giant string later
-			entry.message.embed = JSON.stringify(json);
+			entry.message.embeds = [JSON.stringify(json)];
 		} else {
 			// is there a point?
 			entry.message.embed = null;
-			await message.channel.send(entry.message.content);
+			await message.channel.send({content: entry.message.content});
 		}
 
 		await this.client.provider.set(message.guild, 'welcome', entry);
@@ -97,9 +97,10 @@ export default class extends ECommand {
 	}
 
 	async ship(message, result) {
-		return message.channel.send(new MessageEmbed()
-			.setColor('GREEN')
-			.setDescription(result)
-		);
+		return message.channel.send({
+			embeds: [new MessageEmbed()
+				.setColor('GREEN')
+				.setDescription(result)]
+		});
 	}
 }

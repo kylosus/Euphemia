@@ -60,7 +60,7 @@ export default class extends ECommand {
 				embed.addField('\u200B', '\u200B');
 			});
 
-			return message.channel.send(embed);
+			return message.channel.send({ embeds: [embed] });
 		}
 
 		embed.setTitle(`Command name: ${result.aliases.join('/')}`);
@@ -72,6 +72,6 @@ export default class extends ECommand {
 
 		embed.addField('Usage', '```' + result.description.examples.join('\n') + '```');
 
-		return message.channel.send(embed);
+		return message.channel.send({ embeds: [embed] });
 	}
 }

@@ -34,7 +34,7 @@ export default class ModerationCommand extends ECommand {
 		embed.addField('Moderator', message.member.toString(), true);
 		embed.addField('Reason', result?.reason ?? '*No reason provided*', true);
 
-		return message.channel.send(embed);
+		return message.channel.send({ embeds: [embed] });
 	}
 
 	async execute(message, args) {

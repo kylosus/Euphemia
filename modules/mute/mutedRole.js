@@ -1,3 +1,5 @@
+import { Permissions } from 'discord.js';
+
 const getMutedRole = guild => {
 	const entry = guild.client.provider.get(guild, 'mutedRole', null);
 
@@ -9,18 +11,21 @@ const getMutedRole = guild => {
 };
 
 const setMutedRole = async (guild, role) => {
+	// TODO: update channel overrides
 	await guild.client.provider.set(guild, 'mutedRole', role.id);
 	return role;
 };
 
 const setNewMutedRole = async (guild, roleName = `${guild.client.user.username}-mute`) => {
+	const permissions = new Permissions(Permissions.DEFAULT);
+	permissions.remove(Permissions.FLAGS.SEND_MESSAGES);
+	permissions.remove(Permissions.FLAGS.SEND_MESSAGES_IN_THREADS);
+
 	const role = await guild.roles.create({
-		data:   {
-			name:        roleName,
-			position:    guild.me.roles.highest.position - 1,
-			permissions: 66560 // Replace this
-		},
-		reason: 'Automatic muted role creation'
+		name:     roleName,
+		position: guild.me.roles.highest.position - 1,
+		permissions,
+		reason:   'Automatic muted role creation'
 	});
 
 	return setMutedRole(guild, role);

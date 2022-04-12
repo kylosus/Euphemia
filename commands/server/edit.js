@@ -69,9 +69,9 @@ export default class extends ECommand {
 
 		try {
 			const json = JSON.parse(text);
-			await toEdit.edit(json.content, new MessageEmbed(json));
+			await toEdit.edit({ content: json.content, embeds: [new MessageEmbed(json)] });
 		} catch (err) {
-			await toEdit.edit(text);
+			await toEdit.edit({content: text});
 		}
 
 		return 'Edited message';

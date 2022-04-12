@@ -54,10 +54,10 @@ export default class extends ECommand {
 			await notice.react(EMOJI_OK);
 			await notice.react(EMOJI_NO);
 
-			const reactions = await notice.awaitReactions(
-				(r, u) => u.id === message.author.id,
-				{ time: 3000 }
-			);
+			const reactions = await notice.awaitReactions({
+				filter: (r, u) => u.id === message.author.id,
+				time: 3000
+			});
 
 			if (!reactions.has(EMOJI_OK)) {
 				throw 'Cancelled';
@@ -76,10 +76,11 @@ export default class extends ECommand {
 	}
 
 	async ship(message, [id, reason]) {
-		return message.channel.send(new MessageEmbed()
-			.setColor('GREEN')
-			.setTitle(`Updated Action [${id}] reason in ${message.guild}`)
-			.setDescription('```' + reason + '```')
-		);
+		return message.channel.send({
+			embeds: [new MessageEmbed()
+				.setColor('GREEN')
+				.setTitle(`Updated Action [${id}] reason in ${message.guild}`)
+				.setDescription(Formatters.codeBlock(reason))]
+		});
 	}
 }

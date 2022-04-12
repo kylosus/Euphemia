@@ -7,16 +7,17 @@ export default async (channel, oldMessage, newMessage) => {
 		return;
 	}
 
-	oldMessage.content = _.truncate(oldMessage.content, { length: EmbedLimits.FIELD_VALUE });
-	newMessage.content = _.truncate(newMessage.content, { length: EmbedLimits.FIELD_VALUE });
+	oldMessage.content = truncate(oldMessage.content, { length: EmbedLimits.FIELD_VALUE });
+	newMessage.content = truncate(newMessage.content, { length: EmbedLimits.FIELD_VALUE });
 
-	return channel.send(new MessageEmbed()
-		.setColor('PURPLE')
-		.setTitle(`🖊 Message edited in #${newMessage.channel.name}`)
-		.setDescription(`${newMessage.member || 'Unknown user'} \`${newMessage.author?.id ?? 'Unknown id'}\` [Link](${newMessage.url})`)
-		.addField('Old message', oldMessage.content, false)
-		.addField('New message', newMessage.content, false)
-		.addField('ID', oldMessage.id, false)
-		.setTimestamp()	// Do I need moment // NO
-	);
+	return channel.send({
+		embeds: [new MessageEmbed()
+			.setColor('PURPLE')
+			.setTitle(`🖊 Message edited in #${newMessage.channel.name}`)
+			.setDescription(`${newMessage.member || 'Unknown user'} ${Formatters.blockQuote(newMessage.author?.id ?? 'Unknown id')} [Link](${newMessage.url})`)
+			.addField('Old message', oldMessage.content, false)
+			.addField('New message', newMessage.content, false)
+			.addField('ID', oldMessage.id, false)
+			.setTimestamp()]	// Do I need moment // NO
+	});
 };

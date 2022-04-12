@@ -27,16 +27,23 @@ export default class extends ECommand {
 	}
 
 	async ship(message, result) {
-		return message.channel.send(new MessageEmbed()
-			.setAuthor(`Euphemia version ${pjson.version} by ${pjson.author}`, THUMBNAIL, pjson.repository.name)
-			.setColor(this.client.defaultColor)
-			.addField('⌛ Uptime', result, true)
-			// .addField('📥 Received', this.client.messageStats.received, true)
-			// .addField('📤 Sent', this.client.messageStats.sent, true)
-			// .addField('📡 Commands', this.client.messageStats.commands, true)
-			.addField('📙 Servers', this.client.guilds.cache.size, true)
-			.addField('📑 Channels', this.client.channels.cache.size, true)
-			.addField('📎 Users', this.client.users.cache.size, true)
-		);
+		return message.channel.send({
+			embeds:
+				[new MessageEmbed()
+					.setAuthor({
+						name:    `Euphemia version ${pjson.version} by ${pjson.author}`,
+						url:     pjson.repository.name,
+						iconURL: THUMBNAIL
+					})
+					.setColor(this.client.defaultColor)
+					.addField('⌛ Uptime', result, true)
+					// .addField('📥 Received', this.client.messageStats.received, true)
+					// .addField('📤 Sent', this.client.messageStats.sent, true)
+					// .addField('📡 Commands', this.client.messageStats.commands, true)
+					.addField('📙 Servers', String(this.client.guilds.cache.size), true)
+					.addField('📑 Channels', String(this.client.channels.cache.size), true)
+					.addField('📎 Users', String(this.client.users.cache.size), true)
+				]
+		});
 	}
 };

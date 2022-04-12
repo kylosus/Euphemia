@@ -91,6 +91,6 @@ export default class extends ModerationCommand {
 		embed.addField('Moderator', message.member.toString(), true);
 		embed.addField('Reason', result?.reason ?? '*No reason provided*', true);
 
-		return message.channel.send(embed);
+		return message.channel.send({ embeds: [embed] });
 	}
 }

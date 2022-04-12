@@ -15,7 +15,7 @@ export default async (channel, messages) => {
 
 	const additions = (c => {
 		if (c.length > EmbedLimits.DESCRIPTION) {
-			return new MessageAttachment(Buffer.from(c), 'messages.txt');
+			return new MessageAttachment(c, 'messages.txt');
 		}
 
 		return null;
@@ -23,5 +23,5 @@ export default async (channel, messages) => {
 
 	embed.setDescription(content.reverse().join('\n'));
 
-	return channel.send([embed, additions]);
+	return channel.send({ embeds: [embed], files: [additions] });
 };

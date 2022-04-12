@@ -67,10 +67,11 @@ export default class extends ECommand {
 			return 'RED';
 		})(result);
 
-		return message.channel.send(new MessageEmbed()
-			.setColor(color)
-			.addField(`Sent to ${ result.p.length } users`, result.p.map(p => p.toString()).join(' ') || '~')
-			.addField('Failed', result.f.map(f => `${ f.user.toString() } - ${ f.reason }`).join('\n') || '~')
-		);
+		return message.channel.send({
+			embeds: [new MessageEmbed()
+				.setColor(color)
+				.addField(`Sent to ${result.p.length} users`, result.p.map(p => p.toString()).join(' ') || '~')
+				.addField('Failed', result.f.map(f => `${f.user.toString()} - ${f.reason}`).join('\n') || '~')]
+		});
 	}
 }

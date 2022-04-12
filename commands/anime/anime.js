@@ -120,7 +120,7 @@ export default class extends ECommand {
 
 		embed.addField(...duration, true);
 
-		return message.channel.send(embed);
+		return message.channel.send({ embeds: [embed] });
 	}
 }
 

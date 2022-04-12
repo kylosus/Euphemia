@@ -45,7 +45,7 @@ export default class extends ModerationCommand {
 
 		await Promise.all(channels.map(async c => {
 			try {
-				await c.updateOverwrite(message.guild.id, {
+				await c.permissionOverwrites.edit(message.guild.id, {
 					ATTACH_FILES: toggle,
 					EMBED_LINKS:  toggle
 				});
@@ -72,6 +72,6 @@ export default class extends ModerationCommand {
 			embed.addField('Failed', result.failed.map(r => `<#${ r.id }> - ${ r.reason || 'Unknown reason' }`).join(' '));
 		}
 
-		return message.channel.send(embed);
+		return message.channel.send({ embeds: [embed] });
 	}
 }

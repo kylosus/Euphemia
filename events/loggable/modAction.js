@@ -6,7 +6,10 @@ export default async (channel, guild, moderator, result) => {
 	const embed = new MessageEmbed()
 		.setColor(COLOR);
 
-	embed.setAuthor(`${moderator.user.tag} (${result.moderator})}`, moderator.user.displayAvatarURL());
+	embed.setAuthor({
+		name:    `${moderator.user.tag} (${result.moderator})}`,
+		iconURL: moderator.user.displayAvatarURL()
+	});
 
 	const prefix = result.passed ? '✅' : '❌';	// Fix those later
 	embed.setDescription(`${prefix} Action ${result.action} -> <@${result.target}>`);
@@ -29,5 +32,5 @@ export default async (channel, guild, moderator, result) => {
 
 	embed.setTimestamp(result.timestamp);
 
-	return channel.send(embed);
+	return channel.send({ embeds: [embed] });
 };
