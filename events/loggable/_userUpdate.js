@@ -1,6 +1,6 @@
-const { MessageEmbed } = require('discord.js');
+import { MessageEmbed } from 'discord.js';
 
-module.exports = async (oldUser, newUser) => {
+export default async (oldUser, newUser) => {
 	if (oldUser.tag === newUser.tag) {
 		return;
 	}

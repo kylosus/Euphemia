@@ -1,7 +1,7 @@
-const { MessageAttachment }      = require('discord.js');
-const { AutoEmbed, EmbedLimits } = require('../../lib');
+import { MessageAttachment }      from 'discord.js';
+import { AutoEmbed, EmbedLimits } from '../../lib/index.js';
 
-module.exports = async (channel, messages) => {
+export default async (channel, messages) => {
 	const embed = new AutoEmbed()
 		.setColor('DARK_PURPLE')
 		.setTitle(`🗑 ${messages.size} messages bulk deleted in #${messages.first().channel.name}`)

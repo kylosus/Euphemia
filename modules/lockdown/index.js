@@ -1,9 +1,5 @@
-const watcher = require('./watcher');
+import * as watcher from './watcher.js';
 
-const init = client => {
+export const init = client => {
 	watcher.init(client);
-};
-
-module.exports = {
-	init
 };

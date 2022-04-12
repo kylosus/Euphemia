@@ -1,4 +1,4 @@
-class ModerationCommandResult {
+export default class ModerationCommandResult {
 	constructor(reason = null, aux = null) {
 		// use ids
 		this.passed = [];
@@ -27,5 +27,3 @@ class ModerationCommandResult {
 		return bad;
 	}
 }
-
-module.exports = ModerationCommandResult;

@@ -1,11 +1,12 @@
-const { MessageEmbed, Permissions }      = require('discord.js');
-const { ArgConsts, AutoEmbed, ECommand } = require('../../lib');
+import { MessageEmbed, Permissions }      from 'discord.js';
+import { ArgConsts, AutoEmbed, ECommand } from '../../lib/index.js';
+import process                            from 'process';
 
 // Helper stuff
 // eslint-disable-next-line no-unused-vars
-const got = require('got');
+import got                                from 'got';
 
-module.exports = class extends ECommand {
+export default class extends ECommand {
 	constructor(client) {
 		super(client, {
 			aliases:         ['eval'],
@@ -53,4 +54,4 @@ module.exports = class extends ECommand {
 			.setDescriptionWrap(JSON.stringify(result, null, 4))
 		);
 	}
-};
+}

@@ -1,13 +1,11 @@
-const db       = require('./db');
-const { join } = require('path');
+import * as db from './db.js';
 
-const init = async (client, _db) => {
+import { URL } from 'url';
+
+export const init = async (client, _db) => {
 	await db.init(client, _db);
-	await client.commandHandler.registerCommands(join(__dirname, './commands'), 'Modlog');
+	await client.commandHandler.registerCommands(new URL('./commands', import.meta.url).pathname, 'Modlog');
 };
 
-module.exports = {
-	init,
-	ModerationCommand:       require('./ModerationCommand'),
-	ModerationCommandResult: require('./ModerationCommandResult')
-};
+export { default as ModerationCommand } from './ModerationCommand.js';
+export { default as ModerationCommandResult } from './ModerationCommandResult.js';

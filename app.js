@@ -1,16 +1,20 @@
-require('dotenv').config();
+import 'dotenv/config';
 
-const path    = require('path');
-const sqlite3 = require('sqlite3').verbose();
-const sqlite  = require('sqlite');
+import process from 'process';
+import { URL } from 'url';
 
-const { Intents }                                  = require('discord.js');
-const { EClient, ECommandHandler, SQLiteProvider } = require('./lib');
+import sqlite3 from 'sqlite3';
+import * as sqlite from 'sqlite';
 
-const config  = require('./config.json');
-const modules = require('./modules');
+import { Intents } from 'discord.js';
+import { EClient, ECommandHandler, SQLiteProvider } from './lib/index.js';
 
-if (process.getuid && process.getuid() === 0) {
+// Make this independent of cwd
+import config from './config.json' assert { type: 'json' };
+import * as modules       from './modules/index.js';
+import { registerEvents } from './events/event.js';
+
+if (process.getuid?.() === 0) {
 	console.warn('===================================');
 	console.warn('===================================');
 	console.warn('====DO NOT RUN THE BOT AS ROOT====');
@@ -69,13 +73,12 @@ class Client extends EClient {
 
 		this.commandHandler = new ECommandHandler(this, {
 			prefix: process.env.BOT_PREFIX || config.prefix || ';',
-			path:   path.join(__dirname, 'commands'),
+			path:   new URL('commands', import.meta.url).pathname
 		});
 	}
 }
 
 const client = new Client();
-require('./events/event.js')(client);
 
 client.login(process.env.BOT_TOKEN || config.token).catch(err => {
 	console.error('Failed to log in', err);

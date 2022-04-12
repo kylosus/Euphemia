@@ -1,7 +1,7 @@
-const { MessageEmbed, Permissions } = require('discord.js');
-const { ECommand }                  = require('../../lib');
+import { MessageEmbed, Permissions } from 'discord.js';
+import { ECommand }                  from '../../lib/index.js';
 
-module.exports = class extends ECommand {
+export default class extends ECommand {
 	constructor(client) {
 		super(client, {
 			aliases:           ['lockdown', 'ld'],
@@ -30,4 +30,4 @@ module.exports = class extends ECommand {
 			.setTitle(result)
 		);
 	}
-};
+}

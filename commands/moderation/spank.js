@@ -1,9 +1,9 @@
-const { Permissions }            = require('discord.js');
-const { ArgConsts, ECommand }    = require('../../lib');
-const { mutedRole, muteHandler } = require('../../modules/mute');
-const moment                     = require('moment');
+import { Permissions }                   from 'discord.js';
+import { ArgConsts, ECommand }           from '../../lib/index.js';
+import { getOrSetMutedRole, muteMember } from '../../modules/mute/index.js';
+import dayjs                             from 'dayjs';
 
-module.exports = class extends ECommand {
+export default class extends ECommand {
 	constructor(client) {
 		super(client, {
 			aliases:           ['spank'],
@@ -51,4 +51,4 @@ module.exports = class extends ECommand {
 
 		return `${member} has been spanked by ${message.member}`;
 	}
-};
+}

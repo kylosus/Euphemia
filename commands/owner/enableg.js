@@ -1,6 +1,6 @@
-const { ArgConsts, ECommand } = require('../../lib');
+import { ArgConsts, ECommand } from '../../lib/index.js';
 
-module.exports = class extends ECommand {
+export default class extends ECommand {
 	constructor(client) {
 		super(client, {
 			aliases:     ['enableg'],
@@ -33,4 +33,4 @@ module.exports = class extends ECommand {
 		c.disabled = false;
 		return response;
 	}
-};
+}

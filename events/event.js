@@ -1,18 +1,25 @@
-const fs            = require('fs');
-const path          = require('path');
-const { Guild }     = require('discord.js');
-const directoryPath = path.join(__dirname, 'loggable');
+import { readdirSync } from 'fs';
+import { URL }         from 'url';
+import { Guild }       from 'discord.js';
 
+const directoryPath = new URL('loggable', import.meta.url);
 
-const botEventHandler    = event => require(`./bot/${event}`);
-const serverEventHandler = event => require(`./loggable/${event}`);
+import disconnect   from './bot/disconnect.js';
+import error        from './bot/error.js';
+import guildCreate  from './bot/guildCreate.js';
+import ready        from './bot/ready.js';
+import reconnecting from './bot/reconnecting.js';
 
-// const botEventHandler = () => (() => {});
+import _guildMemberAdd    from './loggable/_guildMemberAdd.js';
+import _guildMemberRemove from './loggable/_guildMemberRemove.js';
+import _userUpdate        from './loggable/_userUpdate.js';
 
 const _err = name => err => console.warn(`Error while executing loggable event ${name}`, err);
 
-const registerLoggable = client => {
-	const events = fs.readdirSync(directoryPath, { withFileTypes: true })
+const serverEventHandler = async e => await import(`./loggable/${e}.js`);
+
+const registerLoggable = async client => {
+	const events = readdirSync(directoryPath, { withFileTypes: true })
 		.filter(dirent => dirent.isFile() && !dirent.name.startsWith('_'))
 		.map(dirent => dirent.name.replace(/\.[^/.]+$/, ''));
 
@@ -52,19 +59,19 @@ const registerLoggable = client => {
 		};
 	};
 
-	events.forEach(e => {
-		client.on(e, wrapper(e, serverEventHandler(e)));
-	});
+	for (const e of events) {
+		client.on(e, wrapper(e, await serverEventHandler(e)));
+	}
 };
 
-module.exports = client => {
-	registerLoggable(client);		// This ignores events that start with '_'
-	client.on('ready',              ()      => botEventHandler('ready')(client));
-	client.on('error',                         botEventHandler('error'));
-	client.on('reconnecting',                  botEventHandler('reconnecting'));
-	client.on('disconnect',                    botEventHandler('disconnect'));
-	client.on('guildCreate',                   botEventHandler('guildCreate'));
-	client.on('guildMemberAdd',     m       => serverEventHandler('_guildMemberAdd')(m).catch(_err('guildMemberAdd')));
-	client.on('guildMemberRemove',  m       => serverEventHandler('_guildMemberRemove')(m).catch(_err('guildMemberRemove')));
-	client.on('userUpdate',         (o, n)  => serverEventHandler('_userUpdate')(o, n).catch(_err('userUpdate')));
+export const registerEvents = async client => {
+	await registerLoggable(client);	// This ignores events that start with '_'
+	client.on('ready',				() => ready(client));
+	client.on('error',				error);
+	client.on('reconnecting',		reconnecting);
+	client.on('disconnect',			disconnect);
+	client.on('guildCreate',		guildCreate);
+	client.on('guildMemberAdd',		m => _guildMemberAdd(m).catch(_err('guildMemberAdd')));
+	client.on('guildMemberRemove',	m => _guildMemberRemove(m).catch(_err('guildMemberRemove')));
+	client.on('userUpdate',			(o, n) => _userUpdate(o, n).catch(_err('userUpdate')));
 };

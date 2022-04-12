@@ -160,7 +160,7 @@ const getIdMax = guild => {
 	return STATEMENTS.getIdMax.get(guild);
 };
 
-module.exports = {
+export {
 	init,
 	insert,
 	forceInsert,

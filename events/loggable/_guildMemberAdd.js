@@ -1,8 +1,8 @@
-const { MessageEmbed }  = require('discord.js');
-const moment            = require('moment');
-const { replaceTokens } = require('../util');
+import { Formatters, MessageEmbed } from 'discord.js';
+import { replaceTokens }            from '../util.js';
+import dayjs             from 'dayjs';
 
-module.exports = async member => {
+export default async member => {
 	const p1 = (async entry => {
 		if (!entry.channel || !entry.message) {
 			return;
@@ -68,5 +68,4 @@ module.exports = async member => {
 	// 	// }
 	// })(member.client.provider.get(member.guild, 'automute', false));
 };
-
 

@@ -1,10 +1,10 @@
-const { MessageEmbed, Permissions }                  = require('discord.js');
-const { ArgConsts }                                  = require('../../lib');
-const { ModerationCommand, ModerationCommandResult } = require('../../modules/moderation');
-const { mutedRole, muteHandler }                     = require('../../modules/mute');
-const moment                                         = require('moment');
+import { MessageEmbed, Permissions }                  from 'discord.js';
+import { ArgConsts }                                  from '../../lib/index.js';
+import { ModerationCommand, ModerationCommandResult } from '../../modules/moderation/index.js';
+import { getMutedRole, setNewMutedRole, muteMember }  from '../../modules/mute/index.js';
+import moment                                         from 'moment';
 
-module.exports = class extends ModerationCommand {
+export default class extends ModerationCommand {
 	constructor(client) {
 		super(client, {
 			actionName:        'mute',
@@ -93,4 +93,4 @@ module.exports = class extends ModerationCommand {
 
 		return message.channel.send(embed);
 	}
-};
+}

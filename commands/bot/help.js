@@ -1,9 +1,9 @@
-const { MessageEmbed }        = require('discord.js');
-const { ArgConsts, ECommand } = require('../../lib');
-const { capitalize }          = require('../../lib/util/StringDoctor');
-const pjson                   = require('../../package.json');
+import { MessageEmbed }        from 'discord.js';
+import { ArgConsts, ECommand } from '../../lib/index.js';
+import { capitalize }          from '../../lib/util/StringDoctor.js';
+import pjson                   from '../../package.json' assert { type: 'json' };
 
-module.exports = class extends ECommand {
+export default class extends ECommand {
 	constructor(client) {
 		super(client, {
 			aliases:     ['help', 'h'],
@@ -74,4 +74,4 @@ module.exports = class extends ECommand {
 
 		return message.channel.send(embed);
 	}
-};
+}

@@ -1,8 +1,8 @@
-const { MessageEmbed } = require('discord.js');
-const { EmbedLimits }  = require('../../lib');
-const _                = require('lodash');
+import { Formatters, MessageEmbed } from 'discord.js';
+import { EmbedLimits }              from '../../lib/index.js';
+import { truncate }     from 'lodash-es';
 
-module.exports = async (channel, oldMessage, newMessage) => {
+export default async (channel, oldMessage, newMessage) => {
 	if (oldMessage.content === newMessage.content || !oldMessage.content || !newMessage.content) {
 		return;
 	}

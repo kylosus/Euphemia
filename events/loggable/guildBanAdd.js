@@ -1,6 +1,5 @@
-const { MessageEmbed } = require('discord.js');
+import { MessageEmbed } from 'discord.js';
 
-module.exports = async (channel, guild, user) => {
 	return channel.send(new MessageEmbed()
 		.setColor('BROWN')
 		.setTitle('🔨 User banned')
@@ -8,4 +7,5 @@ module.exports = async (channel, guild, user) => {
 		.setDescription(user.tag)
 		.addField('ID', user.id, false)
 	);
+export default async (channel, guild, user) => {
 };

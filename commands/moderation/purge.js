@@ -1,9 +1,10 @@
-const { Permissions }         = require('discord.js');
-const { ArgConsts, ECommand } = require('../../lib');
+import { Permissions }         from 'discord.js';
+import { ArgConsts, ECommand } from '../../lib/index.js';
 
-const DELETE_AFTER = 2000;	// 2 seconds
+// 2 seconds
+const DELETE_AFTER = 2000;
 
-module.exports = class extends ECommand {
+export default class extends ECommand {
 	constructor(client) {
 		super(client, {
 			aliases:           ['purge', 'p'],
@@ -32,4 +33,4 @@ module.exports = class extends ECommand {
 		const deleted = (await message.channel.bulkDelete(amount + 1)).size - 1;
 		return `Purged ${ deleted } message${ deleted > 1 ? 's' : '' }`;
 	}
-};
+}

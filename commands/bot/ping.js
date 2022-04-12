@@ -1,8 +1,8 @@
-const { MessageEmbed } = require('discord.js');
-const { ECommand }     = require('../../lib');
-const moment           = require('moment');
+import { MessageEmbed } from 'discord.js';
+import { ECommand }     from '../../lib/index.js';
+import dayjs            from 'dayjs';
 
-module.exports = class extends ECommand {
+export default class extends ECommand {
 	constructor(client) {
 		super(client, {
 			aliases:     ['ping'],
@@ -26,4 +26,4 @@ module.exports = class extends ECommand {
 			.setColor(message.member?.displayColor ?? 'WHITE')
 		);
 	}
-};
+}

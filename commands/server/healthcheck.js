@@ -1,9 +1,9 @@
-const { Collection, MessageEmbed, Permissions } = require('discord.js');
-const { ECommand }                              = require('../../lib');
+import { Collection, MessageEmbed, Permissions } from 'discord.js';
+import { ECommand }                              from '../../lib/index.js';
 
 const MAX_ROLES = 30;
 
-module.exports = class extends ECommand {
+export default class extends ECommand {
 	constructor(client) {
 		super(client, {
 			aliases:         ['healthcheck', 'health'],
@@ -68,4 +68,4 @@ module.exports = class extends ECommand {
 			)
 		);
 	}
-};
+}

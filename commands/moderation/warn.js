@@ -1,8 +1,8 @@
-const { MessageEmbed, Permissions }                  = require('discord.js');
-const { ArgConsts }                                  = require('../../lib');
-const { ModerationCommand, ModerationCommandResult } = require('../../modules/moderation');
+import { MessageEmbed, Permissions }                  from 'discord.js';
+import { ArgConsts }                                  from '../../lib/index.js';
+import { ModerationCommand, ModerationCommandResult } from '../../modules/moderation/index.js';
 
-module.exports = class extends ModerationCommand {
+export default class extends ModerationCommand {
 	constructor(client) {
 		super(client, {
 			actionName:      'warn',
@@ -49,4 +49,4 @@ module.exports = class extends ModerationCommand {
 
 		return result;
 	}
-};
+}

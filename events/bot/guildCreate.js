@@ -1,7 +1,8 @@
-const { MessageEmbed } = require('discord.js');
-const DISCORD_LOGO     = 'https://cdn.discordapp.com/attachments/540834912366755850/547465681453449246/discord-logo.png';
+import { MessageEmbed } from 'discord.js';
 
-module.exports = guild => {
+const DISCORD_LOGO = 'https://cdn.discordapp.com/attachments/540834912366755850/547465681453449246/discord-logo.png';
+
+export default guild => {
 	console.log(`Joined ${guild.name} (${guild.id})`);
 
 	guild.client.owners.forEach(owner => {

@@ -1,9 +1,9 @@
-const { Permissions }                                = require('discord.js');
-const { ArgConsts }                                  = require('../../lib');
-const { ModerationCommand, ModerationCommandResult } = require('../../modules/moderation');
-const { mutedRole, muteHandler }                     = require('../../modules/mute');
+import { Permissions }                                from 'discord.js';
+import { ArgConsts }                                  from '../../lib/index.js';
+import { ModerationCommand, ModerationCommandResult } from '../../modules/moderation/index.js';
+import { getMutedRole, unmuteMember }                 from '../../modules/mute/index.js';
 
-module.exports = class extends ModerationCommand {
+export default class extends ModerationCommand {
 	constructor(client) {
 		super(client, {
 			actionName:        'unmute',
@@ -59,4 +59,4 @@ module.exports = class extends ModerationCommand {
 
 		return result;
 	}
-};
+}

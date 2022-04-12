@@ -1,8 +1,8 @@
-const { MessageEmbed, Permissions }                  = require('discord.js');
-const { ArgConsts, ArgumentType }                    = require('../../lib');
-const { ModerationCommand, ModerationCommandResult } = require('../../modules/moderation');
+import { MessageEmbed, Permissions }                  from 'discord.js';
+import { ArgConsts, ArgumentType }                    from '../../lib/index.js';
+import { ModerationCommand, ModerationCommandResult } from '../../modules/moderation/index.js';
 
-module.exports = class extends ModerationCommand {
+export default class extends ModerationCommand {
 	constructor(client) {
 		super(client, {
 			actionName:      'prunerole',
@@ -64,4 +64,4 @@ module.exports = class extends ModerationCommand {
 			.setDescription(`Pruned ${members.length} members in ${role}:`)
 		);
 	}
-};
+}

@@ -1,11 +1,12 @@
-const { MessageEmbed }                     = require('discord.js');
-const { ArgConsts, ECommand, EmbedLimits } = require('../../lib');
-const { CircularList, PaginatedMessage }   = require('../../modules');
-const ud                                   = require('urban-dictionary');
-const udIcon                               = 'https://cdn.discordapp.com/attachments/352865308203024395/479997284117905440/ud.png';
-const _                                    = require('lodash');
+import { MessageEmbed }                     from 'discord.js';
+import { ArgConsts, ECommand, EmbedLimits } from '../../lib/index.js';
+import { CircularList, PaginatedMessage }   from '../../modules/index.js';
+import * as ud                              from 'urban-dictionary';
+import * as _                               from 'lodash';
 
-module.exports = class extends ECommand {
+const udIcon = 'https://cdn.discordapp.com/attachments/352865308203024395/479997284117905440/ud.png';
+
+export default class extends ECommand {
 	constructor(client) {
 		super(client, {
 			aliases:     ['urban', 'ud'],
@@ -42,4 +43,4 @@ module.exports = class extends ECommand {
 				.setDescription(_.truncate(s.definition, { length: EmbedLimits.DESCRIPTION }));
 		}, new CircularList(result));
 	}
-};
+}

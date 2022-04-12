@@ -1,7 +1,7 @@
-const { Permissions }         = require('discord.js');
-const { ArgConsts, ECommand } = require('../../lib');
+import { Formatters, Permissions } from 'discord.js';
+import { ArgConsts, ECommand }     from '../../lib/index.js';
 
-module.exports = class extends ECommand {
+export default class extends ECommand {
 	constructor(client) {
 		super(client, {
 			aliases:         ['disable'],
@@ -42,4 +42,4 @@ module.exports = class extends ECommand {
 
 		return `Disabled \`${command}\` in this server`;
 	}
-};
+}

@@ -1,4 +1,4 @@
-module.exports.replaceTokens = (string, member) => {
+export const replaceTokens = (string, member) => {
 	return string
 		.replace('$MENTION$', member)
 		.replace('$NAME$', member.user.tag)
@@ -6,7 +6,7 @@ module.exports.replaceTokens = (string, member) => {
 		.replace('$AVATAR$', member.user.avatarURL || member.user.displayAvatarURL());
 };
 
-module.exports.countNormalizer = count => {
+export const countNormalizer = count => {
 	switch (count % 10) {
 		case 1:
 			return `${count}st`;

@@ -1,7 +1,8 @@
-const { ECommand } = require('../../lib');
-const { spawn }    = require('child_process');
+import { ECommand } from '../../lib/index.js';
+import { spawn }    from 'child_process';
+import process      from 'process';
 
-module.exports = class extends ECommand {
+export default class extends ECommand {
 	constructor(client) {
 		super(client, {
 			aliases:     ['restart'],
@@ -26,4 +27,4 @@ module.exports = class extends ECommand {
 
 		process.exit(0);
 	}
-};
+}

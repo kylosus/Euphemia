@@ -1,9 +1,8 @@
-const { MessageEmbed } = require('discord.js');
-const moment           = require('moment');
+import { Formatters, MessageEmbed } from 'discord.js';
 
 const COLOR = '#2CDDD7';
 
-module.exports = async (channel, guild, moderator, result) => {
+export default async (channel, guild, moderator, result) => {
 	const embed = new MessageEmbed()
 		.setColor(COLOR);
 

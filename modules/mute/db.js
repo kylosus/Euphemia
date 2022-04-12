@@ -1,4 +1,4 @@
-const moment = require('moment');
+import moment from 'moment';
 
 const TABLE_NAME = 'muted_members';
 
@@ -61,7 +61,7 @@ const remove = (guild, member) => {
 	return STATEMENTS.delete.run(guild, member);
 };
 
-module.exports = {
+export {
 	init,
 	getMutedRoleIfNotExpired,
 	insert,

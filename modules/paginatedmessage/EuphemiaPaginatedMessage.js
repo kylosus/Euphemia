@@ -22,7 +22,7 @@ const register = async (message, generator, args) => {
 	botMessage.pagination = { generator, args };
 };
 
-module.exports = {
+export {
 	BACKWARD_EMOJI,
 	FORWARD_EMOJI,
 	register

@@ -1,7 +1,6 @@
-const { Collection, MessageEmbed } = require('discord.js');
-const { ArgConsts, ECommand }      = require('../../lib');
-const got                          = require('got');
-const moment                       = require('moment'); require('moment-duration-format');
+import { Collection, Formatters, MessageEmbed } from 'discord.js';
+import { ArgConsts, ECommand }                  from '../../lib/index.js';
+import got                                      from 'got';
 
 const cache = new Collection();
 
@@ -18,7 +17,7 @@ const fetchAnime = (query, variables) => {
 	}).json();
 };
 
-module.exports = class extends ECommand {
+export default class extends ECommand {
 	constructor(client) {
 		super(client, {
 			aliases:     ['next'],
@@ -136,4 +135,5 @@ module.exports = class extends ECommand {
 
 		return this.shipOne(message, result.Media);
 	}
-};
+}
+

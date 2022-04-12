@@ -1,11 +1,14 @@
-const { MessageEmbed } = require('discord.js');
-const { ECommand }     = require('../../lib');
-const moment           = require('moment'); require('moment-duration-format');
-const pjson = require('../../package.json');
+import { MessageEmbed } from 'discord.js';
+import { ECommand }     from '../../lib/index.js';
+import dayjs            from 'dayjs';
+import duration         from 'dayjs/plugin/duration.js';
+import pjson            from '../../package.json' assert { type: 'json' };
+
+dayjs.extend(duration);
 
 const THUMBNAIL = 'https://cdn.discordapp.com/attachments/469111529384443904/473072301315981312/Euphie-sama.png';
 
-module.exports = class extends ECommand {
+export default class extends ECommand {
 	constructor(client) {
 		super(client, {
 			aliases:     ['stats'],

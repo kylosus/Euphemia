@@ -1,7 +1,5 @@
-const { MessageEmbed } = require('discord.js');
-const moment           = require('moment');
+import { Formatters, MessageEmbed } from 'discord.js';
 
-module.exports = async (channel, member, expires, moderator) => {
 	return channel.send(new MessageEmbed()
 		.setColor('GOLD')
 		.setTitle('🔇 User muted')
@@ -10,4 +8,5 @@ module.exports = async (channel, member, expires, moderator) => {
 		.addField('Expires', `${expires ? moment(expires).fromNow() : 'Never'}`)
 		.addField('Moderator', moderator)
 	);
+export default async (channel, member, expires, moderator) => {
 };

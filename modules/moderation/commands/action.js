@@ -1,11 +1,11 @@
-const { MessageEmbed, Permissions } = require('discord.js');
-const { ArgConsts, ECommand }       = require('../../../lib');
-const moment                        = require('moment');
-const db                            = require('../db');
+import { Formatters, MessageEmbed, Permissions } from 'discord.js';
+import { ArgConsts, ECommand }                   from '../../../lib/index.js';
+import { getAction }                 from '../db.js';
+import moment                        from 'moment';
 
 const COLOR = '#2CDDD7';
 
-module.exports = class extends ECommand {
+export default class extends ECommand {
 	constructor(client) {
 		super(client, {
 			aliases:         ['action'],
@@ -73,4 +73,4 @@ module.exports = class extends ECommand {
 
 		return message.channel.send(embed);
 	}
-};
+}

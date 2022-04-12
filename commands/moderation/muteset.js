@@ -1,8 +1,8 @@
-const { Permissions }         = require('discord.js');
-const { ArgConsts, ECommand } = require('../../lib');
-const { mutedRole }           = require('../../modules/mute');
+import { Permissions }                   from 'discord.js';
+import { ArgConsts, ECommand }           from '../../lib/index.js';
+import { setMutedRole, setNewMutedRole } from '../../modules/mute/index.js';
 
-module.exports = class extends ECommand {
+export default class extends ECommand {
 	constructor(client) {
 		super(client, {
 			aliases:           ['muteset'],
@@ -49,4 +49,4 @@ module.exports = class extends ECommand {
 
 		return `Set ${ role.toString() } as the muted role`;
 	}
-};
+}

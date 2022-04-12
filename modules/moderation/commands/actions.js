@@ -1,9 +1,9 @@
-const { MessageEmbed, Permissions }               = require('discord.js');
-const { ArgConsts, ArgumentType, ECommand }       = require('../../../lib');
-const { CircularListGenerator, PaginatedMessage } = require('../../paginatedmessage');
-const db                                          = require('../db');
+import { MessageEmbed, Permissions }               from 'discord.js';
+import { ArgConsts, ArgumentType, ECommand }       from '../../../lib/index.js';
+import { CircularListGenerator, PaginatedMessage } from '../../paginatedmessage/index.js';
+import { getIdMax, getModeratorTargetPage }        from '../db.js';
 
-module.exports = class extends ECommand {
+export default class extends ECommand {
 	constructor(client) {
 		super(client, {
 			aliases:         ['actions'],
@@ -42,7 +42,7 @@ module.exports = class extends ECommand {
 	async run(message, args) {
 		const perPage = 20;
 
-		const { length } = await db.getIdMax(message.guild.id);
+		const { length } = await getIdMax(message.guild.id);
 
 		if (!length) {
 			throw 'No entries found';
@@ -73,7 +73,7 @@ module.exports = class extends ECommand {
 				async () => {
 					lastId += perPage * 2;
 
-					const results = await db.getModeratorTargetPage({
+					const results = await getModeratorTargetPage({
 						guild:     message.guild.id,
 						moderator: args.moderator,
 						target:    args.target,
@@ -122,4 +122,4 @@ module.exports = class extends ECommand {
 
 		return PaginatedMessage.register(message, generator, result);
 	}
-};
+}

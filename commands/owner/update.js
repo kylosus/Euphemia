@@ -1,9 +1,9 @@
-const { MessageEmbed }          = require('discord.js');
-const { ECommand, EmbedLimits } = require('../../lib');
-const { spawn }                 = require('child_process');
-const _                         = require('lodash');
+import { Formatters, MessageEmbed } from 'discord.js';
+import { ECommand, EmbedLimits }    from '../../lib/index.js';
+import { spawn }                 from 'child_process';
+import * as _                    from 'lodash';
 
-module.exports = class extends ECommand {
+export default class extends ECommand {
 	constructor(client) {
 		super(client, {
 			aliases:     ['update'],
@@ -53,4 +53,4 @@ module.exports = class extends ECommand {
 			)
 		);
 	}
-};
+}

@@ -1,13 +1,18 @@
-const { MessageEmbed }        = require('discord.js');
-const { ECommand, ArgConsts } = require('../../lib');
-const moment                  = require('moment');
-const { fetchAnime }          = require('./util');
-const _                       = require('lodash');
+import { MessageEmbed, Formatters } from 'discord.js';
+import { ECommand, ArgConsts }      from '../../lib/index.js';
+import { fetchAnime }               from './util.js';
+import { truncate }                 from 'lodash-es';
+import dayjs                        from 'dayjs';
+import duration                     from 'dayjs/plugin/duration.js';
+import relativeTime                 from 'dayjs/plugin/relativeTime.js';
+
+dayjs.extend(duration);
+dayjs.extend(relativeTime);
 
 const GENRE_MAX = 3;
 const DESC_MAX  = 300;
 
-module.exports = class extends ECommand {
+export default class extends ECommand {
 	constructor(client) {
 		super(client, {
 			aliases:     ['anime'],
@@ -117,7 +122,7 @@ module.exports = class extends ECommand {
 
 		return message.channel.send(embed);
 	}
-};
+}
 
 function _normalizeConstant(string) {
 	const temp = string.toLowerCase().split('_').join(' ');

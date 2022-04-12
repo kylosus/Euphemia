@@ -1,8 +1,9 @@
-const { MessageEmbed }                           = require('discord.js');
-const { ECommand, StringDoctor: { capitalize } } = require('../../lib');
-const db                                         = require('./db');
+import { MessageEmbed }                 from 'discord.js';
+import { ECommand, StringDoctor as SD } from '../../lib/index.js';
 
-class ModerationCommand extends ECommand {
+import { bulkInsert } from './db.js';
+
+export default class ModerationCommand extends ECommand {
 	constructor(client, {
 		actionName = (() => {throw 'Moderation commands need an actionName option';})(), ...options
 	}) {
@@ -74,9 +75,7 @@ class ModerationCommand extends ECommand {
 		}));
 
 		const all = passed.concat(failed);
-		db.bulkInsert(all).catch(console.err);
+		bulkInsert(all).catch(console.error);
 		return all;
 	}
 }
-
-module.exports = ModerationCommand;

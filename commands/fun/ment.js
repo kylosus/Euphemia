@@ -1,8 +1,9 @@
-const { MessageEmbed } = require('discord.js');
-const { ECommand }     = require('../../lib');
-const QUOTES           = require('./ment.js.json');
+import { MessageEmbed } from 'discord.js';
+import { ECommand }     from '../../lib/index.js';
 
-module.exports = class extends ECommand {
+import QUOTES from './ment.js.json' assert { type: 'json' };
+
+export default class extends ECommand {
 	constructor(client) {
 		super(client, {
 			aliases:     ['ment'],
@@ -26,4 +27,4 @@ module.exports = class extends ECommand {
 			.setDescription(result)
 		);
 	}
-};
+}

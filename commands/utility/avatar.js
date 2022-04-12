@@ -1,7 +1,7 @@
-const { MessageEmbed }        = require('discord.js');
-const { ArgConsts, ECommand } = require('../../lib');
+import { MessageEmbed }        from 'discord.js';
+import { ArgConsts, ECommand } from '../../lib/index.js';
 
-module.exports = class extends ECommand {
+export default class extends ECommand {
 	constructor(client) {
 		super(client, {
 			aliases:     ['avatar'],
@@ -46,4 +46,4 @@ module.exports = class extends ECommand {
 			.setColor(result[1])
 		);
 	}
-};
+}

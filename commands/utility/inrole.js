@@ -1,9 +1,9 @@
-const { MessageEmbed }                      = require('discord.js');
-const { ArgConsts, ArgumentType, ECommand } = require('../../lib');
-const { CircularList, PaginatedMessage }    = require('../../modules');
-const _                                     = require('lodash');
+import { MessageEmbed }                      from 'discord.js';
+import { ArgConsts, ArgumentType, ECommand } from '../../lib/index.js';
+import { CircularList, PaginatedMessage }    from '../../modules/index.js';
+import { chunk }                             from 'lodash-es';
 
-module.exports = class extends ECommand {
+export default class extends ECommand {
 	constructor(client) {
 		super(client, {
 			aliases:     ['inrole'],
@@ -49,4 +49,4 @@ module.exports = class extends ECommand {
 				.setDescription(s.map(s => s.user.tag));
 		}, new CircularList(_.chunk(result.members.array(), 20)));
 	}
-};
+}

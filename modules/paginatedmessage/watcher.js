@@ -1,4 +1,4 @@
-const { BACKWARD_EMOJI, FORWARD_EMOJI } = require('./EuphemiaPaginatedMessage');
+import { BACKWARD_EMOJI, FORWARD_EMOJI } from './EuphemiaPaginatedMessage.js';
 
 const _watcher = async ({ message, emoji }, user) => {
 	if (!message.pagination) {
@@ -37,6 +37,4 @@ const init = client => {
 	watch(client);
 };
 
-module.exports = {
-	init
-};
+export { init };

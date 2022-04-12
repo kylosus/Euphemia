@@ -36,7 +36,7 @@ const getOrSetMutedRole = async (guild /*, roleName = `${guild.client.user.usern
 	return role;
 };
 
-module.exports = {
+export {
 	getMutedRole,
 	setMutedRole,
 	setNewMutedRole,

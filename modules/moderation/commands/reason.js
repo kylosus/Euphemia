@@ -1,12 +1,11 @@
-const { MessageEmbed, Permissions } = require('discord.js');
-const { ArgConsts, ECommand }       = require('../../../lib');
-
-const db = require('../db');
+import { Formatters, MessageEmbed, Permissions } from 'discord.js';
+import { ArgConsts, ECommand }                   from '../../../lib/index.js';
+import { getAction, updateReason }               from '../db.js';
 
 const EMOJI_OK = '✅';
 const EMOJI_NO = '❎';
 
-module.exports = class extends ECommand {
+export default class extends ECommand {
 	constructor(client) {
 		super(client, {
 			aliases:         ['reason'],
@@ -35,7 +34,7 @@ module.exports = class extends ECommand {
 	}
 
 	async run(message, { newreason, number }) {
-		const result = await db.getAction(message.guild.id, number);
+		const result = await getAction(message.guild.id, number);
 
 		if (!result) {
 			throw 'Action number not found';
@@ -67,7 +66,7 @@ module.exports = class extends ECommand {
 			return newreason;
 		})(result.reason);
 
-		await db.updateReason({
+		await updateReason({
 			guild: message.guild.id,
 			id:    number,
 			reason
@@ -83,4 +82,4 @@ module.exports = class extends ECommand {
 			.setDescription('```' + reason + '```')
 		);
 	}
-};
+}

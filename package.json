@@ -3,8 +3,9 @@
   "version": "3.0.0",
   "description": "Yet another Discord bot with moderation and utility commands",
   "main": "app.js",
+  "type": "module",
   "scripts": {
-    "start": "node app.js",
+    "start": "node --experimental-json-modules app.js",
     "migrate": "node migrate.js",
     "update": "git pull; npm update"
   },
