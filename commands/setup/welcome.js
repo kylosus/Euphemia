@@ -24,13 +24,13 @@ export default class extends ECommand {
 			args:            [
 				{
 					id:       'message',
-					type:     ArgConsts.JSON,
+					type:     ArgConsts.TYPE.JSON,
 					optional: true,
 					default:  () => null
 				},
 				{
 					id:       'channel',
-					type:     ArgConsts.CHANNEL,
+					type:     ArgConsts.TYPE.CHANNEL,
 					optional: true,
 					default:  () => null
 				},

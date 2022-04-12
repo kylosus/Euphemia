@@ -13,7 +13,7 @@ export default class extends ECommand {
 			args:        [
 				{
 					id:       'code',
-					type:     ArgConsts.NUMBER,
+					type:     ArgConsts.TYPE.NUMBER,
 					optional: true,
 					default:  () => 0,
 				},

@@ -14,13 +14,13 @@ export default class extends ECommand {
 			args:            [
 				{
 					id:       'channel',
-					type:     ArgConsts.CHANNEL,
+					type:     ArgConsts.TYPE.CHANNEL,
 					optional: true,
 					default:  m => m.channel
 				},
 				{
 					id:      'id',
-					type:    ArgConsts.TEXT,
+					type:    ArgConsts.TYPE.TEXT,
 					message: 'Please provide a message id.'
 				}
 			],

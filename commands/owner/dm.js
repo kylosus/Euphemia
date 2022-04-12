@@ -14,12 +14,12 @@ export default class extends ECommand {
 			args:            [
 				{
 					id:      'users',
-					type:    ArgConsts.USERS,
+					type:    ArgConsts.TYPE.USERS,
 					message: 'Please mention users to DM to'
 				},
 				{
 					id:      'text',
-					type:    ArgConsts.TEXT,
+					type:    ArgConsts.TYPE.TEXT,
 					message: 'Please provide text'
 				}
 			],

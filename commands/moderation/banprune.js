@@ -17,12 +17,12 @@ export default class extends ModerationCommand {
 			args:              [
 				{
 					id:      'id',
-					type:    ArgConsts.ID,
+					type:    ArgConsts.TYPE.ID,
 					message: 'Please mention a user to prune'
 				},
 				{
 					id:       'reason',
-					type:     ArgConsts.REASON,
+					type:     ArgConsts.TYPE.REASON,
 					optional: true,
 					default:  () => null,
 				}

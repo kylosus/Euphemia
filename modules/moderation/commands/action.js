@@ -18,7 +18,7 @@ export default class extends ECommand {
 			args:            [
 				{
 					id:      'number',
-					type:    ArgConsts.NUMBER,
+					type:    ArgConsts.TYPE.NUMBER,
 					message: 'Please specify an action number'
 				}
 			],

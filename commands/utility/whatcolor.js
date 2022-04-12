@@ -13,7 +13,7 @@ export default class extends ECommand {
 			args:        [
 				{
 					id:      'color',
-					type:    ArgConsts.TEXT,
+					type:    ArgConsts.TYPE.TEXT,
 					message: 'Please provide color'
 				}
 			],

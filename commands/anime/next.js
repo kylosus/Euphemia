@@ -29,9 +29,9 @@ export default class extends ECommand {
 			args:        [
 				{
 					id:       'anime',
-					type:     ArgConsts.TEXT,
+					type:     ArgConsts.TYPE.TEXT,
 					optional: true,
-					default: () => '*'
+					default:  () => '*'
 				}
 			],
 			guildOnly:   false,

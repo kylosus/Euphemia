@@ -13,7 +13,7 @@ export default class extends ECommand {
 			args:        [
 				{
 					id:       'user',
-					type:     ArgConsts.USER,
+					type:     ArgConsts.TYPE.USER,
 					optional: true,
 					default:  m => m.author
 				}

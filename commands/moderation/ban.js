@@ -17,12 +17,12 @@ export default class extends ModerationCommand {
 			args:              [
 				{
 					id:      'ids',
-					type:    ArgConsts.IDS,
+					type:    ArgConsts.TYPE.IDS,
 					message: 'Please mention users to ban'
 				},
 				{
 					id:       'reason',
-					type:     ArgConsts.REASON,
+					type:     ArgConsts.TYPE.REASON,
 					optional: true,
 					default:  () => null,
 				},

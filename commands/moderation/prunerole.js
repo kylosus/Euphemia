@@ -32,7 +32,7 @@ export default class extends ModerationCommand {
 				},
 				{
 					id:       'reason',
-					type:     ArgConsts.REASON,
+					type:     ArgConsts.TYPE.REASON,
 					optional: true,
 					default:  () => null
 				},

@@ -17,19 +17,19 @@ export default class extends ModerationCommand {
 			args:              [
 				{
 					id:       'channels',
-					type:     ArgConsts.CHANNELS,
+					type:     ArgConsts.TYPE.CHANNELS,
 					optional: true,
 					default:  m => [m.channel]
 				},
 				{
 					id:       'toggle',
-					type:     ArgConsts.WORD,
+					type:     ArgConsts.TYPE.WORD,
 					optional: true,
 					default:  () => 'on'
 				},
 				{
 					id:       'reason',
-					type:     ArgConsts.REASON,
+					type:     ArgConsts.TYPE.REASON,
 					optional: true,
 					default:  () => null
 				}

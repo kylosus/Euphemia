@@ -19,7 +19,7 @@ export default class extends ECommand {
 			args:            [
 				{
 					id:      'code',
-					type:    ArgConsts.TEXT,
+					type:    ArgConsts.TYPE.TEXT,
 					message: 'Please provide code'
 				}
 			],

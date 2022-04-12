@@ -41,7 +41,7 @@ export default class extends ECommand {
 				},
 				{
 					id:      'text',
-					type:    ArgConsts.TEXT,
+					type:    ArgConsts.TYPE.TEXT,
 					message: 'Please provide text'
 				}
 			],

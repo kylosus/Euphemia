@@ -19,7 +19,7 @@ export default class extends ECommand {
 			args:            [
 				{
 					id:       'event',
-					type:     ArgConsts.TEXT,
+					type:     ArgConsts.TYPE.TEXT,
 					optional: true,
 					default:  () => null
 				},

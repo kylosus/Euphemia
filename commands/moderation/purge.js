@@ -15,14 +15,9 @@ export default class extends ECommand {
 			},
 			userPermissions:   [Permissions.FLAGS.MANAGE_MESSAGES, Permissions.FLAGS.READ_MESSAGE_HISTORY],
 			clientPermissions: [Permissions.FLAGS.MANAGE_MESSAGES, Permissions.FLAGS.READ_MESSAGE_HISTORY],
-			args:              [
-				{
-					id:       'amount',
-					type:     ArgConsts.NUMBER,
-					optional: true,
-					default:  () => 1,
-				}
-			],
+			args:              [{
+				id: 'amount', type: ArgConsts.TYPE.NUMBER, optional: true, default: () => 1,
+			}],
 			guildOnly:         true,
 			ownerOnly:         false,
 			deleteAfter:       DELETE_AFTER

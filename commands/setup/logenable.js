@@ -19,13 +19,13 @@ export default class extends ECommand {
 			args:            [
 				{
 					id:       'channel',
-					type:     ArgConsts.CHANNEL,
+					type:     ArgConsts.TYPE.CHANNEL,
 					optional: true,
 					default:  m => m.channel
 				},
 				{
 					id:       'event',
-					type:     ArgConsts.TEXT,
+					type:     ArgConsts.TYPE.TEXT,
 					optional: true,
 					default:  () => null
 				},

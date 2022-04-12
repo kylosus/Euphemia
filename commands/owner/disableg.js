@@ -12,7 +12,7 @@ export default class extends ECommand {
 			args:        [
 				{
 					id:      'command',
-					type:    ArgConsts.WORD,
+					type:    ArgConsts.TYPE.WORD,
 					message: 'Please mention a command name'
 				}
 			],

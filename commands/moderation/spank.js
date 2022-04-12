@@ -16,7 +16,7 @@ export default class extends ECommand {
 			args:              [
 				{
 					id:      'member',
-					type:    ArgConsts.MEMBER,
+					type:    ArgConsts.TYPE.MEMBER,
 					message: 'Are you trying to spank thin air?',
 				}
 			],

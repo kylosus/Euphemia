@@ -18,7 +18,7 @@ export default class extends ECommand {
 			args:        [
 				{
 					id:      'text',
-					type:    ArgConsts.TEXT,
+					type:    ArgConsts.TYPE.TEXT,
 					message: 'Please provide text to look up.'
 				}
 			],

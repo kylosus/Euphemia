@@ -18,12 +18,12 @@ export default class extends ModerationCommand {
 			args:              [
 				{
 					id:      'members',
-					type:    ArgConsts.MEMBERS,
+					type:    ArgConsts.TYPE.MEMBERS,
 					message: 'Please mention members to unmute'
 				},
 				{
 					id:       'reason',
-					type:     ArgConsts.REASON,
+					type:     ArgConsts.TYPE.REASON,
 					optional: true,
 					default:  () => null
 				}

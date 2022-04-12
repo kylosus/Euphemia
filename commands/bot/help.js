@@ -15,7 +15,7 @@ export default class extends ECommand {
 			args:        [
 				{
 					id:       'command',
-					type:     ArgConsts.TEXT,
+					type:     ArgConsts.TYPE.TEXT,
 					optional: true,
 					default:  () => null
 				},
