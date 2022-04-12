@@ -107,7 +107,7 @@ export default class extends ECommand {
 			.setURL(result.siteUrl)
 			.addField(`Episode ${result.nextAiringEpisode?.episode ?? '?'} in`, duration, false);
 
-		return message.channel.send(embed);
+		return message.channel.send({ embeds: [embed] });
 	}
 
 	async shipPage(message, result) {
