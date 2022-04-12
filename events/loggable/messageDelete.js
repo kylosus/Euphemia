@@ -13,8 +13,9 @@ export default async (channel, message) => {
 	if (message.content) {
 		embed.addField(
 			'Content',
-			_.truncate(message.content, { length: EmbedLimits.FIELD_VALUE - 6 })
-			, false);
+			truncate(message.content, { length: EmbedLimits.FIELD_VALUE - 6 }),
+			false
+		);
 	}
 
 	((attachment) => {

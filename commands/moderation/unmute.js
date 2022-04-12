@@ -36,7 +36,7 @@ export default class extends ModerationCommand {
 	async run(message, { members, reason }) {
 		const result = new ModerationCommandResult(reason);
 
-		const role = await mutedRole.getMutedRole(message.guild);
+		const role = await getMutedRole(message.guild);
 
 		if (!role) {
 			throw 'Muted role not found';
@@ -49,7 +49,7 @@ export default class extends ModerationCommand {
 			}
 
 			try {
-				await muteHandler.unmuteMember(message.guild, m, role, reason);
+				await unmuteMember(message.guild, m, role, reason);
 			} catch (error) {
 				return result.addFailed(m, error.message);
 			}

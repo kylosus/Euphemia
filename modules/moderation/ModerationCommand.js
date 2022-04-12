@@ -21,7 +21,7 @@ export default class ModerationCommand extends ECommand {
 	async ship(message, result) {
 		const embed = new MessageEmbed()
 			.setColor(result.getColor())
-			.setTitle(`${capitalize(this.aliases[0])} command executed`);
+			.setTitle(`${SD.capitalize(this.aliases[0])} command executed`);
 
 		if (result.aux) {
 			embed.setDescription(result.aux.toString());

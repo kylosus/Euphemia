@@ -28,8 +28,8 @@ export default class extends ECommand {
 
 	async run(message, { role: _role }) {
 		if (!_role) {
-			const role = await mutedRole.setNewMutedRole(message.guild);
-			return `Created new muted role ${ role.toString() }`;
+			const role = await setNewMutedRole(message.guild);
+			return `Created new muted role ${role.toString()}`;
 		}
 
 		const role = await (async (role) => {
@@ -45,7 +45,7 @@ export default class extends ECommand {
 			throw 'Cannot assign as the muted role. Role is too high in the hierarchy';
 		}
 
-		await mutedRole.setMutedRole(message.guild, role);
+		await setMutedRole(message.guild, role);
 
 		return `Set ${role.toString()} as the muted role`;
 	}

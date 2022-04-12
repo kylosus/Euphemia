@@ -38,12 +38,12 @@ export default class extends ECommand {
 			return member;
 		})();
 
-		const role = await mutedRole.getOrSetMutedRole(message.guild);
+		const role = await getOrSetMutedRole(message.guild);
 
 		await toMute.roles.add(role, 'Spanked');
 
 		const duration = moment().add(1, 'minutes').toISOString();
-		await muteHandler.muteMember(message.guild, toMute, role, 'Spanked', duration);
+		await muteMember(message.guild, toMute, role, 'Spanked', duration);
 
 		if (message.member.id === toMute.id) {
 			return 'Nice try. You got yourself spanked';

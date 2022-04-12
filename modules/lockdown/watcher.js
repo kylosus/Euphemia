@@ -8,7 +8,7 @@ const onMemberAdd = client => {
 			return;
 		}
 
-		const role = await mutedRole.getMutedRole(member.guild);
+		const role = await getMutedRole(member.guild);
 
 		if (!role) {
 			return;

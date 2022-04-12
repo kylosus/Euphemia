@@ -53,7 +53,7 @@ export default class extends ECommand {
 
 			return [
 				async () => {
-					const results = await db.getModeratorTargetPage({
+					const results = await getModeratorTargetPage({
 						guild:     message.guild.id,
 						moderator: args.moderator,
 						target:    args.target,

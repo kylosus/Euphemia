@@ -47,6 +47,6 @@ export default class extends ECommand {
 				.setTitle(`List of members in ${result.name} (${result.members.size})`)
 				// .setDescription(s.map(ss => `${ss}, \`${ss.user.tag}\``).join('\n'));
 				.setDescription(s.map(s => s.user.tag));
-		}, new CircularList(_.chunk(result.members.array(), 20)));
+		}, new CircularList(chunk(result.members.array(), 20)));
 	}
 }

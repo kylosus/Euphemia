@@ -45,14 +45,14 @@ export default class extends ModerationCommand {
 		const result   = new ModerationCommandResult(reason, duration);
 
 		const role = await (async guild => {
-			const role = await mutedRole.getMutedRole(guild);
+			const role = await getMutedRole(guild);
 
 			if (role) {
 				return role;
 			}
 
-			const newRole = await mutedRole.setNewMutedRole(guild);
-			await this.sendNotice(message, `Muted role not found, created new role ${ newRole.toString() }`);
+			const newRole = await setNewMutedRole(guild);
+			await this.sendNotice(message, `Muted role not found, created new role ${newRole.toString()}`);
 			return newRole;
 		})(message.guild);
 
@@ -66,7 +66,7 @@ export default class extends ModerationCommand {
 			result.addPassed(m);
 
 			if (duration) {
-				await muteHandler.muteMember(message.guild, m, role, reason, duration);
+				await muteMember(message.guild, m, role, reason, duration);
 			}
 
 			// this.client.emit('guildMemberMuted', m, args.duration, message.member);

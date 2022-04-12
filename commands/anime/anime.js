@@ -101,12 +101,12 @@ export default class extends ECommand {
 		}
 
 		if (result.description) {
-			embed.addField('Description', _escapeHTML(_.truncate(result.description, { length: DESC_MAX })));
+			embed.addField('Description', _escapeHTML(truncate(result.description, { length: DESC_MAX })));
 		}
 
 		const duration = (() => {
 			if (result.nextAiringEpisode) {
-				const duration = moment.duration(result.nextAiringEpisode.timeUntilAiring, 'seconds');
+				const duration = dayjs.duration(result.nextAiringEpisode.timeUntilAiring, 'seconds');
 				return ['Next', duration.format('D [days] H [hours] m [minutes]')];
 			}
 
