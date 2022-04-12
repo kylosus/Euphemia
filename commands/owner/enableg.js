@@ -25,10 +25,10 @@ export default class extends ECommand {
 		const c = this.client.commandHandler.commands.get(command);
 
 		if (!c) {
-			throw `Command \`${ command }\` not found`;
+			throw `Command \`${command}\` not found`;
 		}
 
-		const response = !c.disabled ? `\`${ c.aliases[0] }\` is already enabled` : `Enabled \`${ c.aliases[0] }\``;
+		const response = !c.disabled ? `\`${c.aliases[0]}\` is already enabled` : `Enabled \`${c.aliases[0]}\``;
 
 		c.disabled = false;
 		return response;

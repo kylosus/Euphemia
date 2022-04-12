@@ -6,13 +6,13 @@ import { chunk }                             from 'lodash-es';
 export default class extends ECommand {
 	constructor(client) {
 		super(client, {
-			aliases:     ['inrole'],
-			description: {
+			aliases:      ['inrole'],
+			description:  {
 				content:  'Shows members in a given role',
 				usage:    '[user]',
 				examples: ['inrole 294846212895670273', 'inrole Something', 'avatar 275331662865367040']
 			},
-			args:        [
+			args:         [
 				{
 					id:      'role',
 					type:    new ArgumentType(
@@ -30,8 +30,8 @@ export default class extends ECommand {
 					message: 'Please provide a role',
 				},
 			],
-			guildOnly:   true,
-			ownerOnly:   false,
+			guildOnly:    true,
+			ownerOnly:    false,
 			fetchMembers: true
 		});
 	}

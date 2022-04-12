@@ -8,13 +8,13 @@ export const replaceTokens = (string, member) => {
 
 export const countNormalizer = count => {
 	switch (count % 10) {
-		case 1:
-			return `${count}st`;
-		case 2:
-			return `${count}nd`;
-		case 3:
-			return `${count}rd`;
-		default:
-			return `${count}th`;
+	case 1:
+		return `${count}st`;
+	case 2:
+		return `${count}nd`;
+	case 3:
+		return `${count}rd`;
+	default:
+		return `${count}th`;
 	}
 };

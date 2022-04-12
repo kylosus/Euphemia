@@ -5,7 +5,9 @@ import { bulkInsert } from './db.js';
 
 export default class ModerationCommand extends ECommand {
 	constructor(client, {
-		actionName = (() => {throw 'Moderation commands need an actionName option';})(), ...options
+		actionName = (() => {
+			throw 'Moderation commands need an actionName option';
+		})(), ...options
 	}) {
 		super(client, options);
 

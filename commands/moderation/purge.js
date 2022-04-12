@@ -9,9 +9,7 @@ export default class extends ECommand {
 		super(client, {
 			aliases:           ['purge', 'p'],
 			description:       {
-				content:  'Purges messages in the channel.',
-				usage:    '[amount]',
-				examples: ['purge', 'purge 100'],
+				content: 'Purges messages in the channel.', usage: '[amount]', examples: ['purge', 'purge 100'],
 			},
 			userPermissions:   [Permissions.FLAGS.MANAGE_MESSAGES, Permissions.FLAGS.READ_MESSAGE_HISTORY],
 			clientPermissions: [Permissions.FLAGS.MANAGE_MESSAGES, Permissions.FLAGS.READ_MESSAGE_HISTORY],
@@ -26,6 +24,6 @@ export default class extends ECommand {
 
 	async run(message, { amount }) {
 		const deleted = (await message.channel.bulkDelete(amount + 1)).size - 1;
-		return `Purged ${ deleted } message${ deleted > 1 ? 's' : '' }`;
+		return `Purged ${deleted} message${deleted > 1 ? 's' : ''}`;
 	}
 }

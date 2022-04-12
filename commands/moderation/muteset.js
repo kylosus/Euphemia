@@ -47,6 +47,6 @@ export default class extends ECommand {
 
 		await mutedRole.setMutedRole(message.guild, role);
 
-		return `Set ${ role.toString() } as the muted role`;
+		return `Set ${role.toString()} as the muted role`;
 	}
 }

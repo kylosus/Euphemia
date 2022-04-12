@@ -21,7 +21,7 @@ export default class extends ECommand {
 		const entry = message.client.provider.get(message.guild, 'lockdown', false);
 		await message.client.provider.set(message.guild, 'lockdown', !entry);
 
-		return `${ entry ? 'Disabled' : 'Enabled' } automute on new member join.`;
+		return `${entry ? 'Disabled' : 'Enabled'} automute on new member join.`;
 	}
 
 	async ship(message, result) {

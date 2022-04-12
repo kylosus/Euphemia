@@ -60,7 +60,9 @@ export default class extends ECommand {
 			search
 		};
 
-		const { data } = await fetchAnime(query, variables).catch(() => {throw 'Anime not found';});
+		const { data } = await fetchAnime(query, variables).catch(() => {
+			throw 'Anime not found';
+		});
 
 		return data.Media;
 	}
@@ -68,20 +70,20 @@ export default class extends ECommand {
 	async ship(message, result) {
 		const embed = new MessageEmbed()
 			.setColor('LUMINOUS_VIVID_PINK')
-			.setTitle(result.title.userPreferred)
-			.setThumbnail(result.coverImage.large)
-			.setDescription(`[AniList](${result.siteUrl}) | [MyAnimeList](https://myanimelist.net/anime/${result.idMal})`)
-			.addField('Average score', `${result.averageScore || '-'}%`, true)
-			.addField('Popularity', result.popularity, true)
+			.setTitle(result.title?.userPreferred)
+			.setThumbnail(result.coverImage?.large)
+			.setDescription(`[AniList](${result?.siteUrl}) | [MyAnimeList](https://myanimelist.net/anime/${result.idMal})`)
+			.addField('Average score', `${result.averageScore ?? '-'}%`, true)
+			.addField('Popularity', String(result?.popularity), true)
 			.addField('Format', _normalizeConstant(result.format) || 'unknown', true)
 			.addField('Source', result.source ? _normalizeConstant(result.source) : 'unknown', true)
-			.addField('Episodes', result.episodes || 'unknown', true)
+			.addField('Episodes', String(result.episodes) ?? 'unknown', true)
 			.addField('Status', _normalizeConstant(result.status) || 'unknown', true);
 
 		if (result.startDate.month) {
 			embed.addField(
 				'Start',
-				`${result.startDate.day}/${result.startDate.month}/${result.startDate.year}`,
+				`${result?.startDate.day}/${result?.startDate.month}/${result?.startDate.year}`,
 				true
 			);
 		}

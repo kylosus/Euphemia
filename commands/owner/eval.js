@@ -13,7 +13,7 @@ export default class extends ECommand {
 			description:     {
 				content:  'Evaluates JavaScript code',
 				usage:    '<code>',
-				examples: ['eval 1 + 1', 'eval message.delete()']
+				examples: ['eval return 1 + 1', 'eval message.delete()']
 			},
 			userPermissions: [Permissions.FLAGS.ADMINISTRATOR],
 			args:            [

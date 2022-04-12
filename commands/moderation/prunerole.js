@@ -15,8 +15,8 @@ export default class extends ModerationCommand {
 			userPermissions: [Permissions.FLAGS.ADMINISTRATOR],
 			args:            [
 				{
-					id:       'role',
-					type:     new ArgumentType(
+					id:      'role',
+					type:    new ArgumentType(
 						/.*/,
 						ArgConsts.flatten,
 						({ guild }, roleRes) => {
@@ -28,7 +28,7 @@ export default class extends ModerationCommand {
 								})();
 						}
 					),
-					message:  'Please provide a role',
+					message: 'Please provide a role',
 				},
 				{
 					id:       'reason',

@@ -9,11 +9,11 @@ export default class extends ECommand {
 				content: 'Sets up welcome channel and message. Send without arguments to disable it',
 				// usage: '[channel] [{JSON}]',
 				usage:    [
-					'%MENTION       -> mentions user',
-					'%NAME%         -> user tag',
-					'$MEMBER_COUNT$ -> guild member count',
-					'$AVATAR$       -> avatar URL'
-				].join('\n'),
+							  '%MENTION       -> mentions user',
+							  '%NAME%         -> user tag',
+							  '$MEMBER_COUNT$ -> guild member count',
+							  '$AVATAR$       -> avatar URL'
+						  ].join('\n'),
 				examples: [
 					'welcome',
 					'welcome #general',

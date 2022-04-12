@@ -61,15 +61,15 @@ export default class extends ModerationCommand {
 
 	async ship(message, result) {
 		const embed = new MessageEmbed()
-		.setColor(result.getColor());
+			.setColor(result.getColor());
 
 		if (result.passed.length) {
-			embed.addField(`${ result.aux !== 'on' ? 'Allowed' : 'Denied' } message sending permissions in`,
-				result.passed.map(r => `<#${ r.id }>`).join(' '));
+			embed.addField(`${result.aux !== 'on' ? 'Allowed' : 'Denied'} message sending permissions in`,
+				result.passed.map(r => `<#${r.id}>`).join(' '));
 		}
 
 		if (result.failed.length) {
-			embed.addField('Failed', result.failed.map(r => `<#${ r.id }> - ${ r.reason || 'Unknown reason' }`).join(' '));
+			embed.addField('Failed', result.failed.map(r => `<#${r.id}> - ${r.reason || 'Unknown reason'}`).join(' '));
 		}
 
 		return message.channel.send({ embeds: [embed] });

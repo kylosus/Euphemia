@@ -8,11 +8,11 @@ export default class extends ECommand {
 			description:     {
 				content:  'Sets up goodbye channel and message. Send without arguments to disable it',
 				usage:    [
-					'%MENTION       -> mentions user',
-					'%NAME%         -> user tag',
-					'$MEMBER_COUNT$ -> guild member count',
-					'$AVATAR$       -> avatar URL'
-				].join('\n'),
+							  '%MENTION       -> mentions user',
+							  '%NAME%         -> user tag',
+							  '$MEMBER_COUNT$ -> guild member count',
+							  '$AVATAR$       -> avatar URL'
+						  ].join('\n'),
 				examples: [
 					'welcome',
 					'welcome #general',
@@ -55,7 +55,7 @@ export default class extends ECommand {
 		}
 
 		if (!args.message) {
-			return `Moved goodbye message to ${ args.channel.toString() }`;
+			return `Moved goodbye message to ${args.channel.toString()}`;
 		}
 
 		// Parse the json

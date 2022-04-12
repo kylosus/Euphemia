@@ -26,8 +26,8 @@ class Client extends EClient {
 	constructor() {
 		super(
 			{
-				ownerIDs:     process.env.BOT_OWNER ? process.env.BOT_OWNER.split(',') : config.owners,
-				defaultColor: config.defaultColor || [233, 91, 169]
+				ownerIDs:     process.env.BOT_OWNER?.split?.(',') ?? config.owners,
+				defaultColor: config.defaultColor ?? [233, 91, 169]
 			},
 			{
 				disableMentions: 'everyone',

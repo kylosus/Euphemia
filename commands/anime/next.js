@@ -2,10 +2,9 @@ import { Collection, Formatters, MessageEmbed } from 'discord.js';
 import { ArgConsts, ECommand }                  from '../../lib/index.js';
 import got                                      from 'got';
 
-const cache = new Collection();
-
-// const ONE_DAY     = 82800;
 const ANILIST_URL = 'https://graphql.anilist.co';
+
+const cache = new Collection();
 
 const fetchAnime = (query, variables) => {
 	return got.post(ANILIST_URL, {
@@ -77,7 +76,9 @@ export default class extends ECommand {
 		const { data } = await fetchAnime(query, variables).catch(() => {
 			// There has to be a better way, man
 			variables.status = 'NOT_YET_RELEASED';
-			return fetchAnime(query, variables).catch(() => {throw 'Anime not found';});
+			return fetchAnime(query, variables).catch(() => {
+				throw 'Anime not found';
+			});
 		});
 
 		if (!data.Page) {

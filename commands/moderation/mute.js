@@ -81,11 +81,11 @@ export default class extends ModerationCommand {
 
 		if (result.passed.length) {
 			const duration = result.aux ? moment(result.aux).fromNow().replace('in', 'for') : 'Forever';
-			embed.addField(`Muted ${ duration }`, result.passed.map(r => `<@${ r.id }>`).join(' '));
+			embed.addField(`Muted ${duration}`, result.passed.map(r => `<@${r.id}>`).join(' '));
 		}
 
 		if (result.failed.length) {
-			embed.addField('Failed', result.failed.map(r => `<@${ r.id }> - ${ r.reason }`).join(' '));
+			embed.addField('Failed', result.failed.map(r => `<@${r.id}> - ${r.reason}`).join(' '));
 		}
 
 		embed.addField('Moderator', message.member.toString(), true);
