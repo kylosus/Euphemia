@@ -3,7 +3,7 @@ import { getExpired, remove, getMutedRoleIfNotExpired } from './db.js';
 const INTERVAL = 60000;	// 1 minute
 
 const muteExpire = client => {
-	client.setInterval(async () => {
+	setInterval(async () => {
 		const result = await getExpired();
 
 		await Promise.all(result.map(async r => {
