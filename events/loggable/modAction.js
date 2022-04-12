@@ -20,13 +20,12 @@ export default async (channel, guild, moderator, result) => {
 	}
 
 	if (result.action === 'MUTE') {
-		embed.addField('Muted for', (time => {
+		embed.addField('Muted until', (time => {
 			if (!time) {
 				return 'Forever';
 			}
 
-			const diff = moment.duration(moment(result.aux).diff(result.timestamp));
-			return `${diff.days()} days, ${diff.hours()} hours, ${diff.minutes()} minutes`;
+			return `${Formatters.time(result.timestamp, Formatters.TimestampStyles.RelativeTime)} minutes`;
 		})(result.aux));
 	}
 

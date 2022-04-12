@@ -23,7 +23,7 @@ export default class extends ECommand {
 	}
 
 	async run() {
-		return moment.duration(this.client.uptime, 'milliseconds').format('D [days] H [hours] m [minutes] s [seconds]');
+		return dayjs.duration(this.client.uptime, 'milliseconds').format('D [days] H [hours] m [minutes] s [seconds]');
 	}
 
 	async ship(message, result) {

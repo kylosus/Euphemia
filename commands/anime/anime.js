@@ -111,13 +111,14 @@ export default class extends ECommand {
 			}
 
 			// this is stupid, just use moment { day: 'whatever' }
-			const date = moment(`${result.startDate.year}${('0' + result.startDate.month).slice(-2)}${('0' + result.startDate.day).slice(-2)}`, 'YYYYMMDD').fromNow();
+			const date         = dayjs(`${result?.startDate.year}${('0' + result?.startDate.month).slice(-2)}${('0' + result?.startDate.day).slice(-2)}`, 'YYYYMMDD');
+			const relativeDate = Formatters.time(date.toDate(), Formatters.TimestampStyles.RelativeTime);
 
 			if (result.status === 'FINISHED') {
-				return ['Aired', date];
+				return ['Aired', relativeDate];
 			}
 
-			return ['Will Air', date];
+			return ['Will Air', relativeDate];
 		})();
 
 		embed.addField(...duration, true);

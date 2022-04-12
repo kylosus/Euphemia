@@ -67,8 +67,7 @@ export default class extends ECommand {
 					return 'Forever';
 				}
 
-				const diff = moment.duration(moment(time).diff(result.timestamp));
-				return `${diff.days()} days, ${diff.hours()} hours, ${diff.minutes()} minutes`;
+				return Formatters.time(time, Formatters.TimestampStyles.RelativeTime);
 			})(result.aux));
 		}
 

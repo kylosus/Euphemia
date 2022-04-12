@@ -90,12 +90,11 @@ export default class extends ECommand {
 
 	async shipOne(message, result) {
 		const duration = ((a) => {
-			if (!a.nextAiringEpisode) {
+			if (!a.nextAiringEpisode?.airingAt) {
 				return 'Some time in the future';
 			}
 
-			return moment.duration(moment(a.nextAiringEpisode.airingAt * 1000).diff(moment()))
-				.format('D [days] H [hours] m [minutes] s [seconds]');
+			return Formatters.time(a.nextAiringEpisode.airingAt, Formatters.TimestampStyles.RelativeTime);
 		})(result);
 
 		const embed = new MessageEmbed()
@@ -119,12 +118,13 @@ export default class extends ECommand {
 		result
 			.filter(r => r.nextAiringEpisode)
 			.sort((a, b) => a.nextAiringEpisode.timeUntilAiring - b.nextAiringEpisode.timeUntilAiring)
-			.forEach(r => embed.addField(
-				`${r.title.userPreferred} ${r.nextAiringEpisode?.episode ?? '?'}`,
-				moment.duration(moment(r.nextAiringEpisode.airingAt * 1000).diff(moment()))
-					.format('D [days] H [hours] m [minutes] s [seconds]'),
-				true)
-			);
+			.forEach(r => {
+				embed.addField(
+					`${r.title.userPreferred} ${r.nextAiringEpisode?.episode ?? '?'}`,
+					Formatters.time(r.nextAiringEpisode.airingAt, Formatters.TimestampStyles.RelativeTime),
+					true
+				);
+			});
 
 		return message.channel.send({ embeds: [embed] });
 	}

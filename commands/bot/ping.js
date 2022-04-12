@@ -17,7 +17,7 @@ export default class extends ECommand {
 	}
 
 	async run(message) {
-		return moment().diff(moment(message.createdAt));
+		return dayjs().diff(dayjs(message.createdAt));
 	}
 
 	async ship(message, result) {

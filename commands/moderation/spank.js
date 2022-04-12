@@ -42,7 +42,7 @@ export default class extends ECommand {
 
 		await toMute.roles.add(role, 'Spanked');
 
-		const duration = moment().add(1, 'minutes').toISOString();
+		const duration = dayjs().add(1, 'minutes').toISOString();
 		await muteMember(message.guild, toMute, role, 'Spanked', duration);
 
 		if (message.member.id === toMute.id) {
