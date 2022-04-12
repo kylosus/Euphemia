@@ -47,9 +47,7 @@ export default class extends ECommand {
 			.setColor('GREEN')
 			.setTitle('Result of git pull. Bot may need a restart')
 			.setDescription(
-				'```' +
-				_.truncate(result, { length: EmbedLimits.DESCRIPTION - 6 })
-				+ '```'
+				Formatters.codeBlock(_.truncate(result, { length: EmbedLimits.DESCRIPTION - 6 }))
 			)
 		);
 	}

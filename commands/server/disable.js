@@ -33,13 +33,13 @@ export default class extends ECommand {
 		const entry = this.client.provider.get(message.guild, 'disabledCommands', {});
 
 		if (entry[command]) {
-			return `Command \`${command}\` is already disabled in this guild`;
+			return `Command ${Formatters.blockQuote(command)} is already disabled in this guild`;
 		}
 
 		entry[command] = true;
 
 		await this.client.provider.set(message.guild, 'disabledCommands', entry);
 
-		return `Disabled \`${command}\` in this server`;
+		return `Disabled ${Formatters.blockQuote(command)}  in this server`;
 	}
 }

@@ -48,7 +48,7 @@ export default class extends ECommand {
 			const notice = await this.sendNotice(
 				message,
 				'This action already has a reason. Are you sure you want to change it?' +
-				'\n' + '```' + result.reason + '```'
+				'\n' + Formatters.codeBlock(result.reason)
 			);
 
 			await notice.react(EMOJI_OK);

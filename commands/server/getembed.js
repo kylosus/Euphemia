@@ -42,7 +42,7 @@ export default class extends ECommand {
 	async ship(message, result) {
 		return message.channel.send(new MessageEmbed()
 			.setColor('GREEN')
-			.setDescription('```' + JSON.stringify(result, null, 4) + '```')
+			.setDescription(Formatters.codeBlock(JSON.stringify(result, null, 4)))
 		);
 	}
 }

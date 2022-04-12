@@ -13,10 +13,10 @@ export default async (channel, guild, moderator, result) => {
 
 	const prefix = result.passed ? '✅' : '❌';	// Fix those later
 	embed.setDescription(`${prefix} Action ${result.action} -> <@${result.target}>`);
-	embed.addField('Reason', '```' + (result.reason || 'No reason provided') + '```');
+	embed.addField('Reason', Formatters.codeBlock(result.reason || 'No reason provided'));
 
 	if (!result.passed) {
-		embed.addField('Failed', '```' + (result.failedReason || 'Unknown reason') + '```');
+		embed.addField('Failed', Formatters.codeBlock((result.failedReason || 'Unknown reason')));
 	}
 
 	if (result.action === 'MUTE') {

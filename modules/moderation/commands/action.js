@@ -58,7 +58,7 @@ export default class extends ECommand {
 		embed.addField('Reason', '```' + (result.reason || 'No reason provided') + '```');
 
 		if (!result.passed) {
-			embed.addField('Failed', '```' + (result.failedReason || 'Unknown reason') + '```');
+			embed.addField('Failed', Formatters.codeBlock(result.failedReason || 'Unknown reason'));
 		}
 
 		if (result.action === 'MUTE') {
