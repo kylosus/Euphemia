@@ -1,4 +1,4 @@
-import { MessageEmbed, Permissions }                  from 'discord.js';
+import { Formatters, MessageEmbed, Permissions }      from 'discord.js';
 import { ArgConsts }                                  from '../../lib/index.js';
 import { ModerationCommand, ModerationCommandResult } from '../../modules/moderation/index.js';
 
@@ -35,11 +35,12 @@ export default class extends ModerationCommand {
 
 		await Promise.all(members.map(async m => {
 			try {
-				await m.user.send(new MessageEmbed()
-					.setColor('RED')
-					.setTitle(`❗ You have been warned in ${message.guild}`)
-					.setDescription('```' + reason + '```')
-				);
+				await m.user.send({
+					embeds: [new MessageEmbed()
+						.setColor('RED')
+						.setTitle(`❗ You have been warned in ${message.guild}`)
+						.setDescription(Formatters.codeBlock(reason))]
+				});
 			} catch (err) {
 				return result.addFailed(m, err.message);
 			}

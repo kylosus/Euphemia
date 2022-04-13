@@ -55,7 +55,7 @@ export default class extends ECommand {
 
 		const prefix = result.passed ? '✅' : '❌';	// Fix those later
 		embed.setDescription(`${prefix} Action \`[${result.id}]\` ${result.action.toLowerCase()} -> <@${result.target}>`);
-		embed.addField('Reason', '```' + (result.reason || 'No reason provided') + '```');
+		embed.addField('Reason', Formatters.codeBlock(result.reason || 'No reason provided'));
 
 		if (!result.passed) {
 			embed.addField('Failed', Formatters.codeBlock(result.failedReason || 'Unknown reason'));

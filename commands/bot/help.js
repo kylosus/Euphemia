@@ -67,10 +67,10 @@ export default class extends ECommand {
 		embed.setDescription(result.description.content);
 
 		if (result.description.usage.length) {
-			embed.addField('Arguments', '```' + result.description.usage + '```');
+			embed.addField('Arguments', Formatters.codeBlock(result.description.usage));
 		}
 
-		embed.addField('Usage', '```' + result.description.examples.join('\n') + '```');
+		embed.addField('Usage', Formatters.codeBlock(result.description.examples.join('\n')));
 
 		return message.channel.send({ embeds: [embed] });
 	}
