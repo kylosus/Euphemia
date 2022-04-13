@@ -1,8 +1,11 @@
 import { MessageEmbed }                     from 'discord.js';
 import { ArgConsts, ECommand, EmbedLimits } from '../../lib/index.js';
 import { CircularList, PaginatedMessage }   from '../../modules/index.js';
-import * as ud                              from 'urban-dictionary';
 import { truncate }                         from 'lodash-es';
+import { promisify }                        from 'util';
+import ud                                   from 'urban-dictionary';
+
+const define = promisify(ud.define);
 
 const udIcon = 'https://cdn.discordapp.com/attachments/352865308203024395/479997284117905440/ud.png';
 
@@ -29,7 +32,7 @@ export default class extends ECommand {
 
 	async run(message, { text }) {
 		try {
-			return await ud.define(text);
+			return await define(text);
 		} catch (err) {
 			throw `Could not find any definitions for ${text}`;
 		}
