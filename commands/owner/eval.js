@@ -1,10 +1,10 @@
-import { MessageEmbed, Permissions }      from 'discord.js';
-import { ArgConsts, AutoEmbed, ECommand } from '../../lib/index.js';
-import process                            from 'process';
+import { Formatters, MessageEmbed, Permissions } from 'discord.js';
+import { ArgConsts, AutoEmbed, ECommand }        from '../../lib/index.js';
+import process                                   from 'process';
 
 // Helper stuff
 // eslint-disable-next-line no-unused-vars
-import got                                from 'got';
+import got                                       from 'got';
 
 export default class extends ECommand {
 	constructor(client) {
@@ -34,7 +34,7 @@ export default class extends ECommand {
 			`(async () => {
 				${code}
 			})();`
-		);
+		) ?? '*No output*';
 		const elapsed = process.hrtime(start)[1] / 1000000;	// millisecond
 
 		return [elapsed, result];
