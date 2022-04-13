@@ -1,6 +1,7 @@
 import { MessageEmbed }                   from 'discord.js';
 import { ArgConsts, ECommand }            from '../../lib/index.js';
 import { CircularList, PaginatedMessage } from '../../modules/index.js';
+import { IMAGE_OPTIONS }                  from './util.js';
 
 const AVATAR_OPTIONS = {
 	dynamic: true,
@@ -36,15 +37,15 @@ export default class extends ECommand {
 			color:   null
 		};
 
-		const user = await this.client.users.fetch(id);
+		const user  = await this.client.users.fetch(id);
 		result.user = user;
 
 		const member = await message.guild.members.fetch(user).catch(() => {});
 		result.color = member?.displayColor;
 
 		result.avatars = [
-			user.displayAvatarURL(AVATAR_OPTIONS),
-			...(member?.avatarURL() ? [member.avatarURL(AVATAR_OPTIONS)] : [])	// no
+			user.displayAvatarURL(IMAGE_OPTIONS),
+			...(member?.avatarURL() ? [member.avatarURL(IMAGE_OPTIONS)] : [])	// no
 		];
 
 		return result;
