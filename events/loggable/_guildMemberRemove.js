@@ -13,12 +13,12 @@ export default async member => {
 			return;
 		}
 
-		replaceTokens(entry.message.content ?? '', member);
-		replaceTokens(entry.message.embeds?.[0] ?? '', member);
+		const content = replaceTokens(entry.message.content ?? '', member);
+		const embed = entry.message.embed ? replaceTokens(entry.message.embed, member) : null;
 
 		return channel.send({
-			content: entry.message.content,
-			embeds:  entry.message.embeds.map(e => JSON.parse(replaceTokens(e, member)))
+			content: content,
+			embeds:  [embed]
 		});
 	})(member.client.provider.get(member.guild, 'goodbye', { channel: null, message: null }));
 

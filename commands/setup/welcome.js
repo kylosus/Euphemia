@@ -73,11 +73,11 @@ export default class extends ECommand {
 			// this would make more sense to save as a JSON, but we do some string manipulation later
 			// I'll make it iterate through object values instead of using the whole thing
 			// as a giant string later
-			entry.message.embeds = [JSON.stringify(json)];
+			entry.message.embed = JSON.stringify(json);
 		} else {
 			// is there a point?
 			entry.message.embed = null;
-			await message.channel.send({content: entry.message.content});
+			await message.channel.send({ content: entry.message.content });
 		}
 
 		await this.client.provider.set(message.guild, 'welcome', entry);

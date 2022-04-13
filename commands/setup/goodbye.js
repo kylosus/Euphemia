@@ -68,7 +68,7 @@ export default class extends ECommand {
 		// If json is not empty save it and try sending it
 		if (Object.keys(json).length) {
 			await message.channel.send({ content: entry.message.content, embeds: [new MessageEmbed(json)] });
-			entry.message.embeds = [JSON.stringify(json)];
+			entry.message.embed = JSON.stringify(json);
 		} else {
 			// is there a point?
 			entry.message.embed = null;
