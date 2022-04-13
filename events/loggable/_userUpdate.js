@@ -22,7 +22,7 @@ export default async (oldUser, newUser) => {
 		}
 
 		return channel.send({
-			embed: [new MessageEmbed()
+			embeds: [new MessageEmbed()
 				.setColor('GREEN')
 				.setThumbnail(newUser.displayAvatarURL())
 				.setTitle('Username change')
