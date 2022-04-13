@@ -1,7 +1,7 @@
-import { MessageEmbed }        from 'discord.js';
-import { ArgConsts, ECommand } from '../../lib/index.js';
-import { capitalize }          from '../../lib/util/StringDoctor.js';
-import pjson                   from '../../package.json' assert { type: 'json' };
+import { Formatters, MessageEmbed } from 'discord.js';
+import { ArgConsts, ECommand }      from '../../lib/index.js';
+import { capitalize }               from '../../lib/util/StringDoctor.js';
+import pjson                        from '../../package.json' assert { type: 'json' };
 
 export default class extends ECommand {
 	constructor(client) {
@@ -48,12 +48,11 @@ export default class extends ECommand {
 		if (!result) {
 			embed
 				.addField('\u200B', '\u200B')
-				.setFooter(`♥ Made with love by ${pjson.author}`)
 				.setTitle(`${message.client.user.username} commands`)
 				.setThumbnail(message.client.user.displayAvatarURL())
 				.setColor(this.client.defaultColor)
 				.addField('\u200B', '\u200B')
-				.setFooter(`♥ Made with love by ${pjson.author}`);
+				.setFooter({ text: `♥ Made with love by ${pjson.author}` });
 
 			this.client.commandHandler.modules.forEach((module, name) => {
 				embed.addField(`${capitalize(name)} commands:`, module.map(command => `**${command.aliases[0]}**: ${command.description.content}`).join('\n'));
