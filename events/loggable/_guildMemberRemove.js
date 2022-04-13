@@ -14,7 +14,7 @@ export default async member => {
 		}
 
 		const content = replaceTokens(entry.message.content ?? '', member);
-		const embeds  = entry.message.embed ? [replaceTokens(entry.message.embed, member)] : null;
+		const embeds  = entry.message.embed ? [JSON.parse(replaceTokens(entry.message.embed, member))] : null;
 
 		return channel.send({
 			content: content,
