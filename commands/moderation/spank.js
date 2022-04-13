@@ -49,6 +49,6 @@ export default class extends ECommand {
 			return 'Nice try. You got yourself spanked';
 		}
 
-		return `${member} has been spanked by ${message.member}`;
+		return `${member.toString()} has been spanked by ${message.member}`;
 	}
 }

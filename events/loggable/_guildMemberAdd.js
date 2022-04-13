@@ -15,7 +15,7 @@ export default async member => {
 		}
 
 		const content = replaceTokens(entry.message.content ?? '', member);
-		const embed = entry.message.embed ? replaceTokens(entry.message.embed, member) : null;
+		const embed   = entry.message.embed ? replaceTokens(entry.message.embed, member) : null;
 
 		return channel.send({
 			content: content,
@@ -40,7 +40,7 @@ export default async member => {
 			.setColor('BLUE')
 			.setTitle('✅ User joined')
 			.setThumbnail(member.user.displayAvatarURL())
-			.setDescription(`${member} ${Formatters.inlineCode(member.user.tag)}`)
+			.setDescription(`${member.toString()} ${Formatters.inlineCode(member.user.tag)}`)
 			.addField('ID', member.id, false)
 			.addField('Joined server', Formatters.time(member.joinedAt, Formatters.TimestampStyles.LongDateTime), true)
 			.addField('Joined Discord', Formatters.time(member.user.createdAt, Formatters.TimestampStyles.LongDateTime), false)
@@ -52,7 +52,7 @@ export default async member => {
 		if (accountAge < 30) {
 			embeds.push(new MessageEmbed()
 				.setColor('DARK_RED')
-				.setDescription(`**WARNING** User ${member}'s account is less than ${accountAge === 1 ? 'day' : ((accountAge + 1) + 'days')} old`)
+				.setDescription(`**WARNING** User ${member.toString()}'s account is less than ${accountAge === 1 ? 'day' : ((accountAge + 1) + 'days')} old`)
 			);
 		}
 

@@ -90,7 +90,7 @@ export default class extends ECommand {
 		const channel = message.guild.channels.cache.get(entry.channel);
 
 		if (channel) {
-			return `Enabled welcome message in ${channel}`;
+			return `Enabled welcome message in ${channel.toString()}`;
 		}
 
 		return `Enabled welcome message, but channel ${entry.channel} seems to have been deleted`;

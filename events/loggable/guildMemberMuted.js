@@ -6,7 +6,7 @@ export default async (channel, member, expires, moderator) => {
 			.setColor('GOLD')
 			.setTitle('🔇 User muted')
 			.setThumbnail(member.user.displayAvatarURL())
-			.addField('User', `${member} ${Formatters.inlineCode(member.id)}`, false)
+			.addField('User', `${member.toString()} ${Formatters.inlineCode(member.id)}`, false)
 			.addField('Expires', `${expires ? Formatters.time(expires, Formatters.TimestampStyles.RelativeTime) : 'Never'}`)
 			.addField('Moderator', moderator.toString())]
 	});

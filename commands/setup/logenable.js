@@ -47,7 +47,7 @@ export default class extends ECommand {
 			entry[event] = channel.id;
 
 			await this.client.provider.set(message.guild, 'log', entry);
-			return `Enabled ${event} in ${channel}`;
+			return `Enabled ${event} in ${channel.toString()}`;
 		}
 
 		// All events
@@ -57,6 +57,6 @@ export default class extends ECommand {
 
 		await this.client.provider.set(message.guild, 'log', entry);
 
-		return `Enabled all events in ${channel}`;
+		return `Enabled all events in ${channel.toString()}`;
 	}
 }

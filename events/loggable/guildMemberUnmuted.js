@@ -6,7 +6,7 @@ export default async (channel, member, moderator) => {
 			.setColor('GOLD')
 			.setTitle('🔈 User unmuted')
 			.setThumbnail(member.user.displayAvatarURL())
-			.addField('User', `${member} ${Formatters.inlineCode(member.id)}`, false)
+			.addField('User', `${member.toString()} ${Formatters.inlineCode(member.id)}`, false)
 			.addField('Moderator', moderator.toString())]
 	});
 };
