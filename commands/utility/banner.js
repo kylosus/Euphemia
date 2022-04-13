@@ -25,6 +25,8 @@ export default class extends ECommand {
 	}
 
 	async run(message, { user }) {
+		await user.fetch(true);
+
 		const banner = user.bannerURL(IMAGE_OPTIONS);
 
 		if (!banner) {
