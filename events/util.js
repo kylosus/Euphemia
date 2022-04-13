@@ -1,6 +1,6 @@
 export const replaceTokens = (string, member) => {
 	return string
-		.replace('$MENTION$', member)
+		.replace('$MENTION$', member.toString())
 		.replace('$NAME$', member.user.tag)
 		.replace('$MEMBER_COUNT$', String(member.guild.memberCount))
 		.replace('$AVATAR$', member.user.avatarURL || member.user.displayAvatarURL());

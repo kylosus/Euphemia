@@ -6,7 +6,7 @@ export default async (channel, message) => {
 	const embed = new MessageEmbed()
 		.setColor('DARK_PURPLE')
 		.setTitle(`🗑 Message deleted in #${message.channel.name}`)
-		.setDescription(message.author || 'Unknown user')
+		.setDescription(message.author.toString() ?? 'Unknown user')
 		.addField('ID', `${message.channel.id}/${message.id}`, false)
 		.setTimestamp();
 

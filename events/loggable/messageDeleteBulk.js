@@ -10,7 +10,7 @@ export default async (channel, messages) => {
 
 	const content = messages.map(m => {
 		const url = m.attachments.first()?.proxyURL ?? null;
-		return `[${m.author || 'Unknown user'}] [${m.id}]: ${m.content ?? ''}${url ? `[Attachment](${url})` : ''}`;
+		return `[${m.author.toString() || 'Unknown user'}] [${m.id}]: ${m.content ?? ''}${url ? `[Attachment](${url})` : ''}`;
 	});
 
 	const additions = (c => {

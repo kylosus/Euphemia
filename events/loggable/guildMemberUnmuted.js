@@ -7,6 +7,6 @@ export default async (channel, member, moderator) => {
 			.setTitle('🔈 User unmuted')
 			.setThumbnail(member.user.displayAvatarURL())
 			.addField('User', `${member} ${Formatters.blockQuote(member.id)}`, false)
-			.addField('Moderator', moderator)]
+			.addField('Moderator', moderator.toString())]
 	});
 };

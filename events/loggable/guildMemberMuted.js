@@ -8,6 +8,6 @@ export default async (channel, member, expires, moderator) => {
 			.setThumbnail(member.user.displayAvatarURL())
 			.addField('User', `${member} ${Formatters.blockQuote(member.id)}`, false)
 			.addField('Expires', `${expires ? Formatters.time(expires, Formatters.TimestampStyles.RelativeTime) : 'Never'}`)
-			.addField('Moderator', moderator)]
+			.addField('Moderator', moderator.toString())]
 	});
 };
