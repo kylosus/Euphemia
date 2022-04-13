@@ -38,7 +38,7 @@ export default async member => {
 				.setColor('BLUE')
 				.setTitle('❌ User left')
 				.setThumbnail(member.user.displayAvatarURL())
-				.setDescription(`${member}  ${Formatters.blockQuote(member.user.tag)}`)
+				.setDescription(`${member}  ${Formatters.inlineCode(member.user.tag)}`)
 				.addField('ID', member.id, false)
 				.setTimestamp(member.joinedAt)]
 		});

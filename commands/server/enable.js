@@ -27,19 +27,19 @@ export default class extends ECommand {
 		const c = this.client.commandHandler.commands.get(command);
 
 		if (!c) {
-			throw `Command ${Formatters.blockQuote(command)}  not found`;
+			throw `Command ${Formatters.inlineCode(command)}  not found`;
 		}
 
 		const entry = this.client.provider.get(message.guild, 'disabledCommands', {});
 
 		if (!entry[command]) {
-			return `Command ${Formatters.blockQuote(command)}  is already enabled in this guild`;
+			return `Command ${Formatters.inlineCode(command)}  is already enabled in this guild`;
 		}
 
 		delete entry[command];
 
 		await this.client.provider.set(message.guild, 'disabledCommands', entry);
 
-		return `Enabled ${Formatters.blockQuote(command)}  in this server`;
+		return `Enabled ${Formatters.inlineCode(command)}  in this server`;
 	}
 }

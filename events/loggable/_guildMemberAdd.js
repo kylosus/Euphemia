@@ -40,7 +40,7 @@ export default async member => {
 			.setColor('BLUE')
 			.setTitle('✅ User joined')
 			.setThumbnail(member.user.displayAvatarURL())
-			.setDescription(`${member} ${Formatters.blockQuote(member.user.tag)}`)
+			.setDescription(`${member} ${Formatters.inlineCode(member.user.tag)}`)
 			.addField('ID', member.id, false)
 			.addField('Joined server', Formatters.time(member.joinedAt, Formatters.TimestampStyles.LongDateTime), true)
 			.addField('Joined Discord', Formatters.time(member.user.createdAt, Formatters.TimestampStyles.LongDateTime), false)
