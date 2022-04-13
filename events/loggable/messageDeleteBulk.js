@@ -13,9 +13,9 @@ export default async (channel, messages) => {
 		return `[${m.author?.toString() ?? 'Unknown user'}] [${m.id}]: ${m.content ?? ''}${url ? `[Attachment](${url})` : ''}`;
 	});
 
-	const additions = (c => {
+	const files = (c => {
 		if (c.length > EmbedLimits.DESCRIPTION) {
-			return new MessageAttachment(c, 'messages.txt');
+			return [new MessageAttachment(c, 'messages.txt')];
 		}
 
 		return null;
@@ -23,5 +23,5 @@ export default async (channel, messages) => {
 
 	embed.setDescription(content.reverse().join('\n'));
 
-	return channel.send({ embeds: [embed], files: [additions] });
+	return channel.send({ embeds: [embed], files });
 };
