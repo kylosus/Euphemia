@@ -3,14 +3,14 @@ import 'dotenv/config';
 import process from 'process';
 import { URL } from 'url';
 
-import sqlite3 from 'sqlite3';
+import sqlite3     from 'sqlite3';
 import * as sqlite from 'sqlite';
 
-import { Intents } from 'discord.js';
+import { Intents }                                  from 'discord.js';
 import { EClient, ECommandHandler, SQLiteProvider } from './lib/index.js';
 
 // Make this independent of cwd
-import config from './config.json' assert { type: 'json' };
+import config             from './config.json' assert { type: 'json' };
 import * as modules       from './modules/index.js';
 import { registerEvents } from './events/event.js';
 
