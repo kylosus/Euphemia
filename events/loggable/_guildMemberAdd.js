@@ -1,6 +1,6 @@
 import { Formatters, MessageEmbed } from 'discord.js';
 import { replaceTokens }            from '../util.js';
-import dayjs             from 'dayjs';
+import dayjs                        from 'dayjs';
 
 export default async member => {
 	const p1 = (async entry => {
