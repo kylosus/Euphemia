@@ -42,8 +42,11 @@ export default class extends ECommand {
 		return PaginatedMessage.register(message, s => {
 			return new MessageEmbed()
 				.setColor('GREEN')
-				.setAuthor(s.word, udIcon)
-				.setDescription(_.truncate(s.definition, { length: EmbedLimits.DESCRIPTION }));
+				.setAuthor({
+					name:    s.word,
+					iconURL: udIcon
+				})
+				.setDescription(truncate(s.definition, { length: EmbedLimits.DESCRIPTION }));
 		}, new CircularList(result));
 	}
 }
