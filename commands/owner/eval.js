@@ -44,14 +44,15 @@ export default class extends ECommand {
 		return new MessageEmbed()
 			.setColor('RED')
 			.setTitle('Error while evaluating:')
-			.setDescription('```' + string + '```');
+			.setDescription(Formatters.codeBlock(string));
 	}
 
 	async ship(message, [elapsed, result]) {
-		return message.channel.send(new AutoEmbed()
-			.setColor('GREEN')
-			.setTitle(`Evaluated in ${elapsed}ms.`)
-			.setDescriptionWrap(JSON.stringify(result, null, 4))
-		);
+		return message.channel.send({
+			embeds: [new AutoEmbed()
+				.setColor('GREEN')
+				.setTitle(`Evaluated in ${elapsed}ms.`)
+				.setDescriptionWrap(JSON.stringify(result, null, 4))]
+		});
 	}
 }
