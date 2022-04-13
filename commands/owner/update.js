@@ -1,7 +1,7 @@
 import { Formatters, MessageEmbed } from 'discord.js';
 import { ECommand, EmbedLimits }    from '../../lib/index.js';
-import { spawn }                 from 'child_process';
-import * as _                    from 'lodash';
+import { spawn }                    from 'child_process';
+import { truncate }                 from 'lodash-es';
 
 export default class extends ECommand {
 	constructor(client) {
@@ -47,7 +47,7 @@ export default class extends ECommand {
 			.setColor('GREEN')
 			.setTitle('Result of git pull. Bot may need a restart')
 			.setDescription(
-				Formatters.codeBlock(_.truncate(result, { length: EmbedLimits.DESCRIPTION - 6 }))
+				Formatters.codeBlock(truncate(result, { length: EmbedLimits.DESCRIPTION - 6 }))
 			)
 		);
 	}

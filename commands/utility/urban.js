@@ -2,7 +2,7 @@ import { MessageEmbed }                     from 'discord.js';
 import { ArgConsts, ECommand, EmbedLimits } from '../../lib/index.js';
 import { CircularList, PaginatedMessage }   from '../../modules/index.js';
 import * as ud                              from 'urban-dictionary';
-import * as _                               from 'lodash';
+import { truncate }                         from 'lodash-es';
 
 const udIcon = 'https://cdn.discordapp.com/attachments/352865308203024395/479997284117905440/ud.png';
 
