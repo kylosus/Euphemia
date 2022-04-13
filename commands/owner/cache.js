@@ -13,9 +13,10 @@ export default class extends ECommand {
 			clientPermissions: [Permissions.FLAGS.READ_MESSAGE_HISTORY],
 			args:              [
 				{
-					id:      'channel',
-					type:    ArgConsts.TYPE.CHANNEL,
-					default: m => m.channel
+					id:       'channel',
+					type:     ArgConsts.TYPE.CHANNEL,
+					optional: true,
+					default:  m => m.channel
 				},
 			],
 			guildOnly:         true,
