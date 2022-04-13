@@ -15,11 +15,11 @@ export default async member => {
 		}
 
 		const content = replaceTokens(entry.message.content ?? '', member);
-		const embed   = entry.message.embed ? replaceTokens(entry.message.embed, member) : null;
+		const embeds  = entry.message.embed ? [replaceTokens(entry.message.embed, member)] : null;
 
 		return channel.send({
 			content: content,
-			embeds:  [JSON.parse(embed)]
+			embeds
 		});
 	})(member.client.provider.get(member.guild, 'welcome', { channel: null, message: null }));
 

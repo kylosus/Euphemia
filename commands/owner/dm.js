@@ -33,7 +33,7 @@ export default class extends ECommand {
 			try {
 				const json  = JSON.parse(text);
 				const embed = new MessageEmbed(json);
-				await message.channel.send(embed);
+				await message.channel.send({ embeds: [embed] });
 				return [json.content, embed];
 			} catch (err) {
 				return [text, null];

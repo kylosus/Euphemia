@@ -50,6 +50,6 @@ export default class extends ECommand {
 
 		embed.setDescription('__Use logenable to unlock__' + '\n\n' + body);
 
-		return message.channel.send(embed);
+		return message.channel.send({ embeds: [embed] });
 	}
 }

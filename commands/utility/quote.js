@@ -36,13 +36,16 @@ export default class extends ECommand {
 		const embed = new MessageEmbed().setColor(result.member ? result.member.displayColor : 'WHITE')
 			.addField('Jump to message', `[Link](${result.url})`)
 			.setDescription(result.content || '*No content*')
-			.setFooter(`In #${result.channel.name}`)
+			.setFooter({ text: `In #${result.channel.name}` })
 			.setTimestamp(result.createdAt);
 
 		if (result.author) {
-			embed.setAuthor(result.author.username, result.author.displayAvatarURL(), null);
+			embed.setAuthor({
+				name:    result.author.username,
+				iconURL: result.author.displayAvatarURL()
+			});
 		} else {
-			embed.setAuthor('Unknown [deleted] user', null, null);
+			embed.setAuthor({ name: 'Unknown [deleted] user' });
 		}
 
 		const attachment = result.attachments.first();
@@ -51,6 +54,6 @@ export default class extends ECommand {
 			embed.setImage(attachment.proxyURL);
 		}
 
-		return message.channel.send(embed);
+		return message.channel.send({ embeds: [embed] });
 	}
 }
