@@ -27,9 +27,10 @@ export default class extends ECommand {
 	}
 
 	async ship(message, result) {
-		return message.channel.send(new MessageEmbed()
-			.setTitle('This color')
-			.setColor(result)
-		);
+		return message.channel.send({
+			embeds: [new MessageEmbed()
+				.setTitle('This color')
+				.setColor(result)]
+		});
 	}
 }

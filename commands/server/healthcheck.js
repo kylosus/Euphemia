@@ -49,26 +49,27 @@ export default class extends ECommand {
 	// so I will replace MessageEmbed with my own AutoEmbed or SafeEmbed implementation with automatic
 	// trims
 	async ship(message, { AdminRoles, ElevatedRoles, EmptyRoles }) {
-		return message.channel.send(new MessageEmbed()
-			.setColor('GREEN')
-			.setAuthor({
-				name:    `${message.guild.name} server health check`,
-				iconURL: message.guild.iconURL()
-			})
-			// .setDescription('Score here')
-			.setImage(message.guild.bannerURL())
-			.addField(
-				`Roles with Admin permissions (${AdminRoles.size})`,
-				AdminRoles.first(MAX_ROLES).map(r => `${r.toString()} - ${r.members.size}members`).join('\n') || '~'
-			)
-			.addField(
-				`Roles with other Elevated permissions (${ElevatedRoles.size})`,
-				ElevatedRoles.first(MAX_ROLES).map(r => `${r.toString()} - ${r.members.size}members`).join('\n') || '~'
-			)
-			.addField(
-				`Empty roles (${EmptyRoles.size})`,
-				(EmptyRoles.first(MAX_ROLES).map(r => r.toString()).join() + '...') || '~'
-			)
-		);
+		return message.channel.send({
+			embeds: [new MessageEmbed()
+				.setColor('GREEN')
+				.setAuthor({
+					name:    `${message.guild.name} server health check`,
+					iconURL: message.guild.iconURL()
+				})
+				// .setDescription('Score here')
+				.setImage(message.guild.bannerURL())
+				.addField(
+					`Roles with Admin permissions (${AdminRoles.size})`,
+					AdminRoles.first(MAX_ROLES).map(r => `${r.toString()} - ${r.members.size}members`).join('\n') || '~'
+				)
+				.addField(
+					`Roles with other Elevated permissions (${ElevatedRoles.size})`,
+					ElevatedRoles.first(MAX_ROLES).map(r => `${r.toString()} - ${r.members.size}members`).join('\n') || '~'
+				)
+				.addField(
+					`Empty roles (${EmptyRoles.size})`,
+					(EmptyRoles.first(MAX_ROLES).map(r => r.toString()).join() + '...') || '~'
+				)]
+		});
 	}
 }

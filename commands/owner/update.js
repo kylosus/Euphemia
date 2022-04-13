@@ -43,12 +43,13 @@ export default class extends ECommand {
 	}
 
 	ship(message, result) {
-		return message.channel.send(new MessageEmbed()
-			.setColor('GREEN')
-			.setTitle('Result of git pull. Bot may need a restart')
-			.setDescription(
-				Formatters.codeBlock(truncate(result, { length: EmbedLimits.DESCRIPTION - 6 }))
-			)
-		);
+		return message.channel.send({
+			embeds: [new MessageEmbed()
+				.setColor('GREEN')
+				.setTitle('Result of git pull. Bot may need a restart')
+				.setDescription(
+					Formatters.codeBlock(truncate(result, { length: EmbedLimits.DESCRIPTION - 6 }))
+				)]
+		});
 	}
 }

@@ -44,7 +44,7 @@ export default class extends ECommand {
 
 		await Promise.all(users.map(async u => {
 			try {
-				await u.send(content, embed);
+				await u.send({ content, embeds: [embed] });
 				return result.p.push(u);
 			} catch (err) {
 				return result.f.push({ user: u, reason: err.message || 'Unknown error' });
