@@ -16,7 +16,7 @@ import _userUpdate        from './loggable/_userUpdate.js';
 
 const _err = name => err => console.warn(`Error while executing loggable event ${name}`, err);
 
-const serverEventHandler = async e => await import(`./loggable/${e}.js`);
+const serverEventHandler = async e => (await import(`./loggable/${e}.js`)).default;
 
 const registerLoggable = async client => {
 	const events = readdirSync(directoryPath, { withFileTypes: true })
