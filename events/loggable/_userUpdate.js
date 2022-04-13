@@ -27,7 +27,7 @@ export default async (oldUser, newUser) => {
 				.setThumbnail(newUser.displayAvatarURL())
 				.setTitle('Username change')
 				.setDescription(`**${oldUser.tag}** has changed their username to **${newUser.tag}**`)
-				.setTimestamp((new Date()))]
+				.setTimestamp()]
 		});
 	}));
 };

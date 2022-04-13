@@ -44,7 +44,7 @@ export default async member => {
 			.addField('ID', member.id, false)
 			.addField('Joined server', Formatters.time(member.joinedAt, Formatters.TimestampStyles.LongDateTime), true)
 			.addField('Joined Discord', Formatters.time(member.user.createdAt, Formatters.TimestampStyles.LongDateTime), false)
-			.setTimestamp(member.joinedAt)
+			.setTimestamp()
 		);
 
 		const accountAge = dayjs().diff(dayjs(member.user.createdAt), 'days');
