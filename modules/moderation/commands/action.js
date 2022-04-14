@@ -1,7 +1,6 @@
 import { Formatters, MessageEmbed, Permissions } from 'discord.js';
 import { ArgConsts, ECommand }                   from '../../../lib/index.js';
-import { getAction }                 from '../db.js';
-import moment                        from 'moment';
+import { getAction }                             from '../db.js';
 
 const COLOR = '#2CDDD7';
 

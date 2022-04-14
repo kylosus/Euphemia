@@ -1,8 +1,8 @@
-import { MessageEmbed, Permissions }                  from 'discord.js';
-import { ArgConsts }                                  from '../../lib/index.js';
+import { Formatters, MessageEmbed, Permissions } from 'discord.js';
+import { ArgConsts }                             from '../../lib/index.js';
 import { ModerationCommand, ModerationCommandResult } from '../../modules/moderation/index.js';
 import { getMutedRole, setNewMutedRole, muteMember }  from '../../modules/mute/index.js';
-import moment                                         from 'moment';
+import dayjs                                          from 'dayjs';
 
 export default class extends ModerationCommand {
 	constructor(client) {
@@ -41,7 +41,7 @@ export default class extends ModerationCommand {
 	}
 
 	async run(message, { members, reason, ...args }) {
-		const duration = args.duration ? moment().add(args.duration).toISOString() : null;
+		const duration = args.duration ? dayjs().add(args.duration).toISOString() : null;
 		const result   = new ModerationCommandResult(reason, duration);
 
 		const role = await (async guild => {
@@ -80,8 +80,12 @@ export default class extends ModerationCommand {
 			.setColor(result.getColor());
 
 		if (result.passed.length) {
-			const duration = result.aux ? moment(result.aux).fromNow().replace('in', 'for') : 'Forever';
-			embed.addField(`Muted ${duration}`, result.passed.map(r => `<@${r.id}>`).join(' '));
+			embed.addField('Muted', result.passed.map(r => `<@${r.id}>`).join(' '));
+
+			// Passed and muted for a specific amount time
+			if (result.aux) {
+				embed.addField('Expires', Formatters.time(new Date(result.aux), Formatters.TimestampStyles.RelativeTime), true);
+			}
 		}
 
 		if (result.failed.length) {

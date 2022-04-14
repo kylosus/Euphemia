@@ -1,4 +1,4 @@
-import moment from 'moment';
+import dayjs from 'dayjs';
 
 const TABLE_NAME = 'muted_members';
 
@@ -33,8 +33,8 @@ const init = async (client, db) => {
 		FROM ${TABLE_NAME} where member = ? and expires > ?
 	`);
 
-	STATEMENTS.insert = await db.prepare(`INSERT OR REPLACE INTO ${TABLE_NAME} VALUES (?, ?, ?, ?, ?)`);
-	STATEMENTS.delete = await db.prepare(`DELETE FROM ${TABLE_NAME} WHERE guild = ? and member = ?`);
+	STATEMENTS.insert     = await db.prepare(`INSERT OR REPLACE INTO ${TABLE_NAME} VALUES (?, ?, ?, ?, ?)`);
+	STATEMENTS.delete     = await db.prepare(`DELETE FROM ${TABLE_NAME} WHERE guild = ? and member = ?`);
 	STATEMENTS.getExpired = await db.prepare(`
 		SELECT
 			CAST(guild as TEXT) as guild,
@@ -45,7 +45,7 @@ const init = async (client, db) => {
 };
 
 const getMutedRoleIfNotExpired = member => {
-	return STATEMENTS.getMutedRoleIfNotExpired.get(member, moment().toISOString());
+	return STATEMENTS.getMutedRoleIfNotExpired.get(member, dayjs().toISOString());
 };
 
 const insert = (guild, member, mutedRole, reason, expires) => {
@@ -54,7 +54,7 @@ const insert = (guild, member, mutedRole, reason, expires) => {
 
 const getExpired = () => {
 	// replace with .each()?
-	return STATEMENTS.getExpired.all(moment().toISOString());
+	return STATEMENTS.getExpired.all(dayjs().toISOString());
 };
 
 const remove = (guild, member) => {
