@@ -10,7 +10,7 @@ export default class extends ModerationCommand {
 			actionName:        'mute',
 			aliases:           ['mute'],
 			description:       {
-				content:  'Mutes mentioned members for a given amount of minutes',
+				content:  'Mutes mentioned members for a given amount of time',
 				usage:    '[minutes] <member1> [member2 ...]',
 				examples: ['mute @Person1', 'mute 5 @Person1 @Person2']
 			},
@@ -68,8 +68,6 @@ export default class extends ModerationCommand {
 			if (duration) {
 				await muteMember(message.guild, m, role, reason, duration);
 			}
-
-			// this.client.emit('guildMemberMuted', m, args.duration, message.member);
 		}));
 
 		return result;
@@ -93,7 +91,7 @@ export default class extends ModerationCommand {
 		}
 
 		embed.addField('Moderator', message.member.toString(), true);
-		embed.addField('Reason', result?.reason ?? '*No reason provided*', true);
+		embed.addField('Reason', result?.reason ?? '*No reason provided*');
 
 		return message.channel.send({ embeds: [embed] });
 	}
