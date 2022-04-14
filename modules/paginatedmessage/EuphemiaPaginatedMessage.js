@@ -1,6 +1,38 @@
 // Buttons soon
+import { MessageActionRow, MessageButton } from 'discord.js';
+
+// const COLLECTOR_TIME = 150000;
 const FORWARD_EMOJI  = '➡';
 const BACKWARD_EMOJI = '⬅';
+
+const _FORWARD_EMOJI  = '>';
+const _BACKWARD_EMOJI = '<';
+
+const _watcher = ({ message, generator, args }) => {
+	message.createMessageComponentCollector({ filter: async interaction => {
+		if (!interaction.isButton()) {
+			return;
+		}
+
+		if (interaction.customId === _BACKWARD_EMOJI) {
+			const embed = generator(await args.previous())
+				.setFooter({ text: `${args.currentIndex + 1}/${args.length}` });
+
+			message.edit({ embeds: [embed] });
+		}
+
+		if (interaction.customId === _FORWARD_EMOJI) {
+			const current = await args.next();
+
+			const embed = generator(current)
+				.setFooter({ text: `${args.currentIndex + 1}/${args.length}` });
+
+			message.edit({ embeds: [embed] });
+		}
+
+		await interaction.deferUpdate();
+	}});
+};
 
 const register = async (message, generator, args) => {
 	const current = await args.current;
@@ -8,18 +40,25 @@ const register = async (message, generator, args) => {
 	const firstEmbed = generator(current)
 		.setFooter({ text: `1/${args.length}` });
 
-	const botMessage = await message.channel.send({ embeds: [firstEmbed] });
-
 	if (args.length === 1) {
-		return;
+		return message.channel.send({ embeds: [firstEmbed] });
 	}
 
-	botMessage.react(BACKWARD_EMOJI).then(() => {
-		botMessage.react(FORWARD_EMOJI);
-	});
+	const buttons = new MessageActionRow()
+		.addComponents(
+			new MessageButton()
+				.setCustomId(_BACKWARD_EMOJI)
+				.setLabel(_BACKWARD_EMOJI)
+				.setStyle('SECONDARY'),
+			new MessageButton()
+				.setCustomId(_FORWARD_EMOJI)
+				.setLabel(_FORWARD_EMOJI)
+				.setStyle('SECONDARY')
+		);
 
-	// Overriding cached message entry
-	botMessage.pagination = { generator, args };
+	const botMessage = await message.channel.send({ embeds: [firstEmbed], components: [buttons] });
+
+	_watcher({ message: botMessage, generator, args });
 };
 
 export {
