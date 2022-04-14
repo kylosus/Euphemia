@@ -19,14 +19,10 @@ export default async (channel, guild, moderator, result) => {
 		embed.addField('Failed', Formatters.codeBlock((result.failedReason || 'Unknown reason')));
 	}
 
-	if (result.action === 'MUTE') {
-		embed.addField('Muted until', (time => {
-			if (!time) {
-				return 'Forever';
-			}
-
-			return `${Formatters.time(result.timestamp, Formatters.TimestampStyles.RelativeTime)} minutes`;
-		})(result.aux));
+	if (result.action === 'MUTE' || result.action === 'TIMEOUT') {
+		if (result.aux) {
+			embed.addField('Expires', Formatters.time(new Date(result.aux), Formatters.TimestampStyles.RelativeTime));
+		}
 	}
 
 	embed.setTimestamp(result.timestamp);
