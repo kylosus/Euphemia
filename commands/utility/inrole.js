@@ -45,6 +45,7 @@ export default class extends ECommand {
 			return new MessageEmbed()
 				.setColor(result.color)
 				.setTitle(`List of members in ${result.name} (${result.members.size})`)
+				.setThumbnail(result.iconURL())
 				// .setDescription(s.map(ss => `${ss}, \`${ss.user.tag}\``).join('\n'));
 				.setDescription(s.map(s => s.user.tag).join('\n'));
 		}, new CircularList(chunk(result.members.toJSON(), 20)));
