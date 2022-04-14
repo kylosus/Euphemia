@@ -43,7 +43,7 @@ export default class extends ECommand {
 	async ship(message, result) {
 		return PaginatedMessage.register(message, s => {
 			return new MessageEmbed()
-				.setColor(result.hexColor)
+				.setColor(result.color)
 				.setTitle(`List of members in ${result.name} (${result.members.size})`)
 				// .setDescription(s.map(ss => `${ss}, \`${ss.user.tag}\``).join('\n'));
 				.setDescription(s.map(s => s.user.tag));
