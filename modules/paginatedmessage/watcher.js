@@ -15,14 +15,14 @@ const _watcher = async ({ message, emoji }, user) => {
 		const current = await args.next();
 
 		const embed = generator(current)
-			.setFooter(`${args.currentIndex + 1}/${args.length}`);
+			.setFooter({ text: `${args.currentIndex + 1}/${args.length}` });
 
 		return message.edit({ embeds: [embed] });
 	}
 
 	if (emoji.name === BACKWARD_EMOJI) {
 		const embed = generator(await args.previous())
-			.setFooter(`${args.currentIndex + 1}/${args.length}`);
+			.setFooter({ text: `${args.currentIndex + 1}/${args.length}` });
 
 		return message.edit({ embeds: [embed] });
 	}
