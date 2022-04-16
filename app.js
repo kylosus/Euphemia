@@ -6,6 +6,8 @@ import { URL } from 'url';
 import sqlite3     from 'sqlite3';
 import * as sqlite from 'sqlite';
 
+sqlite3.verbose()
+
 import { Intents }                                  from 'discord.js';
 import { EClient, ECommandHandler, SQLiteProvider } from './lib/index.js';
 
