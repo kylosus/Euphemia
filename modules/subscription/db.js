@@ -108,7 +108,7 @@ const init = async (client, db) => {
 		LEFT JOIN
 			subscription ON subscription.tag_id = tag.id
 		WHERE
-			guild = @guild AND id > @lastID
+			guild = @guild AND id > @lastID and enabled = @enabled
 		GROUP BY
 			tag.id
 		ORDER BY
@@ -125,7 +125,7 @@ const init = async (client, db) => {
 		LEFT JOIN
 			subscription ON subscription.tag_id = tag.id
 		WHERE
-			guild = @guild AND id < @lastID
+			guild = @guild AND id < @lastID and enabled = @enabled
 		GROUP BY
 			tag.id
 		ORDER BY
@@ -185,12 +185,26 @@ const removeTag = async ({ guild, name }) => {
 	return STATEMENTS.removeTag.run({ '@guildID': guild.id, '@name': name });
 };
 
-const getTagsForward = async ({ guild, lastID = 0, perPage = 5 }) => {
-	return STATEMENTS.getTagsForward.all({ '@guild': guild.id, '@lastID': lastID, '@perPage': perPage });
+const disableTag = async ({ guild, name }) => {
+	return STATEMENTS.disableTag.run({ '@guildID': guild.id, '@name': name });
 };
 
-const getTagsBackward = async ({ guild, prevID = 0, perPage = 5 }) => {
-	return STATEMENTS.getTagsBackward.all({ '@guild': guild.id, '@lastID': prevID, '@perPage': perPage });
+const getTagsForward = async ({ guild, lastID = 0, perPage = 5, enabled = true }) => {
+	return STATEMENTS.getTagsForward.all({
+		'@guild':   guild.id,
+		'@lastID':  lastID,
+		'@perPage': perPage,
+		'@enabled': enabled
+	});
+};
+
+const getTagsBackward = async ({ guild, prevID = 0, perPage = 5, enabled = true }) => {
+	return STATEMENTS.getTagsBackward.all({
+		'@guild':   guild.id,
+		'@lastID':  prevID,
+		'@perPage': perPage,
+		'@enabled': enabled
+	});
 };
 
 const subscribeUserTo = async ({ user, tagName }) => {
@@ -205,8 +219,12 @@ const getSubscribedUsers = async ({ guild, name }) => {
 	return STATEMENTS.getSubscribedUsers.all({ '@guildID': guild.id, '@name': name });
 };
 
-const getTagIdMax = ({ guild }) => {
-	return STATEMENTS.getTagIdMax.get({ '@guild': guild.id });
+const getTagIdMax = ({ guild, enabled = true }) => {
+	return STATEMENTS.getTagIdMax.get({ '@guildID': guild.id, '@enabled': enabled });
+};
+
+const registerTagMention = ({ tagID, user, channel }) => {
+	return STATEMENTS.registerTagMention.run({ '@tagID': tagID, '@userID': user.id, '@channelID': channel.id });
 };
 
 export {
