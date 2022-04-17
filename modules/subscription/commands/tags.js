@@ -23,6 +23,10 @@ export default class extends ECommand {
 
 		const { length } = await getTagIdMax({ guild: message.guild });
 
+		if (!length) {
+			throw 'There are no tags in the server';
+		}
+
 		const [next, prev] = (() => {
 			let lastID = 0;
 			let prevID = 0;
