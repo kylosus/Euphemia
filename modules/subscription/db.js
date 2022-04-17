@@ -101,9 +101,30 @@ const init = async (client, db) => {
 	`);
 
 	STATEMENTS.subscribeUserTo = await db.prepare(`
-		INSERT INTO ${SUBSCRIPTION_TABLE_NAME} (user, tag_id) VALUES(
-			( @user ),
-			(SELECT id from ${TAG_TABLE_NAME} WHERE name = @tagName ));
+		INSERT INTO
+			${SUBSCRIPTION_TABLE_NAME} (user, tag_id)
+		SELECT
+			user, tag_id
+		FROM
+			( SELECT @userID as user, id as tag_id from tag where name = @name )
+	`);
+
+	STATEMENTS.unsubscribeUserFrom = await db.prepare(`
+		DELETE FROM
+			${SUBSCRIPTION_TABLE_NAME}
+		WHERE ROWID IN (
+			SELECT
+				s.ROWID
+			FROM
+				${SUBSCRIPTION_TABLE_NAME} as s
+			JOIN
+				${TAG_TABLE_NAME} as t
+			ON
+				s.tag_id = t.id AND t.name = @name
+			WHERE
+				t.guild = @guildID and s.user = @userID
+			LIMIT 1
+		);
 	`);
 
 	STATEMENTS.getSubscribedUsers = await db.prepare(`
@@ -139,7 +160,11 @@ const getTagsBackward = async ({ guild, prevID = 0, perPage = 5 }) => {
 };
 
 const subscribeUserTo = async ({ user, tagName }) => {
-	return STATEMENTS.subscribeUserTo.run({ '@user': user.id, '@tagName': tagName });
+	return STATEMENTS.subscribeUserTo.run({ '@userID': user.id, '@name': tagName });
+};
+
+const unsubscribeUserFrom = async ({ guild, user, tagName }) => {
+	return STATEMENTS.unsubscribeUserFrom.run({ '@guildID': guild.id, '@userID': user.id, '@name': tagName });
 };
 
 const getSubscribedUsers = async ({ guild, name }) => {
@@ -157,6 +182,7 @@ export {
 	getTagsForward,
 	getTagsBackward,
 	subscribeUserTo,
+	unsubscribeUserFrom,
 	getSubscribedUsers,
 	getTagIdMax
 };
