@@ -78,6 +78,16 @@ const init = async (client, db) => {
 	`);
 	// =========================================================================
 
+	STATEMENTS.getTagCreator = await db.prepare(`
+		SELECT
+			id, creator
+		FROM
+			${TAG_TABLE_NAME}
+		WHERE
+			guild = @guildID AND name = @name
+		LIMIT 1;
+	`);
+
 	STATEMENTS.createTag = await db.prepare(`
 		INSERT INTO
 			${TAG_TABLE_NAME} (guild, name, creator)
@@ -200,6 +210,10 @@ const init = async (client, db) => {
 	`);
 };
 
+const getTagCreator = async ({ guild, name }) => {
+	return STATEMENTS.getTagCreator.get({ '@guildID': guild.id, '@name': name });
+};
+
 const createTag = async ({ guild, name, creator }) => {
 	return STATEMENTS.createTag.run({ '@guildID': guild.id, '@name': name, '@creatorID': creator.id });
 };
@@ -252,6 +266,7 @@ const registerTagMention = ({ tagID, user, channel }) => {
 
 export {
 	init,
+	getTagCreator,
 	createTag,
 	removeTag,
 	disableTag,
