@@ -9,28 +9,28 @@ const init = async (client, db) => {
 	// Tag table
 	await db.run(`
 		CREATE TABLE IF NOT EXISTS ${TAG_TABLE_NAME}
-            (
-                id        INTEGER NOT NULL PRIMARY KEY,
-                guild     INTEGER NOT NULL,
-                name      TEXT    NOT NULL,
-                creator   INTEGER NOT NULL,
-                enabled   BOOLEAN DEFAULT TRUE,
-                timestamp TEXT DEFAULT CURRENT_TIMESTAMP,
-                CONSTRAINT unq UNIQUE (guild, name)
-            );
+			(
+				id        INTEGER NOT NULL PRIMARY KEY,
+				guild     INTEGER NOT NULL,
+				name      TEXT    NOT NULL,
+				creator   INTEGER NOT NULL,
+				enabled   BOOLEAN DEFAULT TRUE,
+				timestamp TEXT DEFAULT CURRENT_TIMESTAMP,
+				CONSTRAINT unq UNIQUE (guild, name)
+			);
 	`);
 
 	// Indexes for table above
 	await db.run(`
-        CREATE INDEX IF NOT EXISTS ${TAG_TABLE_NAME}_id_idx    ON ${TAG_TABLE_NAME} (id);	-- Might be unnecessary
+		CREATE INDEX IF NOT EXISTS ${TAG_TABLE_NAME}_id_idx    ON ${TAG_TABLE_NAME} (id);	-- Might be unnecessary
 	`);
 
 	await db.run(`
-        CREATE INDEX IF NOT EXISTS ${TAG_TABLE_NAME}_guild_idx ON ${TAG_TABLE_NAME} (guild);
+		CREATE INDEX IF NOT EXISTS ${TAG_TABLE_NAME}_guild_idx ON ${TAG_TABLE_NAME} (guild);
 	`);
 
 	await db.run(`
-        CREATE INDEX IF NOT EXISTS ${TAG_TABLE_NAME}_name_idx  ON ${TAG_TABLE_NAME} (name);
+		CREATE INDEX IF NOT EXISTS ${TAG_TABLE_NAME}_name_idx  ON ${TAG_TABLE_NAME} (name);
 	`);
 	// =========================================================================
 
@@ -38,20 +38,20 @@ const init = async (client, db) => {
 	// Subscription table
 	await db.run(`
 		CREATE TABLE IF NOT EXISTS ${SUBSCRIPTION_TABLE_NAME}
-            (
-            	tag_id    INTEGER NOT NULL,
-                user      INTEGER NOT NULL,
-                FOREIGN KEY (tag_id) REFERENCES ${TAG_TABLE_NAME}(id)
-                PRIMARY KEY (tag_id, user)
-            );
+			(
+				tag_id    INTEGER NOT NULL,
+				user      INTEGER NOT NULL,
+				FOREIGN KEY (tag_id) REFERENCES ${TAG_TABLE_NAME}(id)
+				PRIMARY KEY (tag_id, user)
+			);
 	`);
 
 	await db.run(`
-        CREATE INDEX IF NOT EXISTS ${SUBSCRIPTION_TABLE_NAME}_tag_id_idx ON ${SUBSCRIPTION_TABLE_NAME} (tag_id);
+		CREATE INDEX IF NOT EXISTS ${SUBSCRIPTION_TABLE_NAME}_tag_id_idx ON ${SUBSCRIPTION_TABLE_NAME} (tag_id);
 	`);
 
 	await db.run(`
-        CREATE INDEX IF NOT EXISTS ${SUBSCRIPTION_TABLE_NAME}_user_idx   ON ${SUBSCRIPTION_TABLE_NAME} (user);
+		CREATE INDEX IF NOT EXISTS ${SUBSCRIPTION_TABLE_NAME}_user_idx   ON ${SUBSCRIPTION_TABLE_NAME} (user);
 	`);
 	// =========================================================================
 
@@ -59,14 +59,14 @@ const init = async (client, db) => {
 	// Tag Mention table
 	await db.run(`
 		CREATE TABLE IF NOT EXISTS ${TAG_MENTION_TABLE_NAME}
-            (
+			(
 				id        INTEGER NOT NULL PRIMARY KEY,
 				tag_id    INTEGER NOT NULL,
 				user      INTEGER NOT NULL,
 				channel   INTEGER NOT NULL,
 				timestamp TEXT DEFAULT CURRENT_TIMESTAMP,
 				FOREIGN KEY (tag_id) REFERENCES ${TAG_TABLE_NAME}(id)
-            );
+			);
 	`);
 
 	await db.run(`
@@ -80,20 +80,27 @@ const init = async (client, db) => {
 
 	STATEMENTS.createTag = await db.prepare(`
 		INSERT INTO
-		    ${TAG_TABLE_NAME} (guild, name, creator)
+			${TAG_TABLE_NAME} (guild, name, creator)
 		VALUES(@guildID, @name, @creatorID);
+	`);
+
+	STATEMENTS.removeTagId = await db.prepare(`
+		DELETE FROM
+			${TAG_TABLE_NAME}
+		WHERE
+			id = @id;
 	`);
 
 	STATEMENTS.removeTag = await db.prepare(`
 		DELETE FROM
-		    ${TAG_TABLE_NAME}
+			${TAG_TABLE_NAME}
 		WHERE
 			guild = @guildID AND name = @name; 
 	`);
 
 	STATEMENTS.disableTag = await db.prepare(`
 		UPDATE
-		    ${TAG_TABLE_NAME}
+			${TAG_TABLE_NAME}
 		SET
 			enabled = 0
 		WHERE
