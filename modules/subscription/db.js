@@ -174,7 +174,10 @@ const init = async (client, db) => {
 			name = @name AND guild = @guildID
 	`);
 
-	STATEMENTS.getTagIdMax = await db.prepare(`SELECT MAX(id) as length FROM ${TAG_TABLE_NAME} WHERE guild = @guild LIMIT 1`);
+	// Might be problematic if we have a lot of disabled tags
+	// It's kiiinda inefficient now
+	STATEMENTS.getTagIdMax = await db.prepare(`SELECT COUNT(id) as length FROM ${TAG_TABLE_NAME} WHERE guild = @guildID and enabled = @enabled LIMIT 1`);
+
 	STATEMENTS.registerTagMention = await db.prepare(`
 		INSERT INTO
 			tag_mention (tag_id, user, channel)
