@@ -132,7 +132,7 @@ const init = async (client, db) => {
 			s.user
 		FROM
 			${TAG_TABLE_NAME} as t
-		LEFT JOIN
+		JOIN
 			${SUBSCRIPTION_TABLE_NAME} as s
 		ON
 			t.id = s.tag_id
