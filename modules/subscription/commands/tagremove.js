@@ -1,25 +1,26 @@
-import { Formatters }          from 'discord.js';
-import { ArgConsts, ECommand } from '../../../lib/index.js';
-import { disableTag }          from '../db.js';
+import { Formatters, Permissions } from 'discord.js';
+import { ArgConsts, ECommand }     from '../../../lib/index.js';
+import { disableTag }              from '../db.js';
 
 export default class extends ECommand {
 	constructor(client) {
 		super(client, {
-			aliases:     ['tagremove'],
-			description: {
+			aliases:         ['tagremove'],
+			description:     {
 				content:  'Adds a new tag',
 				usage:    '<name>',
 				examples: ['tagremove stuff']
 			},
-			args:        [
+			userPermissions: [Permissions.FLAGS.MANAGE_ROLES],
+			args:            [
 				{
 					id:      'tagName',
 					type:    ArgConsts.TYPE.WORD,
 					message: 'Please enter a tag name'
 				}
 			],
-			guildOnly:   true,
-			ownerOnly:   false
+			guildOnly:       true,
+			ownerOnly:       false
 		});
 	}
 
