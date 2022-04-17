@@ -1,6 +1,6 @@
 import { Formatters }          from 'discord.js';
 import { ArgConsts, ECommand } from '../../../lib/index.js';
-import { removeTag }           from '../db.js';
+import { disableTag }          from '../db.js';
 
 export default class extends ECommand {
 	constructor(client) {
@@ -13,9 +13,9 @@ export default class extends ECommand {
 			},
 			args:        [
 				{
-					id:       'tagName',
-					type:     ArgConsts.TYPE.WORD,
-					message:  'Please enter a tag name'
+					id:      'tagName',
+					type:    ArgConsts.TYPE.WORD,
+					message: 'Please enter a tag name'
 				}
 			],
 			guildOnly:   true,
@@ -27,7 +27,7 @@ export default class extends ECommand {
 		let removed = null;
 
 		try {
-			removed = await removeTag({
+			removed = disableTag({
 				guild: message.guild,
 				name:  tagName,
 			});

@@ -87,7 +87,17 @@ const init = async (client, db) => {
 	STATEMENTS.removeTag = await db.prepare(`
 		DELETE FROM
 		    ${TAG_TABLE_NAME}
-		WHERE guild = @guildID AND name = @name; 
+		WHERE
+			guild = @guildID AND name = @name; 
+	`);
+
+	STATEMENTS.disableTag = await db.prepare(`
+		UPDATE
+		    ${TAG_TABLE_NAME}
+		SET
+			enabled = 0
+		WHERE
+			guild = @guildID AND name = @name; 
 	`);
 
 	STATEMENTS.getTagsForward = await db.prepare(`
@@ -203,6 +213,7 @@ export {
 	init,
 	createTag,
 	removeTag,
+	disableTag,
 	getTagsForward,
 	getTagsBackward,
 	subscribeUserTo,
