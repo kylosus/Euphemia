@@ -66,16 +66,6 @@ const init = async (client, db) => {
 		WHERE guild = @guildID AND name = @name; 
 	`);
 
-	// STATEMENTS.getTags = await db.prepare(`
-	// 	SELECT
-	// 		id, name, enabled
-	// 	FROM ${TAG_TABLE_NAME}
-	// 	WHERE
-	// 		guild = @guild AND id < @lastID
-	// 	ORDER BY id DESC
-	// 		LIMIT @perPage
-	// `);
-
 	STATEMENTS.getTagsForward = await db.prepare(`
 		SELECT
 			id, MAX(tag.name) AS name, tag.enabled, COUNT(subscription.user) AS numSubscriptions

@@ -42,7 +42,6 @@ export default class extends ECommand {
 	async ship(message, { tagName, users }) {
 		const header           = `🏓 Users subscribed to ${Formatters.inlineCode(tagName)}:\n`;
 		const [first, ...rest] = chunk(users.map(Formatters.userMention), EmbedLimits.CONTENT - header.length);
-		// const [first, ...rest] = chunk(users.map(Formatters.userMention), 10);
 
 		let lastMessage = await message.channel.send({
 			content: `${header}${first.join('')}`

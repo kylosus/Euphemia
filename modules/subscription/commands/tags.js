@@ -13,14 +13,6 @@ export default class extends ECommand {
 				usage:    '',
 				examples: ['tags']
 			},
-			// args:        [
-			// 	{
-			// 		id:       'tagName',
-			// 		type:     ArgConsts.TYPE.WORD,
-			// 		optional: false,
-			// 		message: 'Please enter a tag name'
-			// 	}
-			// ],
 			guildOnly: true,
 			ownerOnly: false
 		});
@@ -76,7 +68,6 @@ export default class extends ECommand {
 
 			const body = s
 				.map(({ name, numSubscriptions }) => {
-					// return `${enabled ? name : Formatters.strikethrough(name)}\t(${numSubscriptions}) subs`;
 					return `${Formatters.inlineCode(name)} ${numSubscriptions} subs`;
 				})
 				.join('\n');
