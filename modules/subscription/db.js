@@ -1,5 +1,6 @@
 const TAG_TABLE_NAME          = 'tag';
 const SUBSCRIPTION_TABLE_NAME = 'subscription';
+const TAG_MENTION_TABLE_NAME  = 'tag_mention';
 
 const STATEMENTS = {};
 
@@ -51,6 +52,29 @@ const init = async (client, db) => {
 
 	await db.run(`
         CREATE INDEX IF NOT EXISTS ${SUBSCRIPTION_TABLE_NAME}_user_idx   ON ${SUBSCRIPTION_TABLE_NAME} (user);
+	`);
+	// =========================================================================
+
+	// =========================================================================
+	// Tag Mention table
+	await db.run(`
+		CREATE TABLE IF NOT EXISTS ${TAG_MENTION_TABLE_NAME}
+            (
+				id        INTEGER NOT NULL PRIMARY KEY,
+				tag_id    INTEGER NOT NULL,
+				user      INTEGER NOT NULL,
+				channel   INTEGER NOT NULL,
+				timestamp TEXT DEFAULT CURRENT_TIMESTAMP,
+				FOREIGN KEY (tag_id) REFERENCES ${TAG_TABLE_NAME}(id)
+            );
+	`);
+
+	await db.run(`
+        CREATE INDEX IF NOT EXISTS ${TAG_MENTION_TABLE_NAME}_tag_id_idx ON ${TAG_MENTION_TABLE_NAME} (id);
+	`);
+
+	await db.run(`
+        CREATE INDEX IF NOT EXISTS ${TAG_MENTION_TABLE_NAME}_tag_user_idx ON ${TAG_MENTION_TABLE_NAME} (user);
 	`);
 	// =========================================================================
 
