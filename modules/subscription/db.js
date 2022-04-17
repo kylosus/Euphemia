@@ -163,7 +163,7 @@ const init = async (client, db) => {
 
 	STATEMENTS.getSubscribedUsers = await db.prepare(`
 		SELECT
-			s.user
+			t.id, s.user
 		FROM
 			${TAG_TABLE_NAME} as t
 		JOIN

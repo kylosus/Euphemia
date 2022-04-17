@@ -1,9 +1,9 @@
-import { Formatters, MessageButton }           from 'discord.js';
-import { ArgConsts, ECommand }                 from '../../../lib/index.js';
-import * as EmbedLimits                        from '../../../lib/EmbedLimits.js';
-import { getSubscribedUsers, subscribeUserTo } from '../db.js';
-import { chunk }                               from './util.js';
-import { DecisionMessage }                     from '../../decisionmessage/index.js';
+import { Formatters, MessageButton }                               from 'discord.js';
+import { ArgConsts, ECommand }                                     from '../../../lib/index.js';
+import * as EmbedLimits                                            from '../../../lib/EmbedLimits.js';
+import { getSubscribedUsers, registerTagMention, subscribeUserTo } from '../db.js';
+import { chunk }                                                   from './util.js';
+import { DecisionMessage }                                         from '../../decisionmessage/index.js';
 
 export default class extends ECommand {
 	constructor(client) {
@@ -36,6 +36,13 @@ export default class extends ECommand {
 			throw `Tag ${Formatters.inlineCode(tagName)} not found or empty`;
 		}
 
+		// Best effort
+		registerTagMention({
+			tagID:   res[0].id,
+			user:    message.author,
+			channel: message.channel
+		}).catch(console.warn);
+
 		return { tagName, users: res.map(r => r.user) };
 	}
 
@@ -59,7 +66,7 @@ export default class extends ECommand {
 					.setCustomId('join')
 					.setLabel('join')
 					.setStyle('SECONDARY'),
-				action: async interaction => {
+				action:    async interaction => {
 					try {
 						await subscribeUserTo({ user: interaction.user, tagName });
 					} catch (error) {
@@ -78,8 +85,8 @@ export default class extends ECommand {
 					.setCustomId('leave')
 					.setLabel('leave')
 					.setStyle('SECONDARY'),
-				action: interaction => {
-					console.log('not implemeneted yet teehee')
+				action:    interaction => {
+					console.log('not implemeneted yet teehee');
 				}
 			}
 		]);
