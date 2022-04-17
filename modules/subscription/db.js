@@ -180,7 +180,7 @@ const init = async (client, db) => {
 
 	STATEMENTS.registerTagMention = await db.prepare(`
 		INSERT INTO
-			tag_mention (tag_id, user, channel)
+			${TAG_MENTION_TABLE_NAME} (tag_id, user, channel)
 		VALUES(@tagID, @userID, @channelID);
 	`);
 };
