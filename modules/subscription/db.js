@@ -22,15 +22,15 @@ const init = async (client, db) => {
 
 	// Indexes for table above
 	await db.run(`
-        CREATE INDEX IF NOT EXISTS ${TAG_TABLE_NAME}_id_idx        ON ${TAG_TABLE_NAME} (id);	-- Might be unnecessary
+        CREATE INDEX IF NOT EXISTS ${TAG_TABLE_NAME}_id_idx    ON ${TAG_TABLE_NAME} (id);	-- Might be unnecessary
 	`);
 
 	await db.run(`
-        CREATE INDEX IF NOT EXISTS ${TAG_TABLE_NAME}_guild_idx     ON ${TAG_TABLE_NAME} (guild);
+        CREATE INDEX IF NOT EXISTS ${TAG_TABLE_NAME}_guild_idx ON ${TAG_TABLE_NAME} (guild);
 	`);
 
 	await db.run(`
-        CREATE INDEX IF NOT EXISTS ${TAG_TABLE_NAME}_name_idx      ON ${TAG_TABLE_NAME} (name);
+        CREATE INDEX IF NOT EXISTS ${TAG_TABLE_NAME}_name_idx  ON ${TAG_TABLE_NAME} (name);
 	`);
 	// =========================================================================
 
@@ -108,7 +108,7 @@ const init = async (client, db) => {
 		LEFT JOIN
 			subscription ON subscription.tag_id = tag.id
 		WHERE
-			guild = @guild AND id > @lastID and enabled = @enabled
+			guild = @guildID AND id > @lastID and enabled = @enabled
 		GROUP BY
 			tag.id
 		ORDER BY
@@ -125,7 +125,7 @@ const init = async (client, db) => {
 		LEFT JOIN
 			subscription ON subscription.tag_id = tag.id
 		WHERE
-			guild = @guild AND id < @lastID and enabled = @enabled
+			guild = @guildID AND id < @lastID and enabled = @enabled
 		GROUP BY
 			tag.id
 		ORDER BY
@@ -176,7 +176,15 @@ const init = async (client, db) => {
 
 	// Might be problematic if we have a lot of disabled tags
 	// It's kiiinda inefficient now
-	STATEMENTS.getTagIdMax = await db.prepare(`SELECT COUNT(id) as length FROM ${TAG_TABLE_NAME} WHERE guild = @guildID and enabled = @enabled LIMIT 1`);
+	STATEMENTS.getTagIdMax = await db.prepare(`
+		SELECT
+			COUNT(id) as length
+		FROM
+			${TAG_TABLE_NAME}
+		WHERE
+			guild = @guildID AND enabled = @enabled
+		LIMIT 1;
+	`);
 
 	STATEMENTS.registerTagMention = await db.prepare(`
 		INSERT INTO
@@ -199,7 +207,7 @@ const disableTag = async ({ guild, name }) => {
 
 const getTagsForward = async ({ guild, lastID = 0, perPage = 5, enabled = true }) => {
 	return STATEMENTS.getTagsForward.all({
-		'@guild':   guild.id,
+		'@guildID': guild.id,
 		'@lastID':  lastID,
 		'@perPage': perPage,
 		'@enabled': enabled
@@ -208,7 +216,7 @@ const getTagsForward = async ({ guild, lastID = 0, perPage = 5, enabled = true }
 
 const getTagsBackward = async ({ guild, prevID = 0, perPage = 5, enabled = true }) => {
 	return STATEMENTS.getTagsBackward.all({
-		'@guild':   guild.id,
+		'@guildID': guild.id,
 		'@lastID':  prevID,
 		'@perPage': perPage,
 		'@enabled': enabled
