@@ -8,7 +8,7 @@ export const chunk = (arr, maxLength) => {
 		currLength += e.length;
 
 		if (currLength > maxLength) {
-			res.push([tmp]);
+			res.push(tmp);
 			currLength = 0;
 			tmp        = [];
 		}
@@ -17,7 +17,7 @@ export const chunk = (arr, maxLength) => {
 	}
 
 	if (tmp.length) {
-		res.push([tmp]);
+		res.push(tmp);
 	}
 
 	return res;
