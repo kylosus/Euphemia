@@ -2,6 +2,7 @@ import { Formatters, MessageEmbed }                     from 'discord.js';
 import { ECommand }                                     from '../../../lib/index.js';
 import { getTagIdMax, getTagsForward, getTagsBackward } from '../db.js';
 import { CircularListGenerator, PaginatedMessage }      from '../../paginatedmessage/index.js';
+import { COLOR, PER_PAGE }                              from './consts.js';
 
 export default class extends ECommand {
 	constructor(client) {
@@ -26,7 +27,7 @@ export default class extends ECommand {
 	}
 
 	async run(message) {
-		const perPage = 20;
+		const perPage = PER_PAGE;
 
 		const { length } = await getTagIdMax({ guild: message.guild });
 
@@ -70,7 +71,7 @@ export default class extends ECommand {
 	async ship(message, result) {
 		const generator = s => {
 			const embed = new MessageEmbed()
-				.setColor('GREEN')
+				.setColor(COLOR)
 				.setTitle(`Tags in ${message.guild.toString()}`);
 
 			const body = s
