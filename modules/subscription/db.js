@@ -175,6 +175,11 @@ const init = async (client, db) => {
 	`);
 
 	STATEMENTS.getTagIdMax = await db.prepare(`SELECT MAX(id) as length FROM ${TAG_TABLE_NAME} WHERE guild = @guild LIMIT 1`);
+	STATEMENTS.registerTagMention = await db.prepare(`
+		INSERT INTO
+			tag_mention (tag_id, user, channel)
+		VALUES(@tagID, @userID, @channelID);
+	`);
 };
 
 const createTag = async ({ guild, name, creator }) => {
@@ -237,5 +242,6 @@ export {
 	subscribeUserTo,
 	unsubscribeUserFrom,
 	getSubscribedUsers,
-	getTagIdMax
+	getTagIdMax,
+	registerTagMention
 };
