@@ -1,9 +1,11 @@
-import { Formatters, MessageButton }                               from 'discord.js';
-import { ArgConsts, ECommand }                                     from '../../../lib/index.js';
-import * as EmbedLimits                                            from '../../../lib/EmbedLimits.js';
-import { getSubscribedUsers, registerTagMention, subscribeUserTo } from '../db.js';
-import { chunk }                                                   from './util.js';
-import { DecisionMessage }                                         from '../../decisionmessage/index.js';
+import { Formatters, MessageButton }              from 'discord.js';
+import { ArgConsts, ECommand }                    from '../../../lib/index.js';
+import * as EmbedLimits                           from '../../../lib/EmbedLimits.js';
+import { getSubscribedUsers, registerTagMention } from '../db.js';
+import { chunk }                                  from './util.js';
+import { DecisionMessage }                        from '../../decisionmessage/index.js';
+import { subscribe }                              from './subscribe.js';
+import { unsubscribe }                            from './unsubscribe.js';
 
 export default class extends ECommand {
 	constructor(client) {
@@ -67,17 +69,7 @@ export default class extends ECommand {
 					.setLabel('join')
 					.setStyle('SECONDARY'),
 				action:    async interaction => {
-					try {
-						await subscribeUserTo({ user: interaction.user, tagName });
-					} catch (error) {
-						if (error.code === 'SQLITE_CONSTRAINT') {
-							throw 'You are already in this tag!';
-						}
-
-						throw error;
-					}
-
-					return `Added you to ${tagName}`;
+					return subscribe({ user: interaction.user, tagName });
 				}
 			},
 			{
@@ -85,8 +77,8 @@ export default class extends ECommand {
 					.setCustomId('leave')
 					.setLabel('leave')
 					.setStyle('SECONDARY'),
-				action:    interaction => {
-					console.log('not implemeneted yet teehee');
+				action:    async interaction => {
+					return unsubscribe({ guild: message.guild, user: interaction.user, tagName });
 				}
 			}
 		]);

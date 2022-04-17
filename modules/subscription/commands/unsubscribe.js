@@ -24,16 +24,24 @@ export default class extends ECommand {
 	}
 
 	async run(message, { tagName }) {
-		const result = await unsubscribeUserFrom({
+		return unsubscribe({
 			guild: message.guild,
 			user:  message.author,
 			tagName
 		});
-
-		if (result.changes === 0) {
-			throw `Tag ${Formatters.inlineCode(tagName)} not found or you are not subscribed to it`;
-		}
-
-		return `Unsubscribed from ${Formatters.inlineCode(tagName)}`;
 	}
+}
+
+export async function unsubscribe({ guild, user, tagName }) {
+	const result = await unsubscribeUserFrom({
+		guild,
+		user,
+		tagName
+	});
+
+	if (result.changes === 0) {
+		throw `Tag ${Formatters.inlineCode(tagName)} not found or you are not subscribed to it`;
+	}
+
+	return `Unsubscribed from ${Formatters.inlineCode(tagName)}`;
 }

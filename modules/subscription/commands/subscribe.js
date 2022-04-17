@@ -24,26 +24,30 @@ export default class extends ECommand {
 	}
 
 	async run(message, { tagName }) {
-		let result = null;
-
-		try {
-			result = await subscribeUserTo({
-				user: message.author,
-				tagName
-			});
-		} catch (err) {
-			// Not a great way of handling errors
-			if (err.code === 'SQLITE_CONSTRAINT') {
-				throw `You are already in ${Formatters.inlineCode(tagName)}`;
-			}
-
-			throw err;
-		}
-
-		if (result.changes === 0) {
-			throw `Tag ${Formatters.inlineCode(tagName)} not found`;
-		}
-
-		return `Subscribed to ${Formatters.inlineCode(tagName)}`;
+		return await subscribe({ user: message.author, tagName });
 	}
+}
+
+export async function subscribe({ user, tagName }) {
+	let result = null;
+
+	try {
+		result = await subscribeUserTo({
+			user,
+			tagName
+		});
+	} catch (err) {
+		// Not a great way of handling errors
+		if (err.code === 'SQLITE_CONSTRAINT') {
+			throw `You are already in ${Formatters.inlineCode(tagName)}`;
+		}
+
+		throw err;
+	}
+
+	if (result.changes === 0) {
+		throw `Tag ${Formatters.inlineCode(tagName)} not found`;
+	}
+
+	return `Subscribed to ${Formatters.inlineCode(tagName)}`;
 }
