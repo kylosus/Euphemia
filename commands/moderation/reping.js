@@ -55,13 +55,11 @@ export default class extends ECommand {
 					.setLabel('Join role')
 					.setStyle('SECONDARY'),
 				action:    async ({ member }) => {
-					await member.fetch();
-
 					if (member.roles.cache.has(role.id)) {
 						throw `You already have the ${role.name} role`;
 					}
 
-					member.roles.add(role);
+					await member.roles.add(role);
 
 					return `Added the ${role.name} role`;
 				}
@@ -76,7 +74,7 @@ export default class extends ECommand {
 						throw `You do not have the ${role.name} role`;
 					}
 
-					member.roles.remove(role);
+					await member.roles.remove(role);
 
 					return `Removed the ${role.name} role`;
 				}
