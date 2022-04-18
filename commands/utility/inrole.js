@@ -15,18 +15,7 @@ export default class extends ECommand {
 			args:         [
 				{
 					id:      'role',
-					type:    new ArgumentType(
-						/.*/,
-						ArgConsts.flatten,
-						({ guild }, roleRes) => {
-							return guild.roles.cache.get(roleRes) ||
-								guild.roles.cache.find(r => r.name.toLowerCase() === roleRes.toLowerCase()) ||
-								guild.roles.cache.find(r => r.name.toLowerCase().startsWith(roleRes.toLowerCase())) ||
-								(() => {
-									throw 'Role not found';
-								})();
-						}
-					),
+					type:    ArgConsts.TYPE.ROLE_LOOSE,
 					message: 'Please provide a role',
 				},
 			],
