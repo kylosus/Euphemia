@@ -1,7 +1,7 @@
-import { MessageButton, Permissions } from 'discord.js';
-import { ArgConsts }                  from '../../lib/index.js';
-import { ECommand }                   from '../../lib/index.js';
-import { DecisionMessage }            from '../../modules/decisionmessage/index.js';
+import { Formatters, MessageButton, Permissions } from 'discord.js';
+import { ArgConsts }                              from '../../lib/index.js';
+import { ECommand }                               from '../../lib/index.js';
+import { DecisionMessage }                        from '../../modules/decisionmessage/index.js';
 
 export default class extends ECommand {
 	constructor(client) {
@@ -56,12 +56,12 @@ export default class extends ECommand {
 					.setStyle('SECONDARY'),
 				action:    async ({ member }) => {
 					if (member.roles.cache.has(role.id)) {
-						throw `You already have the ${role.name} role`;
+						throw `You already have the ${Formatters.inlineCode(role.name)} role`;
 					}
 
 					await member.roles.add(role);
 
-					return `Added the ${role.name} role`;
+					return `Added the ${Formatters.inlineCode(role.name)} role`;
 				}
 			},
 			{
@@ -71,12 +71,12 @@ export default class extends ECommand {
 					.setStyle('SECONDARY'),
 				action:    async ({ member }) => {
 					if (!member.roles.cache.has(role.id)) {
-						throw `You do not have the ${role.name} role`;
+						throw `You do not have the ${Formatters.inlineCode(role.name)} role`;
 					}
 
 					await member.roles.remove(role);
 
-					return `Removed the ${role.name} role`;
+					return `Removed the ${Formatters.inlineCode(role.name)} role`;
 				}
 			}
 		]);
