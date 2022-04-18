@@ -1,8 +1,8 @@
-const { Permissions }         = require('discord.js');
-const { ArgConsts, ECommand } = require('../../lib');
-const { getSettings }         = require('./log');
+import { Permissions }         from 'discord.js';
+import { ArgConsts, ECommand } from '../../lib/index.js';
+import { getSettings }         from './log.js';
 
-module.exports = class extends ECommand {
+export default class extends ECommand {
 	constructor(client) {
 		super(client, {
 			aliases:         ['logenable', 'logen'],
@@ -19,13 +19,13 @@ module.exports = class extends ECommand {
 			args:            [
 				{
 					id:       'channel',
-					type:     ArgConsts.CHANNEL,
+					type:     ArgConsts.TYPE.CHANNEL,
 					optional: true,
 					default:  m => m.channel
 				},
 				{
 					id:       'event',
-					type:     ArgConsts.TEXT,
+					type:     ArgConsts.TYPE.TEXT,
 					optional: true,
 					default:  () => null
 				},
@@ -47,7 +47,7 @@ module.exports = class extends ECommand {
 			entry[event] = channel.id;
 
 			await this.client.provider.set(message.guild, 'log', entry);
-			return `Enabled ${event} in ${channel}`;
+			return `Enabled ${event} in ${channel.toString()}`;
 		}
 
 		// All events
@@ -57,6 +57,6 @@ module.exports = class extends ECommand {
 
 		await this.client.provider.set(message.guild, 'log', entry);
 
-		return `Enabled all events in ${channel}`;
+		return `Enabled all events in ${channel.toString()}`;
 	}
-};
+}

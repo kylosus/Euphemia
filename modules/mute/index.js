@@ -1,13 +1,10 @@
-const db      = require('./db');
-const watcher = require('./watcher');
+import * as db from './db.js';
+import * as watcher from './watcher.js';
 
-const init = async (client, _db) => {
+export const init = async (client, _db) => {
 	await db.init(client, _db);
 	await watcher.init(client);
 };
 
-module.exports = {
-	init,
-	mutedRole:   require('./mutedRole'),
-	muteHandler: require('./muteHandler')
-};
+export * from './mutedRole.js';
+export * from './muteHandler.js';

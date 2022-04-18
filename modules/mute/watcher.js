@@ -1,13 +1,13 @@
-const db = require('./db');
+import { getExpired, remove, getMutedRoleIfNotExpired } from './db.js';
 
 const INTERVAL = 60000;	// 1 minute
 
 const muteExpire = client => {
-	client.setInterval(async () => {
-		const result = await db.getExpired();
+	setInterval(async () => {
+		const result = await getExpired();
 
 		await Promise.all(result.map(async r => {
-			db.remove(r.guild, r.member);
+			remove(r.guild, r.member);
 
 			const guild = client.guilds.cache.get(r.guild);
 
@@ -34,7 +34,7 @@ const muteExpire = client => {
 
 const onMemberAdd = async client => {
 	client.on('guildMemberAdd', async m => {
-		const result = await db.getMutedRoleIfNotExpired(m.id);
+		const result = await getMutedRoleIfNotExpired(m.id);
 
 		if (!result) {
 			return;
@@ -54,6 +54,6 @@ const init = async client => {
 	await onMemberAdd(client);
 };
 
-module.exports = {
+export {
 	init
 };

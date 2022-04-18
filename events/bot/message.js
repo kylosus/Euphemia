@@ -1,6 +1,6 @@
-const { MessageEmbed } = require('discord.js');
+import { MessageEmbed } from 'discord.js';
 
-module.exports = message => {
+export default message => {
 	// if (message.author.id === message.client.user.id) {
 	// 	message.client.messageStats.sent++;
 	// } else {
@@ -35,7 +35,7 @@ module.exports = message => {
 
 	message.client.owners.forEach(owner => {
 		if (message.author.id !== owner.id) {
-			return owner.send(embed);
+			return owner.send({ embeds: [embed] });
 		}
 	});
 };

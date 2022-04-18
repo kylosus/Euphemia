@@ -1,7 +1,7 @@
-const { MessageEmbed }        = require('discord.js');
-const { ArgConsts, ECommand } = require('../../lib');
+import { MessageEmbed }        from 'discord.js';
+import { ArgConsts, ECommand } from '../../lib/index.js';
 
-module.exports = class extends ECommand {
+export default class extends ECommand {
 	constructor(client) {
 		super(client, {
 			aliases:     ['color', 'whatcolor'],
@@ -13,7 +13,7 @@ module.exports = class extends ECommand {
 			args:        [
 				{
 					id:      'color',
-					type:    ArgConsts.TEXT,
+					type:    ArgConsts.TYPE.TEXT,
 					message: 'Please provide color'
 				}
 			],
@@ -27,9 +27,10 @@ module.exports = class extends ECommand {
 	}
 
 	async ship(message, result) {
-		return message.channel.send(new MessageEmbed()
-			.setTitle('This color')
-			.setColor(result)
-		);
+		return message.channel.send({
+			embeds: [new MessageEmbed()
+				.setTitle('This color')
+				.setColor(result)]
+		});
 	}
-};
+}

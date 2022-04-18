@@ -1,10 +1,10 @@
-const got                     = require('got');
-const { ArgConsts, ECommand } = require('../../../lib');
-const db                      = require('../db');
+import { ArgConsts, ECommand } from '../../../lib/index.js';
+import { forceInsert }         from '../db.js';
+import got                     from 'got';
 
 const CARL_ID = '235148962103951360';
 
-module.exports = class extends ECommand {
+export default class extends ECommand {
 	constructor(client) {
 		super(client, {
 			aliases:     ['importcarl'],
@@ -16,7 +16,7 @@ module.exports = class extends ECommand {
 			args:        [
 				{
 					id:      'id',
-					type:    ArgConsts.ID,
+					type:    ArgConsts.TYPE.ID,
 					message: 'Please provide a message id.'
 				}
 			],
@@ -52,8 +52,8 @@ module.exports = class extends ECommand {
 		this.sendNotice(message, `Inserting ${entry.length} entries`);
 
 		// Should probably use a transaction
-		await Promise.all(entry.map(e => db.forceInsert(e)));
+		await Promise.all(entry.map(e => forceInsert(e)));
 
 		return `Inserted ${entry.length} entries`;
 	}
-};
+}

@@ -1,8 +1,8 @@
-const { MessageEmbed, Permissions }                  = require('discord.js');
-const { ArgConsts, ArgumentType }                    = require('../../lib');
-const { ModerationCommand, ModerationCommandResult } = require('../../modules/moderation');
+import { MessageEmbed, Permissions }                  from 'discord.js';
+import { ArgConsts, ArgumentType }                    from '../../lib/index.js';
+import { ModerationCommand, ModerationCommandResult } from '../../modules/moderation/index.js';
 
-module.exports = class extends ModerationCommand {
+export default class extends ModerationCommand {
 	constructor(client) {
 		super(client, {
 			actionName:      'prunerole',
@@ -15,8 +15,8 @@ module.exports = class extends ModerationCommand {
 			userPermissions: [Permissions.FLAGS.ADMINISTRATOR],
 			args:            [
 				{
-					id:       'role',
-					type:     new ArgumentType(
+					id:      'role',
+					type:    new ArgumentType(
 						/.*/,
 						ArgConsts.flatten,
 						({ guild }, roleRes) => {
@@ -28,11 +28,11 @@ module.exports = class extends ModerationCommand {
 								})();
 						}
 					),
-					message:  'Please provide a role',
+					message: 'Please provide a role',
 				},
 				{
 					id:       'reason',
-					type:     ArgConsts.REASON,
+					type:     ArgConsts.TYPE.REASON,
 					optional: true,
 					default:  () => null
 				},
@@ -59,9 +59,10 @@ module.exports = class extends ModerationCommand {
 	}
 
 	async ship(message, { _: { role, members } }) {
-		return message.channel.send(new MessageEmbed()
-			.setColor('GREEN')
-			.setDescription(`Pruned ${members.length} members in ${role}:`)
-		);
+		return message.channel.send({
+			embeds: [new MessageEmbed()
+				.setColor('GREEN')
+				.setDescription(`Pruned ${members.length} members in ${role}:`)]
+		});
 	}
-};
+}

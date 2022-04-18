@@ -1,7 +1,7 @@
-const { MessageEmbed }        = require('discord.js');
-const { ArgConsts, ECommand } = require('../../lib');
+import { MessageEmbed }        from 'discord.js';
+import { ArgConsts, ECommand } from '../../lib/index.js';
 
-module.exports = class extends ECommand {
+export default class extends ECommand {
 	constructor(client) {
 		super(client, {
 			aliases:     ['quote'],
@@ -13,13 +13,13 @@ module.exports = class extends ECommand {
 			args:        [
 				{
 					id:       'channel',
-					type:     ArgConsts.CHANNEL,
+					type:     ArgConsts.TYPE.CHANNEL,
 					optional: true,
 					default:  m => m.channel
 				},
 				{
 					id:      'id',
-					type:    ArgConsts.TEXT,
+					type:    ArgConsts.TYPE.TEXT,
 					message: 'Please provide a message id.'
 				}
 			],
@@ -36,13 +36,16 @@ module.exports = class extends ECommand {
 		const embed = new MessageEmbed().setColor(result.member ? result.member.displayColor : 'WHITE')
 			.addField('Jump to message', `[Link](${result.url})`)
 			.setDescription(result.content || '*No content*')
-			.setFooter(`In #${result.channel.name}`)
+			.setFooter({ text: `In #${result.channel.name}` })
 			.setTimestamp(result.createdAt);
 
 		if (result.author) {
-			embed.setAuthor(result.author.username, result.author.displayAvatarURL(), null);
+			embed.setAuthor({
+				name:    result.author.username,
+				iconURL: result.author.displayAvatarURL()
+			});
 		} else {
-			embed.setAuthor('Unknown [deleted] user', null, null);
+			embed.setAuthor({ name: 'Unknown [deleted] user' });
 		}
 
 		const attachment = result.attachments.first();
@@ -51,6 +54,6 @@ module.exports = class extends ECommand {
 			embed.setImage(attachment.proxyURL);
 		}
 
-		return message.channel.send(embed);
+		return message.channel.send({ embeds: [embed] });
 	}
-};
+}

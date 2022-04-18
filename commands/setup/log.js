@@ -1,10 +1,11 @@
-const { MessageEmbed, Permissions } = require('discord.js');
-const { ECommand }                  = require('../../lib');
-const path                          = require('path');
-const fs                            = require('fs');
-const directoryPath                 = path.join(__dirname, '/../../events/loggable');
+import { MessageEmbed, Permissions } from 'discord.js';
+import { ECommand }                  from '../../lib/index.js';
+import { readdirSync }               from 'fs';
+import { URL }                       from 'url';
 
-const events = fs.readdirSync(directoryPath, { withFileTypes: true })
+const directoryPath = new URL('../../events/loggable', import.meta.url);
+
+const events = readdirSync(directoryPath, { withFileTypes: true })
 	.map(dirent => dirent.name.replace(/\.[^.]+$/, '').replace('_', ''));
 
 const SETTINGS = events.reduce(function (acc, curr) {
@@ -12,12 +13,12 @@ const SETTINGS = events.reduce(function (acc, curr) {
 	return acc;
 }, {});
 
-const getSettings = guild => {
+export const getSettings = guild => {
 	const settings = guild.provider.get('log', {});
 	return { ...SETTINGS, ...settings };
 };
 
-module.exports = class extends ECommand {
+export default class extends ECommand {
 	constructor(client) {
 		super(client, {
 			aliases:         ['log'],
@@ -49,8 +50,6 @@ module.exports = class extends ECommand {
 
 		embed.setDescription('__Use logenable to unlock__' + '\n\n' + body);
 
-		return message.channel.send(embed);
+		return message.channel.send({ embeds: [embed] });
 	}
-};
-
-module.exports.getSettings = getSettings;
+}

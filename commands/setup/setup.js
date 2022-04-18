@@ -1,7 +1,7 @@
-const { Permissions } = require('discord.js');
-const { ECommand }    = require('../../lib');
+import { Permissions } from 'discord.js';
+import { ECommand }    from '../../lib/index.js';
 
-module.exports = class extends ECommand {
+export default class extends ECommand {
 	constructor(client) {
 		super(client, {
 			actionName:      'setup',
@@ -24,4 +24,4 @@ module.exports = class extends ECommand {
 		// set up muted role
 		return ':)';
 	}
-};
+}

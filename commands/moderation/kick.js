@@ -1,8 +1,8 @@
-const { Permissions }                                = require('discord.js');
-const { ArgConsts }                                  = require('../../lib');
-const { ModerationCommand, ModerationCommandResult } = require('../../modules/moderation');
+import { Permissions }                                from 'discord.js';
+import { ArgConsts }                                  from '../../lib/index.js';
+import { ModerationCommand, ModerationCommandResult } from '../../modules/moderation/index.js';
 
-module.exports = class extends ModerationCommand {
+export default class extends ModerationCommand {
 	constructor(client) {
 		super(client, {
 			actionName:        'kick',
@@ -17,12 +17,12 @@ module.exports = class extends ModerationCommand {
 			args:              [
 				{
 					id:      'members',
-					type:    ArgConsts.MEMBERS,
+					type:    ArgConsts.TYPE.MEMBERS,
 					message: 'Please mention members to kick'
 				},
 				{
 					id:       'reason',
-					type:     ArgConsts.REASON,
+					type:     ArgConsts.TYPE.REASON,
 					optional: true,
 					default:  () => 'No reason provided'
 				},
@@ -51,4 +51,4 @@ module.exports = class extends ModerationCommand {
 
 		return result;
 	}
-};
+}

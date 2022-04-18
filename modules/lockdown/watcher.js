@@ -1,4 +1,4 @@
-const { mutedRole } = require('../mute');
+import { getMutedRole } from '../mute/index.js';
 
 const onMemberAdd = client => {
 	client.on('guildMemberAdd', async member => {
@@ -8,7 +8,7 @@ const onMemberAdd = client => {
 			return;
 		}
 
-		const role = await mutedRole.getMutedRole(member.guild);
+		const role = await getMutedRole(member.guild);
 
 		if (!role) {
 			return;
@@ -18,10 +18,6 @@ const onMemberAdd = client => {
 	});
 };
 
-const init = client => {
+export const init = client => {
 	onMemberAdd(client);
-};
-
-module.exports = {
-	init
 };

@@ -1,13 +1,18 @@
-const { MessageEmbed }        = require('discord.js');
-const { ECommand, ArgConsts } = require('../../lib');
-const moment                  = require('moment');
-const { fetchAnime }          = require('./util');
-const _                       = require('lodash');
+import { MessageEmbed, Formatters } from 'discord.js';
+import { ECommand, ArgConsts }      from '../../lib/index.js';
+import { fetchAnime }               from './util.js';
+import { truncate }                 from 'lodash-es';
+import dayjs                        from 'dayjs';
+import duration                     from 'dayjs/plugin/duration.js';
+import relativeTime                 from 'dayjs/plugin/relativeTime.js';
+
+dayjs.extend(duration);
+dayjs.extend(relativeTime);
 
 const GENRE_MAX = 3;
 const DESC_MAX  = 300;
 
-module.exports = class extends ECommand {
+export default class extends ECommand {
 	constructor(client) {
 		super(client, {
 			aliases:     ['anime'],
@@ -19,7 +24,7 @@ module.exports = class extends ECommand {
 			args:        [
 				{
 					id:      'anime',
-					type:    ArgConsts.TEXT,
+					type:    ArgConsts.TYPE.TEXT,
 					message: 'Please enter an anime title'
 				}
 			],
@@ -55,7 +60,9 @@ module.exports = class extends ECommand {
 			search
 		};
 
-		const { data } = await fetchAnime(query, variables).catch(() => {throw 'Anime not found';});
+		const { data } = await fetchAnime(query, variables).catch(() => {
+			throw 'Anime not found';
+		});
 
 		return data.Media;
 	}
@@ -63,20 +70,20 @@ module.exports = class extends ECommand {
 	async ship(message, result) {
 		const embed = new MessageEmbed()
 			.setColor('LUMINOUS_VIVID_PINK')
-			.setTitle(result.title.userPreferred)
-			.setThumbnail(result.coverImage.large)
-			.setDescription(`[AniList](${result.siteUrl}) | [MyAnimeList](https://myanimelist.net/anime/${result.idMal})`)
-			.addField('Average score', `${result.averageScore || '-'}%`, true)
-			.addField('Popularity', result.popularity, true)
+			.setTitle(result.title?.userPreferred)
+			.setThumbnail(result.coverImage?.large)
+			.setDescription(`[AniList](${result?.siteUrl}) | [MyAnimeList](https://myanimelist.net/anime/${result.idMal})`)
+			.addField('Average score', `${result.averageScore ?? '-'}%`, true)
+			.addField('Popularity', String(result?.popularity), true)
 			.addField('Format', _normalizeConstant(result.format) || 'unknown', true)
 			.addField('Source', result.source ? _normalizeConstant(result.source) : 'unknown', true)
-			.addField('Episodes', result.episodes || 'unknown', true)
+			.addField('Episodes', String(result.episodes) ?? 'unknown', true)
 			.addField('Status', _normalizeConstant(result.status) || 'unknown', true);
 
 		if (result.startDate.month) {
 			embed.addField(
 				'Start',
-				`${result.startDate.day}/${result.startDate.month}/${result.startDate.year}`,
+				`${result?.startDate.day}/${result?.startDate.month}/${result?.startDate.year}`,
 				true
 			);
 		}
@@ -94,30 +101,31 @@ module.exports = class extends ECommand {
 		}
 
 		if (result.description) {
-			embed.addField('Description', _escapeHTML(_.truncate(result.description, { length: DESC_MAX })));
+			embed.addField('Description', _escapeHTML(truncate(result.description, { length: DESC_MAX })));
 		}
 
 		const duration = (() => {
 			if (result.nextAiringEpisode) {
-				const duration = moment.duration(result.nextAiringEpisode.timeUntilAiring, 'seconds');
+				const duration = dayjs.duration(result.nextAiringEpisode.timeUntilAiring, 'seconds');
 				return ['Next', duration.format('D [days] H [hours] m [minutes]')];
 			}
 
 			// this is stupid, just use moment { day: 'whatever' }
-			const date = moment(`${result.startDate.year}${('0' + result.startDate.month).slice(-2)}${('0' + result.startDate.day).slice(-2)}`, 'YYYYMMDD').fromNow();
+			const date         = dayjs(`${result?.startDate.year}${('0' + result?.startDate.month).slice(-2)}${('0' + result?.startDate.day).slice(-2)}`, 'YYYYMMDD');
+			const relativeDate = Formatters.time(date.toDate(), Formatters.TimestampStyles.RelativeTime);
 
 			if (result.status === 'FINISHED') {
-				return ['Aired', date];
+				return ['Aired', relativeDate];
 			}
 
-			return ['Will Air', date];
+			return ['Will Air', relativeDate];
 		})();
 
 		embed.addField(...duration, true);
 
-		return message.channel.send(embed);
+		return message.channel.send({ embeds: [embed] });
 	}
-};
+}
 
 function _normalizeConstant(string) {
 	const temp = string.toLowerCase().split('_').join(' ');

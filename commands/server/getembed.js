@@ -1,7 +1,7 @@
-const { MessageEmbed, Permissions } = require('discord.js');
-const { ArgConsts, ECommand }       = require('../../lib');
+import { Formatters, MessageEmbed, Permissions } from 'discord.js';
+import { ArgConsts, ECommand }                   from '../../lib/index.js';
 
-module.exports = class extends ECommand {
+export default class extends ECommand {
 	constructor(client) {
 		super(client, {
 			aliases:         ['getembed'],
@@ -14,13 +14,13 @@ module.exports = class extends ECommand {
 			args:            [
 				{
 					id:       'channel',
-					type:     ArgConsts.CHANNEL,
+					type:     ArgConsts.TYPE.CHANNEL,
 					optional: true,
 					default:  m => m.channel
 				},
 				{
 					id:      'id',
-					type:    ArgConsts.TEXT,
+					type:    ArgConsts.TYPE.TEXT,
 					message: 'Please provide a message id.'
 				}
 			],
@@ -40,9 +40,10 @@ module.exports = class extends ECommand {
 	}
 
 	async ship(message, result) {
-		return message.channel.send(new MessageEmbed()
-			.setColor('GREEN')
-			.setDescription('```' + JSON.stringify(result, null, 4) + '```')
-		);
+		return message.channel.send({
+			embeds: [new MessageEmbed()
+				.setColor('GREEN')
+				.setDescription(Formatters.codeBlock(JSON.stringify(result, null, 4)))]
+		});
 	}
-};
+}

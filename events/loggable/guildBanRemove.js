@@ -1,11 +1,12 @@
-const { MessageEmbed } = require('discord.js');
+import { MessageEmbed } from 'discord.js';
 
-module.exports = async (channel, guild, user) => {
-	return channel.send(new MessageEmbed()
-		.setColor('GREEN')
-		.setTitle('♻ User unbanned')
-		.setThumbnail(user.displayAvatarURL())
-		.setDescription(user.tag)
-		.addField('ID', user.id, false)
-	);
+export default async (channel, { user }) => {
+	return channel.send({
+		embeds: [new MessageEmbed()
+			.setColor('GREEN')
+			.setTitle('♻ User unbanned')
+			.setThumbnail(user.displayAvatarURL())
+			.setDescription(user.tag)
+			.addField('ID', user.id, false)]
+	});
 };

@@ -1,4 +1,4 @@
-const { BACKWARD_EMOJI, FORWARD_EMOJI } = require('./EuphemiaPaginatedMessage');
+import { BACKWARD_EMOJI, FORWARD_EMOJI } from './EuphemiaPaginatedMessage.js';
 
 const _watcher = async ({ message, emoji }, user) => {
 	if (!message.pagination) {
@@ -15,28 +15,26 @@ const _watcher = async ({ message, emoji }, user) => {
 		const current = await args.next();
 
 		const embed = generator(current)
-			.setFooter(`${args.currentIndex + 1}/${args.length}`);
+			.setFooter({ text: `${args.currentIndex + 1}/${args.length}` });
 
-		return message.edit(embed);
+		return message.edit({ embeds: [embed] });
 	}
 
 	if (emoji.name === BACKWARD_EMOJI) {
 		const embed = generator(await args.previous())
-			.setFooter(`${args.currentIndex + 1}/${args.length}`);
+			.setFooter({ text: `${args.currentIndex + 1}/${args.length}` });
 
-		return message.edit(embed);
+		return message.edit({ embeds: [embed] });
 	}
 };
 
 const watch = client => {
-	client.on('messageReactionAdd',     (...args) => _watcher(...args).catch(console.error));
-	client.on('messageReactionRemove',  (...args) => _watcher(...args).catch(console.error));
+	client.on('messageReactionAdd',		(...args) => _watcher(...args).catch(console.error));
+	client.on('messageReactionRemove',	(...args) => _watcher(...args).catch(console.error));
 };
 
 const init = client => {
 	watch(client);
 };
 
-module.exports = {
-	init
-};
+export { init };

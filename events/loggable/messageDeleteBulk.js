@@ -1,7 +1,7 @@
-const { MessageAttachment }      = require('discord.js');
-const { AutoEmbed, EmbedLimits } = require('../../lib');
+import { MessageAttachment }      from 'discord.js';
+import { AutoEmbed, EmbedLimits } from '../../lib/index.js';
 
-module.exports = async (channel, messages) => {
+export default async (channel, messages) => {
 	const embed = new AutoEmbed()
 		.setColor('DARK_PURPLE')
 		.setTitle(`🗑 ${messages.size} messages bulk deleted in #${messages.first().channel.name}`)
@@ -10,12 +10,12 @@ module.exports = async (channel, messages) => {
 
 	const content = messages.map(m => {
 		const url = m.attachments.first()?.proxyURL ?? null;
-		return `[${m.author || 'Unknown user'}] [${m.id}]: ${m.content ?? ''}${url ? `[Attachment](${url})` : ''}`;
+		return `[${m.author?.toString() ?? 'Unknown user'}] [${m.id}]: ${m.content ?? ''}${url ? `[Attachment](${url})` : ''}`;
 	});
 
-	const additions = (c => {
+	const files = (c => {
 		if (c.length > EmbedLimits.DESCRIPTION) {
-			return new MessageAttachment(Buffer.from(c), 'messages.txt');
+			return [new MessageAttachment(c, 'messages.txt')];
 		}
 
 		return null;
@@ -23,5 +23,5 @@ module.exports = async (channel, messages) => {
 
 	embed.setDescription(content.reverse().join('\n'));
 
-	return channel.send([embed, additions]);
+	return channel.send({ embeds: [embed], files });
 };

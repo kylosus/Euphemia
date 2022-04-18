@@ -1,7 +1,7 @@
-const { Permissions }         = require('discord.js');
-const { ArgConsts, ECommand } = require('../../lib');
+import { Permissions }         from 'discord.js';
+import { ArgConsts, ECommand } from '../../lib/index.js';
 
-module.exports = class extends ECommand {
+export default class extends ECommand {
 	constructor(client) {
 		super(client, {
 			aliases:           ['cache'],
@@ -13,9 +13,10 @@ module.exports = class extends ECommand {
 			clientPermissions: [Permissions.FLAGS.READ_MESSAGE_HISTORY],
 			args:              [
 				{
-					id:      'channel',
-					type:    ArgConsts.CHANNEL,
-					default: m => m.channel
+					id:       'channel',
+					type:     ArgConsts.TYPE.CHANNEL,
+					optional: true,
+					default:  m => m.channel
 				},
 			],
 			guildOnly:         true,
@@ -27,4 +28,4 @@ module.exports = class extends ECommand {
 		await channel.messages.fetch({ limit: 100 });
 		return '👌';
 	}
-};
+}

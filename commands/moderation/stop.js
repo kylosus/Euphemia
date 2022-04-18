@@ -1,8 +1,8 @@
-const { MessageEmbed, Permissions }                  = require('discord.js');
-const { ArgConsts }                                  = require('../../lib');
-const { ModerationCommand, ModerationCommandResult } = require('../../modules/moderation');
+import { MessageEmbed, Permissions }                  from 'discord.js';
+import { ArgConsts }                                  from '../../lib/index.js';
+import { ModerationCommand, ModerationCommandResult } from '../../modules/moderation/index.js';
 
-module.exports = class extends ModerationCommand {
+export default class extends ModerationCommand {
 	constructor(client) {
 		super(client, {
 			actionName:        'stop',
@@ -17,19 +17,19 @@ module.exports = class extends ModerationCommand {
 			args:              [
 				{
 					id:       'channels',
-					type:     ArgConsts.CHANNELS,
+					type:     ArgConsts.TYPE.CHANNELS,
 					optional: true,
 					default:  m => [m.channel]
 				},
 				{
 					id:       'toggle',
-					type:     ArgConsts.WORD,
+					type:     ArgConsts.TYPE.WORD,
 					optional: true,
 					default:  () => 'on'
 				},
 				{
 					id:       'reason',
-					type:     ArgConsts.REASON,
+					type:     ArgConsts.TYPE.REASON,
 					optional: true,
 					default:  () => null
 				}
@@ -58,17 +58,17 @@ module.exports = class extends ModerationCommand {
 
 	async ship(message, result) {
 		const embed = new MessageEmbed()
-		.setColor(result.getColor());
+			.setColor(result.getColor());
 
 		if (result.passed.length) {
-			embed.addField(`${ result.aux !== 'on' ? 'Allowed' : 'Denied' } message sending permissions in`,
-				result.passed.map(r => `<#${ r.id }>`).join(' '));
+			embed.addField(`${result.aux !== 'on' ? 'Allowed' : 'Denied'} message sending permissions in`,
+				result.passed.map(r => `<#${r.id}>`).join(' '));
 		}
 
 		if (result.failed.length) {
-			embed.addField('Failed', result.failed.map(r => `<#${ r.id }> - ${ r.reason }`).join(' '));
+			embed.addField('Failed', result.failed.map(r => `<#${r.id}> - ${r.reason}`).join(' '));
 		}
 
-		return message.channel.send(embed);
+		return message.channel.send({ embeds: [embed] });
 	}
-};
+}

@@ -1,7 +1,7 @@
-const { MessageEmbed, Permissions }         = require('discord.js');
-const { ArgConsts, ArgumentType, ECommand } = require('../../lib');
+import { MessageEmbed, Permissions }         from 'discord.js';
+import { ArgConsts, ArgumentType, ECommand } from '../../lib/index.js';
 
-module.exports = class extends ECommand {
+export default class extends ECommand {
 	constructor(client) {
 		super(client, {
 			aliases:         ['edit'],
@@ -41,7 +41,7 @@ module.exports = class extends ECommand {
 				},
 				{
 					id:      'text',
-					type:    ArgConsts.TEXT,
+					type:    ArgConsts.TYPE.TEXT,
 					message: 'Please provide text'
 				}
 			],
@@ -69,11 +69,11 @@ module.exports = class extends ECommand {
 
 		try {
 			const json = JSON.parse(text);
-			await toEdit.edit(json.content, new MessageEmbed(json));
+			await toEdit.edit({ content: json.content, embeds: [new MessageEmbed(json)] });
 		} catch (err) {
-			await toEdit.edit(text);
+			await toEdit.edit({content: text});
 		}
 
 		return 'Edited message';
 	}
-};
+}

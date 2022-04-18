@@ -1,8 +1,9 @@
-const { MessageEmbed } = require('discord.js');
-const { ECommand }     = require('../../lib');
-const QUOTES           = require('./jojo.js.json');
+import { MessageEmbed } from 'discord.js';
+import { ECommand }     from '../../lib/index.js';
 
-module.exports = class extends ECommand {
+import QUOTES from './jojo.js.json' assert { type: 'json' };
+
+export default class extends ECommand {
 	constructor(client) {
 		super(client, {
 			aliases:     ['jojo', 'duwang', 'nani'],
@@ -21,9 +22,11 @@ module.exports = class extends ECommand {
 	}
 
 	async ship(message, result) {
-		return message.channel.send(new MessageEmbed()
-			.setColor('RANDOM')
-			.setDescription(result)
-		);
+		return message.channel.send({
+			embeds: [new MessageEmbed()
+				.setColor('RANDOM')
+				.setDescription(result)
+			]
+		});
 	}
-};
+}

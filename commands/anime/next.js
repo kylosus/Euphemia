@@ -1,12 +1,10 @@
-const { Collection, MessageEmbed } = require('discord.js');
-const { ArgConsts, ECommand }      = require('../../lib');
-const got                          = require('got');
-const moment                       = require('moment'); require('moment-duration-format');
+import { Collection, Formatters, MessageEmbed } from 'discord.js';
+import { ArgConsts, ECommand }                  from '../../lib/index.js';
+import got                                      from 'got';
+
+const ANILIST_URL = 'https://graphql.anilist.co';
 
 const cache = new Collection();
-
-// const ONE_DAY     = 82800;
-const ANILIST_URL = 'https://graphql.anilist.co';
 
 const fetchAnime = (query, variables) => {
 	return got.post(ANILIST_URL, {
@@ -18,7 +16,7 @@ const fetchAnime = (query, variables) => {
 	}).json();
 };
 
-module.exports = class extends ECommand {
+export default class extends ECommand {
 	constructor(client) {
 		super(client, {
 			aliases:     ['next'],
@@ -30,9 +28,9 @@ module.exports = class extends ECommand {
 			args:        [
 				{
 					id:       'anime',
-					type:     ArgConsts.TEXT,
+					type:     ArgConsts.TYPE.TEXT,
 					optional: true,
-					default: () => '*'
+					default:  () => '*'
 				}
 			],
 			guildOnly:   false,
@@ -78,7 +76,9 @@ module.exports = class extends ECommand {
 		const { data } = await fetchAnime(query, variables).catch(() => {
 			// There has to be a better way, man
 			variables.status = 'NOT_YET_RELEASED';
-			return fetchAnime(query, variables).catch(() => {throw 'Anime not found';});
+			return fetchAnime(query, variables).catch(() => {
+				throw 'Anime not found';
+			});
 		});
 
 		if (!data.Page) {
@@ -90,12 +90,11 @@ module.exports = class extends ECommand {
 
 	async shipOne(message, result) {
 		const duration = ((a) => {
-			if (!a.nextAiringEpisode) {
+			if (!a.nextAiringEpisode?.airingAt) {
 				return 'Some time in the future';
 			}
 
-			return moment.duration(moment(a.nextAiringEpisode.airingAt * 1000).diff(moment()))
-				.format('D [days] H [hours] m [minutes] s [seconds]');
+			return Formatters.time(a.nextAiringEpisode.airingAt, Formatters.TimestampStyles.RelativeTime);
 		})(result);
 
 		const embed = new MessageEmbed()
@@ -108,7 +107,7 @@ module.exports = class extends ECommand {
 			.setURL(result.siteUrl)
 			.addField(`Episode ${result.nextAiringEpisode?.episode ?? '?'} in`, duration, false);
 
-		return message.channel.send(embed);
+		return message.channel.send({ embeds: [embed] });
 	}
 
 	async shipPage(message, result) {
@@ -119,14 +118,15 @@ module.exports = class extends ECommand {
 		result
 			.filter(r => r.nextAiringEpisode)
 			.sort((a, b) => a.nextAiringEpisode.timeUntilAiring - b.nextAiringEpisode.timeUntilAiring)
-			.forEach(r => embed.addField(
-				`${r.title.userPreferred} ${r.nextAiringEpisode?.episode ?? '?'}`,
-				moment.duration(moment(r.nextAiringEpisode.airingAt * 1000).diff(moment()))
-					.format('D [days] H [hours] m [minutes] s [seconds]'),
-				true)
-			);
+			.forEach(r => {
+				embed.addField(
+					`${r.title.userPreferred} ${r.nextAiringEpisode?.episode ?? '?'}`,
+					Formatters.time(r.nextAiringEpisode.airingAt, Formatters.TimestampStyles.RelativeTime),
+					true
+				);
+			});
 
-		return message.channel.send(embed);
+		return message.channel.send({ embeds: [embed] });
 	}
 
 	async ship(message, result) {
@@ -136,4 +136,5 @@ module.exports = class extends ECommand {
 
 		return this.shipOne(message, result.Media);
 	}
-};
+}
+

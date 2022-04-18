@@ -1,11 +1,10 @@
-const { MessageEmbed, Permissions } = require('discord.js');
-const { ArgConsts, ECommand }       = require('../../../lib');
-const moment                        = require('moment');
-const db                            = require('../db');
+import { Formatters, MessageEmbed, Permissions } from 'discord.js';
+import { ArgConsts, ECommand }                   from '../../../lib/index.js';
+import { getAction }                             from '../db.js';
 
 const COLOR = '#2CDDD7';
 
-module.exports = class extends ECommand {
+export default class extends ECommand {
 	constructor(client) {
 		super(client, {
 			aliases:         ['action'],
@@ -18,7 +17,7 @@ module.exports = class extends ECommand {
 			args:            [
 				{
 					id:      'number',
-					type:    ArgConsts.NUMBER,
+					type:    ArgConsts.TYPE.NUMBER,
 					message: 'Please specify an action number'
 				}
 			],
@@ -29,7 +28,7 @@ module.exports = class extends ECommand {
 	}
 
 	async run(message, { number }) {
-		const result = await db.getAction(message.guild.id, number);
+		const result = await getAction(message.guild.id, number);
 
 		if (!result) {
 			throw 'Action number not found';
@@ -42,20 +41,23 @@ module.exports = class extends ECommand {
 		const embed = new MessageEmbed()
 			.setColor(COLOR);
 
-		embed.setAuthor(...(user => {
+		embed.setAuthor((user => {
 			if (user) {
-				return [`${user.tag} (${result.moderator})}`, user.displayAvatarURL()];
+				return {
+					name:    `${user.tag} (${result.moderator})}`,
+					iconURL: user.displayAvatarURL()
+				};
 			}
 
-			return [`Unknown user: ${result.moderator}`];
-		})(await this.client.users.fetch(result.moderator).catch(() => {})));
+			return { name: `Unknown user: ${result.moderator}` };
+		})(await this.client.users.fetch(result.moderator).catch(console.error)));
 
 		const prefix = result.passed ? '✅' : '❌';	// Fix those later
 		embed.setDescription(`${prefix} Action \`[${result.id}]\` ${result.action.toLowerCase()} -> <@${result.target}>`);
-		embed.addField('Reason', '```' + (result.reason || 'No reason provided') + '```');
+		embed.addField('Reason', Formatters.codeBlock(result.reason || 'No reason provided'));
 
 		if (!result.passed) {
-			embed.addField('Failed', '```' + (result.failedReason || 'Unknown reason') + '```');
+			embed.addField('Failed', Formatters.codeBlock(result.failedReason || 'Unknown reason'));
 		}
 
 		if (result.action === 'MUTE') {
@@ -64,13 +66,12 @@ module.exports = class extends ECommand {
 					return 'Forever';
 				}
 
-				const diff = moment.duration(moment(time).diff(result.timestamp));
-				return `${diff.days()} days, ${diff.hours()} hours, ${diff.minutes()} minutes`;
+				return Formatters.time(time, Formatters.TimestampStyles.RelativeTime);
 			})(result.aux));
 		}
 
 		embed.setTimestamp(result.timestamp);
 
-		return message.channel.send(embed);
+		return message.channel.send({ embeds: [embed] });
 	}
-};
+}

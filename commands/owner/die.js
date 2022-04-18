@@ -1,6 +1,7 @@
-const { ArgConsts, ECommand } = require('../../lib');
+import { ArgConsts, ECommand } from '../../lib/index.js';
+import * as process            from 'process';
 
-module.exports = class extends ECommand {
+export default class extends ECommand {
 	constructor(client) {
 		super(client, {
 			aliases:     ['die', 'shutdown'],
@@ -12,7 +13,7 @@ module.exports = class extends ECommand {
 			args:        [
 				{
 					id:       'code',
-					type:     ArgConsts.NUMBER,
+					type:     ArgConsts.TYPE.NUMBER,
 					optional: true,
 					default:  () => 0,
 				},
@@ -26,4 +27,4 @@ module.exports = class extends ECommand {
 		await this.sendNotice(message, '👋');
 		process.exit(code);
 	}
-};
+}

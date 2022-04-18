@@ -1,6 +1,6 @@
-const { ArgConsts, ECommand } = require('../../lib');
+import { ArgConsts, ECommand } from '../../lib/index.js';
 
-module.exports = class extends ECommand {
+export default class extends ECommand {
 	constructor(client) {
 		super(client, {
 			aliases:     ['enableg'],
@@ -12,7 +12,7 @@ module.exports = class extends ECommand {
 			args:        [
 				{
 					id:      'command',
-					type:    ArgConsts.WORD,
+					type:    ArgConsts.TYPE.WORD,
 					message: 'Please mention a command name'
 				}
 			],
@@ -25,12 +25,12 @@ module.exports = class extends ECommand {
 		const c = this.client.commandHandler.commands.get(command);
 
 		if (!c) {
-			throw `Command \`${ command }\` not found`;
+			throw `Command \`${command}\` not found`;
 		}
 
-		const response = !c.disabled ? `\`${ c.aliases[0] }\` is already enabled` : `Enabled \`${ c.aliases[0] }\``;
+		const response = !c.disabled ? `\`${c.aliases[0]}\` is already enabled` : `Enabled \`${c.aliases[0]}\``;
 
 		c.disabled = false;
 		return response;
 	}
-};
+}

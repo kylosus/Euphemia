@@ -1,7 +1,14 @@
-const { MessageEmbed }        = require('discord.js');
-const { ArgConsts, ECommand } = require('../../lib');
+import { MessageEmbed }                   from 'discord.js';
+import { ArgConsts, ECommand }            from '../../lib/index.js';
+import { CircularList, PaginatedMessage } from '../../modules/index.js';
+import { IMAGE_OPTIONS }                  from './util.js';
 
-module.exports = class extends ECommand {
+const AVATAR_OPTIONS = {
+	dynamic: true,
+	size:    4096
+};
+
+export default class extends ECommand {
 	constructor(client) {
 		super(client, {
 			aliases:     ['avatar'],
@@ -12,10 +19,10 @@ module.exports = class extends ECommand {
 			},
 			args:        [
 				{
-					id:       'user',
-					type:     ArgConsts.USER,
+					id:       'id',
+					type:     ArgConsts.TYPE.ID,
 					optional: true,
-					default:  m => m.author
+					default:  m => m.author.id
 				}
 			],
 			guildOnly:   false,
@@ -23,27 +30,33 @@ module.exports = class extends ECommand {
 		});
 	}
 
-	async run(message, { user }) {
-		const color = ((user) => {
-			const member = message.guild.member(user);
+	async run(message, { id }) {
+		const result = {
+			user:    null,
+			avatars: [],
+			color:   null
+		};
 
-			if (member) {
-				return member.displayColor;
-			}
+		const user  = await this.client.users.fetch(id);
+		result.user = user;
 
-			return null;
-		})(user);
+		const member = await message.guild.members.fetch(user).catch(() => {});
+		result.color = member?.displayColor;
 
-		return [user.displayAvatarURL({
-			dynamic: true,
-			size:    4096
-		}), color];
+		result.avatars = [
+			user.displayAvatarURL(IMAGE_OPTIONS),
+			...(member?.avatarURL() ? [member.avatarURL(IMAGE_OPTIONS)] : [])	// no
+		];
+
+		return result;
 	}
 
-	async ship(message, result) {
-		return message.channel.send(new MessageEmbed()
-			.setImage(result[0])
-			.setColor(result[1])
-		);
+	async ship(message, { user, avatars, color }) {
+		return PaginatedMessage.register(message, s => {
+			return new MessageEmbed()
+				.setColor(color)
+				.setDescription(`${user.toString()}'s avatar`)
+				.setImage(s);
+		}, new CircularList(avatars));
 	}
-};
+}

@@ -1,34 +1,31 @@
-const { MessageEmbed } = require('discord.js');
-const moment           = require('moment');
+import { Formatters, MessageEmbed } from 'discord.js';
 
 const COLOR = '#2CDDD7';
 
-module.exports = async (channel, guild, moderator, result) => {
+export default async (channel, guild, moderator, result) => {
 	const embed = new MessageEmbed()
 		.setColor(COLOR);
 
-	embed.setAuthor(`${moderator.user.tag} (${result.moderator})}`, moderator.user.displayAvatarURL());
+	embed.setAuthor({
+		name:    `${moderator.user.tag} (${result.moderator})}`,
+		iconURL: moderator.user.displayAvatarURL()
+	});
 
 	const prefix = result.passed ? '✅' : '❌';	// Fix those later
 	embed.setDescription(`${prefix} Action ${result.action} -> <@${result.target}>`);
-	embed.addField('Reason', '```' + (result.reason || 'No reason provided') + '```');
+	embed.addField('Reason', Formatters.codeBlock(result.reason || 'No reason provided'));
 
 	if (!result.passed) {
-		embed.addField('Failed', '```' + (result.failedReason || 'Unknown reason') + '```');
+		embed.addField('Failed', Formatters.codeBlock((result.failedReason || 'Unknown reason')));
 	}
 
-	if (result.action === 'MUTE') {
-		embed.addField('Muted for', (time => {
-			if (!time) {
-				return 'Forever';
-			}
-
-			const diff = moment.duration(moment(result.aux).diff(result.timestamp));
-			return `${diff.days()} days, ${diff.hours()} hours, ${diff.minutes()} minutes`;
-		})(result.aux));
+	if (result.action === 'MUTE' || result.action === 'TIMEOUT') {
+		if (result.aux) {
+			embed.addField('Expires', Formatters.time(new Date(result.aux), Formatters.TimestampStyles.RelativeTime));
+		}
 	}
 
 	embed.setTimestamp(result.timestamp);
 
-	return channel.send(embed);
+	return channel.send({ embeds: [embed] });
 };

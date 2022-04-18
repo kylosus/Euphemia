@@ -1,7 +1,8 @@
-const got         = require('got');
+import got from 'got';
+
 const ANILIST_URL = 'https://graphql.anilist.co';
 
-const fetchAnime = (query, variables) => {
+export const fetchAnime = (query, variables) => {
 	return got.post(ANILIST_URL, {
 		json:         {
 			query,
@@ -9,8 +10,4 @@ const fetchAnime = (query, variables) => {
 		},
 		responseType: 'json'
 	}).json();
-};
-
-module.exports = {
-	fetchAnime
 };

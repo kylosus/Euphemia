@@ -1,8 +1,8 @@
-const { MessageEmbed } = require('discord.js');
-const { ECommand }     = require('../../lib');
-const moment           = require('moment');
+import { MessageEmbed } from 'discord.js';
+import { ECommand }     from '../../lib/index.js';
+import dayjs            from 'dayjs';
 
-module.exports = class extends ECommand {
+export default class extends ECommand {
 	constructor(client) {
 		super(client, {
 			aliases:     ['ping'],
@@ -17,13 +17,15 @@ module.exports = class extends ECommand {
 	}
 
 	async run(message) {
-		return moment().diff(moment(message.createdAt));
+		return dayjs().diff(dayjs(message.createdAt));
 	}
 
 	async ship(message, result) {
-		return message.channel.send(new MessageEmbed()
-			.setDescription(`⏳ ${result}`)
-			.setColor(message.member?.displayColor ?? 'WHITE')
-		);
+		return message.channel.send({
+			embeds: [new MessageEmbed()
+				.setDescription(`⏳ ${result}`)
+				.setColor(message.member?.displayColor ?? 'WHITE')
+			]
+		});
 	}
-};
+}

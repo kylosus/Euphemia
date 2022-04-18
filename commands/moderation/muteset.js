@@ -1,8 +1,8 @@
-const { Permissions }         = require('discord.js');
-const { ArgConsts, ECommand } = require('../../lib');
-const { mutedRole }           = require('../../modules/mute');
+import { Permissions }                   from 'discord.js';
+import { ArgConsts, ECommand }           from '../../lib/index.js';
+import { setMutedRole, setNewMutedRole } from '../../modules/mute/index.js';
 
-module.exports = class extends ECommand {
+export default class extends ECommand {
 	constructor(client) {
 		super(client, {
 			aliases:           ['muteset'],
@@ -16,7 +16,7 @@ module.exports = class extends ECommand {
 			args:              [
 				{
 					id:       'role',
-					type:     ArgConsts.TEXT,
+					type:     ArgConsts.TYPE.TEXT,
 					optional: true,
 					default:  () => null
 				}
@@ -28,8 +28,8 @@ module.exports = class extends ECommand {
 
 	async run(message, { role: _role }) {
 		if (!_role) {
-			const role = await mutedRole.setNewMutedRole(message.guild);
-			return `Created new muted role ${ role.toString() }`;
+			const role = await setNewMutedRole(message.guild);
+			return `Created new muted role ${role.toString()}`;
 		}
 
 		const role = await (async (role) => {
@@ -45,8 +45,8 @@ module.exports = class extends ECommand {
 			throw 'Cannot assign as the muted role. Role is too high in the hierarchy';
 		}
 
-		await mutedRole.setMutedRole(message.guild, role);
+		await setMutedRole(message.guild, role);
 
-		return `Set ${ role.toString() } as the muted role`;
+		return `Set ${role.toString()} as the muted role`;
 	}
-};
+}

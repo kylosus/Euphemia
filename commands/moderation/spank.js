@@ -1,9 +1,9 @@
-const { Permissions }            = require('discord.js');
-const { ArgConsts, ECommand }    = require('../../lib');
-const { mutedRole, muteHandler } = require('../../modules/mute');
-const moment                     = require('moment');
+import { Permissions }                   from 'discord.js';
+import { ArgConsts, ECommand }           from '../../lib/index.js';
+import { getOrSetMutedRole, muteMember } from '../../modules/mute/index.js';
+import dayjs                             from 'dayjs';
 
-module.exports = class extends ECommand {
+export default class extends ECommand {
 	constructor(client) {
 		super(client, {
 			aliases:           ['spank'],
@@ -16,7 +16,7 @@ module.exports = class extends ECommand {
 			args:              [
 				{
 					id:      'member',
-					type:    ArgConsts.MEMBER,
+					type:    ArgConsts.TYPE.MEMBER,
 					message: 'Are you trying to spank thin air?',
 				}
 			],
@@ -31,24 +31,24 @@ module.exports = class extends ECommand {
 		}
 
 		const toMute = (() => {
-			if (!message.member.hasPermission(Permissions.FLAGS.MANAGE_ROLES)) {
+			if (!message.member.permissions.has(Permissions.FLAGS.MANAGE_ROLES)) {
 				return message.member;
 			}
 
 			return member;
 		})();
 
-		const role = await mutedRole.getOrSetMutedRole(message.guild);
+		const role = await getOrSetMutedRole(message.guild);
 
 		await toMute.roles.add(role, 'Spanked');
 
-		const duration = moment().add(1, 'minutes').toISOString();
-		await muteHandler.muteMember(message.guild, toMute, role, 'Spanked', duration);
+		const duration = dayjs().add(1, 'minutes').toISOString();
+		await muteMember(message.guild, toMute, role, 'Spanked', duration);
 
 		if (message.member.id === toMute.id) {
 			return 'Nice try. You got yourself spanked';
 		}
 
-		return `${member} has been spanked by ${message.member}`;
+		return `${member.toString()} has been spanked by ${message.member}`;
 	}
-};
+}

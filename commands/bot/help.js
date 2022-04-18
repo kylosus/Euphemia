@@ -1,9 +1,9 @@
-const { MessageEmbed }        = require('discord.js');
-const { ArgConsts, ECommand } = require('../../lib');
-const { capitalize }          = require('../../lib/util/StringDoctor');
-const pjson                   = require('../../package.json');
+import { Formatters, MessageEmbed } from 'discord.js';
+import { ArgConsts, ECommand }      from '../../lib/index.js';
+import { capitalize }               from '../../lib/util/StringDoctor.js';
+import pjson                        from '../../package.json' assert { type: 'json' };
 
-module.exports = class extends ECommand {
+export default class extends ECommand {
 	constructor(client) {
 		super(client, {
 			aliases:     ['help', 'h'],
@@ -15,7 +15,7 @@ module.exports = class extends ECommand {
 			args:        [
 				{
 					id:       'command',
-					type:     ArgConsts.TEXT,
+					type:     ArgConsts.TYPE.TEXT,
 					optional: true,
 					default:  () => null
 				},
@@ -48,30 +48,29 @@ module.exports = class extends ECommand {
 		if (!result) {
 			embed
 				.addField('\u200B', '\u200B')
-				.setFooter(`♥ Made with love by ${pjson.author}`)
 				.setTitle(`${message.client.user.username} commands`)
 				.setThumbnail(message.client.user.displayAvatarURL())
 				.setColor(this.client.defaultColor)
 				.addField('\u200B', '\u200B')
-				.setFooter(`♥ Made with love by ${pjson.author}`);
+				.setFooter({ text: `♥ Made with love by ${pjson.author}` });
 
 			this.client.commandHandler.modules.forEach((module, name) => {
 				embed.addField(`${capitalize(name)} commands:`, module.map(command => `**${command.aliases[0]}**: ${command.description.content}`).join('\n'));
 				embed.addField('\u200B', '\u200B');
 			});
 
-			return message.channel.send(embed);
+			return message.channel.send({ embeds: [embed] });
 		}
 
 		embed.setTitle(`Command name: ${result.aliases.join('/')}`);
 		embed.setDescription(result.description.content);
 
 		if (result.description.usage.length) {
-			embed.addField('Arguments', '```' + result.description.usage + '```');
+			embed.addField('Arguments', Formatters.codeBlock(result.description.usage));
 		}
 
-		embed.addField('Usage', '```' + result.description.examples.join('\n') + '```');
+		embed.addField('Usage', Formatters.codeBlock(result.description.examples.join('\n')));
 
-		return message.channel.send(embed);
+		return message.channel.send({ embeds: [embed] });
 	}
-};
+}

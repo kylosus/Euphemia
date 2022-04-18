@@ -1,7 +1,7 @@
-const { MessageEmbed, Permissions } = require('discord.js');
-const { ECommand }                  = require('../../lib');
+import { MessageEmbed, Permissions } from 'discord.js';
+import { ECommand }                  from '../../lib/index.js';
 
-module.exports = class extends ECommand {
+export default class extends ECommand {
 	constructor(client) {
 		super(client, {
 			aliases:           ['lockdown', 'ld'],
@@ -21,13 +21,14 @@ module.exports = class extends ECommand {
 		const entry = message.client.provider.get(message.guild, 'lockdown', false);
 		await message.client.provider.set(message.guild, 'lockdown', !entry);
 
-		return `${ entry ? 'Disabled' : 'Enabled' } automute on new member join.`;
+		return `${entry ? 'Disabled' : 'Enabled'} automute on new member join.`;
 	}
 
 	async ship(message, result) {
-		return message.channel.send(new MessageEmbed()
-			.setColor('DARK_RED')
-			.setTitle(result)
-		);
+		return message.channel.send({
+			embeds: [new MessageEmbed()
+				.setColor('DARK_RED')
+				.setTitle(result)]
+		});
 	}
-};
+}

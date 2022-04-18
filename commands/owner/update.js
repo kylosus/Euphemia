@@ -1,9 +1,9 @@
-const { MessageEmbed }          = require('discord.js');
-const { ECommand, EmbedLimits } = require('../../lib');
-const { spawn }                 = require('child_process');
-const _                         = require('lodash');
+import { Formatters, MessageEmbed } from 'discord.js';
+import { ECommand, EmbedLimits }    from '../../lib/index.js';
+import { spawn }                    from 'child_process';
+import { truncate }                 from 'lodash-es';
 
-module.exports = class extends ECommand {
+export default class extends ECommand {
 	constructor(client) {
 		super(client, {
 			aliases:     ['update'],
@@ -43,14 +43,13 @@ module.exports = class extends ECommand {
 	}
 
 	ship(message, result) {
-		return message.channel.send(new MessageEmbed()
-			.setColor('GREEN')
-			.setTitle('Result of git pull. Bot may need a restart')
-			.setDescription(
-				'```' +
-				_.truncate(result, { length: EmbedLimits.DESCRIPTION - 6 })
-				+ '```'
-			)
-		);
+		return message.channel.send({
+			embeds: [new MessageEmbed()
+				.setColor('GREEN')
+				.setTitle('Result of git pull. Bot may need a restart')
+				.setDescription(
+					Formatters.codeBlock(truncate(result, { length: EmbedLimits.DESCRIPTION - 6 }))
+				)]
+		});
 	}
-};
+}

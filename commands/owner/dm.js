@@ -1,7 +1,7 @@
-const { MessageEmbed, Permissions } = require('discord.js');
-const { ArgConsts, ECommand }       = require('../../lib');
+import { MessageEmbed, Permissions } from 'discord.js';
+import { ArgConsts, ECommand }       from '../../lib/index.js';
 
-module.exports = class extends ECommand {
+export default class extends ECommand {
 	constructor(client) {
 		super(client, {
 			aliases:         ['dm'],
@@ -14,12 +14,12 @@ module.exports = class extends ECommand {
 			args:            [
 				{
 					id:      'users',
-					type:    ArgConsts.USERS,
+					type:    ArgConsts.TYPE.USERS,
 					message: 'Please mention users to DM to'
 				},
 				{
 					id:      'text',
-					type:    ArgConsts.TEXT,
+					type:    ArgConsts.TYPE.TEXT,
 					message: 'Please provide text'
 				}
 			],
@@ -33,7 +33,7 @@ module.exports = class extends ECommand {
 			try {
 				const json  = JSON.parse(text);
 				const embed = new MessageEmbed(json);
-				await message.channel.send(embed);
+				await message.channel.send({ embeds: [embed] });
 				return [json.content, embed];
 			} catch (err) {
 				return [text, null];
@@ -44,7 +44,7 @@ module.exports = class extends ECommand {
 
 		await Promise.all(users.map(async u => {
 			try {
-				await u.send(content, embed);
+				await u.send({ content, embeds: [embed] });
 				return result.p.push(u);
 			} catch (err) {
 				return result.f.push({ user: u, reason: err.message || 'Unknown error' });
@@ -67,10 +67,11 @@ module.exports = class extends ECommand {
 			return 'RED';
 		})(result);
 
-		return message.channel.send(new MessageEmbed()
-			.setColor(color)
-			.addField(`Sent to ${ result.p.length } users`, result.p.map(p => p.toString()).join(' ') || '~')
-			.addField('Failed', result.f.map(f => `${ f.user.toString() } - ${ f.reason }`).join('\n') || '~')
-		);
+		return message.channel.send({
+			embeds: [new MessageEmbed()
+				.setColor(color)
+				.addField(`Sent to ${result.p.length} users`, result.p.map(p => p.toString()).join(' ') || '~')
+				.addField('Failed', result.f.map(f => `${f.user.toString()} - ${f.reason}`).join('\n') || '~')]
+		});
 	}
-};
+}

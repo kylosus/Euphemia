@@ -1,9 +1,9 @@
-const { Permissions }                                = require('discord.js');
-const { ArgConsts }                                  = require('../../lib');
-const { ModerationCommand, ModerationCommandResult } = require('../../modules/moderation');
-const { mutedRole, muteHandler }                     = require('../../modules/mute');
+import { Permissions }                                from 'discord.js';
+import { ArgConsts }                                  from '../../lib/index.js';
+import { ModerationCommand, ModerationCommandResult } from '../../modules/moderation/index.js';
+import { getMutedRole, unmuteMember }                 from '../../modules/mute/index.js';
 
-module.exports = class extends ModerationCommand {
+export default class extends ModerationCommand {
 	constructor(client) {
 		super(client, {
 			actionName:        'unmute',
@@ -18,12 +18,12 @@ module.exports = class extends ModerationCommand {
 			args:              [
 				{
 					id:      'members',
-					type:    ArgConsts.MEMBERS,
+					type:    ArgConsts.TYPE.MEMBERS,
 					message: 'Please mention members to unmute'
 				},
 				{
 					id:       'reason',
-					type:     ArgConsts.REASON,
+					type:     ArgConsts.TYPE.REASON,
 					optional: true,
 					default:  () => null
 				}
@@ -36,7 +36,7 @@ module.exports = class extends ModerationCommand {
 	async run(message, { members, reason }) {
 		const result = new ModerationCommandResult(reason);
 
-		const role = await mutedRole.getMutedRole(message.guild);
+		const role = await getMutedRole(message.guild);
 
 		if (!role) {
 			throw 'Muted role not found';
@@ -49,7 +49,7 @@ module.exports = class extends ModerationCommand {
 			}
 
 			try {
-				await muteHandler.unmuteMember(message.guild, m, role, reason);
+				await unmuteMember(message.guild, m, role, reason);
 			} catch (error) {
 				return result.addFailed(m, error.message);
 			}
@@ -59,4 +59,4 @@ module.exports = class extends ModerationCommand {
 
 		return result;
 	}
-};
+}

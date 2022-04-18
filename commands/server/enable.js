@@ -1,7 +1,7 @@
-const { Permissions }         = require('discord.js');
-const { ArgConsts, ECommand } = require('../../lib');
+import { Formatters, Permissions } from 'discord.js';
+import { ArgConsts, ECommand }     from '../../lib/index.js';
 
-module.exports = class extends ECommand {
+export default class extends ECommand {
 	constructor(client) {
 		super(client, {
 			aliases:         ['enable'],
@@ -14,7 +14,7 @@ module.exports = class extends ECommand {
 			args:            [
 				{
 					id:      'command',
-					type:    ArgConsts.WORD,
+					type:    ArgConsts.TYPE.WORD,
 					message: 'Please mention a command name'
 				}
 			],
@@ -27,19 +27,19 @@ module.exports = class extends ECommand {
 		const c = this.client.commandHandler.commands.get(command);
 
 		if (!c) {
-			throw `Command \`${command}\` not found`;
+			throw `Command ${Formatters.inlineCode(command)}  not found`;
 		}
 
 		const entry = this.client.provider.get(message.guild, 'disabledCommands', {});
 
 		if (!entry[command]) {
-			return `Command \`${command}\` is already enabled in this guild`;
+			return `Command ${Formatters.inlineCode(command)}  is already enabled in this guild`;
 		}
 
 		delete entry[command];
 
 		await this.client.provider.set(message.guild, 'disabledCommands', entry);
 
-		return `Enabled \`${command}\` in this server`;
+		return `Enabled ${Formatters.inlineCode(command)}  in this server`;
 	}
-};
+}

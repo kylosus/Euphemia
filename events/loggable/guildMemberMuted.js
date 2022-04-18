@@ -1,13 +1,13 @@
-const { MessageEmbed } = require('discord.js');
-const moment           = require('moment');
+import { Formatters, MessageEmbed } from 'discord.js';
 
-module.exports = async (channel, member, expires, moderator) => {
-	return channel.send(new MessageEmbed()
-		.setColor('GOLD')
-		.setTitle('🔇 User muted')
-		.setThumbnail(member.user.displayAvatarURL())
-		.addField('User', `${member} \`${member.id}\``, false)
-		.addField('Expires', `${expires ? moment(expires).fromNow() : 'Never'}`)
-		.addField('Moderator', moderator)
-	);
+export default async (channel, member, expires, moderator) => {
+	return channel.send({
+		embeds: [new MessageEmbed()
+			.setColor('GOLD')
+			.setTitle('🔇 User muted')
+			.setThumbnail(member.user.displayAvatarURL())
+			.addField('User', `${member.toString()} ${Formatters.inlineCode(member.id)}`, false)
+			.addField('Expires', `${expires ? Formatters.time(expires, Formatters.TimestampStyles.RelativeTime) : 'Never'}`)
+			.addField('Moderator', moderator.toString())]
+	});
 };

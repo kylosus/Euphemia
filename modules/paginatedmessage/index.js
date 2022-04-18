@@ -1,12 +1,9 @@
-const watcher = require('./watcher');
+import * as watcher from './watcher.js';
 
-const init = async (client) => {
+export { default as CircularList }          from './CircularList.js';
+export { default as CircularListGenerator } from './CircularListGenerator.js';
+export * as PaginatedMessage                from './EuphemiaPaginatedMessage.js';
+
+export const init = async (client) => {
 	await watcher.init(client);
-};
-
-module.exports = {
-	init,
-	CircularList:          require('./CircularList'),
-	CircularListGenerator: require('./CircularListGenerator'),
-	PaginatedMessage:      require('./EuphemiaPaginatedMessage')
 };

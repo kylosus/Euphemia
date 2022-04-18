@@ -1,7 +1,7 @@
-const { MessageEmbed, Permissions } = require('discord.js');
-const { ArgConsts, ECommand }       = require('../../lib');
+import { MessageEmbed, Permissions } from 'discord.js';
+import { ArgConsts, ECommand }       from '../../lib/index.js';
 
-module.exports = class extends ECommand {
+export default class extends ECommand {
 	constructor(client) {
 		super(client, {
 			aliases:         ['say'],
@@ -14,13 +14,13 @@ module.exports = class extends ECommand {
 			args:            [
 				{
 					id:       'channel',
-					type:     ArgConsts.CHANNEL,
+					type:     ArgConsts.TYPE.CHANNEL,
 					optional: true,
 					default:  m => m.channel
 				},
 				{
 					id:      'text',
-					type:    ArgConsts.TEXT,
+					type:    ArgConsts.TYPE.TEXT,
 					message: 'Please provide text'
 				}
 			],
@@ -36,9 +36,9 @@ module.exports = class extends ECommand {
 	async ship(message, [channel, text]) {
 		try {
 			const json = JSON.parse(text);
-			return channel.send(json.content, new MessageEmbed(json));
+			return channel.send({ content: json.content, embeds: [new MessageEmbed(json)] });
 		} catch (err) {
-			return channel.send(text);
+			return channel.send({ content: text });
 		}
 	}
-};
+}

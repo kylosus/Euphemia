@@ -1,20 +1,21 @@
-const { EmbedLimits }  = require('../../lib');
-const { MessageEmbed } = require('discord.js');
-const _                = require('lodash');
+import { MessageEmbed } from 'discord.js';
+import { EmbedLimits }  from '../../lib/index.js';
+import { truncate }     from 'lodash-es';
 
-module.exports = async (channel, message) => {
+export default async (channel, message) => {
 	const embed = new MessageEmbed()
 		.setColor('DARK_PURPLE')
 		.setTitle(`🗑 Message deleted in #${message.channel.name}`)
-		.setDescription(message.author || 'Unknown user')
+		.setDescription(message.author.toString() ?? 'Unknown user')
 		.addField('ID', `${message.channel.id}/${message.id}`, false)
 		.setTimestamp();
 
 	if (message.content) {
 		embed.addField(
 			'Content',
-			_.truncate(message.content, { length: EmbedLimits.FIELD_VALUE - 6 })
-			, false);
+			truncate(message.content, { length: EmbedLimits.FIELD_VALUE - 6 }),
+			false
+		);
 	}
 
 	((attachment) => {
@@ -30,5 +31,5 @@ module.exports = async (channel, message) => {
 		return embed.addField('Attachment', attachment.name + '\n' + `[Link](${attachment.proxyURL})`);
 	})(message.attachments.first());
 
-	return channel.send(embed);
+	return channel.send({ embeds: [embed] });
 };

@@ -1,18 +1,18 @@
-const { MessageEmbed }                      = require('discord.js');
-const { ArgConsts, ArgumentType, ECommand } = require('../../lib');
-const { CircularList, PaginatedMessage }    = require('../../modules');
-const _                                     = require('lodash');
+import { MessageEmbed }                      from 'discord.js';
+import { ArgConsts, ArgumentType, ECommand } from '../../lib/index.js';
+import { CircularList, PaginatedMessage }    from '../../modules/index.js';
+import { chunk }                             from 'lodash-es';
 
-module.exports = class extends ECommand {
+export default class extends ECommand {
 	constructor(client) {
 		super(client, {
-			aliases:     ['inrole'],
-			description: {
+			aliases:      ['inrole'],
+			description:  {
 				content:  'Shows members in a given role',
 				usage:    '[user]',
 				examples: ['inrole 294846212895670273', 'inrole Something', 'avatar 275331662865367040']
 			},
-			args:        [
+			args:         [
 				{
 					id:      'role',
 					type:    new ArgumentType(
@@ -30,8 +30,8 @@ module.exports = class extends ECommand {
 					message: 'Please provide a role',
 				},
 			],
-			guildOnly:   true,
-			ownerOnly:   false,
+			guildOnly:    true,
+			ownerOnly:    false,
 			fetchMembers: true
 		});
 	}
@@ -43,10 +43,11 @@ module.exports = class extends ECommand {
 	async ship(message, result) {
 		return PaginatedMessage.register(message, s => {
 			return new MessageEmbed()
-				.setColor(result.hexColor)
+				.setColor(result.color)
 				.setTitle(`List of members in ${result.name} (${result.members.size})`)
+				.setThumbnail(result.iconURL())
 				// .setDescription(s.map(ss => `${ss}, \`${ss.user.tag}\``).join('\n'));
-				.setDescription(s.map(s => s.user.tag));
-		}, new CircularList(_.chunk(result.members.array(), 20)));
+				.setDescription(s.map(s => s.user.tag).join('\n'));
+		}, new CircularList(chunk(result.members.toJSON(), 20)));
 	}
-};
+}

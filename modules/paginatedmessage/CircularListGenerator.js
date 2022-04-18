@@ -1,6 +1,6 @@
-const CircularList = require('./CircularList');
+import CircularList from './CircularList.js';
 
-module.exports = class extends CircularList {
+export default class CircularListGenerator extends CircularList {
 	constructor(array, length, nextGen, previousGen) {
 		super(array);
 		this._first        = nextGen();
@@ -43,4 +43,4 @@ module.exports = class extends CircularList {
 	get length() {
 		return this._length;
 	}
-};
+}

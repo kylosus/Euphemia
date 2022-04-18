@@ -1,6 +1,6 @@
-const { MessageEmbed } = require('discord.js');
+import { MessageEmbed } from 'discord.js';
 
-module.exports = async (oldUser, newUser) => {
+export default async (oldUser, newUser) => {
 	if (oldUser.tag === newUser.tag) {
 		return;
 	}
@@ -21,12 +21,13 @@ module.exports = async (oldUser, newUser) => {
 			return;
 		}
 
-		return channel.send(new MessageEmbed()
-			.setColor('GREEN')
-			.setThumbnail(newUser.displayAvatarURL())
-			.setTitle('Username change')
-			.setDescription(`**${oldUser.tag}** has changed their username to **${newUser.tag}**`)
-			.setTimestamp((new Date()))
-		);
+		return channel.send({
+			embeds: [new MessageEmbed()
+				.setColor('GREEN')
+				.setThumbnail(newUser.displayAvatarURL())
+				.setTitle('Username change')
+				.setDescription(`**${oldUser.tag}** has changed their username to **${newUser.tag}**`)
+				.setTimestamp()]
+		});
 	}));
 };

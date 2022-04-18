@@ -1,7 +1,7 @@
-const { MessageEmbed, Permissions } = require('discord.js');
-const { ArgConsts, ECommand }       = require('../../lib');
+import { MessageEmbed, Permissions } from 'discord.js';
+import { ArgConsts, ECommand }       from '../../lib/index.js';
 
-module.exports = class extends ECommand {
+export default class extends ECommand {
 	constructor(client) {
 		super(client, {
 			aliases:         ['welcome'],
@@ -24,13 +24,13 @@ module.exports = class extends ECommand {
 			args:            [
 				{
 					id:       'message',
-					type:     ArgConsts.JSON,
+					type:     ArgConsts.TYPE.JSON,
 					optional: true,
 					default:  () => null
 				},
 				{
 					id:       'channel',
-					type:     ArgConsts.CHANNEL,
+					type:     ArgConsts.TYPE.CHANNEL,
 					optional: true,
 					default:  () => null
 				},
@@ -68,7 +68,7 @@ module.exports = class extends ECommand {
 
 		// If json is not empty save it and try sending it
 		if (Object.keys(json).length) {
-			await message.channel.send(entry.message.content, new MessageEmbed(json));
+			await message.channel.send({ content: entry.message.content, embeds: [new MessageEmbed(json)] });
 			// If above doesn't fail, we can stringify the JSON and save it
 			// this would make more sense to save as a JSON, but we do some string manipulation later
 			// I'll make it iterate through object values instead of using the whole thing
@@ -77,7 +77,7 @@ module.exports = class extends ECommand {
 		} else {
 			// is there a point?
 			entry.message.embed = null;
-			await message.channel.send(entry.message.content);
+			await message.channel.send({ content: entry.message.content });
 		}
 
 		await this.client.provider.set(message.guild, 'welcome', entry);
@@ -90,16 +90,17 @@ module.exports = class extends ECommand {
 		const channel = message.guild.channels.cache.get(entry.channel);
 
 		if (channel) {
-			return `Enabled welcome message in ${channel}`;
+			return `Enabled welcome message in ${channel.toString()}`;
 		}
 
 		return `Enabled welcome message, but channel ${entry.channel} seems to have been deleted`;
 	}
 
 	async ship(message, result) {
-		return message.channel.send(new MessageEmbed()
-			.setColor('GREEN')
-			.setDescription(result)
-		);
+		return message.channel.send({
+			embeds: [new MessageEmbed()
+				.setColor('GREEN')
+				.setDescription(result)]
+		});
 	}
-};
+}

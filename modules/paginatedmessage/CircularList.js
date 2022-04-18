@@ -1,8 +1,8 @@
-module.exports = class {
+export default class CircularList {
 	constructor(array) {
-		this._array   = array;
+		this._array = array;
 		this._current = 0;
-		this._end     = array.length - 1;
+		this._end = array.length - 1;
 	}
 
 	next() {
@@ -36,4 +36,5 @@ module.exports = class {
 	get length() {
 		return this._array.length;
 	}
-};
+}
+

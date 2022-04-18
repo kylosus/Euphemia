@@ -1,12 +1,11 @@
-const { MessageEmbed, Permissions } = require('discord.js');
-const { ArgConsts, ECommand }       = require('../../../lib');
-
-const db = require('../db');
+import { Formatters, MessageEmbed, Permissions } from 'discord.js';
+import { ArgConsts, ECommand }                   from '../../../lib/index.js';
+import { getAction, updateReason }               from '../db.js';
 
 const EMOJI_OK = '✅';
 const EMOJI_NO = '❎';
 
-module.exports = class extends ECommand {
+export default class extends ECommand {
 	constructor(client) {
 		super(client, {
 			aliases:         ['reason'],
@@ -19,12 +18,12 @@ module.exports = class extends ECommand {
 			args:            [
 				{
 					id:      'number',
-					type:    ArgConsts.NUMBER,
+					type:    ArgConsts.TYPE.NUMBER,
 					message: 'Please specify an action number'
 				},
 				{
 					id:      'newreason',
-					type:    ArgConsts.TEXT,
+					type:    ArgConsts.TYPE.TEXT,
 					message: 'Please enter a reason'
 				}
 			],
@@ -35,7 +34,7 @@ module.exports = class extends ECommand {
 	}
 
 	async run(message, { newreason, number }) {
-		const result = await db.getAction(message.guild.id, number);
+		const result = await getAction(message.guild.id, number);
 
 		if (!result) {
 			throw 'Action number not found';
@@ -49,16 +48,16 @@ module.exports = class extends ECommand {
 			const notice = await this.sendNotice(
 				message,
 				'This action already has a reason. Are you sure you want to change it?' +
-				'\n' + '```' + result.reason + '```'
+				'\n' + Formatters.codeBlock(result.reason)
 			);
 
 			await notice.react(EMOJI_OK);
 			await notice.react(EMOJI_NO);
 
-			const reactions = await notice.awaitReactions(
-				(r, u) => u.id === message.author.id,
-				{ time: 3000 }
-			);
+			const reactions = await notice.awaitReactions({
+				filter: (r, u) => u.id === message.author.id,
+				time: 3000
+			});
 
 			if (!reactions.has(EMOJI_OK)) {
 				throw 'Cancelled';
@@ -67,7 +66,7 @@ module.exports = class extends ECommand {
 			return newreason;
 		})(result.reason);
 
-		await db.updateReason({
+		await updateReason({
 			guild: message.guild.id,
 			id:    number,
 			reason
@@ -77,10 +76,11 @@ module.exports = class extends ECommand {
 	}
 
 	async ship(message, [id, reason]) {
-		return message.channel.send(new MessageEmbed()
-			.setColor('GREEN')
-			.setTitle(`Updated Action [${id}] reason in ${message.guild}`)
-			.setDescription('```' + reason + '```')
-		);
+		return message.channel.send({
+			embeds: [new MessageEmbed()
+				.setColor('GREEN')
+				.setTitle(`Updated Action [${id}] reason in ${message.guild}`)
+				.setDescription(Formatters.codeBlock(reason))]
+		});
 	}
-};
+}
