@@ -188,7 +188,7 @@ const init = async (client, db) => {
 		ON
 			t.id = s.tag_id
 		WHERE
-			name = @name AND guild = @guildID
+			name = @name AND guild = @guildID AND enabled = 1
 	`);
 
 	// Might be problematic if we have a lot of disabled tags
