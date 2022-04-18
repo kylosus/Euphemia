@@ -33,6 +33,10 @@ export default class extends ECommand {
 	}
 
 	async run(message, { role, text }) {
+		if (!role.editable) {
+			throw 'I do not have enough permissions to assign this role';
+		}
+
 		return {
 			text: `${text ?? ''}\n\n${role.toString()}`,
 			role
