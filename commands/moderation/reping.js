@@ -17,7 +17,7 @@ export default class extends ECommand {
 			args:            [
 				{
 					id:      'role',
-					type:    ArgConsts.TYPE.ROLE_LOOSE,
+					type:    ArgConsts.TYPE.ROLE_OR_ID_LOOSE,
 					message: 'Please mention a role to ping',
 				},
 				{
