@@ -1,6 +1,9 @@
-import { Formatters }          from 'discord.js';
-import { ArgConsts, ECommand } from '../../../lib/index.js';
-import { createTag }           from '../db.js';
+import { Formatters, MessageButton, MessageEmbed } from 'discord.js';
+import { ArgConsts, ECommand }                     from '../../../lib/index.js';
+import { DecisionMessage }                         from '../../decisionmessage/index.js';
+import { createTag }                               from '../db.js';
+import { subscribe }                               from './subscribe.js';
+import { unsubscribe }                             from './unsubscribe.js';
 
 export default class extends ECommand {
 	constructor(client) {
@@ -13,9 +16,9 @@ export default class extends ECommand {
 			},
 			args:        [
 				{
-					id:       'tagName',
-					type:     ArgConsts.TYPE.WORD,
-					message:  'Please enter a tag name'
+					id:      'tagName',
+					type:    ArgConsts.TYPE.WORD,
+					message: 'Please enter a tag name'
 				}
 			],
 			guildOnly:   true,
@@ -39,6 +42,36 @@ export default class extends ECommand {
 			throw error;
 		}
 
-		return `Created tag ${Formatters.inlineCode(tagName)}`;
+		return { tagName, result: `Created tag ${Formatters.inlineCode(tagName)}` };
+
+	}
+
+	async ship(message, { tagName, result }) {
+		const resultMessage = await message.channel.send({
+			embeds: [new MessageEmbed()
+				.setColor('GREEN')
+				.setDescription(result)]
+		});
+
+		return DecisionMessage.register(resultMessage, [
+			{
+				component: new MessageButton()
+					.setCustomId('join')
+					.setLabel('join')
+					.setStyle('SECONDARY'),
+				action:    async interaction => {
+					return subscribe({ user: interaction.user, tagName });
+				}
+			},
+			{
+				component: new MessageButton()
+					.setCustomId('leave')
+					.setLabel('leave')
+					.setStyle('SECONDARY'),
+				action:    async interaction => {
+					return unsubscribe({ guild: message.guild, user: interaction.user, tagName });
+				}
+			}
+		]);
 	}
 }
