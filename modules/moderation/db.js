@@ -22,10 +22,6 @@ const init = async (client, db) => {
 
 	// Indexes for table above
 	await db.run(`
-        CREATE INDEX IF NOT EXISTS ${TABLE_NAME}_id_idx        ON ${TABLE_NAME} (id);	-- Might be unnecessary
-	`);
-
-	await db.run(`
         CREATE INDEX IF NOT EXISTS ${TABLE_NAME}_guild_idx     ON ${TABLE_NAME} (guild);
 	`);
 
