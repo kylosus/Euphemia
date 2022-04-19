@@ -42,7 +42,7 @@ export default class extends ECommand {
 	async run(message, args) {
 		const perPage = 20;
 
-		const { length } = await getIdMax(message.guild.id);
+		const { length } = await getIdMax({ guild: message.guild });
 
 		if (!length) {
 			throw 'No entries found';

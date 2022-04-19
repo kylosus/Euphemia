@@ -8,18 +8,18 @@ const init = async (client, db) => {
 	await db.run(`
 		CREATE TABLE IF NOT EXISTS ${TABLE_NAME}
 			(
-			  guild INTEGER NOT NULL,
-			  member INTEGER NOT NULL,
+			  guild     INTEGER NOT NULL,
+			  member    INTEGER NOT NULL,
 			  mutedRole INTEGER NOT NULL,
-			  reason TEXT,
-			  expires TEXT NOT NULL,
+			  reason    TEXT,
+			  expires   TEXT NOT NULL,
 			  PRIMARY KEY (guild, member)
 			);
 	`);
 
 	// Index for the table above
 	await db.run(`
-        CREATE INDEX IF NOT EXISTS ${TABLE_NAME}_guild_idx   ON ${TABLE_NAME} (guild);
+		CREATE INDEX IF NOT EXISTS ${TABLE_NAME}_guild_idx   ON ${TABLE_NAME} (guild);
 	`);
 
 	await db.run(`
@@ -28,37 +28,61 @@ const init = async (client, db) => {
 
 	STATEMENTS.getMutedRoleIfNotExpired = await db.prepare(`
 		SELECT
-		    CAST(mutedrole as TEXT) as mutedRole,
-		    expires
-		FROM ${TABLE_NAME} where member = ? and expires > ?
+			CAST(mutedrole as TEXT) as mutedRole, expires
+		FROM
+			${TABLE_NAME}
+		WHERE
+			member = @memberID AND expires > @expires;
 	`);
 
-	STATEMENTS.insert     = await db.prepare(`INSERT OR REPLACE INTO ${TABLE_NAME} VALUES (?, ?, ?, ?, ?)`);
-	STATEMENTS.delete     = await db.prepare(`DELETE FROM ${TABLE_NAME} WHERE guild = ? and member = ?`);
+	// guild.id, member.id, mutedRole.id, reason, expires
+	STATEMENTS.insert = await db.prepare(`
+		INSERT OR REPLACE INTO
+			${TABLE_NAME}
+		VALUES (@guildID, @memberID, @mutedRoleID, @reason, @expires);
+	`);
+
+	STATEMENTS.delete     = await db.prepare(`DELETE FROM ${TABLE_NAME} WHERE guild = @guildID and member = @memberID`);
 	STATEMENTS.getExpired = await db.prepare(`
 		SELECT
-			CAST(guild as TEXT) as guild,
-			CAST(member as TEXT) as member,
+			CAST(guild     as TEXT) as guild,
+			CAST(member    as TEXT) as member,
 			CAST(mutedRole as TEXT) as mutedRole
-		FROM ${TABLE_NAME} where expires < ?
+		FROM
+			${TABLE_NAME}
+		WHERE
+			expires < @expires;
 	`);
 };
 
-const getMutedRoleIfNotExpired = member => {
-	return STATEMENTS.getMutedRoleIfNotExpired.get(member, dayjs().toISOString());
+const getMutedRoleIfNotExpired = ({ member }) => {
+	return STATEMENTS.getMutedRoleIfNotExpired.get({
+		'@memberID': member.id,
+		'@expires':  dayjs().toISOString()
+	});
 };
 
-const insert = (guild, member, mutedRole, reason, expires) => {
-	return STATEMENTS.insert.run(guild, member, mutedRole, reason, expires);
+const insert = ({ guild, member, mutedRole, reason, expires }) => {
+	return STATEMENTS.insert.run({
+		'@guildID':     guild.id,
+		'@memberID':    member.id,
+		'@mutedRoleID': mutedRole.id,
+		'@reason':      reason,
+		'@expires':     expires
+	});
 };
 
 const getExpired = () => {
 	// replace with .each()?
-	return STATEMENTS.getExpired.all(dayjs().toISOString());
+	return STATEMENTS.getExpired.all({ expires: dayjs().toISOString() });
 };
 
-const remove = (guild, member) => {
-	return STATEMENTS.delete.run(guild, member);
+const removeID = ({ guildID, memberID }) => {
+	return STATEMENTS.delete.run({ '@guildID': guildID, '@memberID': memberID });
+};
+
+const remove = ({ guild, member }) => {
+	return removeID({ guildID: guild.id, memberID: member.id });
 };
 
 export {
@@ -66,5 +90,6 @@ export {
 	getMutedRoleIfNotExpired,
 	insert,
 	getExpired,
+	removeID,
 	remove
 };

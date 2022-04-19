@@ -1,4 +1,4 @@
-import { getExpired, remove, getMutedRoleIfNotExpired } from './db.js';
+import { getExpired, getMutedRoleIfNotExpired, removeID } from './db.js';
 
 const INTERVAL = 60000;	// 1 minute
 
@@ -7,7 +7,7 @@ const muteExpire = client => {
 		const result = await getExpired();
 
 		await Promise.all(result.map(async r => {
-			remove(r.guild, r.member);
+			removeID({ guildID: r.guild, memberID: r.member });
 
 			const guild = client.guilds.cache.get(r.guild);
 
@@ -34,7 +34,7 @@ const muteExpire = client => {
 
 const onMemberAdd = async client => {
 	client.on('guildMemberAdd', async m => {
-		const result = await getMutedRoleIfNotExpired(m.id);
+		const result = await getMutedRoleIfNotExpired({ member: m });
 
 		if (!result) {
 			return;

@@ -34,7 +34,7 @@ export default class extends ECommand {
 	}
 
 	async run(message, { newreason, number }) {
-		const result = await getAction(message.guild.id, number);
+		const result = await getAction({ guild: message.guild, id: number });
 
 		if (!result) {
 			throw 'Action number not found';
@@ -56,7 +56,7 @@ export default class extends ECommand {
 
 			const reactions = await notice.awaitReactions({
 				filter: (r, u) => u.id === message.author.id,
-				time: 3000
+				time:   3000
 			});
 
 			if (!reactions.has(EMOJI_OK)) {

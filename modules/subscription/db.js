@@ -66,11 +66,11 @@ const init = async (client, db) => {
 	`);
 
 	await db.run(`
-        CREATE INDEX IF NOT EXISTS ${TAG_MENTION_TABLE_NAME}_tag_id_idx ON ${TAG_MENTION_TABLE_NAME} (id);
+		CREATE INDEX IF NOT EXISTS ${TAG_MENTION_TABLE_NAME}_tag_id_idx ON ${TAG_MENTION_TABLE_NAME} (id);
 	`);
 
 	await db.run(`
-        CREATE INDEX IF NOT EXISTS ${TAG_MENTION_TABLE_NAME}_tag_user_idx ON ${TAG_MENTION_TABLE_NAME} (user);
+		CREATE INDEX IF NOT EXISTS ${TAG_MENTION_TABLE_NAME}_tag_user_idx ON ${TAG_MENTION_TABLE_NAME} (user);
 	`);
 	// =========================================================================
 

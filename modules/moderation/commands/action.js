@@ -28,7 +28,7 @@ export default class extends ECommand {
 	}
 
 	async run(message, { number }) {
-		const result = await getAction(message.guild.id, number);
+		const result = await getAction({ guild: message.guild, id: number });
 
 		if (!result) {
 			throw 'Action number not found';
