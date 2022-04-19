@@ -1,6 +1,6 @@
-const USERS_TABLE_NAME       = 'users';
-const GUILDS_TABLE_NAME      = 'guilds';
-const MEMBERSHIPS_TABLE_NAME = 'memberships';
+export const USERS_TABLE_NAME       = 'users';
+export const GUILDS_TABLE_NAME      = 'guilds';
+export const MEMBERSHIPS_TABLE_NAME = 'memberships';
 
 let db           = null;
 const STATEMENTS = {};
