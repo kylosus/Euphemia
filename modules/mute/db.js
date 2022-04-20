@@ -74,7 +74,7 @@ const insert = ({ guild, member, mutedRole, reason, expires }) => {
 
 const getExpired = () => {
 	// replace with .each()?
-	return STATEMENTS.getExpired.all({ expires: dayjs().toISOString() });
+	return STATEMENTS.getExpired.all({ '@expires': dayjs().toISOString() });
 };
 
 const removeID = ({ guildID, memberID }) => {
@@ -82,7 +82,7 @@ const removeID = ({ guildID, memberID }) => {
 };
 
 const remove = ({ guild, member }) => {
-	return removeID({ guildID: guild.id, memberID: member.id });
+	return removeID({ '@guildID': guild.id, '@memberID': member.id });
 };
 
 export {
