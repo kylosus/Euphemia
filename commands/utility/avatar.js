@@ -44,8 +44,8 @@ export default class extends ECommand {
 		result.color = member?.displayColor;
 
 		result.avatars = [
-			user.displayAvatarURL(IMAGE_OPTIONS),
-			...(member?.avatarURL() ? [member.avatarURL(IMAGE_OPTIONS)] : [])	// no
+			...(member?.avatarURL() ? [member.avatarURL(IMAGE_OPTIONS)] : []),	// no
+			user.displayAvatarURL(IMAGE_OPTIONS)
 		];
 
 		return result;
