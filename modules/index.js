@@ -12,4 +12,4 @@ export const init = async (client, _db) => {
 	await subscription.init(client, _db);
 };
 
-export { CircularList, PaginatedMessage } from './paginatedmessage/index.js';
+export { CircularList, PaginatedMessage, SelectionPaginatedMessage } from './paginatedmessage/index.js';
