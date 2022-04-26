@@ -2,9 +2,12 @@ import dayjs from 'dayjs';
 
 const TABLE_NAME = 'mod_action';
 
+let db = null;
 const STATEMENTS = {};
 
-const init = async (client, db) => {
+const init = async (client, _db) => {
+	db = _db;
+
 	await db.run(`
 		CREATE TABLE IF NOT EXISTS ${TABLE_NAME}
 			(
@@ -43,7 +46,7 @@ const init = async (client, db) => {
 				(SELECT IFNULL(MAX(id), 0) + 1 FROM ${TABLE_NAME} WHERE guild = @guildID),
 				@guildID, @action, @moderatorID, @targetID, @aux, @reason, @passed, @failedReason, @timestamp
 			)
- 		RETURNING id
+-- 		RETURNING *;
 	`);
 
 	STATEMENTS.getAction = await db.prepare(`
@@ -130,7 +133,7 @@ const init = async (client, db) => {
 	STATEMENTS.getIdMax = await db.prepare(`SELECT MAX(id) as length FROM ${TABLE_NAME} WHERE guild = @guildID LIMIT 1`);
 };
 
-const insert = ({ guild, action, moderator, target, aux, reason, passed, failedReason }) => {
+const insert = async ({ guild, action, moderator, target, aux, reason, passed, failedReason }) => {
 	// using guild id twice here because there's an embedded query to get
 	// an autoincrement id
 	return STATEMENTS.insert.run({
@@ -146,7 +149,7 @@ const insert = ({ guild, action, moderator, target, aux, reason, passed, failedR
 	});
 };
 
-const forceInsert = ({ guild, action, moderator, target, aux, reason, passed, failedReason, timestamp }) => {
+const forceInsert = async ({ guild, action, moderator, target, aux, reason, passed, failedReason, timestamp }) => {
 	return STATEMENTS.insert.run({
 		'@guildID':      guild.id,
 		'@action':       action,
@@ -160,20 +163,30 @@ const forceInsert = ({ guild, action, moderator, target, aux, reason, passed, fa
 	});
 };
 
-const getAction = ({ guild, id }) => {
+const getAction = async ({ guild, id }) => {
 	return STATEMENTS.getAction.get({ '@guildID': guild.id, '@id': id });
 };
 
-const updateReason = ({ guild, id, reason }) => {
+const updateReason = async ({ guild, id, reason }) => {
 	return STATEMENTS.updateReason.run({ '@guildID': guild.id, '@reason': reason, '@id': id });
 };
 
 // this is stupid
 const bulkInsert = async (params = []) => {
-	// Should be a transaction
-	return Promise.all(params.map(async p => {
-		return insert(p);
-	}));
+	await db.exec('BEGIN');
+
+	let res = null;
+
+	try {
+		res = await Promise.all(params.map(p => insert(p)));
+	} catch (err) {
+		await db.exec('ROLLBACK');
+		throw err;
+	}
+
+	await db.exec('COMMIT');
+
+	return res;
 };
 
 // I am so sorry

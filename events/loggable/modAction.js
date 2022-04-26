@@ -7,7 +7,7 @@ export default async (channel, guild, moderator, result) => {
 		.setColor(COLOR);
 
 	embed.setAuthor({
-		name:    `${moderator.user.tag} (${result.moderator})}`,
+		name:    `[${result.id}] ${moderator.user.tag} (${result.moderator})`,
 		iconURL: moderator.user.displayAvatarURL()
 	});
 
