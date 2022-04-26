@@ -3,11 +3,6 @@ import { ArgConsts, ECommand }            from '../../lib/index.js';
 import { CircularList, PaginatedMessage } from '../../modules/index.js';
 import { IMAGE_OPTIONS }                  from './util.js';
 
-const AVATAR_OPTIONS = {
-	dynamic: true,
-	size:    4096
-};
-
 export default class extends ECommand {
 	constructor(client) {
 		super(client, {
