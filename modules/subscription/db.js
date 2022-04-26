@@ -2,6 +2,8 @@ const TAG_TABLE_NAME          = 'tag';
 const SUBSCRIPTION_TABLE_NAME = 'subscription';
 const TAG_MENTION_TABLE_NAME  = 'tag_mention';
 
+export const MAX_TAG_LENGTH = 25;
+
 const STATEMENTS = {};
 
 const init = async (client, db) => {
@@ -211,6 +213,10 @@ const getTagCreator = async ({ guild, name }) => {
 };
 
 const createTag = async ({ guild, name, creator }) => {
+	if (name.length > MAX_TAG_LENGTH) {
+		throw 'Tag name too long';
+	}
+
 	return STATEMENTS.createTag.run({ '@guildID': guild.id, '@name': name, '@creatorID': creator.id });
 };
 

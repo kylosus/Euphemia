@@ -1,9 +1,10 @@
 import { Formatters, MessageButton, MessageEmbed } from 'discord.js';
-import { ArgConsts, ECommand }                     from '../../../lib/index.js';
+import { ECommand }                                from '../../../lib/index.js';
 import { DecisionMessage }                         from '../../decisionmessage/index.js';
 import { createTag }                               from '../db.js';
 import { subscribe }                               from './subscribe.js';
 import { unsubscribe }                             from './unsubscribe.js';
+import { TagArgType }                              from './util.js';
 
 export default class extends ECommand {
 	constructor(client) {
@@ -17,7 +18,7 @@ export default class extends ECommand {
 			args:        [
 				{
 					id:      'tagName',
-					type:    ArgConsts.TYPE.WORD,
+					type:    TagArgType,
 					message: 'Please enter a tag name'
 				}
 			],

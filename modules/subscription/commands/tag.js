@@ -1,8 +1,8 @@
 import { Formatters, MessageButton }              from 'discord.js';
-import { ArgConsts, ECommand }                    from '../../../lib/index.js';
+import { ECommand }                               from '../../../lib/index.js';
 import * as EmbedLimits                           from '../../../lib/EmbedLimits.js';
 import { getSubscribedUsers, registerTagMention } from '../db.js';
-import { chunk }                                  from './util.js';
+import { chunk, TagArgType }                      from './util.js';
 import { DecisionMessage }                        from '../../decisionmessage/index.js';
 import { subscribe }                              from './subscribe.js';
 import { unsubscribe }                            from './unsubscribe.js';
@@ -19,8 +19,8 @@ export default class extends ECommand {
 			args:        [
 				{
 					id:      'tagName',
-					type:    ArgConsts.TYPE.WORD,
-					message: 'Please enter a tag name'
+					type:    TagArgType,
+					message: 'Please enter a valid tag name'
 				}
 			],
 			guildOnly:   true,

@@ -1,9 +1,10 @@
 import { Formatters, MessageEmbed }       from 'discord.js';
-import { ArgConsts, ECommand }            from '../../../lib/index.js';
+import { ECommand }                       from '../../../lib/index.js';
 import { getSubscribedUsers }             from '../db.js';
 import { CircularList, PaginatedMessage } from '../../paginatedmessage/index.js';
 import { chunk }                          from 'lodash-es';
 import { COLOR, PER_PAGE }                from './consts.js';
+import { TagArgType }                     from './util.js';
 
 
 export default class extends ECommand {
@@ -18,7 +19,7 @@ export default class extends ECommand {
 			args:        [
 				{
 					id:      'tagName',
-					type:    ArgConsts.TYPE.WORD,
+					type:    TagArgType,
 					message: 'Please enter a tag name'
 				}
 			],
