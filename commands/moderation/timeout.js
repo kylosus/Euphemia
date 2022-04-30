@@ -1,7 +1,9 @@
-import { Formatters, MessageEmbed, Permissions } from 'discord.js';
-import { ArgConsts }                             from '../../lib/index.js';
+import { Formatters, MessageEmbed, Permissions }      from 'discord.js';
+import { ArgConsts }                                  from '../../lib/index.js';
 import { ModerationCommand, ModerationCommandResult } from '../../modules/moderation/index.js';
 import dayjs                                          from 'dayjs';
+
+const WEEK = dayjs.duration({ weeks: 1 }).asMilliseconds();
 
 export default class extends ModerationCommand {
 	constructor(client) {
@@ -41,6 +43,10 @@ export default class extends ModerationCommand {
 
 	async run(message, { members, reason, ...args }) {
 		const duration = args.duration.asMilliseconds();
+
+		if (duration > WEEK) {
+			throw `Maximum timeout duration is ${Formatters.inlineCode('1 week')}`;
+		}
 
 		const result = new ModerationCommandResult(reason, dayjs().add(args.duration).toISOString());
 
