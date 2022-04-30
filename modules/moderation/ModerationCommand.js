@@ -1,7 +1,7 @@
 import { MessageEmbed }                 from 'discord.js';
 import { ECommand, StringDoctor as SD } from '../../lib/index.js';
 
-import { bulkInsert } from './db.js';
+import { bulkInsert, insert } from './db.js';
 
 export default class ModerationCommand extends ECommand {
 	constructor(client, {
@@ -55,10 +55,10 @@ export default class ModerationCommand extends ECommand {
 
 	async record(guild, moderator, { aux, reason, ...result }) {
 		const passed = result.passed.map(r => ({
-			guild:        guild.id,
+			guild,
 			action:       this.actionName,
-			moderator:    moderator.id,
-			target:       r?.id ?? r,
+			moderator,
+			target:       { id: r?.id ?? r },	// sorry
 			aux,
 			reason,
 			passed:       true,
@@ -66,18 +66,23 @@ export default class ModerationCommand extends ECommand {
 		}));
 
 		const failed = result.failed.map(r => ({
-			guild:        guild.id,
+			guild,
 			action:       this.actionName,
-			moderator:    moderator.id,
-			target:       r?.id ?? r,
+			moderator,
+			target:       { id: r?.id ?? r },
 			aux,
 			reason,
 			passed:       false,
 			failedReason: r.reason
 		}));
 
-		const all = passed.concat(failed);
-		bulkInsert(all).catch(console.error);
+		const all   = passed.concat(failed);
+		const dbRes = await bulkInsert(all).catch(console.error);
+
+		dbRes.forEach((r, i) => {
+			all[i].id = r.lastID;
+		});
+
 		return all;
 	}
 }

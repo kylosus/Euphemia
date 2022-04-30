@@ -7,12 +7,12 @@ export default async (channel, guild, moderator, result) => {
 		.setColor(COLOR);
 
 	embed.setAuthor({
-		name:    `${moderator.user.tag} (${result.moderator})}`,
+		name:    `[${result.id}] ${moderator.user.tag} (${result.moderator.id})`,
 		iconURL: moderator.user.displayAvatarURL()
 	});
 
 	const prefix = result.passed ? '✅' : '❌';	// Fix those later
-	embed.setDescription(`${prefix} Action ${result.action} -> <@${result.target}>`);
+	embed.setDescription(`${prefix} Action ${result.action} -> <@${result.target.id}>`);
 	embed.addField('Reason', Formatters.codeBlock(result.reason || 'No reason provided'));
 
 	if (!result.passed) {
