@@ -26,8 +26,8 @@ export default class extends ModerationCommand {
 				{
 					id:       'duration',
 					type:     ArgConsts.TYPE.DURATION,
-					optional: false,
-					message:  'Please provide duration'
+					optional: true,
+					default:  () => dayjs.duration({ minutes: 5 })
 				},
 				{
 					id:       'reason',
