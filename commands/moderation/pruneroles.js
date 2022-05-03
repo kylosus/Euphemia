@@ -16,7 +16,7 @@ export default class extends ModerationCommand {
 			args:            [
 				{
 					id:      'roles',
-					type:    ArgConsts.TYPE.IDS,
+					type:    ArgConsts.TYPE.ROLES,
 					message: 'Please provide role ids',
 				},
 				{
