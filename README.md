@@ -2,53 +2,90 @@
 ***
 Yet another discord.js bot.
 ***
-#### [Click here to add Euphemia to your server](https://discordapp.com/oauth2/authorize?client_id=469059467544100864&scope=bot&permissions=2146827511)
+#### Run `npm install --build-from-source` on project root to install, and `npm run` to start.
+Minimal bot configuration is in `config.json`. You can alternatively use a `.env` file.
 ***
-### Command list (not up-to-date)
+### Command list
+*   ##### Anime
+    * `;anime [anime title]` Searches for anime on AniList
+    * `;next [anime title]` Returns remaining time for the next episode of given anime
+
+*   ##### Bot
+    * `;help [command/module]` Lists available commands.
+    * `;ping ` Replies with ping
+    * `;stats ` Shows bot stats
+
+*   ##### Fun
+    * `;jojo ` Replies with a random JoJo quote
+    * `;ment ` Replies with a random Code Ment quote
+
 *   ##### Moderation
-    * `;ban [@member] <@member2> <@member3> <...>` Bans mentioned members.
-    * `;kick [@member1] <@member2> <@member3> <...>` Kicks mentioned members.
-    * `;lockdown` Automatically mutes every new member. Reuse cancels the lockdown
-    * `;mute <minutes> [@member1] <@member2> <@member2> <...>` Mutes mentioned users for a given amount of minutes. Mutes indefinitely, if no duration is specified.
-    * `;purge <messages>` Purges a specified amount of messages. Deletes the last messages, if message amoubnt is not specified.
-    * `;stop [on|off]` Denies (allows) message sending perms for @everyone in current channel.
+    * `;ban <user> [user2...] [reason]` Bans a user.
+    * `;banprune <user> [reason]` Re-bans a user to prune their messages. Use during raids
+    * `;banrange [user2...] [reason]` Bans every user joined within a range. Useful for mass bot joins
+    * `;kick <member> [member2...] [reason]` Kicks a member.
+    * `;lockdown ` Automatically mutes every new member on join.
+    * `;mute [minutes] <member1> [member2 ...]` Mutes mentioned members for a given amount of time
+    * `;muteset [role]` Sets muted role for the server
+    * `;nopics [#channel]` Denies Attach Files and Embed Links permissions for @everyone in specified channels.
+    * `;prunerole <role>` Removes all members in a role
+    * `;pruneroles <role>` Removes all members in a role
+    * `;purge [amount]` Purges messages in the channel.
+    * `;reping <role> [message]` (Re-)Pings a role and gives people an option to join and leave
+    * `;silentwarn <member> [member2...] <reason>` Warns a member without sending a DM.
+    * `;spank <member1> [member2 ...]` Spanks bad people
+    * `;stop [#channel]` Denies Send Message permissions for @everyone in specified channels.
+    * `;timeout [minutes] <member1> [member2 ...]` Times out mentioned members for a given amount of time
+    * `;unmute <member1> [member2 ...]` Unmutes mentioned users
+    * `;warn <member> [member2...] <reason>` Warns a member.
 
-*   ##### Server utility
-    *  `;welcome` New member greeting
-        *  `;welcome` Disables welcome message for current guild, if enabled.
-        *  `;welcome #channel` Enables welcome message in the specified channel
-        *  `;welcome { embedJSON }` Sets goodbye message to the specified JSON string. See `;help welcome` for more info.
-    *  `;goodbye` Member leave message.
-        *  `;goodbye` Disables goodbye message for current guild, if enabled.
-        *  `;goodbye #channel` Enables goodbye message in the specified channel.
-        *  `;goodbye { embedJSON }` Sets goodbye message to the specified JSON string. See `;help goodbye` for more info.
-    * `;log`
-        * `;log list` List all available guild events to log.
-        * `;log enable logEvent #channel` Enable given log event in the specified channel.
-        * `;log disable logEvent` Disable given log event.
+*   ##### Owner
+    * `;cache cache [channel]` Caches messages in a channel
+    * `;die [exit code]` Kills the bot
+    * `;disableg <command name>` Disables a command globally
+    * `;dm <user> [user2...] <text>` DMs users. Supports embeds
+    * `;enableg <command name>` Enables a command globally
+    * `;eval <code>` Evaluates JavaScript code
+    * `;restart ` Restarts the bot. Be careful when using with pm2 and other managers
+    * `;update ` Updates the bot and restarts
 
-*   ##### General utility
-    * `;next <Anime title>` Returns remaining time for the next episode of given anime. Returns this day's schedule, if no anime is specified.
-    * `;ping` Replies with average ping.
-    * `;quote [messageID]` Quotes a message by given ID.
-    * `;help <commandName>` Displays a list of available commands, or detailed information for a specified command.
-    * `;stats` Displays bot stats
+*   ##### Server
+    * `;disable <command name>` Disables a command in the server
+    * `;edit <message url or reply> <text>` Edits messages. Supports embeds
+    * `;enable <command name>` Enables a command in the server
+    * `;getembed [channel or current channel] <text>` Says something. Supports embeds
+    * `;healthcheck ` Server health check
+    * `;say [channel or current channel] <text>` Says something. Supports embeds
 
-*   ##### Fun commands
-    * `;jojo` Replies with a random JoJo/Duwang quote.
-    * `;ment` Replies with a random MENT dialogue.
+*   ##### Setup
+    * `;goodbye channel {Embed JSON}` Sets up goodbye channel and message. Send without arguments to disable it
+    * `;log ` Handles loggable server events
+    * `;logdisable [channel (or current channel)] [event name]` Disables log events in channels. Run without the second argument to disable everything
+    * `;logenable [channel (or current channel)] [event name]` Enables log events in channels. Run without the second argument to enable everything
+    * `;setup ` Sets up guild settings
+    * `;welcome channel {Embed JSON}` Sets up welcome channel and message. Send without arguments to disable it
 
-*   ##### Owner-only commands
-    * `;groups` Lists all command groups.
-    * `;enable` Enables a command or command group.
-    * `;disable` Disables a command or command group.
-    * `;reload` Reloads a command or command group.
-    * `;load` Loads a new command
-    * `;unload` Unloads a command.
-    * `;prefix` Shows or sets the command prefix.
-    * `;eval` Executes JavaScript code.
+*   ##### Utility
+    * `;avatar [user]` Shows avatar of a given user
+    * `;banner [user]` Shows banner of a given user
+    * `;inrole [user]` Shows members in a given role
+    * `;quote <id> [#channel]` Quotes a message
+    * `;urban [prompt]` Looks up Urban Dictionary definitions
+    * `;color <color>` Shows color
+
+*   ##### Modlog
+    * `;action <action number>` Shows details of a specified action
+    * `;actions [from @moderator] [to @member]` Lists moderation actions in the server
+    * `;importcarl <carl exported message id>` Imports carl database
+    * `;reason <action number>` Changes reason for an action
+
+*   ##### Subscription
+    * `;intag <name>` Shows all users in the tag without pinging
+    * `;subscribe <name>` Subscribes to a tag
+    * `;tag <name>` Pings a tag
+    * `;tagadd <name>` Adds a new tag
+    * `;tagremove <name>` Adds a new tag
+    * `;tags ` Lists all tags in the server
+    * `;unsubscribe <name>` Unsubscribes from a tag
+
 ***
-### Libraries and frameworks used
-* [discord.js](https://github.com/discordjs/discord.js/) and [discord.js-commando](https://github.com/discordjs/Commando)
-* [moment](https://github.com/moment/moment/) and [moment-duration-format](https://github.com/jsmreese/moment-duration-format)
-*   [node-sqlite](https://github.com/kriasoft/node-sqlite/)
