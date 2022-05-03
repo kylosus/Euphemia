@@ -26,10 +26,10 @@ export default class ModerationCommand extends ECommand {
 			embed.setDescription(result.aux.toString());
 		}
 
-		embed.addField('Passed', result.passed.map(r => `<@${r.id}>`).join(' ') || '~');
+		embed.addField('Passed', result.passed.map(r => r.toString()).join(' ') || '~');
 
 		if (result.failed.length) {
-			embed.addField('Failed', result.failed.map(r => `<@${r.id}> - ${r.reason || '**Unknown reason**'}`).join(' '));
+			embed.addField('Failed', result.failed.map(r => `${r.toString()} - ${r.reason || '**Unknown reason**'}`).join(' '));
 		}
 
 		embed.addField('Moderator', message.member.toString(), true);
@@ -57,7 +57,7 @@ export default class ModerationCommand extends ECommand {
 			guild,
 			action:       this.actionName,
 			moderator,
-			target:       { id: r?.id ?? r },	// sorry
+			target:       r,
 			aux,
 			reason,
 			passed:       true,
@@ -68,7 +68,7 @@ export default class ModerationCommand extends ECommand {
 			guild,
 			action:       this.actionName,
 			moderator,
-			target:       { id: r?.id ?? r },
+			target:       r,
 			aux,
 			reason,
 			passed:       false,

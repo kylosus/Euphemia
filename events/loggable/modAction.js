@@ -12,7 +12,7 @@ export default async (channel, guild, moderator, result) => {
 	});
 
 	const prefix = result.passed ? '✅' : '❌';	// Fix those later
-	embed.setDescription(`${prefix} Action ${result.action} -> <@${result.target.id}>`);
+	embed.setDescription(`${prefix} Action ${result.action} -> ${result.target.toString()}`);
 	embed.addField('Reason', Formatters.codeBlock(result.reason || 'No reason provided'));
 
 	if (!result.passed) {

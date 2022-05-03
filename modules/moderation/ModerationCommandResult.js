@@ -8,11 +8,13 @@ export default class ModerationCommandResult {
 	}
 
 	addPassed(p) {
-		this.passed.push({ id: p?.id ?? p });
+		// this.passed.push({ id: p?.id ?? p });
+		this.passed.push({ id: p?.id ?? p, toString: () => p.toString() });
 	}
 
-	addFailed(id, reason) {
-		this.failed.push({ id: id?.id ?? id, reason });
+	addFailed(f, reason) {
+		// this.failed.push({ id: id?.id ?? id, reason });
+		this.failed.push({ id: f?.id ?? f, reason, toString: () => f.toString() });
 	}
 
 	getColor(good = 'GREEN', warn = 'ORANGE', bad = 'RED') {
