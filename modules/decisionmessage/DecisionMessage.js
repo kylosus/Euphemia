@@ -4,9 +4,8 @@ import { makeError }                                     from '../../lib/EComman
 const register = async (message, decisions = [{
 	component: new MessageButton(),
 	// eslint-disable-next-line no-unused-vars
-	action: async (interaction) => {
-	}
-}]) => {
+	action: async (interaction) => {}
+}], collectorOptions = {}) => {
 	const buttons = new MessageActionRow();
 
 	decisions.forEach(d => buttons.addComponents(d.component));
@@ -28,6 +27,13 @@ const register = async (message, decisions = [{
 			// Shit just works
 			try {
 				const result = await decision.action(interaction);
+
+				// The caller is doing other stuff
+				if (!result) {
+					interaction.deferUpdate().catch(console.error);
+					return;
+				}
+
 				await interaction.reply({
 					ephemeral: true, embeds: [new MessageEmbed()
 						.setColor('GREEN')
@@ -37,7 +43,8 @@ const register = async (message, decisions = [{
 				const embed = makeError(err.message || err || 'An unknown error occurred');
 				interaction.reply({ ephemeral: true, embeds: [embed] }).catch(console.warn);
 			}
-		}
+		},
+		...collectorOptions
 	});
 
 	return newMessage;
