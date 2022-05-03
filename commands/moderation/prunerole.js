@@ -51,7 +51,7 @@ export default class extends ModerationCommand {
 		return message.channel.send({
 			embeds: [new MessageEmbed()
 				.setColor('GREEN')
-				.setDescription(`Pruned ${members.length} members in ${role}:`)]
+				.setDescription(`Pruned ${members.length} members from ${role}:`)]
 		});
 	}
 }

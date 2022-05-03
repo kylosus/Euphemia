@@ -1,7 +1,6 @@
 import { MessageEmbed }                 from 'discord.js';
 import { ECommand, StringDoctor as SD } from '../../lib/index.js';
-
-import { bulkInsert, insert } from './db.js';
+import { bulkInsert }                   from './db.js';
 
 export default class ModerationCommand extends ECommand {
 	constructor(client, {

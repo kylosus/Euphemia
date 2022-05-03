@@ -42,17 +42,17 @@ export default class extends ModerationCommand {
 				return m;
 			}));
 
-			result.addPassed(roles);
+			result.addPassed(role);
 			result.aux = members.length;
 
-			result._.push({ role, members });
+			result._.push({ role: role.id, members });
 		}
 
 		return result;
 	}
 
 	async ship(message, { _ }) {
-		const embed = new AutoEmbed().setColor('GREEN');
+		const embed = new AutoEmbed().setColor('GREEN').setTitle('Pruned:');
 
 		const content = _.map(({ role, members }) => `${members.length} from ${role}`);
 		embed.setDescription(content.join('\n'));

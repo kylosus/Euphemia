@@ -13,7 +13,7 @@ export default class extends ModerationCommand {
 			aliases:           ['banrange'],
 			description:       {
 				content:  'Bans every user joined within a range. Useful for mass bot joins',
-				usage:    ' [user2...] [reason]',
+				usage:    '[user2...] [reason]',
 				examples: ['banrange 12345678', 'banrange 12345678 12345679'],
 			},
 			userPermissions:   [Permissions.FLAGS.BAN_MEMBERS],
