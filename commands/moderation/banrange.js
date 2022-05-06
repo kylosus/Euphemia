@@ -28,7 +28,11 @@ export default class extends ModerationCommand {
 					id:       'to',
 					type:     ArgConsts.TYPE.MEMBER,
 					optional: true,
-					default:  m => m.guild.members.cache.last(),
+					default:  message => message.guild.members.cache
+						.reduce(
+							(acc, m) => m.joinedTimestamp > acc.joinedTimestamp ? m : acc,
+							message.guild.members.cache.last()
+						)
 				},
 				{
 					id:       'reason',
