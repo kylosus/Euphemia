@@ -1,5 +1,6 @@
 import { Formatters, MessageEmbed } from 'discord.js';
 import { replaceTokens }            from '../util.js';
+import * as AutoKick                from '../../modules/autokick/index.js';
 
 export default async member => {
 	const p1 = (async entry => {
@@ -33,15 +34,22 @@ export default async member => {
 			return;
 		}
 
-		return channel.send({
-			embeds: [new MessageEmbed()
-				.setColor('BLUE')
-				.setTitle('❌ User left')
-				.setThumbnail(member.user.displayAvatarURL())
-				.setDescription(`${member.toString()}  ${Formatters.inlineCode(member.user.tag)}`)
-				.addField('ID', member.id, false)
-				.setTimestamp(member.joinedAt)]
-		});
+		const embeds = [new MessageEmbed()
+			.setColor('BLUE')
+			.setTitle('❌ User left')
+			.setThumbnail(member.user.displayAvatarURL())
+			.setDescription(`${member.toString()}  ${Formatters.inlineCode(member.user.tag)}`)
+			.addField('ID', member.id, false)
+			.setTimestamp(member.joinedAt)];
+
+		if (AutoKick.getState(member.guild)) {
+			embeds.push(new MessageEmbed()
+				.setColor('DARK_RED')
+				.setDescription(`${Formatters.bold('WARNING')} Autokick is currently active`)
+			);
+		}
+
+		return channel.send({ embeds });
 	})(member.client.provider.get(member.guild, 'log', { guildMemberRemove: null }));
 
 	return Promise.all([p1, p2]);
