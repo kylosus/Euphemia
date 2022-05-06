@@ -1,5 +1,5 @@
 import { ArgConsts, ECommand } from '../../lib/index.js';
-import * as process            from 'process';
+import process                 from 'node:process';
 
 export default class extends ECommand {
 	constructor(client) {

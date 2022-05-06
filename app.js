@@ -1,6 +1,6 @@
 import 'dotenv/config';
 
-import process from 'process';
+import process from 'node:process';
 import { URL } from 'url';
 
 import sqlite3     from 'sqlite3';

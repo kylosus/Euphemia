@@ -1,6 +1,6 @@
 import { Formatters, MessageEmbed, Permissions } from 'discord.js';
 import { ArgConsts, AutoEmbed, ECommand }        from '../../lib/index.js';
-import process                                   from 'process';
+import process                                   from 'node:process';
 
 // Helper stuff
 // eslint-disable-next-line no-unused-vars

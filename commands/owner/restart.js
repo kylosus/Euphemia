@@ -1,6 +1,7 @@
 import { ECommand } from '../../lib/index.js';
 import { spawn }    from 'child_process';
-import process      from 'process';
+import process      from 'node:process';
+
 
 export default class extends ECommand {
 	constructor(client) {
