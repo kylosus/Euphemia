@@ -60,23 +60,27 @@ class Client extends EClient {
 
 const client = new Client();
 
+// Load default path commands
 await client.commandHandler.loadModules();
 
-await client.setProvider(
-	sqlite.open({
-		filename: new URL('settings.sqlite3', import.meta.url).pathname,
-		driver:   sqlite3.Database
-	}).then(async db => {
-		await modules.init(client, db);
-		return new SQLiteProvider(db);
-	})
-);
+// Init DB
+const db = await sqlite.open({
+	filename: new URL('settings.sqlite3', import.meta.url).pathname,
+	driver:   sqlite3.Database
+});
+
+// Load modules
+await modules.init(client, db);
+
+// Set provider
+await client.setProvider(new SQLiteProvider(db));
 
 console.log(`Loaded ${client.commandHandler.commands.size} commands`);
 
+// Register EventEmitter events
 await registerEvents(client);
 
-client.login(process.env.BOT_TOKEN || config.token).catch(err => {
+await client.login(process.env.BOT_TOKEN || config.token).catch(err => {
 	console.error('Failed to log in', err);
 	process.exit(1);
 });
