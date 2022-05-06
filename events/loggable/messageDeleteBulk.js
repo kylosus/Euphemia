@@ -1,3 +1,4 @@
+import { Buffer }                 from 'node:buffer';
 import { MessageAttachment }      from 'discord.js';
 import { AutoEmbed, EmbedLimits } from '../../lib/index.js';
 
@@ -15,7 +16,7 @@ export default async (channel, messages) => {
 
 	const files = (c => {
 		if (c.length > EmbedLimits.DESCRIPTION) {
-			return [new MessageAttachment(c, 'messages.txt')];
+			return [new MessageAttachment(Buffer.from(c), 'messages.txt')];
 		}
 
 		return null;
