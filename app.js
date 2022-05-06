@@ -67,7 +67,6 @@ class Client extends EClient {
 const client = new Client();
 
 await client.commandHandler.loadModules();
-console.log(`Loaded ${client.commandHandler.commands.size} commands`);
 
 await client.setProvider(
 	sqlite.open({
@@ -78,6 +77,8 @@ await client.setProvider(
 		return new SQLiteProvider(db);
 	})
 );
+
+console.log(`Loaded ${client.commandHandler.commands.size} commands`);
 
 await registerEvents(client);
 
