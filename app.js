@@ -31,12 +31,6 @@ class Client extends EClient {
 			},
 			{
 				disableMentions: 'everyone',
-				// untested, might break
-				//partials: [
-				//	'MESSAGE',
-				//	'GUILD_MEMBER',
-				//	'MESSAGE'
-				//],
 				intents: [
 					Intents.FLAGS.GUILDS,
 					Intents.FLAGS.GUILD_MEMBERS,
