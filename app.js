@@ -84,3 +84,8 @@ await client.login(process.env.BOT_TOKEN || config.token).catch(err => {
 	console.error('Failed to log in', err);
 	process.exit(1);
 });
+
+// Just in case, I guess
+process.on('unhandledRejection', (reason, promise) => {
+	console.log('Unhandled Rejection at:', promise, 'reason:', reason);
+});
