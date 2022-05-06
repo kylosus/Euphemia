@@ -4,7 +4,7 @@ import { ModerationCommand, ModerationCommandResult }   from '../../modules/mode
 
 const PROMPT_YES         = 'YES';
 const PROMPT_NO          = 'NO';
-const MAX_BANNABLE_USERS = 50;
+const MAX_BANNABLE_USERS = 150;
 
 export default class extends ModerationCommand {
 	constructor(client) {
