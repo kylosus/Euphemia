@@ -59,8 +59,8 @@ export default class extends ECommand {
 				}`, {}];
 			}
 
-			return [`query ($search: String, $status: MediaStatus) {
-					Media(type:ANIME status:$status search:$search) {
+			return [`query ($search: String) {
+					Media(type: ANIME, search: $search, status_in: [RELEASING, NOT_YET_RELEASED]) {
 						id
 						siteUrl
 						coverImage { medium }
@@ -69,16 +69,11 @@ export default class extends ECommand {
 					}
 				}`, {
 				search,
-				status: 'RELEASING'
 			}];
 		})(anime === '*' ? null : anime);
 
 		const { data } = await fetchAnime(query, variables).catch(() => {
-			// There has to be a better way, man
-			variables.status = 'NOT_YET_RELEASED';
-			return fetchAnime(query, variables).catch(() => {
-				throw 'Anime not found';
-			});
+			throw 'Anime not found';
 		});
 
 		if (!data.Page) {
