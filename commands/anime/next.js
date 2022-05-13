@@ -1,6 +1,7 @@
 import { Collection, Formatters, MessageEmbed } from 'discord.js';
 import { ArgConsts, ECommand }                  from '../../lib/index.js';
 import got                                      from 'got';
+import dayjs                                    from 'dayjs';
 
 const ANILIST_URL = 'https://graphql.anilist.co';
 
@@ -65,6 +66,7 @@ export default class extends ECommand {
 						siteUrl
 						coverImage { medium }
 						title { userPreferred }
+						startDate { year month day }
 						nextAiringEpisode { episode airingAt }
 					}
 				}`, {
@@ -86,6 +88,12 @@ export default class extends ECommand {
 	async shipOne(message, result) {
 		const duration = ((a) => {
 			if (!a.nextAiringEpisode?.airingAt) {
+				const duration = dayjs(`${a.startDate.year}-${a.startDate.month}-${a.startDate.day ?? '1'}`);
+
+				if (duration.isValid()) {
+					return Formatters.time(duration.unix(), Formatters.TimestampStyles.LongDate);
+				}
+
 				return 'Some time in the future';
 			}
 
