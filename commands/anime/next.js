@@ -64,7 +64,8 @@ export default class extends ECommand {
 					Media(type: ANIME, search: $search, status_in: [RELEASING, NOT_YET_RELEASED]) {
 						id
 						siteUrl
-						coverImage { medium }
+						episodes
+						coverImage { color medium }
 						title { userPreferred }
 						startDate { year month day }
 						nextAiringEpisode { episode airingAt }
@@ -101,14 +102,13 @@ export default class extends ECommand {
 		})(result);
 
 		const embed = new MessageEmbed()
-			.setColor('GREEN');
+			.setColor(result.coverImage.color);
 
 		embed
-			.setTitle(`${result.title} ${result.nextAiringEpisode?.episode ?? '?'}`)
-			.setThumbnail(result.coverImage.medium)
 			.setTitle(result.title.userPreferred)
+			.setThumbnail(result.coverImage.medium)
 			.setURL(result.siteUrl)
-			.addField(`Episode ${result.nextAiringEpisode?.episode ?? '?'} in`, duration, false);
+			.addField(`Episode ${result.nextAiringEpisode?.episode ?? '1'}/${result.episodes ?? '?'} in`, duration, false);
 
 		return message.channel.send({ embeds: [embed] });
 	}
@@ -123,7 +123,7 @@ export default class extends ECommand {
 			.sort((a, b) => a.nextAiringEpisode.timeUntilAiring - b.nextAiringEpisode.timeUntilAiring)
 			.forEach(r => {
 				embed.addField(
-					`${r.title.userPreferred} ${r.nextAiringEpisode?.episode ?? '?'}`,
+					`${r.title.userPreferred} ${r.nextAiringEpisode?.episode ?? '1'}`,
 					Formatters.time(r.nextAiringEpisode.airingAt, Formatters.TimestampStyles.RelativeTime),
 					true
 				);
