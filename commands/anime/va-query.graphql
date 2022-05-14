@@ -1,0 +1,45 @@
+query ($characterName: String, $maxCharacters: Int) {
+  Page(page: 0, perPage: $maxCharacters) {
+    characters(search: $characterName) {
+      name {
+        userPreferred
+      }
+      image {
+        medium
+      }
+      siteUrl
+      media(perPage: 1, type: ANIME) {
+        edges {
+          voiceActors(language: JAPANESE) {
+            image {
+              large
+            }
+            siteUrl
+            name {
+              userPreferred
+            }
+            characters(page: 0, perPage: 5, sort: FAVOURITES_DESC) {
+              nodes {
+                name {
+                  userPreferred
+                }
+                media(sort: POPULARITY_DESC) {
+                  nodes {
+                    title {
+                      userPreferred
+                    }
+                  }
+                }
+              }
+            }
+          }
+          node {
+            title {
+              userPreferred
+            }
+          }
+        }
+      }
+    }
+  }
+}
