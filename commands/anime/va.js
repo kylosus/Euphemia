@@ -50,8 +50,8 @@ export default class extends ECommand {
 		const selectionOptions = characters
 			.filter(c => c.media.edges.length)
 			.map(c => ({
-				label: c.name.userPreferred,
-				data: c
+				label: `${c.name.userPreferred} (${c.media.edges[0].node.title.userPreferred})`.slice(0, 100),
+				data:  c
 			}));
 
 		return SelectionPaginatedMessage.register(message, s => {
