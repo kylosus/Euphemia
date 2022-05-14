@@ -37,11 +37,16 @@ export default class extends ECommand {
 			throw 'Character not found';
 		});
 
+		if (!data.Page.characters.length) {
+			throw 'No voice actors found for the character';
+		}
+
 		return data.Page.characters;
 	}
 
 	async ship(message, characters) {
 		const selectionOptions = characters
+			.filter(c => c.media.edges.length)
 			.map(c => ({
 				label: c.name.userPreferred,
 				data: c
