@@ -55,8 +55,19 @@ export default class extends ECommand {
 			}));
 
 		return SelectionPaginatedMessage.register(message, s => {
+			const voiceActor = s.media.edges[0].voiceActors[0];
 			return new MessageEmbed()
-				.setDescription(s.name.userPreferred);
+				.setColor(this.client.defaultColor)
+				.setAuthor({
+					name:    s.name.userPreferred,
+					url:     s.siteUrl,
+					iconURL: s.image.medium
+				})
+				.setTitle(voiceActor.name.userPreferred)
+				.setURL(voiceActor.siteUrl)
+				.setThumbnail(voiceActor.image.large)
+				.setFooter({ text: `Anime ${s.media.edges[0].node.title.userPreferred}` })
+				.setDescription(voiceActor.characters.nodes.map(c => `${c.name.userPreferred} (${c.media.nodes[0].title.userPreferred})`).join('\n'));
 		}, selectionOptions);
 	}
 }

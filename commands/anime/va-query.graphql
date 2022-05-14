@@ -5,7 +5,7 @@ query ($characterName: String, $maxCharacters: Int) {
         userPreferred
       }
       image {
-        large
+        medium
       }
       siteUrl
       media(perPage: 1, type: ANIME) {
