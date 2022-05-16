@@ -43,8 +43,7 @@ export default class ModerationCommand extends ECommand {
 		const result     = await this.run(message, parsedArgs);
 
 		this.record(message.guild, message.member, result)
-			.then(r => r.forEach(r => this.client.emit('modAction', message.guild, message.member, r)))
-			.catch(err => this.client.emit('error', err));
+			.then(r => r.forEach(r => this.client.emit('modAction', message.guild, message.member, r)));
 
 		const reply = await this.ship(message, result);
 
@@ -76,7 +75,7 @@ export default class ModerationCommand extends ECommand {
 		}));
 
 		const all   = passed.concat(failed);
-		const dbRes = await bulkInsert(all).catch(console.error);
+		const dbRes = await bulkInsert(all);
 
 		dbRes.forEach((r, i) => {
 			all[i].id = r.lastID;

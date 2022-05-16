@@ -29,8 +29,8 @@ const _watcher = async ({ message, emoji }, user) => {
 };
 
 const watch = client => {
-	client.on('messageReactionAdd',		(...args) => _watcher(...args).catch(console.error));
-	client.on('messageReactionRemove',	(...args) => _watcher(...args).catch(console.error));
+	client.on('messageReactionAdd',		(...args) => _watcher(...args).catch());
+	client.on('messageReactionRemove',	(...args) => _watcher(...args).catch());
 };
 
 const init = client => {
