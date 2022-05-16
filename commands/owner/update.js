@@ -1,7 +1,8 @@
-import { Formatters, MessageEmbed } from 'discord.js';
-import { ECommand, EmbedLimits }    from '../../lib/index.js';
-import { spawn }                    from 'child_process';
-import { truncate }                 from 'lodash-es';
+import { AutoEmbed, ECommand } from '../../lib/index.js';
+import { spawn }               from 'child_process';
+import process                 from 'node:process';
+
+const EXIT_TIMEOUT = 5000;
 
 export default class extends ECommand {
 	constructor(client) {
@@ -39,17 +40,27 @@ export default class extends ECommand {
 			throw error;
 		}
 
+		process.on('exit', () => {
+			spawn(process.argv.shift(), process.argv, {
+				cwd:      process.cwd(),
+				detached: true,
+				stdio:    'inherit'
+			});
+		});
+
+		setTimeout(() => {
+			process.exit(0);
+		}, EXIT_TIMEOUT);
+
 		return result;
 	}
 
-	ship(message, result) {
+	async ship(message, result) {
 		return message.channel.send({
-			embeds: [new MessageEmbed()
+			embeds: [new AutoEmbed()
 				.setColor('GREEN')
-				.setTitle('Result of git pull. Bot may need a restart')
-				.setDescription(
-					Formatters.codeBlock(truncate(result, { length: EmbedLimits.DESCRIPTION - 6 }))
-				)]
+				.setTitle(`Result of git pull. Attempting restart in ${EXIT_TIMEOUT / 1000} seconds...`)
+				.setDescriptionWrap(result)]
 		});
 	}
 }
