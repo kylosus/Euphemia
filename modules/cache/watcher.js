@@ -49,7 +49,7 @@ const watch = client => {
 	});
 
 	client.on('userUpdate',        (...args) => userUpdate(...args).catch(console.error));
-	client.on('guildUPdate',       (...args) => guildUpdate(...args).catch(console.error));
+	client.on('guildUpdate',       (...args) => guildUpdate(...args).catch(console.error));
 	client.on('guildCreate',       (...args) => guildCreate(...args).catch(console.error));
 	client.on('guildMemberAdd',    (...args) => guildMemberAdd(...args).catch(console.error));
 	client.on('guildMemberRemove', (...args) => guildMemberRemove(...args).catch(console.error));
