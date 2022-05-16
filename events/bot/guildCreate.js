@@ -2,11 +2,11 @@ import { MessageEmbed } from 'discord.js';
 
 const DISCORD_LOGO = 'https://cdn.discordapp.com/attachments/540834912366755850/547465681453449246/discord-logo.png';
 
-export default guild => {
+export default async guild => {
 	console.log(`Joined ${guild.name} (${guild.id})`);
 
-	guild.client.owners.forEach(owner => {
-		owner.send({
+	return guild.client.owners.map(owner => {
+		return owner.send({
 			embeds: [new MessageEmbed()
 				.setColor(guild.client.defaultColor)
 				.setImage(guild.iconURL() || DISCORD_LOGO)
@@ -15,6 +15,6 @@ export default guild => {
 				.addField('Guild id', guild.id || '-')
 				.addField('Member count', guild.memberCount || '-')
 				.addField('Owner', guild.owner ? guild.owner.user.tag : guild.ownerID)]
-		}).catch(console.error);
+		});
 	});
 };

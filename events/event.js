@@ -70,7 +70,7 @@ export const registerEvents = async client => {
 	client.on('error',				error);
 	client.on('reconnecting',		reconnecting);
 	client.on('disconnect',			disconnect);
-	client.on('guildCreate',		guildCreate);
+	client.on('guildCreate',		g => guildCreate(g).catch(_err('guildCreate')));
 	client.on('guildMemberAdd',		m => _guildMemberAdd(m).catch(_err('guildMemberAdd')));
 	client.on('guildMemberRemove',	m => _guildMemberRemove(m).catch(_err('guildMemberRemove')));
 	client.on('userUpdate',			(o, n) => _userUpdate(o, n).catch(_err('userUpdate')));
