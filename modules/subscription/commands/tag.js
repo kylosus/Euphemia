@@ -43,7 +43,7 @@ export default class extends ECommand {
 			tagID:   res[0].id,
 			user:    message.author,
 			channel: message.channel
-		}).catch(console.warn);
+		}).catch(console.error);
 
 		return { tagName, users: res.map(r => r.user) };
 	}
