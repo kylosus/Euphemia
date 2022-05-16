@@ -36,7 +36,7 @@ const register = async (message, decisions = [{
 
 				await interaction.reply({
 					ephemeral: true, embeds: [new MessageEmbed()
-						.setColor('GREEN')
+						.setColor(this.client.config.COLOR_OK)
 						.setDescription(result)]
 				});
 			} catch (err) {

@@ -8,7 +8,7 @@ export default async (channel, oldMember, newMember) => {
 
 		return channel.send({
 			embeds: [new MessageEmbed()
-				.setColor('GREEN')
+				.setColor(this.client.config.COLOR_OK)
 				.setThumbnail(newMember.user.displayAvatarURL())
 				.setTitle('Nickname change')
 				.setDescription(body)
@@ -19,7 +19,7 @@ export default async (channel, oldMember, newMember) => {
 	if (oldMember.user.tag !== newMember.user.tag) {
 		return channel.send({
 			embeds: [new MessageEmbed()
-				.setColor('GREEN')
+				.setColor(this.client.config.COLOR_OK)
 				.setThumbnail(newMember.user.displayAvatarURL())
 				.setTitle('Username change')
 				.setDescription(`**${oldMember.user.tag}** has changed their username to **${newMember.user.tag}**`)

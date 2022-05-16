@@ -99,7 +99,7 @@ export default class extends ECommand {
 	async ship(message, result) {
 		const generator = s => {
 			const embed = new MessageEmbed()
-				.setColor('GREEN')
+				.setColor(this.client.config.COLOR_OK)
 				.setTitle(`Latest mod actions in ${message.guild}`);
 
 			const body = typeof s === 'string' ? s : s.map(({

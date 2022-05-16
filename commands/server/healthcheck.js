@@ -51,7 +51,7 @@ export default class extends ECommand {
 	async ship(message, { AdminRoles, ElevatedRoles, EmptyRoles }) {
 		return message.channel.send({
 			embeds: [new MessageEmbed()
-				.setColor('GREEN')
+				.setColor(this.client.config.COLOR_OK)
 				.setAuthor({
 					name:    `${message.guild.name} server health check`,
 					iconURL: message.guild.iconURL()

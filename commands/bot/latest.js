@@ -24,7 +24,7 @@ module.exports = class extends Command {
 
 		if (!changelog.length) {
 			return message.channel.send(new RichEmbed()
-				.setColor('RED')
+				.setColor(this.client.config.COLOR_NO)
 				.setTitle('No changelog found')
 			);
 		}
@@ -41,7 +41,7 @@ module.exports = class extends Command {
 			return message.channel.send(_build(log));
 		} else {
 			return message.channel.send(new RichEmbed()
-				.setColor('RED')
+				.setColor(this.client.config.COLOR_NO)
 				.addField('Version not found', `try ${this.client.commandPrefix}${this.name} list to view available versions`)
 			);
 		}

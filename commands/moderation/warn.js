@@ -37,7 +37,7 @@ export default class extends ModerationCommand {
 			try {
 				await m.user.send({
 					embeds: [new MessageEmbed()
-						.setColor('RED')
+						.setColor(this.client.config.COLOR_NO)
 						.setTitle(`❗ You have been warned in ${message.guild}`)
 						.setDescription(Formatters.codeBlock(reason))]
 				});

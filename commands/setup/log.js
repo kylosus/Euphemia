@@ -38,7 +38,7 @@ export default class extends ECommand {
 	}
 
 	async ship(message, result) {
-		const embed = new MessageEmbed().setTitle('Available log events').setColor('GREEN');
+		const embed = new MessageEmbed().setTitle('Available log events').setColor(this.client.config.COLOR_OK);
 
 		const body = Object.entries(result).map(([key, value]) => {
 			if (value) {

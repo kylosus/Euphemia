@@ -42,7 +42,7 @@ export default class extends ECommand {
 
 	makeError(string) {
 		return new MessageEmbed()
-			.setColor('RED')
+			.setColor(this.client.config.COLOR_NO)
 			.setTitle('Error while evaluating:')
 			.setDescription(Formatters.codeBlock(string));
 	}
@@ -50,7 +50,7 @@ export default class extends ECommand {
 	async ship(message, [elapsed, result]) {
 		return message.channel.send({
 			embeds: [new AutoEmbed()
-				.setColor('GREEN')
+				.setColor(this.client.config.COLOR_OK)
 				.setTitle(`Evaluated in ${elapsed}ms.`)
 				.setDescriptionWrap(JSON.stringify(result, null, 4))]
 		});

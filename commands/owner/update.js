@@ -58,7 +58,7 @@ export default class extends ECommand {
 	async ship(message, result) {
 		return message.channel.send({
 			embeds: [new AutoEmbed()
-				.setColor('GREEN')
+				.setColor(this.client.config.COLOR_OK)
 				.setTitle(`Result of git pull. Attempting restart in ${EXIT_TIMEOUT / 1000} seconds...`)
 				.setDescriptionWrap(result)]
 		});

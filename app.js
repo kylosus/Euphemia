@@ -10,9 +10,10 @@ import { Intents }                                  from 'discord.js';
 import { EClient, ECommandHandler, SQLiteProvider } from './lib/index.js';
 
 // Make this independent of cwd
-import config             from './config.json' assert { type: 'json' };
-import * as modules       from './modules/index.js';
-import { registerEvents } from './events/event.js';
+// import config             from './config.json' assert { type: 'json' };
+import { BotConfig }                                from './config.js';
+import * as modules                                 from './modules/index.js';
+import { registerEvents }                           from './events/event.js';
 
 if (process.getuid?.() === 0) {
 	console.warn('===================================');
@@ -26,12 +27,12 @@ class Client extends EClient {
 	constructor() {
 		super(
 			{
-				ownerIDs:     process.env.BOT_OWNER?.split?.(',') ?? config.owners,
-				defaultColor: config.defaultColor ?? [233, 91, 169]
+				ownerIDs: process.env.BOT_OWNER?.split?.(',') ?? BotConfig.OWNERS,
+				config:   { TOKEN: '', ...BotConfig }
 			},
 			{
 				disableMentions: 'everyone',
-				intents: [
+				intents:         [
 					Intents.FLAGS.GUILDS,
 					Intents.FLAGS.GUILD_MEMBERS,
 					Intents.FLAGS.GUILD_BANS,
@@ -52,7 +53,7 @@ class Client extends EClient {
 		);
 
 		this.commandHandler = new ECommandHandler(this, {
-			prefix: process.env.BOT_PREFIX || config.prefix || ';',
+			prefix: process.env.BOT_PREFIX || BotConfig.PREFIX || ';',
 			path:   new URL('commands', import.meta.url).pathname
 		});
 	}
@@ -80,7 +81,7 @@ console.log(`Loaded ${client.commandHandler.commands.size} commands`);
 // Register EventEmitter events
 await registerEvents(client);
 
-await client.login(process.env.BOT_TOKEN || config.token).catch(err => {
+await client.login(process.env.BOT_TOKEN || BotConfig.TOKEN).catch(err => {
 	console.error('Failed to log in', err);
 	process.exit(1);
 });

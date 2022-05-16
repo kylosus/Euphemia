@@ -115,7 +115,7 @@ export default class extends ECommand {
 
 	async shipPage(message, result) {
 		const embed = new MessageEmbed()
-			.setColor('GREEN')
+			.setColor(this.client.config.COLOR_OK)
 			.setTitle('Airing anime schedule');
 
 		result

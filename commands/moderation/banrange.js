@@ -74,7 +74,7 @@ export default class extends ModerationCommand {
 
 		const sent = await message.channel.send({
 			embeds:     [new AutoEmbed()
-				.setColor('ORANGE')
+				.setColor(this.client.config.COLOR_WARN)
 				.setTitle(`I am about to ban ${range.size} users. Are you sure?`)
 				.setDescription(range.map(m => `${m.toString()}${m.user.tag}`).join('\n'))],
 			components: [buttons]

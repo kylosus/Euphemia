@@ -1,9 +1,7 @@
 import { Formatters, MessageEmbed, Permissions } from 'discord.js';
 import { ArgConsts, ECommand }                   from '../../../lib/index.js';
 import { getAction, updateReason }               from '../db.js';
-
-const EMOJI_OK = '✅';
-const EMOJI_NO = '❎';
+import { BotConfig }                             from '../../../config.js';
 
 export default class extends ECommand {
 	constructor(client) {
@@ -51,15 +49,15 @@ export default class extends ECommand {
 				'\n' + Formatters.codeBlock(result.reason)
 			);
 
-			await notice.react(EMOJI_OK);
-			await notice.react(EMOJI_NO);
+			await notice.react(BotConfig.EMOJI_OK);
+			await notice.react(BotConfig.EMOJI_NO);
 
 			const reactions = await notice.awaitReactions({
 				filter: (r, u) => u.id === message.author.id,
 				time:   3000
 			});
 
-			if (!reactions.has(EMOJI_OK)) {
+			if (!reactions.has(BotConfig.EMOJI_OK)) {
 				throw 'Cancelled';
 			}
 
@@ -78,7 +76,7 @@ export default class extends ECommand {
 	async ship(message, [id, reason]) {
 		return message.channel.send({
 			embeds: [new MessageEmbed()
-				.setColor('GREEN')
+				.setColor(this.client.config.COLOR_OK)
 				.setTitle(`Updated Action [${id}] reason in ${message.guild}`)
 				.setDescription(Formatters.codeBlock(reason))]
 		});

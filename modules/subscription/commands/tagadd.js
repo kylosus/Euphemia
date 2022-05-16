@@ -50,7 +50,7 @@ export default class extends ECommand {
 	async ship(message, { tagName, result }) {
 		const resultMessage = await message.channel.send({
 			embeds: [new MessageEmbed()
-				.setColor('GREEN')
+				.setColor(this.client.config.COLOR_OK)
 				.setDescription(result)]
 		});
 

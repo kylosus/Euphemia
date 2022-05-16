@@ -52,7 +52,7 @@ export default class extends ModerationCommand {
 	}
 
 	async ship(message, { _ }) {
-		const embed = new AutoEmbed().setColor('GREEN').setTitle('Pruned:');
+		const embed = new AutoEmbed().setColor(this.client.config.COLOR_OK).setTitle('Pruned:');
 
 		const content = _.map(({ role, members }) => `${members.length} from ${role}`);
 		embed.setDescription(content.join('\n'));

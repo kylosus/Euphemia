@@ -50,7 +50,7 @@ export default class extends ModerationCommand {
 	async ship(message, { _: { role, members } }) {
 		return message.channel.send({
 			embeds: [new MessageEmbed()
-				.setColor('GREEN')
+				.setColor(this.client.config.COLOR_OK)
 				.setDescription(`Pruned ${members.length} members from ${role}:`)]
 		});
 	}
