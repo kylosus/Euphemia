@@ -1,4 +1,4 @@
-import { MessageEmbed, Permissions }                  from 'discord.js';
+import { Formatters, MessageEmbed, Permissions }      from 'discord.js';
 import { ArgConsts }                                  from '../../lib/index.js';
 import { ModerationCommand, ModerationCommandResult } from '../../modules/moderation/index.js';
 
@@ -60,16 +60,23 @@ export default class extends ModerationCommand {
 	}
 
 	async ship(message, result) {
+		const wrap = Formatters.channelMention;
+
 		const embed = new MessageEmbed()
 			.setColor(result.getColor());
 
 		if (result.passed.length) {
 			embed.addField(`${result.aux !== 'on' ? 'Allowed' : 'Denied'} message sending permissions in`,
-				result.passed.map(r => `<#${r.id}>`).join(' '));
+				result.passed.map(r => wrap(r.id)).join(' '));
 		}
 
 		if (result.failed.length) {
-			embed.addField('Failed', result.failed.map(r => `<#${r.id}> - ${r.reason || 'Unknown reason'}`).join(' '));
+			embed.addField(
+				'Failed',
+				result.failed
+					.map(({ id, reason = 'Unknown reason' }) => `${wrap(id)} - ${reason}`)
+					.join(' ')
+			);
 		}
 
 		return message.channel.send({ embeds: [embed] });

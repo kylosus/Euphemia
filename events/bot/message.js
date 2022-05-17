@@ -1,12 +1,6 @@
 import { MessageEmbed } from 'discord.js';
 
 export default message => {
-	// if (message.author.id === message.client.user.id) {
-	// 	message.client.messageStats.sent++;
-	// } else {
-	// 	message.client.messageStats.received++;
-	// }
-
 	if (message.guild || message.author.id === message.client.user.id) {
 		return;
 	}

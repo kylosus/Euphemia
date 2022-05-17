@@ -53,11 +53,11 @@ export default class extends ECommand {
 		})(await this.client.users.fetch(result.moderator).catch(console.error)));
 
 		const prefix = result.passed ? '✅' : '❌';	// Fix those later
-		embed.setDescription(`${prefix} Action \`[${result.id}]\` ${result.action.toLowerCase()} -> <@${result.target}>`);
-		embed.addField('Reason', Formatters.codeBlock(result.reason || 'No reason provided'));
+		embed.setDescription(`${prefix} Action \`[${result.id}]\` ${result.action.toLowerCase()} -> ${Formatters.userMention(result.target)}`);
+		embed.addField('Reason', Formatters.codeBlock(result.reason ?? 'No reason provided'));
 
 		if (!result.passed) {
-			embed.addField('Failed', Formatters.codeBlock(result.failedReason || 'Unknown reason'));
+			embed.addField('Failed', Formatters.codeBlock(result.failedReason ?? 'Unknown reason'));
 		}
 
 		if (result.action === 'MUTE') {

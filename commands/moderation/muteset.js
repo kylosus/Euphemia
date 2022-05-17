@@ -16,7 +16,7 @@ export default class extends ECommand {
 			args:              [
 				{
 					id:       'role',
-					type:     ArgConsts.TYPE.TEXT,
+					type:     ArgConsts.TYPE.ROLE_LOOSE,
 					optional: true,
 					default:  () => null
 				}
@@ -26,20 +26,11 @@ export default class extends ECommand {
 		});
 	}
 
-	async run(message, { role: _role }) {
-		if (!_role) {
+	async run(message, { role }) {
+		if (!role) {
 			const role = await setNewMutedRole(message.guild);
 			return `Created new muted role ${role.toString()}`;
 		}
-
-		const role = await (async (role) => {
-			return message.guild.roles.cache.get(role) ||
-				message.guild.roles.cache.find(r => r.name.toLowerCase() === role.toLowerCase()) ||
-				message.guild.roles.cache.find(r => r.name.toLowerCase().startsWith(role.toLowerCase())) ||
-				(() => {
-					throw 'Role not found';
-				})();
-		})(_role);
 
 		if (role.position >= message.guild.me.roles.highest.position) {
 			throw 'Cannot assign as the muted role. Role is too high in the hierarchy';

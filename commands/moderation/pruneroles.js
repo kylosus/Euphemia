@@ -8,7 +8,7 @@ export default class extends ModerationCommand {
 			actionName:      'pruneroles',
 			aliases:         ['pruneroles', 'purgeroles'],
 			description:     {
-				content:  'Removes all members in a role',
+				content:  'Removes all members in multiple roles',
 				usage:    '<role>',
 				examples: ['edit https://discord.com/channels/292277485310312448/292277485310312448/850097454262386738 {JSON}']
 			},

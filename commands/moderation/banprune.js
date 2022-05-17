@@ -36,10 +36,7 @@ export default class extends ModerationCommand {
 		const result = new ModerationCommandResult(reason);
 
 		try {
-			await message.guild.members.ban(id, {
-				days: 1,
-			});
-
+			await message.guild.members.ban(id, { days: 1 });
 			result.addPassed(id);
 		} catch (err) {
 			result.addFailed(id, err.message);

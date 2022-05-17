@@ -1,5 +1,5 @@
 import { MessageEmbed, Permissions }                  from 'discord.js';
-import { ArgConsts, ArgumentType }                    from '../../lib/index.js';
+import { ArgConsts }                                  from '../../lib/index.js';
 import { ModerationCommand, ModerationCommandResult } from '../../modules/moderation/index.js';
 
 export default class extends ModerationCommand {

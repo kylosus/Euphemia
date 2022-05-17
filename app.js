@@ -10,7 +10,6 @@ import { Intents }                                  from 'discord.js';
 import { EClient, ECommandHandler, SQLiteProvider } from './lib/index.js';
 
 // Make this independent of cwd
-// import config             from './config.json' assert { type: 'json' };
 import { BotConfig }                                from './config.js';
 import * as modules                                 from './modules/index.js';
 import { registerEvents }                           from './events/event.js';

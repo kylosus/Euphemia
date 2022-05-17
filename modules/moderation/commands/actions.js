@@ -1,4 +1,4 @@
-import { MessageEmbed, Permissions }               from 'discord.js';
+import { Formatters, MessageEmbed, Permissions }   from 'discord.js';
 import { ArgConsts, ArgumentType, ECommand }       from '../../../lib/index.js';
 import { CircularListGenerator, PaginatedMessage } from '../../paginatedmessage/index.js';
 import { getIdMax, getModeratorTargetPage }        from '../db.js';
@@ -110,13 +110,16 @@ export default class extends ECommand {
 				target:    targetID
 			}) => {
 				const prefix    = passed ? '✅' : '❌';	// Fix those later;
-				const moderator = `<@${moderatorID}>`;
-				const target    = `<@${targetID}>`;
+				const moderator = Formatters.userMention(moderatorID);
+				const target    = Formatters.userMention(targetID);
 
 				return `${prefix} \`[${id}]\` ${action.toLowerCase()} ${moderator} -> ${target}`;
 			}).join('\n');
 
-			embed.setDescription(`__Run \`action <number>\` to get details__\n\n${body}`);
+			embed.setDescription(
+				Formatters.underscore(`Run ${Formatters.inlineCode('action <number>')} to get details`)
+				+ '\n\n' + body
+			);
 			return embed;
 		};
 

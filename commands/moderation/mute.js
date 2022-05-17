@@ -1,5 +1,5 @@
-import { Formatters, MessageEmbed, Permissions } from 'discord.js';
-import { ArgConsts }                             from '../../lib/index.js';
+import { Formatters, MessageEmbed, Permissions }      from 'discord.js';
+import { ArgConsts }                                  from '../../lib/index.js';
 import { ModerationCommand, ModerationCommandResult } from '../../modules/moderation/index.js';
 import { getMutedRole, setNewMutedRole, muteMember }  from '../../modules/mute/index.js';
 import dayjs                                          from 'dayjs';
@@ -78,16 +78,23 @@ export default class extends ModerationCommand {
 			.setColor(result.getColor());
 
 		if (result.passed.length) {
-			embed.addField('Muted', result.passed.map(r => `<@${r.id}>`).join(' '));
+			embed.addField('Muted', result.passed.map(r => Formatters.userMention(r.id)).join(' '));
 
 			// Passed and muted for a specific amount time
 			if (result.aux) {
-				embed.addField('Expires', Formatters.time(new Date(result.aux), Formatters.TimestampStyles.RelativeTime), true);
+				embed.addField(
+					'Expires',
+					Formatters.time(new Date(result.aux), Formatters.TimestampStyles.RelativeTime),
+					true
+				);
 			}
 		}
 
 		if (result.failed.length) {
-			embed.addField('Failed', result.failed.map(r => `<@${r.id}> - ${r.reason}`).join(' '));
+			embed.addField(
+				'Failed',
+				result.failed.map(r => `${Formatters.userMention(r.id)} - ${r.reason}`).join(' ')
+			);
 		}
 
 		embed.addField('Moderator', message.member.toString(), true);

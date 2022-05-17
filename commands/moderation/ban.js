@@ -43,10 +43,7 @@ export default class extends ModerationCommand {
 			}
 
 			try {
-				await message.guild.members.ban(id, {
-					days: 0,
-					reason
-				});
+				await message.guild.members.ban(id, { days: 0, reason });
 			} catch (err) {
 				return result.addFailed(id, err.message);
 			}

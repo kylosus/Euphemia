@@ -61,12 +61,5 @@ export default async member => {
 
 	// This is a historic moment, I finally found a use for deferred promise awaits
 	return Promise.all([p1, p2]);
-
-	// eslint-disable-next-line no-unused-vars
-	// (entry => {
-	// 	// if (!entry) {
-	// 	//
-	// 	// }
-	// })(member.client.provider.get(member.guild, 'automute', false));
 };
 
