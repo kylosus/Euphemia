@@ -42,7 +42,7 @@ export default class extends ECommand {
 
 	async ship(message, result) {
 		const embed = new MessageEmbed()
-			.setColor(this.client.defaultColor)
+			.setColor(this.client.config.COLOR_OK)
 			.setThumbnail(message.client.user.displayAvatarURL());
 
 		if (!result) {
@@ -50,7 +50,7 @@ export default class extends ECommand {
 				.addField('\u200B', '\u200B')
 				.setTitle(`${message.client.user.username} commands`)
 				.setThumbnail(message.client.user.displayAvatarURL())
-				.setColor(this.client.defaultColor)
+				.setColor(this.client.config.COLOR_OK)
 				.addField('\u200B', '\u200B')
 				.setFooter({ text: `♥ Made with love by ${pjson.author}` });
 

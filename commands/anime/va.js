@@ -57,7 +57,7 @@ export default class extends ECommand {
 		return SelectionPaginatedMessage.register(message, s => {
 			const voiceActor = s.media.edges[0].voiceActors[0];
 			return new MessageEmbed()
-				.setColor(this.client.defaultColor)
+				.setColor(this.client.config.COLOR_OK)
 				.setAuthor({
 					name:    s.name.userPreferred,
 					url:     s.siteUrl,

@@ -1,5 +1,6 @@
 import { MessageActionRow, MessageButton, MessageEmbed } from 'discord.js';
 import { makeError }                                     from '../../lib/ECommand.js';
+import { BotConfig }                                     from '../../config.js';
 
 const register = async (message, decisions = [{
 	component: new MessageButton(),
@@ -36,7 +37,7 @@ const register = async (message, decisions = [{
 
 				await interaction.reply({
 					ephemeral: true, embeds: [new MessageEmbed()
-						.setColor(this.client.config.COLOR_OK)
+						.setColor(BotConfig.COLOR_OK)
 						.setDescription(result)]
 				});
 			} catch (err) {

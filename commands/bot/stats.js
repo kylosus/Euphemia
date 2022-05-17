@@ -35,7 +35,7 @@ export default class extends ECommand {
 						url:     pjson.repository.name,
 						iconURL: THUMBNAIL
 					})
-					.setColor(this.client.defaultColor)
+					.setColor(this.client.config.COLOR_OK)
 					.addField('⌛ Uptime', result, true)
 					// .addField('📥 Received', this.client.messageStats.received, true)
 					// .addField('📤 Sent', this.client.messageStats.sent, true)
