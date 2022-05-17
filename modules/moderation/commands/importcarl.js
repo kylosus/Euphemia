@@ -49,7 +49,7 @@ export default class extends ECommand {
 			};
 		});
 
-		this.sendNotice(message, `Inserting ${entry.length} entries`);
+		this.sendNotice(message, `Inserting ${entry.length} entries`).catch(() => {});
 
 		// Should probably use a transaction
 		await Promise.all(entry.map(e => forceInsert(e)));

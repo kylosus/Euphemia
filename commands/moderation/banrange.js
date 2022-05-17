@@ -91,7 +91,7 @@ export default class extends ModerationCommand {
 			throw 'Cancelled';
 		}
 
-		interaction.deferUpdate().catch();
+		interaction.deferUpdate().catch(() => {});
 
 		if (interaction.customId !== PROMPT_YES) {
 			throw 'Cancelled';

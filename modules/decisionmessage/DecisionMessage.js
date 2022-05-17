@@ -30,7 +30,7 @@ const register = async (message, decisions = [{
 
 				// The caller is doing other stuff
 				if (!result) {
-					interaction.deferUpdate().catch();
+					interaction.deferUpdate().catch(() => {});
 					return;
 				}
 
@@ -41,7 +41,7 @@ const register = async (message, decisions = [{
 				});
 			} catch (err) {
 				const embed = makeError(err.message || err || 'An unknown error occurred');
-				interaction.reply({ ephemeral: true, embeds: [embed] }).catch();
+				interaction.reply({ ephemeral: true, embeds: [embed] }).catch(() => {});
 			}
 		},
 		...collectorOptions
