@@ -1,6 +1,3 @@
 {
-    "token": "",
-    "owners": ["275331662865367040"],
-    "prefix": "",
-    "defaultColor": [233, 91, 169]
+    "notice": "USE config.js INSTEAD"
 }
