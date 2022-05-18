@@ -38,7 +38,7 @@ export default class extends ECommand {
 		const query = `query ($search: String) {
 			Media(type:ANIME search: $search, sort: SEARCH_MATCH) {
 				averageScore
-				coverImage { large }
+				coverImage { color large }
 				description
 				duration
 				endDate { year month day }
@@ -70,7 +70,7 @@ export default class extends ECommand {
 
 	async ship(message, result) {
 		const embed = new MessageEmbed()
-			.setColor('LUMINOUS_VIVID_PINK')
+			.setColor(result.coverImage.color)
 			.setTitle(result.title?.userPreferred)
 			.setThumbnail(result.coverImage?.large)
 			.setDescription(`[AniList](${result?.siteUrl}) | [MyAnimeList](https://myanimelist.net/anime/${result.idMal})`)
