@@ -41,7 +41,7 @@ export default class extends ModerationCommand {
 
 	async run(message, { channels, toggle: _toggle, reason }) {
 		const toggle = _toggle !== 'on';
-		const result = new ModerationCommandResult(reason, _toggle);
+		const result = new ModerationCommandResult(reason, toggle);
 
 		await Promise.all(channels.map(async c => {
 			try {
@@ -66,7 +66,7 @@ export default class extends ModerationCommand {
 			.setColor(result.getColor());
 
 		if (result.passed.length) {
-			embed.addField(`${result.aux !== 'on' ? 'Allowed' : 'Denied'} message sending permissions in`,
+			embed.addField(`${result.aux ? 'Allowed' : 'Denied'} message sending permissions in`,
 				result.passed.map(r => wrap(r.id)).join(' '));
 		}
 
