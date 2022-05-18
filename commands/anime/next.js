@@ -34,13 +34,14 @@ export default class extends ECommand {
 					default:  () => '*'
 				}
 			],
+			cached:      true,
 			guildOnly:   false,
 			ownerOnly:   false,
 		});
 	}
 
 	async run(message, { anime }) {
-		const cached = cache.get(anime.toUpperCase());
+		const cached = cache.get(anime.toLowerCase());
 
 		if (cached) {
 			if ((cached.Media.nextAiringEpisode?.airingAt ?? 0) * 1000 - Date.now() > 0) {
@@ -80,7 +81,7 @@ export default class extends ECommand {
 		});
 
 		if (!data.Page) {
-			cache.set(anime.toUpperCase(), data);
+			cache.set(anime.toLowerCase(), data);
 		}
 
 		return data;

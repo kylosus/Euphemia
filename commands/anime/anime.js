@@ -28,6 +28,7 @@ export default class extends ECommand {
 					message: 'Please enter an anime title'
 				}
 			],
+			cached:      true,
 			guildOnly:   false,
 			ownerOnly:   false,
 		});
