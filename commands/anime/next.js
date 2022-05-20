@@ -90,7 +90,7 @@ export default class extends ECommand {
 	async shipOne(message, result) {
 		const duration = ((a) => {
 			if (!a.nextAiringEpisode?.airingAt) {
-				const duration = dayjs(`${a.startDate.year}-${a.startDate.month}-${a.startDate.day ?? '1'}`);
+				const duration = dayjs(`${a.startDate.year ?? '-'}-${a.startDate.month}-${a.startDate.day}`);
 
 				if (duration.isValid()) {
 					return Formatters.time(duration.unix(), Formatters.TimestampStyles.LongDate);
