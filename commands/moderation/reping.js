@@ -7,7 +7,7 @@ export default class extends ECommand {
 	constructor(client) {
 		super(client, {
 			actionName:      'reping',
-			aliases:         ['reping', 'b', 'deport'],
+			aliases:         ['reping'],
 			description:     {
 				content:  '(Re-)Pings a role and gives people an option to join and leave',
 				usage:    '<role> [message]',

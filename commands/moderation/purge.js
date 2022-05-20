@@ -9,7 +9,9 @@ export default class extends ECommand {
 		super(client, {
 			aliases:           ['purge', 'p'],
 			description:       {
-				content: 'Purges messages in the channel.', usage: '[amount]', examples: ['purge', 'purge 100'],
+				content:  'Purges messages in the channel.',
+				usage:    '[amount]',
+				examples: ['purge', 'purge 100'],
 			},
 			userPermissions:   [Permissions.FLAGS.MANAGE_MESSAGES, Permissions.FLAGS.READ_MESSAGE_HISTORY],
 			clientPermissions: [Permissions.FLAGS.MANAGE_MESSAGES, Permissions.FLAGS.READ_MESSAGE_HISTORY],

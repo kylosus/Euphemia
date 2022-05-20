@@ -11,7 +11,7 @@ const THUMBNAIL = 'https://cdn.discordapp.com/attachments/469111529384443904/473
 export default class extends ECommand {
 	constructor(client) {
 		super(client, {
-			aliases:     ['stats'],
+			aliases:     ['stats', 'status'],
 			description: {
 				content:  'Shows bot stats',
 				usage:    '',

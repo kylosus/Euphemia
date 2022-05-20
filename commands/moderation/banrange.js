@@ -10,7 +10,7 @@ export default class extends ModerationCommand {
 	constructor(client) {
 		super(client, {
 			actionName:        'banrange',
-			aliases:           ['banrange'],
+			aliases:           ['banrange', 'rangeban'],
 			description:       {
 				content:  'Bans every user joined within a range. Useful for mass bot joins',
 				usage:    '[user2...] [reason]',

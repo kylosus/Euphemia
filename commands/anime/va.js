@@ -9,7 +9,7 @@ const query = readFileSync(new URL('./va-query.graphql', import.meta.url), 'utf8
 export default class extends ECommand {
 	constructor(client) {
 		super(client, {
-			aliases:       ['va'],
+			aliases:       ['va', 'voiceactor'],
 			description:   {
 				content:  'Searches for voice actors of characters',
 				usage:    '<character>',

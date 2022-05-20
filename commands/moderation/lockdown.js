@@ -4,7 +4,7 @@ import { ECommand }                  from '../../lib/index.js';
 export default class extends ECommand {
 	constructor(client) {
 		super(client, {
-			aliases:           ['lockdown', 'ld'],
+			aliases:           ['lockdown', 'ld', 'automute'],
 			description:       {
 				content:  'Automatically mutes every new member on join.',
 				usage:    '',

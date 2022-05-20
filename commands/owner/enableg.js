@@ -3,7 +3,7 @@ import { ArgConsts, ECommand } from '../../lib/index.js';
 export default class extends ECommand {
 	constructor(client) {
 		super(client, {
-			aliases:     ['enableg'],
+			aliases:     ['enableg', 'enableglobal'],
 			description: {
 				content:  'Enables a command globally',
 				usage:    '<command name>',

@@ -6,7 +6,7 @@ export default class extends ModerationCommand {
 	constructor(client) {
 		super(client, {
 			actionName:      'warn',
-			aliases:         ['silentwarn'],
+			aliases:         ['silentwarn', 'warnsilent'],
 			description:     {
 				content:  'Warns a member without sending a DM.',
 				usage:    '<member> [member2...] <reason>',

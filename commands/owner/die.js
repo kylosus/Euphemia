@@ -6,7 +6,7 @@ export default class extends ECommand {
 		super(client, {
 			aliases:     ['die', 'shutdown'],
 			description: {
-				content:  'Kills the bot',
+				content:  'Shuts down the bot',
 				usage:    '[exit code]',
 				examples: ['die', 'die 1']
 			},

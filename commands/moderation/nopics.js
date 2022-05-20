@@ -6,7 +6,7 @@ export default class extends ModerationCommand {
 	constructor(client) {
 		super(client, {
 			actionName:        'nopics',
-			aliases:           ['nopics'],
+			aliases:           ['nopics', 'disablepics'],
 			description:       {
 				content:  'Denies Attach Files and Embed Links permissions for @everyone in specified channels.',
 				usage:    '[#channel]',

@@ -6,7 +6,7 @@ import { TagArgType }              from './util.js';
 export default class extends ECommand {
 	constructor(client) {
 		super(client, {
-			aliases:         ['tagremove'],
+			aliases:         ['tagremove', 'removetag', 'deltag', 'tagdel', 'tagdelete', 'deletetag'],
 			description:     {
 				content:  'Adds a new tag',
 				usage:    '<name>',

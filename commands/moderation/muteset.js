@@ -5,7 +5,7 @@ import { setMutedRole, setNewMutedRole } from '../../modules/mute/index.js';
 export default class extends ECommand {
 	constructor(client) {
 		super(client, {
-			aliases:           ['muteset'],
+			aliases:           ['muteset', 'setmute'],
 			description:       {
 				content:  'Sets muted role for the server',
 				usage:    '[role]',

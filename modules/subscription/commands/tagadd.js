@@ -9,7 +9,7 @@ import { TagArgType }                              from './util.js';
 export default class extends ECommand {
 	constructor(client) {
 		super(client, {
-			aliases:     ['tagadd'],
+			aliases:     ['tagadd', 'addtag'],
 			description: {
 				content:  'Adds a new tag',
 				usage:    '<name>',

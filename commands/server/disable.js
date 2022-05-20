@@ -4,7 +4,7 @@ import { ArgConsts, ECommand }     from '../../lib/index.js';
 export default class extends ECommand {
 	constructor(client) {
 		super(client, {
-			aliases:         ['disable'],
+			aliases:         ['disable', 'disablecommand'],
 			description:     {
 				content:  'Disables a command in the server',
 				usage:    '<command name>',

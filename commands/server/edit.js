@@ -4,7 +4,7 @@ import { ArgConsts, ArgumentType, ECommand } from '../../lib/index.js';
 export default class extends ECommand {
 	constructor(client) {
 		super(client, {
-			aliases:         ['edit'],
+			aliases:         ['edit', 'editmessage'],
 			description:     {
 				content:  'Edits messages. Supports embeds',
 				usage:    '<message url or reply> <text>',
