@@ -30,10 +30,10 @@ export default class extends ECommand {
 	}
 
 	async run(message, { channel, text }) {
-		return [channel, text];
+		return { channel, text };
 	}
 
-	async ship(message, [channel, text]) {
+	async ship(message, { channel, text }) {
 		try {
 			const json = JSON.parse(text);
 			return channel.send({ content: json.content, embeds: [new MessageEmbed(json)] });
