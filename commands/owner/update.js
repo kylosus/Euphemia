@@ -1,15 +1,13 @@
 import { AutoEmbed, ECommand } from '../../lib/index.js';
 import { spawn }               from 'child_process';
-import process                 from 'node:process';
-
-const EXIT_TIMEOUT = 5000;
+import { Formatters }          from 'discord.js';
 
 export default class extends ECommand {
 	constructor(client) {
 		super(client, {
 			aliases:     ['update'],
 			description: {
-				content:  'Updates the bot and restarts',
+				content:  'Updates the bot without restarting',
 				usage:    '',
 				examples: ['update']
 			},
@@ -40,18 +38,6 @@ export default class extends ECommand {
 			throw error;
 		}
 
-		process.on('exit', () => {
-			spawn(process.argv.shift(), process.argv, {
-				cwd:      process.cwd(),
-				detached: true,
-				stdio:    'inherit'
-			});
-		});
-
-		setTimeout(() => {
-			process.exit(0);
-		}, EXIT_TIMEOUT);
-
 		return result;
 	}
 
@@ -59,8 +45,8 @@ export default class extends ECommand {
 		return message.channel.send({
 			embeds: [new AutoEmbed()
 				.setColor(this.client.config.COLOR_OK)
-				.setTitle(`Result of git pull. Attempting restart in ${EXIT_TIMEOUT / 1000} seconds...`)
-				.setDescriptionWrap(result)]
+				.setTitle('Result of git pull')
+				.setDescription(`Run ${Formatters.inlineCode('restart')} to restart the bot\n\n${Formatters.codeBlock(result)}`)]
 		});
 	}
 }
