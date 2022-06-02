@@ -9,8 +9,8 @@ export default class extends ModerationCommand {
 			aliases:         ['pruneroles', 'purgeroles'],
 			description:     {
 				content:  'Removes all members in multiple roles',
-				usage:    '<role>',
-				examples: ['edit https://discord.com/channels/292277485310312448/292277485310312448/850097454262386738 {JSON}']
+				usage:    '<role1> [role2 ...]',
+				examples: ['pruneroles 123456 Members 2345678']
 			},
 			userPermissions: [Permissions.FLAGS.ADMINISTRATOR],
 			args:            [
