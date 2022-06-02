@@ -14,10 +14,10 @@ export default class extends ECommand {
 			},
 			args:        [
 				{
-					id:       'id',
-					type:     ArgConsts.TYPE.ID,
+					id:       'user',
+					type:     ArgConsts.TYPE.USER,
 					optional: true,
-					default:  m => m.author.id
+					default:  m => m.author
 				}
 			],
 			guildOnly:   false,
@@ -25,15 +25,12 @@ export default class extends ECommand {
 		});
 	}
 
-	async run(message, { id }) {
+	async run(message, { user }) {
 		const result = {
-			user:    null,
+			user,
 			avatars: [],
 			color:   null
 		};
-
-		const user  = await this.client.users.fetch(id);
-		result.user = user;
 
 		const member = await message.guild.members.fetch(user).catch(() => {});
 		result.color = member?.displayColor;
