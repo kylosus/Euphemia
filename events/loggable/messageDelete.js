@@ -3,10 +3,6 @@ import { EmbedLimits }  from '../../lib/index.js';
 import { truncate }     from 'lodash-es';
 
 export default async (channel, message) => {
-	if (message.NOLOG) {
-		return;
-	}
-
 	const embed = new MessageEmbed()
 		.setColor('DARK_PURPLE')
 		.setTitle(`🗑 Message deleted in #${message.channel.name}`)
