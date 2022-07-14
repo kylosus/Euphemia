@@ -1,4 +1,4 @@
-import { MessageEmbed } from 'discord.js';
+import { Formatters, MessageEmbed } from 'discord.js';
 
 export default async (oldUser, newUser) => {
 	if (oldUser.tag === newUser.tag) {
@@ -24,9 +24,11 @@ export default async (oldUser, newUser) => {
 		return channel.send({
 			embeds: [new MessageEmbed()
 				.setColor('GREEN')
-				.setThumbnail(newUser.displayAvatarURL())
 				.setTitle('Username change')
-				.setDescription(`**${oldUser.tag}** has changed their username to **${newUser.tag}**`)
+				.setThumbnail(newUser.displayAvatarURL())
+				.setDescription(`${newUser.toString()}  ${Formatters.inlineCode(newUser.tag)}`)
+				.addField('Old username', oldUser.tag, true)
+				.addField('New username', newUser.tag, true)
 				.setTimestamp()]
 		});
 	}));
