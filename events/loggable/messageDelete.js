@@ -1,13 +1,13 @@
-import { MessageEmbed } from 'discord.js';
-import { EmbedLimits }  from '../../lib/index.js';
-import { truncate }     from 'lodash-es';
+import { Formatters, MessageEmbed } from 'discord.js';
+import { EmbedLimits }              from '../../lib/index.js';
+import { truncate }                 from 'lodash-es';
 
 export default async (channel, message) => {
 	const embed = new MessageEmbed()
 		.setColor('DARK_PURPLE')
 		.setTitle(`🗑 Message deleted in #${message.channel.name}`)
 		.setDescription(message.author.toString() ?? 'Unknown user')
-		.addField('ID', `${message.channel.id}/${message.id}`, false)
+		.addField('ID', `${Formatters.channelMention(message.channel.id)}/${message.id}`, false)
 		.setTimestamp();
 
 	if (message.content) {
