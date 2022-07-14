@@ -20,17 +20,17 @@
   "author": "jokersus#3343",
   "license": "MIT",
   "dependencies": {
-    "dayjs": "^1.11.2",
-    "discord.js": "^13.7.0",
+    "dayjs": "^1.11.3",
+    "discord.js": "^13.8.1",
     "dotenv": "^16.0.1",
     "got": "^12.1.0",
     "lodash-es": "^4.17.21",
-    "node-cron": "^3.0.0",
+    "node-cron": "^3.0.1",
     "sqlite": "^4.1.1",
     "sqlite3": "^5.0.8",
     "urban-dictionary": "^3.0.2"
   },
   "devDependencies": {
-    "eslint": "^8.15.0"
+    "eslint": "^8.19.0"
   }
 }
