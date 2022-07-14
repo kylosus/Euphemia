@@ -4,6 +4,8 @@ Yet another discord.js bot.
 ***
 #### Run `npm install --build-from-source` on project root to install, and `npm run` to start.
 Minimal bot configuration is in `config.json`. You can alternatively use a `.env` file.
+
+You need CUDA 11.6 with cuDNN 8.1+ with an MPI compatible compiler. Only devices with compute capability 7.0+ connected through NVLINK are supported. Make sure `CUDA_HOME`, `MPI_HOME` and (optionally) `NVSHMEM_HOME` environment variables are set.
 ***
 ### Command list
 *   ##### Anime
