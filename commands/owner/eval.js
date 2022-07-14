@@ -34,7 +34,7 @@ export default class extends ECommand {
 			`(async () => {
 				${code}
 			})();`
-		) ?? '*No output*';
+		).catch(err => { throw typeof err === 'string' ? err : err.message; }) ?? '*No output*';
 		const elapsed = process.hrtime(start)[1] / 1000000;	// millisecond
 
 		return [elapsed, result];
