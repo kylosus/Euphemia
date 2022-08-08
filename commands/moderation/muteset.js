@@ -1,19 +1,19 @@
-import { Permissions }                   from 'discord.js';
+import { PermissionsBitField }           from 'discord.js';
 import { ArgConsts, ECommand }           from '../../lib/index.js';
 import { setMutedRole, setNewMutedRole } from '../../modules/mute/index.js';
 
 export default class extends ECommand {
 	constructor(client) {
 		super(client, {
-			aliases:           ['muteset', 'setmute'],
-			description:       {
+			aliases:                   ['muteset', 'setmute'],
+			description:               {
 				content:  'Sets muted role for the server',
 				usage:    '[role]',
 				examples: ['muteset', 'muteset Some role', 'muteset 422621940868579338']
 			},
-			userPermissions:   [Permissions.FLAGS.MANAGE_ROLES],
-			clientPermissions: [Permissions.FLAGS.MANAGE_ROLES, Permissions.FLAGS.MANAGE_GUILD],
-			args:              [
+			userPermissions:   [PermissionsBitField.Flags.ManageRoles],
+			clientPermissions: [PermissionsBitField.Flags.ManageRoles, PermissionsBitField.Flags.ManageGuild],
+			args:                      [
 				{
 					id:       'role',
 					type:     ArgConsts.TYPE.ROLE_LOOSE,
@@ -21,8 +21,8 @@ export default class extends ECommand {
 					default:  () => null
 				}
 			],
-			guildOnly:         true,
-			ownerOnly:         false,
+			guildOnly:                 true,
+			ownerOnly:                 false,
 		});
 	}
 
@@ -32,7 +32,7 @@ export default class extends ECommand {
 			return `Created new muted role ${role.toString()}`;
 		}
 
-		if (role.position >= message.guild.me.roles.highest.position) {
+		if (role.position >= message.guild.members.me.roles.highest.position) {
 			throw 'Cannot assign as the muted role. Role is too high in the hierarchy';
 		}
 

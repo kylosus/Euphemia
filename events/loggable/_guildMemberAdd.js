@@ -1,6 +1,6 @@
-import { Formatters, MessageEmbed } from 'discord.js';
-import { replaceTokens }            from '../util.js';
-import dayjs                        from 'dayjs';
+import { inlineCode, time, TimestampStyles, EmbedBuilder, Colors } from 'discord.js';
+import { replaceTokens }                                           from '../util.js';
+import dayjs                                                       from 'dayjs';
 
 export default async member => {
 	const p1 = (async entry => {
@@ -36,22 +36,26 @@ export default async member => {
 
 		const embeds = [];
 
-		embeds.push(new MessageEmbed()
-			.setColor('BLUE')
+		const ldt = TimestampStyles.LongDateTime;
+
+		embeds.push(new EmbedBuilder()
+			.setColor(Colors.Blue)
 			.setTitle('✅ User joined')
 			.setThumbnail(member.user.displayAvatarURL())
-			.setDescription(`${member.toString()} ${Formatters.inlineCode(member.user.tag)}`)
-			.addField('ID', member.id, false)
-			.addField('Joined server', Formatters.time(member.joinedAt, Formatters.TimestampStyles.LongDateTime), true)
-			.addField('Joined Discord', Formatters.time(member.user.createdAt, Formatters.TimestampStyles.LongDateTime), false)
+			.setDescription(`${member.toString()} ${inlineCode(member.user.tag)}`)
+			.addFields(
+				{ name: 'ID', value: member.id, inline: false },
+				{ name: 'Joined server', value: time(member.joinedAt, ldt), inline: true },
+				{ name: 'Joined Discord', value: time(member.user.createdAt, ldt), inline: false }
+			)
 			.setTimestamp()
 		);
 
 		const accountAge = dayjs().diff(dayjs(member.user.createdAt), 'days');
 
 		if (accountAge < 30) {
-			embeds.push(new MessageEmbed()
-				.setColor('DARK_RED')
+			embeds.push(new EmbedBuilder()
+				.setColor(Colors.DarkRed)
 				.setDescription(`**WARNING** User ${member.toString()}'s account is less than ${accountAge === 1 ? 'day' : ((accountAge + 1) + 'days')} old`)
 			);
 		}

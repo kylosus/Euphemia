@@ -1,4 +1,4 @@
-import { MessageEmbed } from 'discord.js';
+import { EmbedBuilder, Colors } from 'discord.js';
 
 export default message => {
 	if (message.guild || message.author.id === message.client.user.id) {
@@ -9,8 +9,8 @@ export default message => {
 		return;
 	}
 
-	const embed = new MessageEmbed()
-		.setColor('BLUE')
+	const embed = new EmbedBuilder()
+		.setColor(Colors.Blue)
 		.setThumbnail(message.author.displayAvatarURL())
 		.setTitle(`DM from ${message.author.tag}`)
 		.setDescription(message.content || '~');
@@ -24,7 +24,10 @@ export default message => {
 			return embed.setImage(attachment.proxyURL);
 		}
 
-		return embed.addField('Attachment', attachment.name + '\n' + `[Link](${attachment.proxyURL})`);
+		return embed.addFields({
+			name:  'Attachment',
+			value: attachment.name + '\n' + `[Link](${attachment.proxyURL})`
+		});
 	})(message.attachments.first());
 
 	message.client.owners.forEach(owner => {

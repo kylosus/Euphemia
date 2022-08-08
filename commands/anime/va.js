@@ -2,7 +2,7 @@ import { ECommand, ArgConsts }       from '../../lib/index.js';
 import { fetchAnime }                from './util.js';
 import { readFileSync }              from 'fs';
 import { SelectionPaginatedMessage } from '../../modules/index.js';
-import { MessageEmbed }              from 'discord.js';
+import { EmbedBuilder }              from 'discord.js';
 
 const query = readFileSync(new URL('./va-query.graphql', import.meta.url), 'utf8');
 
@@ -56,7 +56,7 @@ export default class extends ECommand {
 
 		return SelectionPaginatedMessage.register(message, s => {
 			const voiceActor = s.media.edges[0].voiceActors[0];
-			return new MessageEmbed()
+			return new EmbedBuilder()
 				.setColor(this.client.config.COLOR_OK)
 				.setAuthor({
 					name:    s.name.userPreferred,

@@ -1,5 +1,5 @@
-import { MessageEmbed, Permissions } from 'discord.js';
-import { ArgConsts, ECommand }       from '../../lib/index.js';
+import { EmbedBuilder, PermissionsBitField } from 'discord.js';
+import { ArgConsts, ECommand }               from '../../lib/index.js';
 
 export default class extends ECommand {
 	constructor(client) {
@@ -10,7 +10,7 @@ export default class extends ECommand {
 				usage:    '<user> [user2...] <text>',
 				examples: ['dm 275331662865367040 something', 'dm @user1 @user2 {JSON}']
 			},
-			userPermissions: [Permissions.FLAGS.MANAGE_MESSAGES],
+			userPermissions: [PermissionsBitField.Flags.ManageMessages],
 			args:            [
 				{
 					id:      'users',
@@ -32,7 +32,7 @@ export default class extends ECommand {
 		const [content, embed] = await (async () => {
 			try {
 				const json  = JSON.parse(text);
-				const embed = new MessageEmbed(json);
+				const embed = new EmbedBuilder(json);
 				await message.channel.send({ embeds: [embed] });
 				return [json.content, embed];
 			} catch (err) {
@@ -68,10 +68,19 @@ export default class extends ECommand {
 		})(result);
 
 		return message.channel.send({
-			embeds: [new MessageEmbed()
+			embeds: [new EmbedBuilder()
 				.setColor(color)
-				.addField(`Sent to ${result.p.length} users`, result.p.map(p => p.toString()).join(' ') || '~')
-				.addField('Failed', result.f.map(f => `${f.user.toString()} - ${f.reason}`).join('\n') || '~')]
+				.addFields(
+					{
+						name:  `Sent to ${result.p.length} users`,
+						value: result.p.map(p => p.toString()).join(' ') || '~'
+					},
+					{
+						name:  'Failed',
+						value: result.f.map(f => `${f.user.toString()} - ${f.reason}`).join('\n') || '~'
+					}
+				)
+			]
 		});
 	}
 }

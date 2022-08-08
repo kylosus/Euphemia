@@ -1,11 +1,11 @@
-import { Formatters, MessageButton }              from 'discord.js';
-import { ECommand }                               from '../../../lib/index.js';
-import * as EmbedLimits                           from '../../../lib/EmbedLimits.js';
-import { getSubscribedUsers, registerTagMention } from '../db.js';
-import { chunk, TagArgType }                      from './util.js';
-import { DecisionMessage }                        from '../../decisionmessage/index.js';
-import { subscribe }                              from './subscribe.js';
-import { unsubscribe }                            from './unsubscribe.js';
+import { inlineCode, userMention, ButtonBuilder, ButtonStyle } from 'discord.js';
+import { ECommand }                                            from '../../../lib/index.js';
+import * as EmbedLimits                                        from '../../../lib/EmbedLimits.js';
+import { getSubscribedUsers, registerTagMention }              from '../db.js';
+import { chunk, TagArgType }                                   from './util.js';
+import { DecisionMessage }                                     from '../../decisionmessage/index.js';
+import { subscribe }                                           from './subscribe.js';
+import { unsubscribe }                                         from './unsubscribe.js';
 
 export default class extends ECommand {
 	constructor(client) {
@@ -35,7 +35,7 @@ export default class extends ECommand {
 		});
 
 		if (!res.length) {
-			throw `Tag ${Formatters.inlineCode(tagName)} not found or empty`;
+			throw `Tag ${inlineCode(tagName)} not found or empty`;
 		}
 
 		// Best effort
@@ -49,8 +49,8 @@ export default class extends ECommand {
 	}
 
 	async ship(message, { tagName, users }) {
-		const header           = `🏓 Users subscribed to ${Formatters.inlineCode(tagName)}:\n`;
-		const [first, ...rest] = chunk(users.map(Formatters.userMention), EmbedLimits.CONTENT - header.length);
+		const header           = `🏓 Users subscribed to ${inlineCode(tagName)}:\n`;
+		const [first, ...rest] = chunk(users.map(userMention), EmbedLimits.CONTENT - header.length);
 
 		let lastMessage = await message.channel.send({
 			content: `${header}${first.join('')}`
@@ -64,19 +64,19 @@ export default class extends ECommand {
 
 		return DecisionMessage.register(lastMessage, [
 			{
-				component: new MessageButton()
+				component: new ButtonBuilder()
 					.setCustomId('join')
 					.setLabel('join')
-					.setStyle('SECONDARY'),
+					.setStyle(ButtonStyle.Secondary),
 				action:    async interaction => {
 					return subscribe({ user: interaction.user, tagName });
 				}
 			},
 			{
-				component: new MessageButton()
+				component: new ButtonBuilder()
 					.setCustomId('leave')
 					.setLabel('leave')
-					.setStyle('SECONDARY'),
+					.setStyle(ButtonStyle.Secondary),
 				action:    async interaction => {
 					return unsubscribe({ guild: message.guild, user: interaction.user, tagName });
 				}

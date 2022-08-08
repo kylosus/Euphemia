@@ -1,8 +1,10 @@
-import { Formatters, MessageEmbed, Permissions }      from 'discord.js';
-import { ArgConsts }                                  from '../../lib/index.js';
-import { ModerationCommand, ModerationCommandResult } from '../../modules/moderation/index.js';
-import { getMutedRole, setNewMutedRole, muteMember }  from '../../modules/mute/index.js';
-import dayjs                                          from 'dayjs';
+import { time, userMention, TimestampStyles, EmbedBuilder, PermissionsBitField } from 'discord.js';
+import { ArgConsts }                                                             from '../../lib/index.js';
+import {
+	ModerationCommand, ModerationCommandResult
+}                                                                                from '../../modules/moderation/index.js';
+import { getMutedRole, setNewMutedRole, muteMember }                             from '../../modules/mute/index.js';
+import dayjs                                                                     from 'dayjs';
 
 export default class extends ModerationCommand {
 	constructor(client) {
@@ -14,8 +16,8 @@ export default class extends ModerationCommand {
 				usage:    '[minutes] <member1> [member2 ...]',
 				examples: ['mute @Person1', 'mute 5 @Person1 @Person2']
 			},
-			userPermissions:   [Permissions.FLAGS.MANAGE_ROLES],
-			clientPermissions: [Permissions.FLAGS.MANAGE_ROLES, Permissions.FLAGS.MANAGE_GUILD],
+			userPermissions:   [PermissionsBitField.Flags.ManageRoles],
+			clientPermissions: [PermissionsBitField.Flags.ManageRoles, PermissionsBitField.Flags.ManageGuild],
 			args:              [
 				{
 					id:      'members',
@@ -74,31 +76,33 @@ export default class extends ModerationCommand {
 	}
 
 	async ship(message, result) {
-		const embed = new MessageEmbed()
+		const embed = new EmbedBuilder()
 			.setColor(result.getColor());
 
 		if (result.passed.length) {
-			embed.addField('Muted', result.passed.map(r => Formatters.userMention(r.id)).join(' '));
+			embed.addFields({ name: 'Muted', value: result.passed.map(r => userMention(r.id)).join(' ') });
 
 			// Passed and muted for a specific amount time
 			if (result.aux) {
-				embed.addField(
-					'Expires',
-					Formatters.time(new Date(result.aux), Formatters.TimestampStyles.RelativeTime),
-					true
-				);
+				embed.addFields({
+					name:   'Expires',
+					value:  time(new Date(result.aux), TimestampStyles.RelativeTime),
+					inline: true
+				});
 			}
 		}
 
 		if (result.failed.length) {
-			embed.addField(
-				'Failed',
-				result.failed.map(r => `${Formatters.userMention(r.id)} - ${r.reason}`).join(' ')
-			);
+			embed.addFields({
+				name:  'Failed',
+				value: result.failed.map(r => `${userMention(r.id)} - ${r.reason}`).join(' ')
+			});
 		}
 
-		embed.addField('Moderator', message.member.toString(), true);
-		embed.addField('Reason', result?.reason ?? '*No reason provided*');
+		embed.addFields(
+			{ name: 'Moderator', value: message.member.toString(), inline: true },
+			{ name: 'Reason', value: result?.reason ?? '*No reason provided*' }
+		);
 
 		return message.channel.send({ embeds: [embed] });
 	}

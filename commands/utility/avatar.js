@@ -1,4 +1,4 @@
-import { MessageEmbed }                   from 'discord.js';
+import { EmbedBuilder }                   from 'discord.js';
 import { ArgConsts, ECommand }            from '../../lib/index.js';
 import { CircularList, PaginatedMessage } from '../../modules/index.js';
 import { IMAGE_OPTIONS }                  from './util.js';
@@ -45,7 +45,7 @@ export default class extends ECommand {
 
 	async ship(message, { user, avatars, color }) {
 		return PaginatedMessage.register(message, s => {
-			return new MessageEmbed()
+			return new EmbedBuilder()
 				.setColor(color)
 				.setDescription(`${user.toString()}'s avatar`)
 				.setImage(s);

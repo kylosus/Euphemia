@@ -1,4 +1,4 @@
-import { MessageEmbed } from 'discord.js';
+import { EmbedBuilder, Colors } from 'discord.js';
 
 export default async (channel, oldMember, newMember) => {
 	if (oldMember.nickname !== newMember.nickname) {
@@ -7,8 +7,8 @@ export default async (channel, oldMember, newMember) => {
 			: `**${newMember.user.tag}** has removed their nickname, **${oldMember.nickname}**`;
 
 		return channel.send({
-			embeds: [new MessageEmbed()
-				.setColor('GREEN')
+			embeds: [new EmbedBuilder()
+				.setColor(Colors.Green)
 				.setThumbnail(newMember.user.displayAvatarURL())
 				.setTitle('Nickname change')
 				.setDescription(body)
@@ -18,8 +18,8 @@ export default async (channel, oldMember, newMember) => {
 
 	if (oldMember.user.tag !== newMember.user.tag) {
 		return channel.send({
-			embeds: [new MessageEmbed()
-				.setColor('GREEN')
+			embeds: [new EmbedBuilder()
+				.setColor(Colors.Green)
 				.setThumbnail(newMember.user.displayAvatarURL())
 				.setTitle('Username change')
 				.setDescription(`**${oldMember.user.tag}** has changed their username to **${newMember.user.tag}**`)

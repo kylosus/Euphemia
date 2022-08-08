@@ -1,7 +1,9 @@
-import { Formatters, MessageEmbed, Permissions }      from 'discord.js';
-import { ArgConsts }                                  from '../../lib/index.js';
-import { ModerationCommand, ModerationCommandResult } from '../../modules/moderation/index.js';
-import dayjs                                          from 'dayjs';
+import { inlineCode, time, TimestampStyles, EmbedBuilder, PermissionsBitField } from 'discord.js';
+import { ArgConsts }                                                            from '../../lib/index.js';
+import {
+	ModerationCommand, ModerationCommandResult
+}                                                                               from '../../modules/moderation/index.js';
+import dayjs                                                                    from 'dayjs';
 
 const WEEK = dayjs.duration({ weeks: 1 }).asMilliseconds();
 
@@ -15,8 +17,8 @@ export default class extends ModerationCommand {
 				usage:    '[minutes] <member1> [member2 ...]',
 				examples: ['mute @Person1', 'mute 5 @Person1 @Person2']
 			},
-			userPermissions:   [Permissions.FLAGS.MANAGE_ROLES],
-			clientPermissions: [Permissions.FLAGS.MANAGE_ROLES],
+			userPermissions:   [PermissionsBitField.Flags.ManageRoles],
+			clientPermissions: [PermissionsBitField.Flags.ManageRoles],
 			args:              [
 				{
 					id:      'members',
@@ -45,7 +47,7 @@ export default class extends ModerationCommand {
 		const duration = args.duration.asMilliseconds();
 
 		if (duration > WEEK) {
-			throw `Maximum timeout duration is ${Formatters.inlineCode('1 week')}`;
+			throw `Maximum timeout duration is ${inlineCode('1 week')}`;
 		}
 
 		const result = new ModerationCommandResult(reason, dayjs().add(args.duration).toISOString());
@@ -64,20 +66,24 @@ export default class extends ModerationCommand {
 	}
 
 	async ship(message, result) {
-		const embed = new MessageEmbed()
+		const embed = new EmbedBuilder()
 			.setColor(result.getColor());
 
 		if (result.passed.length) {
-			embed.addField('Muted', result.passed.map(r => `<@${r.id}>`).join(' '));
-			embed.addField('Expires', Formatters.time(new Date(result.aux), Formatters.TimestampStyles.RelativeTime), true);
+			embed.addFields(
+				{ name: 'Muted', value: result.passed.map(r => `<@${r.id}>`).join(' ') },
+				{ name: 'Expires', value: time(new Date(result.aux), TimestampStyles.RelativeTime), inline: true }
+			);
 		}
 
 		if (result.failed.length) {
-			embed.addField('Failed', result.failed.map(r => `<@${r.id}> - ${r.reason}`).join(' '));
+			embed.addFields({ name: 'Failed', value: result.failed.map(r => `<@${r.id}> - ${r.reason}`).join(' ') });
 		}
 
-		embed.addField('Moderator', message.member.toString(), true);
-		embed.addField('Reason', result?.reason ?? '*No reason provided*');
+		embed.addFields(
+			{ name: 'Moderator', value: message.member.toString(), inline: true },
+			{ name: 'Reason', value: result?.reason ?? '*No reason provided*' }
+		);
 
 		return message.channel.send({ embeds: [embed] });
 	}

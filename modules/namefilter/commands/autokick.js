@@ -1,4 +1,4 @@
-import { MessageEmbed, Permissions } from 'discord.js';
+import { EmbedBuilder, PermissionsBitField } from 'discord.js';
 import { ECommand }                  from '../../../lib/index.js';
 import * as AutoKick                 from '../index.js';
 
@@ -11,8 +11,8 @@ export default class extends ECommand {
 				usage:    '',
 				examples: ['autokick'],
 			},
-			userPermissions:   [Permissions.FLAGS.KICK_MEMBERS],
-			clientPermissions: [Permissions.FLAGS.KICK_MEMBERS],
+			userPermissions:   [PermissionsBitField.FLAGS.KICK_MEMBERS],
+			clientPermissions: [PermissionsBitField.FLAGS.KICK_MEMBERS],
 			guildOnly:         true,
 			ownerOnly:         false,
 		});
@@ -27,7 +27,7 @@ export default class extends ECommand {
 
 	async ship(message, result) {
 		return message.channel.send({
-			embeds: [new MessageEmbed()
+			embeds: [new EmbedBuilder()
 				.setColor(this.client.config.COLOR_SPECIAL)
 				.setTitle(result)]
 		});

@@ -1,10 +1,10 @@
-import { MessageEmbed, Formatters } from 'discord.js';
-import { ECommand, ArgConsts }      from '../../lib/index.js';
-import { fetchAnime }               from './util.js';
-import { truncate }                 from 'lodash-es';
-import dayjs                        from 'dayjs';
-import duration                     from 'dayjs/plugin/duration.js';
-import relativeTime                 from 'dayjs/plugin/relativeTime.js';
+import { EmbedBuilder, time, TimestampStyles } from 'discord.js';
+import { ECommand, ArgConsts }                 from '../../lib/index.js';
+import { fetchAnime }                          from './util.js';
+import { truncate }                            from 'lodash-es';
+import dayjs                                   from 'dayjs';
+import duration                                from 'dayjs/plugin/duration.js';
+import relativeTime                            from 'dayjs/plugin/relativeTime.js';
 
 dayjs.extend(duration);
 dayjs.extend(relativeTime);
@@ -69,40 +69,49 @@ export default class extends ECommand {
 	}
 
 	async ship(message, result) {
-		const embed = new MessageEmbed()
+		const embed = new EmbedBuilder()
 			.setColor(result.coverImage.color)
 			.setTitle(result.title?.userPreferred)
 			.setThumbnail(result.coverImage?.large)
 			.setDescription(`[AniList](${result?.siteUrl}) | [MyAnimeList](https://myanimelist.net/anime/${result.idMal})`)
-			.addField('Average score', `${result.averageScore ?? '-'}%`, true)
-			.addField('Popularity', String(result?.popularity), true)
-			.addField('Format', _normalizeConstant(result.format) || 'unknown', true)
-			.addField('Source', result.source ? _normalizeConstant(result.source) : 'unknown', true)
-			.addField('Episodes', String(result.episodes) ?? 'unknown', true)
-			.addField('Status', _normalizeConstant(result.status) || 'unknown', true);
+			.addFields(
+				{ name: 'Average score', value: `${result.averageScore ?? '-'}%`, inline: true },
+				{ name: 'Popularity', value: String(result?.popularity), inline: true },
+				{ name: 'Format', value: _normalizeConstant(result.format) || 'unknown', inline: true },
+				{ name: 'Source', value: result.source ? _normalizeConstant(result.source) : 'unknown', inline: true },
+				{ name: 'Episodes', value: String(result.episodes) ?? 'unknown', inline: true },
+				{ name: 'Status', value: _normalizeConstant(result.status) || 'unknown', inline: true },
+			);
 
 		if (result.startDate.month) {
-			embed.addField(
-				'Start',
-				`${result?.startDate.day}/${result?.startDate.month}/${result?.startDate.year}`,
-				true
-			);
+			embed.addFields({
+				name:   'Start',
+				value:  `${result?.startDate.day}/${result?.startDate.month}/${result?.startDate.year}`,
+				inline: true
+			});
 		}
 
-		embed.addField('End', (({ day, month, year }) => {
-			if (!month) {
-				return 'Still airing';
-			}
+		embed.addFields({
+			name:   'End',
+			value:  (({ day, month, year }) => {
+				if (!month) {
+					return 'Still airing';
+				}
 
-			return `${day}/${month}/${year}`;
-		})(result.endDate), true);
+				return `${day}/${month}/${year}`;
+			})(result.endDate),
+			inline: true
+		});
 
 		if (result.genres) {
-			embed.addField('Genres', result.genres.slice(0, GENRE_MAX).join('\n'), true);
+			embed.addFields({ name: 'Genres', value: result.genres.slice(0, GENRE_MAX).join('\n'), inline: true });
 		}
 
 		if (result.description) {
-			embed.addField('Description', _escapeHTML(truncate(result.description, { length: DESC_MAX })));
+			embed.addFields({
+				name:  'Description',
+				value: _escapeHTML(truncate(result.description, { length: DESC_MAX }))
+			});
 		}
 
 		const duration = (() => {
@@ -113,7 +122,7 @@ export default class extends ECommand {
 
 			// this is stupid, just use moment { day: 'whatever' }
 			const date         = dayjs(`${result?.startDate.year}${('0' + result?.startDate.month).slice(-2)}${('0' + result?.startDate.day).slice(-2)}`, 'YYYYMMDD');
-			const relativeDate = Formatters.time(date.toDate(), Formatters.TimestampStyles.RelativeTime);
+			const relativeDate = time(date.toDate(), TimestampStyles.RelativeTime);
 
 			if (result.status === 'FINISHED') {
 				return ['Aired', relativeDate];
@@ -122,7 +131,7 @@ export default class extends ECommand {
 			return ['Will Air', relativeDate];
 		})();
 
-		embed.addField(...duration, true);
+		embed.addFields({ name: duration[0], value: duration[1], inline: true });
 
 		return message.channel.send({ embeds: [embed] });
 	}

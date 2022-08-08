@@ -1,5 +1,5 @@
-import { MessageEmbed } from 'discord.js';
-import { ECommand }     from '../../lib/index.js';
+import { EmbedBuilder, Colors } from 'discord.js';
+import { ECommand }             from '../../lib/index.js';
 
 import QUOTES from './jojo.js.json' assert { type: 'json' };
 
@@ -23,8 +23,8 @@ export default class extends ECommand {
 
 	async ship(message, result) {
 		return message.channel.send({
-			embeds: [new MessageEmbed()
-				.setColor('RANDOM')
+			embeds: [new EmbedBuilder()
+				.setColor(Math.floor(Math.random() * Colors.White))
 				.setDescription(result)
 			]
 		});

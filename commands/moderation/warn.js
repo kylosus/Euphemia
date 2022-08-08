@@ -1,19 +1,19 @@
-import { Formatters, MessageEmbed, Permissions }      from 'discord.js';
-import { ArgConsts }                                  from '../../lib/index.js';
-import { ModerationCommand, ModerationCommandResult } from '../../modules/moderation/index.js';
+import { codeBlock, EmbedBuilder, PermissionsBitField } from 'discord.js';
+import { ArgConsts }                                    from '../../lib/index.js';
+import { ModerationCommand, ModerationCommandResult }   from '../../modules/moderation/index.js';
 
 export default class extends ModerationCommand {
 	constructor(client) {
 		super(client, {
-			actionName:      'warn',
-			aliases:         ['warn'],
-			description:     {
+			actionName:              'warn',
+			aliases:                 ['warn'],
+			description:             {
 				content:  'Warns a member.',
 				usage:    '<member> [member2...] <reason>',
 				examples: ['warn @member Some reason', 'warn @member1 @member2 Some other reason']
 			},
-			userPermissions: [Permissions.FLAGS.MANAGE_GUILD],
-			args:            [
+			userPermissions: [PermissionsBitField.Flags.ManageGuild],
+			args:                    [
 				{
 					id:      'members',
 					type:    ArgConsts.TYPE.MEMBERS,
@@ -25,8 +25,8 @@ export default class extends ModerationCommand {
 					message: 'Please add a reason'
 				}
 			],
-			guildOnly:       true,
-			ownerOnly:       false,
+			guildOnly:               true,
+			ownerOnly:               false,
 		});
 	}
 
@@ -36,10 +36,10 @@ export default class extends ModerationCommand {
 		await Promise.all(members.map(async m => {
 			try {
 				await m.user.send({
-					embeds: [new MessageEmbed()
+					embeds: [new EmbedBuilder()
 						.setColor(this.client.config.COLOR_NO)
 						.setTitle(`❗ You have been warned in ${message.guild}`)
-						.setDescription(Formatters.codeBlock(reason))]
+						.setDescription(codeBlock(reason))]
 				});
 			} catch (err) {
 				return result.addFailed(m, err.message);

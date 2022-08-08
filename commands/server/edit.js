@@ -1,4 +1,4 @@
-import { MessageEmbed, Permissions }         from 'discord.js';
+import { EmbedBuilder, PermissionsBitField } from 'discord.js';
 import { ArgConsts, ArgumentType, ECommand } from '../../lib/index.js';
 
 export default class extends ECommand {
@@ -10,7 +10,7 @@ export default class extends ECommand {
 				usage:    '<message url or reply> <text>',
 				examples: ['edit https://discord.com/channels/292277485310312448/292277485310312448/850097454262386738 {JSON}']
 			},
-			userPermissions: [Permissions.FLAGS.ADMINISTRATOR],
+			userPermissions: [PermissionsBitField.Flags.Administrator],
 			args:            [
 				{
 					id:       'url',
@@ -63,15 +63,15 @@ export default class extends ECommand {
 
 		const toEdit = await channel.messages.fetch(messageID);
 
-		if (toEdit.author.id !== toEdit.guild.me.id) {
+		if (toEdit.author.id !== toEdit.guild.members.me.id) {
 			throw 'Cannot edit messages of other users';
 		}
 
 		try {
 			const json = JSON.parse(text);
-			await toEdit.edit({ content: json.content, embeds: [new MessageEmbed(json)] });
+			await toEdit.edit({ content: json.content, embeds: [new EmbedBuilder(json)] });
 		} catch (err) {
-			await toEdit.edit({content: text});
+			await toEdit.edit({ content: text });
 		}
 
 		return 'Edited message';

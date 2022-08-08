@@ -1,6 +1,6 @@
-import { readdirSync } from 'fs';
-import { URL }         from 'url';
-import { Guild }       from 'discord.js';
+import { readdirSync }        from 'fs';
+import { URL }                from 'url';
+import { Guild, ChannelType } from 'discord.js';
 
 const directoryPath = new URL('loggable', import.meta.url);
 
@@ -48,7 +48,7 @@ const registerLoggable = async client => {
 
 			const channel = guild.channels.cache.get(entry[eventName]);
 
-			if (!channel || !channel.isText()) {
+			if (!channel || channel.type !== ChannelType.GuildText) {
 				// Disable the event if the channel has been deleted and/or it's not a text channel
 				entry[eventName] = null;
 				client.provider.set(guild, 'log', entry);

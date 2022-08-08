@@ -1,20 +1,20 @@
-import { Permissions }                                from 'discord.js';
+import { PermissionsBitField }                        from 'discord.js';
 import { ArgConsts }                                  from '../../lib/index.js';
 import { ModerationCommand, ModerationCommandResult } from '../../modules/moderation/index.js';
 
 export default class extends ModerationCommand {
 	constructor(client) {
 		super(client, {
-			actionName:        'banprune',
-			aliases:           ['banprune', 'bp'],
-			description:       {
+			actionName:                'banprune',
+			aliases:                   ['banprune', 'bp'],
+			description:               {
 				content:  'Re-bans a user to prune their messages. Use during raids',
 				usage:    '<user> [reason]',
 				examples: ['banprune @user', 'banprune @user Spammed in general'],
 			},
-			userPermissions:   [Permissions.FLAGS.BAN_MEMBERS],
-			clientPermissions: [Permissions.FLAGS.BAN_MEMBERS],
-			args:              [
+			userPermissions:   [PermissionsBitField.Flags.BanMembers],
+			clientPermissions: [PermissionsBitField.Flags.BanMembers],
+			args:                      [
 				{
 					id:      'id',
 					type:    ArgConsts.TYPE.ID,
@@ -27,8 +27,8 @@ export default class extends ModerationCommand {
 					default:  () => null,
 				}
 			],
-			guildOnly:         true,
-			ownerOnly:         false,
+			guildOnly:                 true,
+			ownerOnly:                 false,
 		});
 	}
 
@@ -36,7 +36,7 @@ export default class extends ModerationCommand {
 		const result = new ModerationCommandResult(reason);
 
 		try {
-			await message.guild.members.ban(id, { days: 1 });
+			await message.guild.members.ban(id, { deleteMessageDays: 1 });
 			result.addPassed(id);
 		} catch (err) {
 			result.addFailed(id, err.message);

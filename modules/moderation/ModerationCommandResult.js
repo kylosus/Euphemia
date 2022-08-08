@@ -1,3 +1,5 @@
+import { Colors } from 'discord.js';
+
 export default class ModerationCommandResult {
 	constructor(reason = null, aux = null) {
 		// use ids
@@ -17,7 +19,7 @@ export default class ModerationCommandResult {
 		this.failed.push({ id: f?.id ?? f, reason, toString: () => f.toString() });
 	}
 
-	getColor(good = 'GREEN', warn = 'ORANGE', bad = 'RED') {
+	getColor(good = Colors.Green, warn = Colors.Orange, bad = Colors.Red) {
 		if (!this.failed.length) {
 			return good;
 		}

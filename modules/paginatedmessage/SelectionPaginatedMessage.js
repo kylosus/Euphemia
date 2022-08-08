@@ -1,4 +1,4 @@
-import { MessageActionRow, MessageSelectMenu } from 'discord.js';
+import { ActionRowBuilder, SelectMenuBuilder } from 'discord.js';
 
 const _watcher = ({ message, generator, options }) => {
 	// handle errors!
@@ -26,13 +26,13 @@ const register = async (message, generator, options) => {
 	// 	return message.channel.send({ embeds: [firstEmbed] });
 	// }
 
-	const selectMenu = new MessageSelectMenu()
+	const selectMenu = new SelectMenuBuilder()
 		.setCustomId('select')
 		.addOptions(
 			options.map(({ label }, index) => ({ label, value: String(index) }))	// shit ass api
 		);
 
-	const row = new MessageActionRow().addComponents(selectMenu);
+	const row = new ActionRowBuilder().addComponents(selectMenu);
 
 	const botMessage = await message.channel.send({ embeds: [firstEmbed], components: [row] });
 

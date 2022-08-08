@@ -1,6 +1,6 @@
-import { Formatters, MessageEmbed } from 'discord.js';
-import { replaceTokens }            from '../util.js';
-import * as AutoKick                from '../../modules/autokick/index.js';
+import { inlineCode, bold, EmbedBuilder, Colors } from 'discord.js';
+import { replaceTokens }                          from '../util.js';
+import * as AutoKick                              from '../../modules/autokick/index.js';
 
 export default async member => {
 	const p1 = (async entry => {
@@ -34,18 +34,18 @@ export default async member => {
 			return;
 		}
 
-		const embeds = [new MessageEmbed()
-			.setColor('BLUE')
+		const embeds = [new EmbedBuilder()
+			.setColor(Colors.Blue)
 			.setTitle('❌ User left')
 			.setThumbnail(member.user.displayAvatarURL())
-			.setDescription(`${member.toString()}  ${Formatters.inlineCode(member.user.tag)}`)
-			.addField('ID', member.id, false)
+			.setDescription(`${member.toString()}  ${inlineCode(member.user.tag)}`)
+			.addFields({ name: 'ID', value: member.id, inline: false })
 			.setTimestamp(member.joinedAt)];
 
 		if (AutoKick.getState(member.guild)) {
-			embeds.push(new MessageEmbed()
-				.setColor('DARK_RED')
-				.setDescription(`${Formatters.bold('WARNING')} Autokick is currently active`)
+			embeds.push(new EmbedBuilder()
+				.setColor(Colors.DarkRed)
+				.setDescription(`${bold('WARNING')} Autokick is currently active`)
 			);
 		}
 

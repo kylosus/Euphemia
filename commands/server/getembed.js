@@ -1,17 +1,17 @@
-import { Formatters, MessageEmbed, Permissions } from 'discord.js';
-import { ArgConsts, ECommand }                   from '../../lib/index.js';
+import { codeBlock, EmbedBuilder, PermissionsBitField } from 'discord.js';
+import { ArgConsts, ECommand }                          from '../../lib/index.js';
 
 export default class extends ECommand {
 	constructor(client) {
 		super(client, {
-			aliases:         ['getembed'],
-			description:     {
+			aliases:                 ['getembed'],
+			description:             {
 				content:  'Says something. Supports embeds',
 				usage:    '[channel or current channel] <text>',
 				examples: ['say something', 'say #general {JSON}']
 			},
-			userPermissions: [Permissions.FLAGS.MANAGE_MESSAGES],
-			args:            [
+			userPermissions: [PermissionsBitField.Flags.ManageMessages],
+			args:                    [
 				{
 					id:       'channel',
 					type:     ArgConsts.TYPE.CHANNEL,
@@ -24,8 +24,8 @@ export default class extends ECommand {
 					message: 'Please provide a message id.'
 				}
 			],
-			guildOnly:       true,
-			ownerOnly:       false,
+			guildOnly:               true,
+			ownerOnly:               false,
 		});
 	}
 
@@ -41,9 +41,9 @@ export default class extends ECommand {
 
 	async ship(message, result) {
 		return message.channel.send({
-			embeds: [new MessageEmbed()
+			embeds: [new EmbedBuilder()
 				.setColor(this.client.config.COLOR_OK)
-				.setDescription(Formatters.codeBlock(JSON.stringify(result, null, 4)))]
+				.setDescription(codeBlock(JSON.stringify(result, null, 4)))]
 		});
 	}
 }

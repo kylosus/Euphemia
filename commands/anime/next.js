@@ -1,7 +1,7 @@
-import { Collection, Formatters, MessageEmbed } from 'discord.js';
-import { ArgConsts, ECommand }                  from '../../lib/index.js';
-import got                                      from 'got';
-import dayjs                                    from 'dayjs';
+import { Collection, time, TimestampStyles, EmbedBuilder } from 'discord.js';
+import { ArgConsts, ECommand }                             from '../../lib/index.js';
+import got                                                 from 'got';
+import dayjs                                               from 'dayjs';
 
 const ANILIST_URL = 'https://graphql.anilist.co';
 
@@ -93,29 +93,33 @@ export default class extends ECommand {
 				const duration = dayjs(`${a.startDate.year ?? '-'}-${a.startDate.month}-${a.startDate.day}`);
 
 				if (duration.isValid()) {
-					return Formatters.time(duration.unix(), Formatters.TimestampStyles.LongDate);
+					return time(duration.unix(), TimestampStyles.LongDate);
 				}
 
 				return 'Some time in the future';
 			}
 
-			return Formatters.time(a.nextAiringEpisode.airingAt, Formatters.TimestampStyles.RelativeTime);
+			return time(a.nextAiringEpisode.airingAt, TimestampStyles.RelativeTime);
 		})(result);
 
-		const embed = new MessageEmbed()
+		const embed = new EmbedBuilder()
 			.setColor(result.coverImage.color);
 
 		embed
 			.setTitle(result.title.userPreferred)
 			.setThumbnail(result.coverImage.medium)
 			.setURL(result.siteUrl)
-			.addField(`Episode ${result.nextAiringEpisode?.episode ?? '1'}/${result.episodes ?? '?'} in`, duration, false);
+			.addFields({
+				name:   `Episode ${result.nextAiringEpisode?.episode ?? '1'}/${result.episodes ?? '?'} in`,
+				value:  duration,
+				inline: false
+			});
 
 		return message.channel.send({ embeds: [embed] });
 	}
 
 	async shipPage(message, result) {
-		const embed = new MessageEmbed()
+		const embed = new EmbedBuilder()
 			.setColor(this.client.config.COLOR_OK)
 			.setTitle('Airing anime schedule');
 
@@ -123,11 +127,11 @@ export default class extends ECommand {
 			.filter(r => r.nextAiringEpisode)
 			.sort((a, b) => a.nextAiringEpisode.timeUntilAiring - b.nextAiringEpisode.timeUntilAiring)
 			.forEach(r => {
-				embed.addField(
-					`${r.title.userPreferred} ${r.nextAiringEpisode?.episode ?? '1'}`,
-					Formatters.time(r.nextAiringEpisode.airingAt, Formatters.TimestampStyles.RelativeTime),
-					true
-				);
+				embed.addFields({
+					name:   `${r.title.userPreferred} ${r.nextAiringEpisode?.episode ?? '1'}`,
+					value:  time(r.nextAiringEpisode.airingAt, TimestampStyles.RelativeTime),
+					inline: true
+				});
 			});
 
 		return message.channel.send({ embeds: [embed] });

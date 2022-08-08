@@ -1,19 +1,19 @@
-import { MessageEmbed, Permissions }                  from 'discord.js';
+import { EmbedBuilder, PermissionsBitField }          from 'discord.js';
 import { ArgConsts }                                  from '../../lib/index.js';
 import { ModerationCommand, ModerationCommandResult } from '../../modules/moderation/index.js';
 
 export default class extends ModerationCommand {
 	constructor(client) {
 		super(client, {
-			actionName:      'prunerole',
-			aliases:         ['prunerole', 'purgerole'],
-			description:     {
+			actionName:              'prunerole',
+			aliases:                 ['prunerole', 'purgerole'],
+			description:             {
 				content:  'Removes all members in a role',
 				usage:    '<role>',
 				examples: ['edit https://discord.com/channels/292277485310312448/292277485310312448/850097454262386738 {JSON}']
 			},
-			userPermissions: [Permissions.FLAGS.ADMINISTRATOR],
-			args:            [
+			userPermissions: [PermissionsBitField.Flags.Administrator],
+			args:                    [
 				{
 					id:      'role',
 					type:    ArgConsts.TYPE.ROLE_LOOSE,
@@ -26,8 +26,8 @@ export default class extends ModerationCommand {
 					default:  () => null
 				},
 			],
-			guildOnly:       true,
-			ownerOnly:       true,
+			guildOnly:               true,
+			ownerOnly:               true,
 		});
 	}
 
@@ -49,7 +49,7 @@ export default class extends ModerationCommand {
 
 	async ship(message, { _: { role, members } }) {
 		return message.channel.send({
-			embeds: [new MessageEmbed()
+			embeds: [new EmbedBuilder()
 				.setColor(this.client.config.COLOR_OK)
 				.setDescription(`Pruned ${members.length} members from ${role}:`)]
 		});

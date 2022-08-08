@@ -1,19 +1,19 @@
-import { Formatters, MessageEmbed, Permissions } from 'discord.js';
-import { ArgConsts, ECommand }                   from '../../../lib/index.js';
-import { getAction, updateReason }               from '../db.js';
-import { BotConfig }                             from '../../../config.js';
+import { codeBlock, EmbedBuilder, PermissionsBitField } from 'discord.js';
+import { ArgConsts, ECommand }                          from '../../../lib/index.js';
+import { getAction, updateReason }                      from '../db.js';
+import { BotConfig }                                    from '../../../config.js';
 
 export default class extends ECommand {
 	constructor(client) {
 		super(client, {
-			aliases:         ['reason'],
-			description:     {
+			aliases:                 ['reason'],
+			description:             {
 				content:  'Changes reason for an action',
 				usage:    '<action number>',
 				examples: ['action 1']
 			},
-			userPermissions: [Permissions.FLAGS.MANAGE_GUILD],
-			args:            [
+			userPermissions: [PermissionsBitField.Flags.ManageGuild],
+			args:                    [
 				{
 					id:      'number',
 					type:    ArgConsts.TYPE.NUMBER,
@@ -25,9 +25,9 @@ export default class extends ECommand {
 					message: 'Please enter a reason'
 				}
 			],
-			guildOnly:       true,
-			nsfw:            false,
-			ownerOnly:       false,
+			guildOnly:               true,
+			nsfw:                    false,
+			ownerOnly:               false,
 		});
 	}
 
@@ -46,7 +46,7 @@ export default class extends ECommand {
 			const notice = await this.sendNotice(
 				message,
 				'This action already has a reason. Are you sure you want to change it?' +
-				'\n' + Formatters.codeBlock(result.reason)
+				'\n' + codeBlock(result.reason)
 			);
 
 			await notice.react(BotConfig.EMOJI_OK);
@@ -75,10 +75,10 @@ export default class extends ECommand {
 
 	async ship(message, [id, reason]) {
 		return message.channel.send({
-			embeds: [new MessageEmbed()
+			embeds: [new EmbedBuilder()
 				.setColor(this.client.config.COLOR_OK)
 				.setTitle(`Updated Action [${id}] reason in ${message.guild}`)
-				.setDescription(Formatters.codeBlock(reason))]
+				.setDescription(codeBlock(reason))]
 		});
 	}
 }

@@ -1,6 +1,6 @@
-import { Formatters, MessageEmbed, Permissions }      from 'discord.js';
-import { ArgConsts }                                  from '../../lib/index.js';
-import { ModerationCommand, ModerationCommandResult } from '../../modules/moderation/index.js';
+import { channelMention, EmbedBuilder, PermissionsBitField } from 'discord.js';
+import { ArgConsts }                                         from '../../lib/index.js';
+import { ModerationCommand, ModerationCommandResult }        from '../../modules/moderation/index.js';
 
 export default class extends ModerationCommand {
 	constructor(client) {
@@ -12,8 +12,8 @@ export default class extends ModerationCommand {
 				usage:    '[#channel]',
 				examples: ['nopics', 'nopics #channel'],
 			},
-			userPermissions:   [Permissions.FLAGS.MANAGE_ROLES],
-			clientPermissions: [Permissions.FLAGS.MANAGE_ROLES],
+			userPermissions:   [PermissionsBitField.Flags.ManageRoles],
+			clientPermissions: [PermissionsBitField.Flags.ManageRoles],
 			args:              [
 				{
 					id:       'channels',
@@ -60,23 +60,25 @@ export default class extends ModerationCommand {
 	}
 
 	async ship(message, result) {
-		const wrap = Formatters.channelMention;
+		const wrap = channelMention;
 
-		const embed = new MessageEmbed()
+		const embed = new EmbedBuilder()
 			.setColor(result.getColor());
 
 		if (result.passed.length) {
-			embed.addField(`${result.aux ? 'Allowed' : 'Denied'} message sending permissions in`,
-				result.passed.map(r => wrap(r.id)).join(' '));
+			embed.addFields({
+				name:  `${result.aux ? 'Allowed' : 'Denied'} message sending permission in`,
+				value: result.passed.map(r => wrap(r.id)).join(' ')
+			});
 		}
 
 		if (result.failed.length) {
-			embed.addField(
-				'Failed',
-				result.failed
+			embed.addFields({
+				name:  'Failed',
+				value: result.failed
 					.map(({ id, reason = 'Unknown reason' }) => `${wrap(id)} - ${reason}`)
 					.join(' ')
-			);
+			});
 		}
 
 		return message.channel.send({ embeds: [embed] });

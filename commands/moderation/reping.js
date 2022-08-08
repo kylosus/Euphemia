@@ -1,7 +1,7 @@
-import { Formatters, MessageButton, Permissions } from 'discord.js';
-import { ArgConsts }                              from '../../lib/index.js';
-import { ECommand }                               from '../../lib/index.js';
-import { DecisionMessage }                        from '../../modules/decisionmessage/index.js';
+import { inlineCode, ButtonBuilder, ButtonStyle, PermissionsBitField } from 'discord.js';
+import { ArgConsts }                                                   from '../../lib/index.js';
+import { ECommand }                                                    from '../../lib/index.js';
+import { DecisionMessage }                                             from '../../modules/decisionmessage/index.js';
 
 export default class extends ECommand {
 	constructor(client) {
@@ -13,7 +13,7 @@ export default class extends ECommand {
 				usage:    '<role> [message]',
 				examples: ['reping @games', 'reping Games Join now'],
 			},
-			userPermissions: [Permissions.FLAGS.MANAGE_ROLES],
+			userPermissions: [PermissionsBitField.Flags.ManageRoles],
 			args:            [
 				{
 					id:      'role',
@@ -50,33 +50,33 @@ export default class extends ECommand {
 
 		return DecisionMessage.register(resultMessage, [
 			{
-				component: new MessageButton()
+				component: new ButtonBuilder()
 					.setCustomId('join')
 					.setLabel('Join role')
-					.setStyle('SECONDARY'),
+					.setStyle(ButtonStyle.Secondary),
 				action:    async ({ member }) => {
 					if (member.roles.cache.has(role.id)) {
-						throw `You already have the ${Formatters.inlineCode(role.name)} role`;
+						throw `You already have the ${inlineCode(role.name)} role`;
 					}
 
 					await member.roles.add(role);
 
-					return `Added the ${Formatters.inlineCode(role.name)} role`;
+					return `Added the ${inlineCode(role.name)} role`;
 				}
 			},
 			{
-				component: new MessageButton()
+				component: new ButtonBuilder()
 					.setCustomId('leave')
 					.setLabel('Leave role')
-					.setStyle('SECONDARY'),
+					.setStyle(ButtonStyle.Secondary),
 				action:    async ({ member }) => {
 					if (!member.roles.cache.has(role.id)) {
-						throw `You do not have the ${Formatters.inlineCode(role.name)} role`;
+						throw `You do not have the ${inlineCode(role.name)} role`;
 					}
 
 					await member.roles.remove(role);
 
-					return `Removed the ${Formatters.inlineCode(role.name)} role`;
+					return `Removed the ${inlineCode(role.name)} role`;
 				}
 			}
 		]);

@@ -1,12 +1,12 @@
-import { MessageEmbed } from 'discord.js';
+import { EmbedBuilder, Colors } from 'discord.js';
 
 export default async (channel, { user }) => {
 	return channel.send({
-		embeds: [new MessageEmbed()
-			.setColor('DARK_RED')
+		embeds: [new EmbedBuilder()
+			.setColor(Colors.DarkRed)
 			.setTitle('🔨 User banned')
 			.setThumbnail(user.displayAvatarURL())
 			.setDescription(user.tag)
-			.addField('ID', user.id, false)]
+			.addFields({ name: 'ID', value: user.id, inline: false })]
 	});
 };

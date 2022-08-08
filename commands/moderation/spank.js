@@ -1,4 +1,4 @@
-import { Permissions }                   from 'discord.js';
+import { PermissionsBitField }           from 'discord.js';
 import { ArgConsts, ECommand }           from '../../lib/index.js';
 import { getOrSetMutedRole, muteMember } from '../../modules/mute/index.js';
 import dayjs                             from 'dayjs';
@@ -6,22 +6,22 @@ import dayjs                             from 'dayjs';
 export default class extends ECommand {
 	constructor(client) {
 		super(client, {
-			aliases:           ['spank'],
-			description:       {
+			aliases:                   ['spank'],
+			description:               {
 				content:  'Spanks bad people',
 				usage:    '<member1> [member2 ...]',
 				examples: ['spank @Person1', 'spank @Person1 @Person2']
 			},
-			clientPermissions: [Permissions.FLAGS.MANAGE_ROLES, Permissions.FLAGS.MANAGE_GUILD],
-			args:              [
+			clientPermissions: [PermissionsBitField.Flags.ManageRoles, PermissionsBitField.Flags.ManageRoles],
+			args:                      [
 				{
 					id:      'member',
 					type:    ArgConsts.TYPE.MEMBER,
 					message: 'Are you trying to spank thin air?',
 				}
 			],
-			guildOnly:         true,
-			ownerOnly:         false,
+			guildOnly:                 true,
+			ownerOnly:                 false,
 		});
 	}
 
@@ -31,7 +31,7 @@ export default class extends ECommand {
 		}
 
 		const toMute = (() => {
-			if (!message.member.permissions.has(Permissions.FLAGS.MANAGE_ROLES)) {
+			if (!message.member.permissions.has(PermissionsBitField.Flags.ManageRoles)) {
 				return message.member;
 			}
 

@@ -1,9 +1,9 @@
-import { Formatters, MessageEmbed } from 'discord.js';
+import { codeBlock, time, TimestampStyles, EmbedBuilder } from 'discord.js';
 
 const COLOR = '#2CDDD7';
 
 export default async (channel, guild, moderator, result) => {
-	const embed = new MessageEmbed()
+	const embed = new EmbedBuilder()
 		.setColor(COLOR);
 
 	embed.setAuthor({
@@ -13,15 +13,15 @@ export default async (channel, guild, moderator, result) => {
 
 	const prefix = result.passed ? '✅' : '❌';	// Fix those later
 	embed.setDescription(`${prefix} Action ${result.action} -> ${result.target.toString()}`);
-	embed.addField('Reason', Formatters.codeBlock(result.reason || 'No reason provided'));
+	embed.addFields({ name: 'Reason', value: codeBlock(result.reason || 'No reason provided') });
 
 	if (!result.passed) {
-		embed.addField('Failed', Formatters.codeBlock((result.failedReason || 'Unknown reason')));
+		embed.addFields({ name: 'Failed', value: codeBlock((result.failedReason || 'Unknown reason')) });
 	}
 
 	if (result.action === 'MUTE' || result.action === 'TIMEOUT') {
 		if (result.aux) {
-			embed.addField('Expires', Formatters.time(new Date(result.aux), Formatters.TimestampStyles.RelativeTime));
+			embed.addFields({ name: 'Expires', value: time(new Date(result.aux), TimestampStyles.RelativeTime) });
 		}
 	}
 

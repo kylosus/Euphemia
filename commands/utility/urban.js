@@ -1,4 +1,4 @@
-import { MessageEmbed }                     from 'discord.js';
+import { EmbedBuilder }                     from 'discord.js';
 import { ArgConsts, ECommand, EmbedLimits } from '../../lib/index.js';
 import { CircularList, PaginatedMessage }   from '../../modules/index.js';
 import { truncate }                         from 'lodash-es';
@@ -40,7 +40,7 @@ export default class extends ECommand {
 
 	async ship(message, result) {
 		return PaginatedMessage.register(message, s => {
-			return new MessageEmbed()
+			return new EmbedBuilder()
 				.setColor(this.client.config.COLOR_OK)
 				.setAuthor({
 					name:    s.word,
