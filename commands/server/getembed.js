@@ -4,14 +4,14 @@ import { ArgConsts, ECommand }                          from '../../lib/index.js
 export default class extends ECommand {
 	constructor(client) {
 		super(client, {
-			aliases:                 ['getembed'],
-			description:             {
+			aliases:         ['getembed'],
+			description:     {
 				content:  'Says something. Supports embeds',
 				usage:    '[channel or current channel] <text>',
 				examples: ['say something', 'say #general {JSON}']
 			},
 			userPermissions: [PermissionsBitField.Flags.ManageMessages],
-			args:                    [
+			args:            [
 				{
 					id:       'channel',
 					type:     ArgConsts.TYPE.CHANNEL,
