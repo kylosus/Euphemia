@@ -29,7 +29,7 @@ export default class extends ECommand {
 	}
 
 	async run(message, { channel, id }) {
-		return channel.messages.fetch(id);
+		return channel.messages.fetch({ message: id });
 	}
 
 	async ship(message, result) {

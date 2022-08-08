@@ -24,13 +24,13 @@ export default class extends ECommand {
 					message: 'Please provide a message id.'
 				}
 			],
-			guildOnly:               true,
-			ownerOnly:               false,
+			guildOnly:       true,
+			ownerOnly:       false,
 		});
 	}
 
 	async run(message, { channel, id }) {
-		const m = await channel.messages.fetch(id);
+		const m = await channel.messages.fetch({ message: id });
 
 		if (!m.embeds) {
 			throw 'Message has no embeds';
