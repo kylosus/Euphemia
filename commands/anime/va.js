@@ -49,10 +49,15 @@ export default class extends ECommand {
 	async ship(message, characters) {
 		const selectionOptions = characters
 			.filter(c => c.media.edges.length)
+			.filter(c => c.media.edges[0].voiceActors[0])
 			.map(c => ({
 				label: `${c.name.userPreferred} (${c.media.edges[0].node.title.userPreferred})`.slice(0, 100),
 				data:  c
 			}));
+
+		if (!selectionOptions.length) {
+			throw 'No voice actors found for the character';
+		}
 
 		return SelectionPaginatedMessage.register(message, s => {
 			const voiceActor = s.media.edges[0].voiceActors[0];
