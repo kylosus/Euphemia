@@ -22,7 +22,7 @@ export default class extends ModerationCommand {
 				{
 					id:      'from',
 					type:    ArgConsts.TYPE.MEMBER,
-					message: 'Please mention the first user that joined'
+					message: 'Please enter the ID of the first user that joined'
 				},
 				{
 					id:       'to',
@@ -101,16 +101,16 @@ export default class extends ModerationCommand {
 
 		await Promise.all(range.map(async m => {
 			if (!m.bannable) {
-				return result.addFailed(m.id, 'Member too high in the hierarchy');
+				return result.addFailed(m, 'Member too high in the hierarchy');
 			}
 
 			try {
 				await m.ban({ days: 1, reason });
 			} catch (err) {
-				return result.addFailed(m.id, err.message);
+				return result.addFailed(m, err.message);
 			}
 
-			result.addPassed(m.id);
+			result.addPassed(m);
 		}));
 
 		return result;
