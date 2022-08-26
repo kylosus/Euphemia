@@ -16,8 +16,8 @@ export default class extends ModerationCommand {
 			clientPermissions: [Permissions.FLAGS.BAN_MEMBERS],
 			args:              [
 				{
-					id:      'ids',
-					type:    ArgConsts.TYPE.IDS,
+					id:      'users',
+					type:    ArgConsts.TYPE.USERS,
 					message: 'Please mention users to ban'
 				},
 				{
@@ -32,23 +32,23 @@ export default class extends ModerationCommand {
 		});
 	}
 
-	async run(message, { ids, reason }) {
+	async run(message, { users, reason }) {
 		const result = new ModerationCommandResult(reason);
 
-		await Promise.all(ids.map(async id => {
-			const member = await message.guild.members.fetch(id);
+		await Promise.all(users.map(async user => {
+			const member = await message.guild.members.fetch(user);
 
 			if (member && !member.bannable) {
-				return result.addFailed(id, 'Member too high in the hierarchy');
+				return result.addFailed(user, 'Member too high in the hierarchy');
 			}
 
 			try {
-				await message.guild.members.ban(id, { days: 0, reason });
+				await message.guild.members.ban(user, { days: 0, reason });
 			} catch (err) {
-				return result.addFailed(id, err.message);
+				return result.addFailed(user, err.message);
 			}
 
-			result.addPassed(id);
+			result.addPassed(user);
 		}));
 
 		return result;
