@@ -25,6 +25,12 @@ export default class extends ECommand {
 	}
 
 	async run(message, { amount }) {
+		// Bad fix?e
+		const permissions = message.member.permissionsIn(message.channel);
+		if (!permissions.has(Permissions.FLAGS.MANAGE_MESSAGES)) {
+			throw 'You cannot purge messages in this channel';
+		}
+
 		const deleted = (await message.channel.bulkDelete(amount + 1)).size - 1;
 		return `Purged ${deleted} message${deleted > 1 ? 's' : ''}`;
 	}
