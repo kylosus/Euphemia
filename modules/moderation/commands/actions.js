@@ -12,7 +12,8 @@ export default class extends ECommand {
 				usage:    '[from @moderator] [to @member]',
 				examples: ['actions', 'actions from=@moderator', 'actions from @moderator to @user']
 			},
-			userPermissions: [Permissions.FLAGS.MANAGE_GUILD],
+			// For Valk
+			userPermissions: [Permissions.FLAGS.MANAGE_ROLES],
 			args:            [
 				{
 					id:       'moderator',

@@ -12,7 +12,8 @@ export default class extends ModerationCommand {
 				usage:    '<member> [member2...] <reason>',
 				examples: ['warn @member Some reason', 'warn @member1 @member2 Some other reason']
 			},
-			userPermissions: [Permissions.FLAGS.MANAGE_GUILD],
+			// For Valk
+			userPermissions: [Permissions.FLAGS.MANAGE_ROLES],
 			args:            [
 				{
 					id:      'members',

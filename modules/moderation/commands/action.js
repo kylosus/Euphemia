@@ -13,7 +13,8 @@ export default class extends ECommand {
 				usage:    '<action number>',
 				examples: ['action 1']
 			},
-			userPermissions: [Permissions.FLAGS.MANAGE_GUILD],
+			// For Valk
+			userPermissions: [Permissions.FLAGS.MANAGE_ROLES],
 			args:            [
 				{
 					id:      'number',
