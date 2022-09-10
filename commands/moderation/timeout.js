@@ -15,8 +15,8 @@ export default class extends ModerationCommand {
 				usage:    '[minutes] <member1> [member2 ...]',
 				examples: ['mute @Person1', 'mute 5 @Person1 @Person2']
 			},
-			userPermissions:   [Permissions.FLAGS.MANAGE_ROLES],
-			clientPermissions: [Permissions.FLAGS.MANAGE_ROLES],
+			userPermissions:   [Permissions.FLAGS.USE_VAD],
+			clientPermissions: [Permissions.FLAGS.USE_VAD],
 			args:              [
 				{
 					id:      'members',
