@@ -29,12 +29,12 @@ export default class extends ECommand {
 	}
 
 	async run(message, { users, text }) {
-		const [content, embed] = await (async () => {
+		const [content, embeds] = await (async () => {
 			try {
 				const json  = JSON.parse(text);
 				const embed = new EmbedBuilder(json);
 				await message.channel.send({ embeds: [embed] });
-				return [json.content, embed];
+				return [json.content, [embed]];
 			} catch (err) {
 				return [text, null];
 			}
@@ -44,7 +44,7 @@ export default class extends ECommand {
 
 		await Promise.all(users.map(async u => {
 			try {
-				await u.send({ content, embeds: [embed] });
+				await u.send({ content, embeds });
 				return result.p.push(u);
 			} catch (err) {
 				return result.f.push({ user: u, reason: err.message || 'Unknown error' });
