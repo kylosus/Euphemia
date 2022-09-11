@@ -57,14 +57,14 @@ export default class extends ECommand {
 	async ship(message, result) {
 		const color = ((res) => {
 			if (!res.f.length) {
-				return 'GREEN';
+				return this.client.config.COLOR_OK;
 			}
 
 			if (res.p.length) {
-				return 'ORANGE';
+				return this.client.config.COLOR_WARN;
 			}
 
-			return 'RED';
+			return this.client.config.COLOR_NO;
 		})(result);
 
 		return message.channel.send({
