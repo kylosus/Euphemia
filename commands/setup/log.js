@@ -1,7 +1,7 @@
-import { MessageEmbed, Permissions } from 'discord.js';
-import { ECommand }                  from '../../lib/index.js';
-import { readdirSync }               from 'fs';
-import { URL }                       from 'url';
+import { EmbedBuilder, PermissionsBitField } from 'discord.js';
+import { ECommand }                          from '../../lib/index.js';
+import { readdirSync }                       from 'fs';
+import { URL }                               from 'url';
 
 const directoryPath = new URL('../../events/loggable', import.meta.url);
 
@@ -21,15 +21,15 @@ export const getSettings = guild => {
 export default class extends ECommand {
 	constructor(client) {
 		super(client, {
-			aliases:         ['log'],
-			description:     {
+			aliases:                 ['log'],
+			description:             {
 				content:  'Handles loggable server events',
 				usage:    '',
 				examples: ['log']
 			},
-			userPermissions: [Permissions.FLAGS.MANAGE_GUILD],
-			guildOnly:       true,
-			ownerOnly:       false,
+			userPermissions: [PermissionsBitField.Flags.ManageGuild],
+			guildOnly:               true,
+			ownerOnly:               false,
 		});
 	}
 
@@ -38,7 +38,7 @@ export default class extends ECommand {
 	}
 
 	async ship(message, result) {
-		const embed = new MessageEmbed().setTitle('Available log events').setColor(this.client.config.COLOR_OK);
+		const embed = new EmbedBuilder().setTitle('Available log events').setColor(this.client.config.COLOR_OK);
 
 		const body = Object.entries(result).map(([key, value]) => {
 			if (value) {

@@ -1,10 +1,10 @@
-import { Formatters, MessageEmbed }       from 'discord.js';
-import { ECommand }                       from '../../../lib/index.js';
-import { getSubscribedUsers }             from '../db.js';
-import { CircularList, PaginatedMessage } from '../../paginatedmessage/index.js';
-import { chunk }                          from 'lodash-es';
-import { COLOR, PER_PAGE }                from './consts.js';
-import { TagArgType }                     from './util.js';
+import { inlineCode, userMention, EmbedBuilder } from 'discord.js';
+import { ECommand }                              from '../../../lib/index.js';
+import { getSubscribedUsers }                    from '../db.js';
+import { CircularList, PaginatedMessage }        from '../../paginatedmessage/index.js';
+import { chunk }                                 from 'lodash-es';
+import { COLOR, PER_PAGE }                       from './consts.js';
+import { TagArgType }                            from './util.js';
 
 
 export default class extends ECommand {
@@ -35,7 +35,7 @@ export default class extends ECommand {
 		});
 
 		if (!res.length) {
-			throw `Tag ${Formatters.inlineCode(tagName)} not found or empty`;
+			throw `Tag ${inlineCode(tagName)} not found or empty`;
 		}
 
 		return { tagName, users: res.map(r => r.user) };
@@ -43,10 +43,10 @@ export default class extends ECommand {
 
 	async ship(message, { tagName, users }) {
 		return PaginatedMessage.register(message, s => {
-			return new MessageEmbed()
+			return new EmbedBuilder()
 				.setTitle(`User subscribed to ${tagName}`)
 				.setColor(COLOR)
-				.setDescription(s.map(Formatters.userMention).join('\n'));
+				.setDescription(s.map(userMention).join('\n'));
 		}, new CircularList(chunk(users, PER_PAGE)));
 	}
 }

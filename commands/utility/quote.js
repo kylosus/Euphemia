@@ -1,4 +1,4 @@
-import { MessageEmbed }        from 'discord.js';
+import { EmbedBuilder }        from 'discord.js';
 import { ArgConsts, ECommand } from '../../lib/index.js';
 
 export default class extends ECommand {
@@ -29,12 +29,12 @@ export default class extends ECommand {
 	}
 
 	async run(message, { channel, id }) {
-		return channel.messages.fetch(id);
+		return channel.messages.fetch({ message: id });
 	}
 
 	async ship(message, result) {
-		const embed = new MessageEmbed().setColor(result.member ? result.member.displayColor : 'WHITE')
-			.addField('Jump to message', `[Link](${result.url})`)
+		const embed = new EmbedBuilder().setColor(result.member ? result.member.displayColor : 'WHITE')
+			.addFields({ name: 'Jump to message', value: `[Link](${result.url})` })
 			.setDescription(result.content || '*No content*')
 			.setFooter({ text: `In #${result.channel.name}` })
 			.setTimestamp(result.createdAt);

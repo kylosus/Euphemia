@@ -1,6 +1,6 @@
-import { AutoEmbed, ECommand } from '../../lib/index.js';
-import { spawn }               from 'child_process';
-import { Formatters }          from 'discord.js';
+import { AutoEmbed, ECommand }   from '../../lib/index.js';
+import { spawn }                 from 'child_process';
+import { inlineCode, codeBlock } from 'discord.js';
 
 export default class extends ECommand {
 	constructor(client) {
@@ -46,7 +46,7 @@ export default class extends ECommand {
 			embeds: [new AutoEmbed()
 				.setColor(this.client.config.COLOR_OK)
 				.setTitle('Result of git pull')
-				.setDescription(`Run ${Formatters.inlineCode('restart')} to restart the bot\n\n${Formatters.codeBlock(result)}`)]
+				.setDescription(`Run ${inlineCode('restart')} to restart the bot\n\n${codeBlock(result)}`)]
 		});
 	}
 }

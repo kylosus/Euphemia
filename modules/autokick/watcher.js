@@ -1,4 +1,4 @@
-// import { MessageEmbed } from 'discord.js';
+// import { EmbedBuilder } from 'discord.js';
 
 // const ONE_DAY = 86400;	// seconds
 
@@ -30,8 +30,8 @@ const onMemberAdd = client => {
 		// })(member.guild);
 		//
 		// await member.send({
-		// 	embeds: [new MessageEmbed()
-		// 		.setColor('DARK_RED')
+		// 	embeds: [new EmbedBuilder()
+		// 		.setColor(Colors.DARK_RED')
 		// 		.setTitle(`You have been kicked automatically from ${member.guild.name}`)
 		// 		.setDescription(`
 		// 			We are currently being raided.

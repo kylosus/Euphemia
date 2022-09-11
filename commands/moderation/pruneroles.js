@@ -1,19 +1,19 @@
-import { Permissions }                                from 'discord.js';
+import { PermissionsBitField }                        from 'discord.js';
 import { ArgConsts, AutoEmbed }                       from '../../lib/index.js';
 import { ModerationCommand, ModerationCommandResult } from '../../modules/moderation/index.js';
 
 export default class extends ModerationCommand {
 	constructor(client) {
 		super(client, {
-			actionName:      'pruneroles',
-			aliases:         ['pruneroles', 'purgeroles'],
-			description:     {
+			actionName:              'pruneroles',
+			aliases:                 ['pruneroles', 'purgeroles'],
+			description:             {
 				content:  'Removes all members in multiple roles',
 				usage:    '<role1> [role2 ...]',
 				examples: ['pruneroles 123456 Members 2345678']
 			},
-			userPermissions: [Permissions.FLAGS.ADMINISTRATOR],
-			args:            [
+			userPermissions: [PermissionsBitField.Flags.Administrator],
+			args:                    [
 				{
 					id:      'roles',
 					type:    ArgConsts.TYPE.ROLES,
@@ -26,8 +26,8 @@ export default class extends ModerationCommand {
 					default:  () => null
 				},
 			],
-			guildOnly:       true,
-			ownerOnly:       true,
+			guildOnly:               true,
+			ownerOnly:               true,
 		});
 	}
 

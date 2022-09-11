@@ -1,21 +1,21 @@
-import { Formatters, MessageEmbed } from 'discord.js';
-import { EmbedLimits }              from '../../lib/index.js';
-import { truncate }                 from 'lodash-es';
+import { channelMention, EmbedBuilder, Colors } from 'discord.js';
+import { EmbedLimits }                          from '../../lib/index.js';
+import { truncate }                             from 'lodash-es';
 
 export default async (channel, message) => {
-	const embed = new MessageEmbed()
-		.setColor('DARK_PURPLE')
+	const embed = new EmbedBuilder()
+		.setColor(Colors.DarkPurple)
 		.setTitle(`🗑 Message deleted in #${message.channel.name}`)
 		.setDescription(message.author.toString() ?? 'Unknown user')
-		.addField('ID', `${Formatters.channelMention(message.channel.id)}/${message.id}`, false)
+		.addFields({ name: 'ID', value: `${channelMention(message.channel.id)}/${message.id}`, inline: false })
 		.setTimestamp();
 
 	if (message.content) {
-		embed.addField(
-			'Content',
-			truncate(message.content, { length: EmbedLimits.FIELD_VALUE - 6 }),
-			false
-		);
+		embed.addFields({
+			name:   'Content',
+			value:  truncate(message.content, { length: EmbedLimits.FIELD_VALUE - 6 }),
+			inline: false
+		});
 	}
 
 	((attachment) => {
@@ -28,7 +28,10 @@ export default async (channel, message) => {
 			return embed.setImage(attachment.proxyURL);
 		}
 
-		return embed.addField('Attachment', attachment.name + '\n' + `[Link](${attachment.proxyURL})`);
+		return embed.addFields({
+			name:  'Attachment',
+			value: attachment.name + '\n' + `[Link](${attachment.proxyURL})`
+		});
 	})(message.attachments.first());
 
 	return channel.send({ embeds: [embed] });

@@ -1,20 +1,20 @@
-import { Permissions }                                from 'discord.js';
+import { PermissionsBitField }                        from 'discord.js';
 import { ArgConsts }                                  from '../../lib/index.js';
 import { ModerationCommand, ModerationCommandResult } from '../../modules/moderation/index.js';
 
 export default class extends ModerationCommand {
 	constructor(client) {
 		super(client, {
-			actionName:        'kick',
-			aliases:           ['kick'],
-			description:       {
+			actionName:                'kick',
+			aliases:                   ['kick'],
+			description:               {
 				content:  'Kicks a member.',
 				usage:    '<member> [member2...] [reason]',
 				examples: ['kick @member', 'kick @member1 @member2', 'kick 275331662865367040'],
 			},
-			userPermissions:   [Permissions.FLAGS.KICK_MEMBERS],
-			clientPermissions: [Permissions.FLAGS.KICK_MEMBERS],
-			args:              [
+			userPermissions:   [PermissionsBitField.Flags.KickMembers],
+			clientPermissions: [PermissionsBitField.Flags.KickMembers],
+			args:                      [
 				{
 					id:      'members',
 					type:    ArgConsts.TYPE.MEMBERS,
@@ -27,8 +27,8 @@ export default class extends ModerationCommand {
 					default:  () => 'No reason provided'
 				},
 			],
-			guildOnly:         true,
-			ownerOnly:         false,
+			guildOnly:                 true,
+			ownerOnly:                 false,
 		});
 	}
 

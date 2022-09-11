@@ -1,4 +1,4 @@
-import { Formatters }          from 'discord.js';
+import { inlineCode }          from 'discord.js';
 import { ECommand }            from '../../../lib/index.js';
 import { unsubscribeUserFrom } from '../db.js';
 import { TagArgType }          from './util.js';
@@ -41,8 +41,8 @@ export async function unsubscribe({ guild, user, tagName }) {
 	});
 
 	if (result.changes === 0) {
-		throw `Tag ${Formatters.inlineCode(tagName)} not found or you are not subscribed to it`;
+		throw `Tag ${inlineCode(tagName)} not found or you are not subscribed to it`;
 	}
 
-	return `Unsubscribed from ${Formatters.inlineCode(tagName)}`;
+	return `Unsubscribed from ${inlineCode(tagName)}`;
 }

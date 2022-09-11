@@ -1,4 +1,4 @@
-import { Permissions }                                from 'discord.js';
+import { PermissionsBitField }                        from 'discord.js';
 import { ArgConsts }                                  from '../../lib/index.js';
 import { ModerationCommand, ModerationCommandResult } from '../../modules/moderation/index.js';
 
@@ -12,8 +12,8 @@ export default class extends ModerationCommand {
 				usage:    '<user> [user2...] [reason]',
 				examples: ['ban @user', 'ban @user1 @user2', 'ban 275331662865367040'],
 			},
-			userPermissions:   [Permissions.FLAGS.BAN_MEMBERS],
-			clientPermissions: [Permissions.FLAGS.BAN_MEMBERS],
+			userPermissions:   [PermissionsBitField.Flags.BanMembers],
+			clientPermissions: [PermissionsBitField.Flags.BanMembers],
 			args:              [
 				{
 					id:      'users',
@@ -36,14 +36,14 @@ export default class extends ModerationCommand {
 		const result = new ModerationCommandResult(reason);
 
 		await Promise.all(users.map(async user => {
-			const member = await message.guild.members.fetch(user);
+			const member = await message.guild.members.fetch({ user }).catch(() => {});
 
 			if (member && !member.bannable) {
 				return result.addFailed(user, 'Member too high in the hierarchy');
 			}
 
 			try {
-				await message.guild.members.ban(user, { days: 0, reason });
+				await message.guild.members.ban(user.id, { deleteMessageDays: 0, reason });
 			} catch (err) {
 				return result.addFailed(user, err.message);
 			}

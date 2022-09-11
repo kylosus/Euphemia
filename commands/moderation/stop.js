@@ -1,4 +1,4 @@
-import { MessageEmbed, Permissions }                  from 'discord.js';
+import { EmbedBuilder, PermissionsBitField }          from 'discord.js';
 import { ArgConsts }                                  from '../../lib/index.js';
 import { ModerationCommand, ModerationCommandResult } from '../../modules/moderation/index.js';
 
@@ -8,12 +8,12 @@ export default class extends ModerationCommand {
 			actionName:        'stop',
 			aliases:           ['stop'],
 			description:       {
-				content:  'Denies Send Message permissions for @everyone in specified channels.',
+				content:  'Denies Send Message permission for @everyone in specified channels.',
 				usage:    '[#channel]',
 				examples: ['stop', 'stop #channel'],
 			},
-			userPermissions:   [Permissions.FLAGS.MANAGE_ROLES],
-			clientPermissions: [Permissions.FLAGS.MANAGE_ROLES],
+			userPermissions:   [PermissionsBitField.Flags.ManageRoles],
+			clientPermissions: [PermissionsBitField.Flags.ManageRoles],
 			args:              [
 				{
 					id:       'channels',
@@ -46,7 +46,7 @@ export default class extends ModerationCommand {
 
 		await Promise.all(channels.map(async c => {
 			try {
-				await c.permissionOverwrites.edit(message.guild.id, { SEND_MESSAGES: toggle });
+				await c.permissionOverwrites.edit(message.guild.id, { SendMessages: toggle });
 			} catch (err) {
 				return result.addFailed(c, err.message || 'Unknown error');
 			}
@@ -58,14 +58,14 @@ export default class extends ModerationCommand {
 	}
 
 	async ship(message, result) {
-		const embed = new MessageEmbed()
+		const embed = new EmbedBuilder()
 			.setColor(result.getColor());
 
 		if (result.passed.length) {
-			embed.addField(
-				`${result.aux ? 'Allowed' : 'Denied'} message sending permissions in`,
-				result.passed.map(r => r.toString()).join(' ')
-			);
+			embed.addFields({
+				name:  `${result.aux ? 'Allowed' : 'Denied'} message sending permissions in`,
+				value: result.passed.map(r => r.toString()).join(' ')
+			});
 
 			// If not allowed
 			if (!result.aux) {
@@ -74,7 +74,10 @@ export default class extends ModerationCommand {
 		}
 
 		if (result.failed.length) {
-			embed.addField('Failed', result.failed.map(r => `${r.toString()} - ${r.reason}`).join(' '));
+			embed.addFields({
+				name:  'Failed',
+				value: result.failed.map(r => `${r.toString()} - ${r.reason}`).join(' ')
+			});
 		}
 
 		return message.channel.send({ embeds: [embed] });

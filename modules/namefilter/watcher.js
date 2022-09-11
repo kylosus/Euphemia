@@ -1,4 +1,4 @@
-import { MessageEmbed } from 'discord.js';
+import { EmbedBuilder, Colors } from 'discord.js';
 
 const GUILD_ID       = '292277485310312448';
 const LOG_CHANNEL_ID = '294880275211747339';
@@ -14,18 +14,18 @@ const watch = async user => {
 		return;
 	}
 
-	const guild = user.client.guilds.cache.get(GUILD_ID);
+	const guild      = user.client.guilds.cache.get(GUILD_ID);
 	const logChannel = guild.channels.cache.get(LOG_CHANNEL_ID);
 
 	await guild.members.ban(user);
 
 	return logChannel.send({
-		embeds: [new MessageEmbed()
-			.setColor('RED')
+		embeds: [new EmbedBuilder()
+			.setColor(Colors.Red)
 			.setTitle('🔨 User was automatically banned')
 			.setThumbnail(user.displayAvatarURL())
 			.setDescription(user.tag)
-			.addField('ID', user.id, false)]
+			.addFields({ name: 'ID', value: user.id, inline: false })]
 	});
 };
 

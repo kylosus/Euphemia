@@ -1,4 +1,4 @@
-import { Formatters }      from 'discord.js';
+import { inlineCode }      from 'discord.js';
 import { ECommand }        from '../../../lib/index.js';
 import { subscribeUserTo } from '../db.js';
 import { TagArgType }      from './util.js';
@@ -40,15 +40,15 @@ export async function subscribe({ user, tagName }) {
 	} catch (err) {
 		// Not a great way of handling errors
 		if (err.code === 'SQLITE_CONSTRAINT') {
-			throw `You are already in ${Formatters.inlineCode(tagName)}`;
+			throw `You are already in ${inlineCode(tagName)}`;
 		}
 
 		throw err;
 	}
 
 	if (result.changes === 0) {
-		throw `Tag ${Formatters.inlineCode(tagName)} not found`;
+		throw `Tag ${inlineCode(tagName)} not found`;
 	}
 
-	return `Subscribed to ${Formatters.inlineCode(tagName)}`;
+	return `Subscribed to ${inlineCode(tagName)}`;
 }

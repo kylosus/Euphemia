@@ -1,12 +1,12 @@
-import { Buffer }                 from 'node:buffer';
-import { MessageAttachment }      from 'discord.js';
-import { AutoEmbed, EmbedLimits } from '../../lib/index.js';
+import { Buffer }                    from 'node:buffer';
+import { AttachmentBuilder, Colors } from 'discord.js';
+import { AutoEmbed, EmbedLimits }    from '../../lib/index.js';
 
 export default async (channel, messages) => {
 	const embed = new AutoEmbed()
-		.setColor('DARK_PURPLE')
+		.setColor(Colors.DarkPurple)
 		.setTitle(`🗑 ${messages.size} messages bulk deleted in #${messages.first().channel.name}`)
-		.addField('Channel ID', messages.first().channel.id, false)
+		.addFields({ name: 'Channel ID', value: messages.first().channel.id, inline: false })
 		.setTimestamp();
 
 	const content = messages.map(m => {
@@ -16,7 +16,7 @@ export default async (channel, messages) => {
 
 	const files = (c => {
 		if (c.length > EmbedLimits.DESCRIPTION) {
-			return [new MessageAttachment(Buffer.from(c), 'messages.txt')];
+			return [new AttachmentBuilder(Buffer.from(c), { name: 'messages.txt' })];
 		}
 
 		return null;

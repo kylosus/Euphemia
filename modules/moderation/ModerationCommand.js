@@ -1,4 +1,4 @@
-import { MessageEmbed }                 from 'discord.js';
+import { EmbedBuilder }                 from 'discord.js';
 import { ECommand, StringDoctor as SD } from '../../lib/index.js';
 import { bulkInsert }                   from './db.js';
 
@@ -18,7 +18,7 @@ export default class ModerationCommand extends ECommand {
 	}
 
 	async ship(message, result) {
-		const embed = new MessageEmbed()
+		const embed = new EmbedBuilder()
 			.setColor(result.getColor())
 			.setTitle(`${SD.capitalize(this.aliases[0])} command executed`);
 
@@ -26,14 +26,19 @@ export default class ModerationCommand extends ECommand {
 			embed.setDescription(result.aux.toString());
 		}
 
-		embed.addField('Passed', result.passed.map(r => r.toString()).join(' ') || '~');
+		embed.addFields({ name: 'Passed', value: result.passed.map(r => r.toString()).join(' ') || '~' });
 
 		if (result.failed.length) {
-			embed.addField('Failed', result.failed.map(r => `${r.toString()} - ${r.reason || '**Unknown reason**'}`).join(' '));
+			embed.addFields({
+				name:  'Failed',
+				value: result.failed.map(r => `${r.toString()} - ${r.reason || '**Unknown reason**'}`).join(' ')
+			});
 		}
 
-		embed.addField('Moderator', message.member.toString(), true);
-		embed.addField('Reason', result?.reason ?? '*No reason provided*', true);
+		embed.addFields(
+			{ name: 'Moderator', value: message.member.toString(), inline: true },
+			{ name: 'Reason', value: result?.reason ?? '*No reason provided*', inline: true }
+		);
 
 		return message.channel.send({ embeds: [embed] });
 	}

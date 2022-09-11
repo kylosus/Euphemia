@@ -1,5 +1,5 @@
-import { MessageEmbed, Permissions } from 'discord.js';
-import { ArgConsts, ECommand }       from '../../lib/index.js';
+import { EmbedBuilder, PermissionsBitField } from 'discord.js';
+import { ArgConsts, ECommand }               from '../../lib/index.js';
 
 export default class extends ECommand {
 	constructor(client) {
@@ -20,7 +20,7 @@ export default class extends ECommand {
 					'welcome {\n\t"content":"%MENTION% has joined!",\n\t"image":"https://image-link.com"\n}'
 				]
 			},
-			userPermissions: [Permissions.FLAGS.MANAGE_GUILD],
+			userPermissions: [PermissionsBitField.Flags.ManageGuild],
 			args:            [
 				{
 					id:       'message',
@@ -68,7 +68,7 @@ export default class extends ECommand {
 
 		// If json is not empty save it and try sending it
 		if (Object.keys(json).length) {
-			await message.channel.send({ content: entry.message.content, embeds: [new MessageEmbed(json)] });
+			await message.channel.send({ content: entry.message.content, embeds: [new EmbedBuilder(json)] });
 			// If above doesn't fail, we can stringify the JSON and save it
 			// this would make more sense to save as a JSON, but we do some string manipulation later
 			// I'll make it iterate through object values instead of using the whole thing
@@ -98,7 +98,7 @@ export default class extends ECommand {
 
 	async ship(message, result) {
 		return message.channel.send({
-			embeds: [new MessageEmbed()
+			embeds: [new EmbedBuilder()
 				.setColor(this.client.config.COLOR_OK)
 				.setDescription(result)]
 		});

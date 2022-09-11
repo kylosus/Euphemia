@@ -1,4 +1,4 @@
-import { Formatters, MessageEmbed }                     from 'discord.js';
+import { inlineCode, EmbedBuilder }                     from 'discord.js';
 import { ECommand }                                     from '../../../lib/index.js';
 import { getTagIdMax, getTagsForward, getTagsBackward } from '../db.js';
 import { CircularListGenerator, PaginatedMessage }      from '../../paginatedmessage/index.js';
@@ -13,8 +13,8 @@ export default class extends ECommand {
 				usage:    '',
 				examples: ['tags']
 			},
-			guildOnly: true,
-			ownerOnly: false
+			guildOnly:   true,
+			ownerOnly:   false
 		});
 	}
 
@@ -66,13 +66,13 @@ export default class extends ECommand {
 
 	async ship(message, result) {
 		const generator = s => {
-			const embed = new MessageEmbed()
+			const embed = new EmbedBuilder()
 				.setColor(COLOR)
 				.setTitle(`Tags in ${message.guild.toString()}`);
 
 			const body = s
 				.map(({ name, numSubscriptions }) => {
-					return `${Formatters.inlineCode(name)} ${numSubscriptions} subs`;
+					return `${inlineCode(name)} ${numSubscriptions} subs`;
 				})
 				.join('\n');
 
