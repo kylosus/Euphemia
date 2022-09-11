@@ -46,8 +46,8 @@ export default class extends ModerationCommand {
 		await Promise.all(channels.map(async c => {
 			try {
 				await c.permissionOverwrites.edit(message.guild.id, {
-					ATTACH_FILES: toggle,
-					EMBED_LINKS:  toggle
+					AttachFiles: toggle,
+					EmbedLinks:  toggle
 				});
 			} catch (err) {
 				return result.addFailed(c, err.message);

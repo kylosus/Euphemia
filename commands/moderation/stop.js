@@ -46,7 +46,7 @@ export default class extends ModerationCommand {
 
 		await Promise.all(channels.map(async c => {
 			try {
-				await c.permissionOverwrites.edit(message.guild.id, { SEND_MESSAGES: toggle });
+				await c.permissionOverwrites.edit(message.guild.id, { SendMessages: toggle });
 			} catch (err) {
 				return result.addFailed(c, err.message || 'Unknown error');
 			}
