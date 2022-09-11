@@ -72,6 +72,11 @@ export default class extends ModerationCommand {
 			});
 		}
 
+		// If not allowed
+		if (!result.aux) {
+			embed.setFooter({ text: 'Type nopics off to revert back' });
+		}
+
 		if (result.failed.length) {
 			embed.addFields({
 				name:  'Failed',
