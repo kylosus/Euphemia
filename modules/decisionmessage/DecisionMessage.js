@@ -20,7 +20,7 @@ const register = async (message, decisions = [{
 				return;
 			}
 
-			const decision = decisions.find(d => interaction.customId === d.component.customId);
+			const decision = decisions.find(d => interaction.customId === d.component.data.custom_id);
 
 			if (!decision) {
 				return;
