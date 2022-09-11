@@ -17,9 +17,9 @@ const setMutedRole = async (guild, role) => {
 };
 
 const setNewMutedRole = async (guild, roleName = `${guild.client.user.username}-mute`) => {
-	const PermissionsBitField = new PermissionsBitField(PermissionsBitField.Default);
-	PermissionsBitField.remove(PermissionsBitField.Flagas.SendMessages);
-	PermissionsBitField.remove(PermissionsBitField.Flags.SendMessagesInThreads);
+	const permissions = new PermissionsBitField(PermissionsBitField.Default);
+	permissions.remove(PermissionsBitField.Flags.SendMessages);
+	permissions.remove(PermissionsBitField.Flags.SendMessagesInThreads);
 
 	const role = await guild.roles.create({
 		name:     roleName,
