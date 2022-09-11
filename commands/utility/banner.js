@@ -1,4 +1,4 @@
-import { MessageEmbed }        from 'discord.js';
+import { EmbedBuilder }        from 'discord.js';
 import { ArgConsts, ECommand } from '../../lib/index.js';
 import { IMAGE_OPTIONS }       from './util.js';
 
@@ -33,7 +33,8 @@ export default class extends ECommand {
 			throw `${user.toString()} has no banner`;
 		}
 
-		const member = await message.guild.members.fetch(user).catch(() => {});
+		const member = await message.guild.members.fetch({ user }).catch(() => {
+		});
 		const color  = member?.displayColor;
 
 		return {
@@ -45,7 +46,7 @@ export default class extends ECommand {
 
 	async ship(message, { user, color, banner }) {
 		return message.channel.send({
-			embeds: [new MessageEmbed()
+			embeds: [new EmbedBuilder()
 				.setColor(color)
 				.setDescription(`${user.toString()}'s banner`)
 				.setImage(banner)]

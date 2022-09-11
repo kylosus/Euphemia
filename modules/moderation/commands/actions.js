@@ -1,7 +1,9 @@
-import { Formatters, MessageEmbed, Permissions }   from 'discord.js';
-import { ArgConsts, ArgumentType, ECommand }       from '../../../lib/index.js';
-import { CircularListGenerator, PaginatedMessage } from '../../paginatedmessage/index.js';
-import { getIdMax, getModeratorTargetPage }        from '../db.js';
+import { userMention, underscore, inlineCode, EmbedBuilder, PermissionsBitField } from 'discord.js';
+import { ArgConsts, ArgumentType, ECommand }                                      from '../../../lib/index.js';
+import {
+	CircularListGenerator, PaginatedMessage
+}                                                                                 from '../../paginatedmessage/index.js';
+import { getIdMax, getModeratorTargetPage }                                       from '../db.js';
 
 export default class extends ECommand {
 	constructor(client) {
@@ -13,7 +15,7 @@ export default class extends ECommand {
 				examples: ['actions', 'actions from=@moderator', 'actions from @moderator to @user']
 			},
 			// For Valk
-			userPermissions: [Permissions.FLAGS.MANAGE_ROLES],
+			userPermissions: [PermissionsBitField.Flags.ManageRoles],
 			args:            [
 				{
 					id:       'moderator',
@@ -99,7 +101,7 @@ export default class extends ECommand {
 
 	async ship(message, result) {
 		const generator = s => {
-			const embed = new MessageEmbed()
+			const embed = new EmbedBuilder()
 				.setColor(this.client.config.COLOR_OK)
 				.setTitle(`Latest mod actions in ${message.guild}`);
 
@@ -111,14 +113,14 @@ export default class extends ECommand {
 				target:    targetID
 			}) => {
 				const prefix    = passed ? '✅' : '❌';	// Fix those later;
-				const moderator = Formatters.userMention(moderatorID);
-				const target    = Formatters.userMention(targetID);
+				const moderator = userMention(moderatorID);
+				const target    = userMention(targetID);
 
 				return `${prefix} \`[${id}]\` ${action.toLowerCase()} ${moderator} -> ${target}`;
 			}).join('\n');
 
 			embed.setDescription(
-				Formatters.underscore(`Run ${Formatters.inlineCode('action <number>')} to get details`)
+				underscore(`Run ${inlineCode('action <number>')} to get details`)
 				+ '\n\n' + body
 			);
 			return embed;

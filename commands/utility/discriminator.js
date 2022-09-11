@@ -1,4 +1,4 @@
-// const {MessageEmbed}			= require('discord.js');
+// const {EmbedBuilder}			= require('discord.js');
 // const {ArgumentType, ECommand}	= require('../../lib');
 // const {flatten}					= require('../../lib/Argument');
 // const _ = require('lodash');
@@ -41,9 +41,9 @@
 // 	}
 //
 // 	async ship(message, result) {
-// 		return EuphemiaPaginatedMessage(result[0].map(chunk => new MessageEmbed()
-// 			.addField(`Users with discriminator #${result[1]}`, '```' + chunk.join('\n') + '```')
-// 			.setColor('PURPLE')
+// 		return EuphemiaPaginatedMessage(result[0].map(chunk => new EmbedBuilder()
+// 			.addField.(`Users with discriminator #${result[1]}`, '```' + chunk.join('\n') + '```')
+// 			.setColor(Colors.PURPLE')
 // 		), message);
 // 	}
 //

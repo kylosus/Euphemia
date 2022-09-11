@@ -6,7 +6,7 @@ import { URL } from 'url';
 import sqlite3     from 'sqlite3';
 import * as sqlite from 'sqlite';
 
-import { Intents }                                  from 'discord.js';
+import { GatewayIntentBits }                        from 'discord.js';
 import { EClient, ECommandHandler, SQLiteProvider } from './lib/index.js';
 
 // Make this independent of cwd
@@ -32,20 +32,20 @@ class Client extends EClient {
 			{
 				disableMentions: 'everyone',
 				intents:         [
-					Intents.FLAGS.GUILDS,
-					Intents.FLAGS.GUILD_MEMBERS,
-					Intents.FLAGS.GUILD_BANS,
-					Intents.FLAGS.GUILD_BANS,
+					GatewayIntentBits.Guilds,
+					GatewayIntentBits.GuildMembers,
+					GatewayIntentBits.GuildBans,
+					GatewayIntentBits.MessageContent,
 					// Intents.FLAGS.GUILD_INTEGRATIONS,
 					// Intents.FLAGS.GUILD_WEBHOOKS,
 					// Intents.FLAGS.GUILD_INVITES,
 					// Intents.FLAGS.GUILD_VOICE_STATES,
 					// Intents.FLAGS.GUILD_PRESENCES,
-					Intents.FLAGS.GUILD_MESSAGES,
-					Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
+					GatewayIntentBits.GuildMessages,
+					GatewayIntentBits.GuildMessageReactions,
 					// Intents.FLAGS.GUILD_MESSAGE_TYPING,
-					Intents.FLAGS.DIRECT_MESSAGES,
-					Intents.FLAGS.DIRECT_MESSAGE_REACTIONS,
+					GatewayIntentBits.DirectMessages,
+					GatewayIntentBits.DirectMessageReactions,
 					// Intents.FLAGS.DIRECT_MESSAGE_TYPING
 				]
 			}

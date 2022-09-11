@@ -1,4 +1,4 @@
-import { Permissions }                                from 'discord.js';
+import { PermissionsBitField }                        from 'discord.js';
 import { ArgConsts }                                  from '../../lib/index.js';
 import { ModerationCommand, ModerationCommandResult } from '../../modules/moderation/index.js';
 import { getMutedRole, unmuteMember }                 from '../../modules/mute/index.js';
@@ -6,16 +6,16 @@ import { getMutedRole, unmuteMember }                 from '../../modules/mute/i
 export default class extends ModerationCommand {
 	constructor(client) {
 		super(client, {
-			actionName:        'unmute',
-			aliases:           ['unmute'],
-			description:       {
+			actionName:                'unmute',
+			aliases:                   ['unmute'],
+			description:               {
 				content:  'Unmutes mentioned users',
 				usage:    '<member1> [member2 ...]',
 				examples: ['unmute @Person1', 'unmute @Person1 @Person2']
 			},
-			userPermissions:   [Permissions.FLAGS.MANAGE_ROLES],
-			clientPermissions: [Permissions.FLAGS.MANAGE_ROLES, Permissions.FLAGS.MANAGE_GUILD],
-			args:              [
+			userPermissions:   [PermissionsBitField.Flags.ManageRoles],
+			clientPermissions: [PermissionsBitField.Flags.ManageRoles, PermissionsBitField.Flags.ManageGuild],
+			args:                      [
 				{
 					id:      'members',
 					type:    ArgConsts.TYPE.MEMBERS,
@@ -28,8 +28,8 @@ export default class extends ModerationCommand {
 					default:  () => null
 				}
 			],
-			guildOnly:         true,
-			ownerOnly:         false,
+			guildOnly:                 true,
+			ownerOnly:                 false,
 		});
 	}
 

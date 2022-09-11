@@ -1,13 +1,17 @@
-import { Formatters, MessageEmbed } from 'discord.js';
+import { inlineCode, time, TimestampStyles, EmbedBuilder, Colors } from 'discord.js';
 
 export default async (channel, member, expires, moderator) => {
 	return channel.send({
-		embeds: [new MessageEmbed()
-			.setColor('GOLD')
+		embeds: [new EmbedBuilder()
+			.setColor(Colors.Gold)
 			.setTitle('🔇 User muted')
 			.setThumbnail(member.user.displayAvatarURL())
-			.addField('User', `${member.toString()} ${Formatters.inlineCode(member.id)}`, false)
-			.addField('Expires', `${expires ? Formatters.time(expires, Formatters.TimestampStyles.RelativeTime) : 'Never'}`)
-			.addField('Moderator', moderator.toString())]
+
+			.addFields(
+				{ name: 'User', value: `${member.toString()} ${inlineCode(member.id)}`, inline: false },
+				{ name: 'Expires', value: `${expires ? time(expires, TimestampStyles.RelativeTime) : 'Never'}` },
+				{ name: 'Moderator', value: moderator.toString() }
+			)
+		]
 	});
 };

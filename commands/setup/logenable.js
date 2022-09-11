@@ -1,12 +1,12 @@
-import { Permissions }         from 'discord.js';
+import { PermissionsBitField } from 'discord.js';
 import { ArgConsts, ECommand } from '../../lib/index.js';
 import { getSettings }         from './log.js';
 
 export default class extends ECommand {
 	constructor(client) {
 		super(client, {
-			aliases:         ['logenable', 'logen'],
-			description:     {
+			aliases:                 ['logenable', 'logen'],
+			description:             {
 				content:  'Enables log events in channels. Run without the second argument to enable everything',
 				usage:    '[channel (or current channel)] [event name]',
 				examples: [
@@ -15,8 +15,8 @@ export default class extends ECommand {
 					'logenable #channel guildBanAdd'
 				]
 			},
-			userPermissions: [Permissions.FLAGS.MANAGE_GUILD],
-			args:            [
+			userPermissions: [PermissionsBitField.Flags.ManageGuild],
+			args:                    [
 				{
 					id:       'channel',
 					type:     ArgConsts.TYPE.CHANNEL,
@@ -30,8 +30,8 @@ export default class extends ECommand {
 					default:  () => null
 				},
 			],
-			guildOnly:       true,
-			ownerOnly:       false,
+			guildOnly:               true,
+			ownerOnly:               false,
 		});
 	}
 

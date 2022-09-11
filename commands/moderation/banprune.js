@@ -1,4 +1,4 @@
-import { Permissions }                                from 'discord.js';
+import { PermissionsBitField }                        from 'discord.js';
 import { ArgConsts }                                  from '../../lib/index.js';
 import { ModerationCommand, ModerationCommandResult } from '../../modules/moderation/index.js';
 
@@ -12,8 +12,8 @@ export default class extends ModerationCommand {
 				usage:    '<user> [user2...] [reason]',
 				examples: ['banprune @user', 'banprune @user Spammed in general'],
 			},
-			userPermissions:   [Permissions.FLAGS.BAN_MEMBERS],
-			clientPermissions: [Permissions.FLAGS.BAN_MEMBERS],
+			userPermissions:   [PermissionsBitField.Flags.BanMembers],
+			clientPermissions: [PermissionsBitField.Flags.BanMembers],
 			args:              [
 				{
 					id:      'users',
@@ -43,7 +43,8 @@ export default class extends ModerationCommand {
 			}
 
 			try {
-				await message.guild.members.ban(user, { days: 1, reason });
+				await message.guild.members.ban(user, { deleteMessageDays: 1 });
+				result.addPassed(user);
 			} catch (err) {
 				return result.addFailed(user, err.message);
 			}

@@ -1,5 +1,5 @@
-import { Formatters, MessageEmbed, Permissions } from 'discord.js';
-import { ArgConsts, ECommand }                   from '../../lib/index.js';
+import { codeBlock, EmbedBuilder, PermissionsBitField } from 'discord.js';
+import { ArgConsts, ECommand }                          from '../../lib/index.js';
 
 export default class extends ECommand {
 	constructor(client) {
@@ -10,7 +10,7 @@ export default class extends ECommand {
 				usage:    '[channel or current channel] <text>',
 				examples: ['say something', 'say #general {JSON}']
 			},
-			userPermissions: [Permissions.FLAGS.MANAGE_MESSAGES],
+			userPermissions: [PermissionsBitField.Flags.ManageMessages],
 			args:            [
 				{
 					id:       'channel',
@@ -30,7 +30,7 @@ export default class extends ECommand {
 	}
 
 	async run(message, { channel, id }) {
-		const m = await channel.messages.fetch(id);
+		const m = await channel.messages.fetch({ message: id });
 
 		if (!m.embeds) {
 			throw 'Message has no embeds';
@@ -41,9 +41,9 @@ export default class extends ECommand {
 
 	async ship(message, result) {
 		return message.channel.send({
-			embeds: [new MessageEmbed()
+			embeds: [new EmbedBuilder()
 				.setColor(this.client.config.COLOR_OK)
-				.setDescription(Formatters.codeBlock(JSON.stringify(result, null, 4)))]
+				.setDescription(codeBlock(JSON.stringify(result, null, 4)))]
 		});
 	}
 }

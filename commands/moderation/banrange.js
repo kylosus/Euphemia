@@ -1,6 +1,6 @@
-import { MessageActionRow, MessageButton, Permissions } from 'discord.js';
-import { ArgConsts, AutoEmbed }                         from '../../lib/index.js';
-import { ModerationCommand, ModerationCommandResult }   from '../../modules/moderation/index.js';
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, PermissionsBitField } from 'discord.js';
+import { ArgConsts, AutoEmbed }                                              from '../../lib/index.js';
+import { ModerationCommand, ModerationCommandResult }                        from '../../modules/moderation/index.js';
 
 const PROMPT_YES         = 'YES';
 const PROMPT_NO          = 'NO';
@@ -16,8 +16,8 @@ export default class extends ModerationCommand {
 				usage:    '[user2...] [reason]',
 				examples: ['banrange 12345678', 'banrange 12345678 12345679'],
 			},
-			userPermissions:   [Permissions.FLAGS.BAN_MEMBERS],
-			clientPermissions: [Permissions.FLAGS.BAN_MEMBERS],
+			userPermissions:   [PermissionsBitField.Flags.BanMembers],
+			clientPermissions: [PermissionsBitField.Flags.BanMembers],
 			args:              [
 				{
 					id:      'from',
@@ -58,17 +58,17 @@ export default class extends ModerationCommand {
 			throw `I cannot ban more than ${MAX_BANNABLE_USERS} users at a time.`;
 		}
 
-		const buttons = new MessageActionRow()
+		const buttons = new ActionRowBuilder()
 			.addComponents([
-				new MessageButton({
+				new ButtonBuilder({
 					customId: PROMPT_YES,
 					label:    PROMPT_YES,
-					style:    'DANGER'
+					style:    ButtonStyle.Danger
 				}),
-				new MessageButton({
+				new ButtonBuilder({
 					customId: PROMPT_NO,
 					label:    PROMPT_NO,
-					style:    'PRIMARY'
+					style:    ButtonStyle.Danger
 				})
 			]);
 
@@ -105,7 +105,7 @@ export default class extends ModerationCommand {
 			}
 
 			try {
-				await m.ban({ days: 1, reason });
+				await m.ban({ deleteMessageDays: 0, reason });
 			} catch (err) {
 				return result.addFailed(m, err.message);
 			}

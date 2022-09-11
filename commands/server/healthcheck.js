@@ -1,5 +1,5 @@
-import { Collection, MessageEmbed, Permissions } from 'discord.js';
-import { ECommand }                              from '../../lib/index.js';
+import { Collection, EmbedBuilder, PermissionsBitField } from 'discord.js';
+import { ECommand }                                      from '../../lib/index.js';
 
 const MAX_ROLES = 30;
 
@@ -12,7 +12,7 @@ export default class extends ECommand {
 				usage:    '',
 				examples: ['healthcheck']
 			},
-			userPermissions: [Permissions.FLAGS.MANAGE_GUILD],
+			userPermissions: [PermissionsBitField.Flags.ManageGuild],
 			guildOnly:       true,
 			ownerOnly:       false,
 			typing:          true
@@ -26,18 +26,18 @@ export default class extends ECommand {
 			EmptyRoles:    new Collection()
 		};
 
-		health.AdminRoles    = message.guild.roles.cache.filter(r => r.permissions.has(Permissions.FLAGS.ADMINISTRATOR));
-		health.ElevatedRoles = message.guild.roles.cache.filter(r => r.permissions.has([
-			Permissions.FLAGS.MANAGE_GUILD,
-			Permissions.FLAGS.MANAGE_MESSAGES,
-			Permissions.FLAGS.MANAGE_ROLES,
-			Permissions.FLAGS.BAN_MEMBERS,
-			Permissions.FLAGS.KICK_MEMBERS,
-			Permissions.FLAGS.DEAFEN_MEMBERS,
-			Permissions.FLAGS.MANAGE_CHANNELS,
-			Permissions.FLAGS.MANAGE_NICKNAMES,
-			Permissions.FLAGS.MENTION_EVERYONE,
-			Permissions.FLAGS.PRIORITY_SPEAKER
+		health.AdminRoles    = message.guild.roles.cache.filter(r => r.PermissionsBitField.has(PermissionsBitField.FLAGS.ADMINISTRATOR));
+		health.ElevatedRoles = message.guild.roles.cache.filter(r => r.PermissionsBitField.has([
+			PermissionsBitField.FLAGS.MANAGE_GUILD,
+			PermissionsBitField.FLAGS.ManageMessages,
+			PermissionsBitField.FLAGS.MANAGE_ROLES,
+			PermissionsBitField.FLAGS.BanMembers,
+			PermissionsBitField.FLAGS.KICK_MEMBERS,
+			PermissionsBitField.FLAGS.DEAFEN_MEMBERS,
+			PermissionsBitField.FLAGS.MANAGE_CHANNELS,
+			PermissionsBitField.FLAGS.MANAGE_NICKNAMES,
+			PermissionsBitField.FLAGS.MENTION_EVERYONE,
+			PermissionsBitField.FLAGS.PRIORITY_SPEAKER
 		], false));
 		health.EmptyRoles    = message.guild.roles.cache.filter(r => !r.members.size);
 
@@ -46,11 +46,11 @@ export default class extends ECommand {
 
 	// By the way, this is kinda very bad. There is no logic in the array trimming (the first() calls)
 	// and I just append '...' in all cases. This needs a more comprehensive solution with lodash and
-	// so I will replace MessageEmbed with my own AutoEmbed or SafeEmbed implementation with automatic
+	// so I will replace EmbedBuilder with my own AutoEmbed or SafeEmbed implementation with automatic
 	// trims
 	async ship(message, { AdminRoles, ElevatedRoles, EmptyRoles }) {
 		return message.channel.send({
-			embeds: [new MessageEmbed()
+			embeds: [new EmbedBuilder()
 				.setColor(this.client.config.COLOR_OK)
 				.setAuthor({
 					name:    `${message.guild.name} server health check`,
@@ -58,18 +58,23 @@ export default class extends ECommand {
 				})
 				// .setDescription('Score here')
 				.setImage(message.guild.bannerURL())
-				.addField(
-					`Roles with Admin permissions (${AdminRoles.size})`,
-					AdminRoles.first(MAX_ROLES).map(r => `${r.toString()} - ${r.members.size}members`).join('\n') || '~'
+
+				.addFields(
+					{
+						name:  `Roles with Admin permissions (${AdminRoles.size})`,
+						value: AdminRoles.first(MAX_ROLES).map(r => `${r.toString()} - ${r.members.size}members`).join('\n') || '~'
+					},
+					{
+						name:  `Roles with other Elevated permissions (${ElevatedRoles.size})`,
+						value: ElevatedRoles.first(MAX_ROLES).map(r => `${r.toString()} - ${r.members.size}members`).join('\n') || '~'
+
+					},
+					{
+						name:  `Empty roles (${EmptyRoles.size})`,
+						value: (EmptyRoles.first(MAX_ROLES).map(r => r.toString()).join() + '...') || '~'
+					}
 				)
-				.addField(
-					`Roles with other Elevated permissions (${ElevatedRoles.size})`,
-					ElevatedRoles.first(MAX_ROLES).map(r => `${r.toString()} - ${r.members.size}members`).join('\n') || '~'
-				)
-				.addField(
-					`Empty roles (${EmptyRoles.size})`,
-					(EmptyRoles.first(MAX_ROLES).map(r => r.toString()).join() + '...') || '~'
-				)]
+			]
 		});
 	}
 }

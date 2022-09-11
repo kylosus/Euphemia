@@ -1,6 +1,6 @@
-import { Formatters, MessageEmbed, Permissions }      from 'discord.js';
-import { ArgConsts }                                  from '../../lib/index.js';
-import { ModerationCommand, ModerationCommandResult } from '../../modules/moderation/index.js';
+import { codeBlock, EmbedBuilder, PermissionsBitField } from 'discord.js';
+import { ArgConsts }                                    from '../../lib/index.js';
+import { ModerationCommand, ModerationCommandResult }   from '../../modules/moderation/index.js';
 
 export default class extends ModerationCommand {
 	constructor(client) {
@@ -13,7 +13,7 @@ export default class extends ModerationCommand {
 				examples: ['warn @member Some reason', 'warn @member1 @member2 Some other reason']
 			},
 			// For Valk
-			userPermissions: [Permissions.FLAGS.MANAGE_ROLES],
+			userPermissions: [PermissionsBitField.Flags.ManageRoles],
 			args:            [
 				{
 					id:      'members',
@@ -37,10 +37,10 @@ export default class extends ModerationCommand {
 		await Promise.all(members.map(async m => {
 			try {
 				await m.user.send({
-					embeds: [new MessageEmbed()
+					embeds: [new EmbedBuilder()
 						.setColor(this.client.config.COLOR_NO)
 						.setTitle(`❗ You have been warned in ${message.guild}`)
-						.setDescription(Formatters.codeBlock(reason))]
+						.setDescription(codeBlock(reason))]
 				});
 			} catch (err) {
 				return result.addFailed(m, err.message);

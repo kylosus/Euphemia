@@ -1,4 +1,4 @@
-import { MessageEmbed } from 'discord.js';
+import { EmbedBuilder } from 'discord.js';
 import { ECommand }     from '../../lib/index.js';
 import dayjs            from 'dayjs';
 
@@ -22,7 +22,7 @@ export default class extends ECommand {
 
 	async ship(message, result) {
 		return message.channel.send({
-			embeds: [new MessageEmbed()
+			embeds: [new EmbedBuilder()
 				.setDescription(`⏳ ${result}`)
 				.setColor(message.member?.displayColor ?? 'WHITE')
 			]

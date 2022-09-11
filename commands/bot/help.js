@@ -1,7 +1,7 @@
-import { Formatters, MessageEmbed } from 'discord.js';
-import { ArgConsts, ECommand }      from '../../lib/index.js';
-import { capitalize }               from '../../lib/util/StringDoctor.js';
-import pjson                        from '../../package.json' assert { type: 'json' };
+import { codeBlock, EmbedBuilder } from 'discord.js';
+import { ArgConsts, ECommand }     from '../../lib/index.js';
+import { capitalize }              from '../../lib/util/StringDoctor.js';
+import pjson                       from '../../package.json' assert { type: 'json' };
 
 export default class extends ECommand {
 	constructor(client) {
@@ -41,22 +41,27 @@ export default class extends ECommand {
 	}
 
 	async ship(message, result) {
-		const embed = new MessageEmbed()
+		const embed = new EmbedBuilder()
 			.setColor(this.client.config.COLOR_OK)
 			.setThumbnail(message.client.user.displayAvatarURL());
 
 		if (!result) {
 			embed
-				.addField('\u200B', '\u200B')
+				.addFields({ name: '\u200B', value: '\u200B' })
 				.setTitle(`${message.client.user.username} commands`)
 				.setThumbnail(message.client.user.displayAvatarURL())
 				.setColor(this.client.config.COLOR_OK)
-				.addField('\u200B', '\u200B')
+				.addFields({ name: '\u200B', value: '\u200B' })
 				.setFooter({ text: `♥ Made with love by ${pjson.author}` });
 
 			this.client.commandHandler.modules.forEach((module, name) => {
-				embed.addField(`${capitalize(name)} commands:`, module.map(command => `**${command.aliases[0]}**: ${command.description.content}`).join('\n'));
-				embed.addField('\u200B', '\u200B');
+				embed.addFields(
+					{
+						name:  `${capitalize(name)} commands:`,
+						value: module.map(command => `**${command.aliases[0]}**: ${command.description.content}`).join('\n')
+					},
+					{ name: '\u200B', value: '\u200B' }
+				);
 			});
 
 			return message.channel.send({ embeds: [embed] });
@@ -66,10 +71,10 @@ export default class extends ECommand {
 		embed.setDescription(result.description.content);
 
 		if (result.description.usage.length) {
-			embed.addField('Arguments', Formatters.codeBlock(result.description.usage));
+			embed.addFields({ name: 'Arguments', value: codeBlock(result.description.usage) });
 		}
 
-		embed.addField('Usage', Formatters.codeBlock(result.description.examples.join('\n')));
+		embed.addFields({ name: 'Usage', value: codeBlock(result.description.examples.join('\n')) });
 
 		return message.channel.send({ embeds: [embed] });
 	}

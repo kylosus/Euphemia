@@ -1,5 +1,5 @@
-import { MessageEmbed, Permissions } from 'discord.js';
-import { ArgConsts, ECommand }       from '../../lib/index.js';
+import { EmbedBuilder, PermissionsBitField } from 'discord.js';
+import { ArgConsts, ECommand }               from '../../lib/index.js';
 
 export default class extends ECommand {
 	constructor(client) {
@@ -10,7 +10,7 @@ export default class extends ECommand {
 				usage:    '<user> [user2...] <text>',
 				examples: ['dm 275331662865367040 something', 'dm @user1 @user2 {JSON}']
 			},
-			userPermissions: [Permissions.FLAGS.MANAGE_MESSAGES],
+			userPermissions: [PermissionsBitField.Flags.ManageMessages],
 			args:            [
 				{
 					id:      'users',
@@ -29,12 +29,12 @@ export default class extends ECommand {
 	}
 
 	async run(message, { users, text }) {
-		const [content, embed] = await (async () => {
+		const [content, embeds] = await (async () => {
 			try {
 				const json  = JSON.parse(text);
-				const embed = new MessageEmbed(json);
+				const embed = new EmbedBuilder(json);
 				await message.channel.send({ embeds: [embed] });
-				return [json.content, embed];
+				return [json.content, [embed]];
 			} catch (err) {
 				return [text, null];
 			}
@@ -44,7 +44,7 @@ export default class extends ECommand {
 
 		await Promise.all(users.map(async u => {
 			try {
-				await u.send({ content, embeds: [embed] });
+				await u.send({ content, embeds });
 				return result.p.push(u);
 			} catch (err) {
 				return result.f.push({ user: u, reason: err.message || 'Unknown error' });
@@ -57,21 +57,30 @@ export default class extends ECommand {
 	async ship(message, result) {
 		const color = ((res) => {
 			if (!res.f.length) {
-				return 'GREEN';
+				return this.client.config.COLOR_OK;
 			}
 
 			if (res.p.length) {
-				return 'ORANGE';
+				return this.client.config.COLOR_WARN;
 			}
 
-			return 'RED';
+			return this.client.config.COLOR_NO;
 		})(result);
 
 		return message.channel.send({
-			embeds: [new MessageEmbed()
+			embeds: [new EmbedBuilder()
 				.setColor(color)
-				.addField(`Sent to ${result.p.length} users`, result.p.map(p => p.toString()).join(' ') || '~')
-				.addField('Failed', result.f.map(f => `${f.user.toString()} - ${f.reason}`).join('\n') || '~')]
+				.addFields(
+					{
+						name:  `Sent to ${result.p.length} users`,
+						value: result.p.map(p => p.toString()).join(' ') || '~'
+					},
+					{
+						name:  'Failed',
+						value: result.f.map(f => `${f.user.toString()} - ${f.reason}`).join('\n') || '~'
+					}
+				)
+			]
 		});
 	}
 }

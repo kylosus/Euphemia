@@ -1,4 +1,4 @@
-import { MessageEmbed }                   from 'discord.js';
+import { EmbedBuilder }                   from 'discord.js';
 import { ArgConsts, ECommand }            from '../../lib/index.js';
 import { CircularList, PaginatedMessage } from '../../modules/index.js';
 import { IMAGE_OPTIONS }                  from './util.js';
@@ -32,7 +32,7 @@ export default class extends ECommand {
 			color:   null
 		};
 
-		const member = await message.guild.members.fetch(user).catch(() => {});
+		const member = await message.guild.members.fetch({ user }).catch(() => {});
 		result.color = member?.displayColor;
 
 		result.avatars = [
@@ -45,7 +45,7 @@ export default class extends ECommand {
 
 	async ship(message, { user, avatars, color }) {
 		return PaginatedMessage.register(message, s => {
-			return new MessageEmbed()
+			return new EmbedBuilder()
 				.setColor(color)
 				.setDescription(`${user.toString()}'s avatar`)
 				.setImage(s);

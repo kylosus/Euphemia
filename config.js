@@ -1,7 +1,7 @@
 export const BotConfig = {
 	TOKEN:         '',
 	OWNERS:        ['275331662865367040'],
-	PREFIX:        ';',
+	PREFIX:        '',
 	EMOJI_OK:      '❎',
 	EMOJI_NO:      '❌',
 	COLOR_OK:      '#E91E63',

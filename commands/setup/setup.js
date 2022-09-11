@@ -1,20 +1,20 @@
-import { Permissions } from 'discord.js';
-import { ECommand }    from '../../lib/index.js';
+import { PermissionsBitField } from 'discord.js';
+import { ECommand }            from '../../lib/index.js';
 
 export default class extends ECommand {
 	constructor(client) {
 		super(client, {
-			actionName:      'setup',
-			aliases:         ['setup'],
-			description:     {
+			actionName:              'setup',
+			aliases:                 ['setup'],
+			description:             {
 				content:  'Sets up guild settings',
 				usage:    '',
 				examples: ['setup'],
 			},
-			userPermissions: [Permissions.FLAGS.MANAGE_GUILD],
-			guildOnly:       true,
-			ownerOnly:       false,
-			disabled:        true
+			userPermissions: [PermissionsBitField.Flags.ManageGuild],
+			guildOnly:               true,
+			ownerOnly:               false,
+			disabled:                true
 		});
 	}
 

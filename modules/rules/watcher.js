@@ -1,8 +1,8 @@
-import {MessageEmbed} from "discord.js";
+import { EmbedBuilder } from 'discord.js';
 
 const CHANNEL = '702949061216698388';
 
-const interactionCreate	= client => {
+const interactionCreate = client => {
 	client.on('interactionCreate', async interaction => {
 		if (interaction.channel?.id !== CHANNEL) {
 			return;
@@ -16,12 +16,14 @@ const interactionCreate	= client => {
 
 		await interaction.member.roles.add(roles);
 
-		interaction.reply({ephemeral: true, embeds: [
-			new MessageEmbed()
-				.setColor(client.config.COLOR_OK)
-				.setTitle('Assigned roles')
-				.setDescription(roles.map(r => r.toString()).join('\n'))
-		]});
+		interaction.reply({
+			ephemeral: true, embeds: [
+				new EmbedBuilder()
+					.setColor(client.config.COLOR_OK)
+					.setTitle('Assigned roles')
+					.setDescription(roles.map(r => r.toString()).join('\n'))
+			]
+		});
 	});
 };
 

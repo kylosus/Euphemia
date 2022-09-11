@@ -1,4 +1,4 @@
-import { Permissions } from 'discord.js';
+import { PermissionsBitField } from 'discord.js';
 
 const getMutedRole = guild => {
 	const entry = guild.client.provider.get(guild, 'mutedRole', null);
@@ -17,14 +17,14 @@ const setMutedRole = async (guild, role) => {
 };
 
 const setNewMutedRole = async (guild, roleName = `${guild.client.user.username}-mute`) => {
-	const permissions = new Permissions(Permissions.DEFAULT);
-	permissions.remove(Permissions.FLAGS.SEND_MESSAGES);
-	permissions.remove(Permissions.FLAGS.SEND_MESSAGES_IN_THREADS);
+	const permissions = new PermissionsBitField(PermissionsBitField.Default);
+	permissions.remove(PermissionsBitField.Flags.SendMessages);
+	permissions.remove(PermissionsBitField.Flags.SendMessagesInThreads);
 
 	const role = await guild.roles.create({
 		name:     roleName,
-		position: guild.me.roles.highest.position - 1,
-		permissions,
+		position: guild.members.me.roles.highest.position - 1,
+		PermissionsBitField,
 		reason:   'Automatic muted role creation'
 	});
 

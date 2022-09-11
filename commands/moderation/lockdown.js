@@ -1,19 +1,19 @@
-import { MessageEmbed, Permissions } from 'discord.js';
-import { ECommand }                  from '../../lib/index.js';
+import { EmbedBuilder, PermissionsBitField } from 'discord.js';
+import { ECommand }                          from '../../lib/index.js';
 
 export default class extends ECommand {
 	constructor(client) {
 		super(client, {
-			aliases:           ['lockdown', 'ld', 'automute'],
-			description:       {
+			aliases:                   ['lockdown', 'ld', 'automute'],
+			description:               {
 				content:  'Automatically mutes every new member on join.',
 				usage:    '',
 				examples: ['lockdown'],
 			},
-			userPermissions:   [Permissions.FLAGS.MANAGE_ROLES],
-			clientPermissions: [Permissions.FLAGS.MANAGE_ROLES],
-			guildOnly:         true,
-			ownerOnly:         false,
+			userPermissions:   [PermissionsBitField.Flags.ManageRoles],
+			clientPermissions: [PermissionsBitField.Flags.ManageRoles],
+			guildOnly:                 true,
+			ownerOnly:                 false,
 		});
 	}
 
@@ -26,7 +26,7 @@ export default class extends ECommand {
 
 	async ship(message, result) {
 		return message.channel.send({
-			embeds: [new MessageEmbed()
+			embeds: [new EmbedBuilder()
 				.setColor(this.client.config.COLOR_SPECIAL)
 				.setTitle(result)]
 		});

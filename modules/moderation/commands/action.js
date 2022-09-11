@@ -1,20 +1,22 @@
-import { Formatters, MessageEmbed, Permissions } from 'discord.js';
-import { ArgConsts, ECommand }                   from '../../../lib/index.js';
-import { getAction }                             from '../db.js';
+import { time, TimestampStyles, userMention, codeBlock, EmbedBuilder, PermissionsBitField } from 'discord.js';
+import {
+	ArgConsts, ECommand
+}                                                                                           from '../../../lib/index.js';
+import { getAction }                                                                        from '../db.js';
 
 const COLOR = '#2CDDD7';
 
 export default class extends ECommand {
 	constructor(client) {
 		super(client, {
-			aliases:         ['action'],
-			description:     {
+			aliases:     ['action'],
+			description: {
 				content:  'Shows details of a specified action',
 				usage:    '<action number>',
 				examples: ['action 1']
 			},
 			// For Valk
-			userPermissions: [Permissions.FLAGS.MANAGE_ROLES],
+			userPermissions: [PermissionsBitField.Flags.ManageRoles],
 			args:            [
 				{
 					id:      'number',
@@ -39,7 +41,7 @@ export default class extends ECommand {
 	}
 
 	async ship(message, result) {
-		const embed = new MessageEmbed()
+		const embed = new EmbedBuilder()
 			.setColor(COLOR);
 
 		embed.setAuthor((user => {
@@ -54,21 +56,24 @@ export default class extends ECommand {
 		})(await this.client.users.fetch(result.moderator).catch(console.error)));
 
 		const prefix = result.passed ? '✅' : '❌';	// Fix those later
-		embed.setDescription(`${prefix} Action \`[${result.id}]\` ${result.action.toLowerCase()} -> ${Formatters.userMention(result.target)}`);
-		embed.addField('Reason', Formatters.codeBlock(result.reason ?? 'No reason provided'));
+		embed.setDescription(`${prefix} Action \`[${result.id}]\` ${result.action.toLowerCase()} -> ${userMention(result.target)}`);
+		embed.addFields({ name: 'Reason', value: codeBlock(result.reason ?? 'No reason provided') });
 
 		if (!result.passed) {
-			embed.addField('Failed', Formatters.codeBlock(result.failedReason ?? 'Unknown reason'));
+			embed.addFields({ name: 'Failed', value: codeBlock(result.failedReason ?? 'Unknown reason') });
 		}
 
 		if (result.action === 'MUTE') {
-			embed.addField('Muted for', (time => {
-				if (!time) {
-					return 'Forever';
-				}
+			embed.addFields({
+				name:  'Muted for',
+				value: (t => {
+					if (!t) {
+						return 'Forever';
+					}
 
-				return Formatters.time(time, Formatters.TimestampStyles.RelativeTime);
-			})(result.aux));
+					return time(t, TimestampStyles.RelativeTime);
+				})(result.aux)
+			});
 		}
 
 		embed.setTimestamp(result.timestamp);

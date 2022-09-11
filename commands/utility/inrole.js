@@ -1,7 +1,7 @@
-import { MessageEmbed }                      from 'discord.js';
-import { ArgConsts, ArgumentType, ECommand } from '../../lib/index.js';
-import { CircularList, PaginatedMessage }    from '../../modules/index.js';
-import { chunk }                             from 'lodash-es';
+import { EmbedBuilder }                   from 'discord.js';
+import { ArgConsts, ECommand }            from '../../lib/index.js';
+import { CircularList, PaginatedMessage } from '../../modules/index.js';
+import { chunk }                          from 'lodash-es';
 
 export default class extends ECommand {
 	constructor(client) {
@@ -31,7 +31,7 @@ export default class extends ECommand {
 
 	async ship(message, result) {
 		return PaginatedMessage.register(message, s => {
-			return new MessageEmbed()
+			return new EmbedBuilder()
 				.setColor(result.color)
 				.setTitle(`List of members in ${result.name} (${result.members.size})`)
 				.setThumbnail(result.iconURL())

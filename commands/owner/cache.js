@@ -1,17 +1,17 @@
-import { Permissions }         from 'discord.js';
+import { PermissionsBitField } from 'discord.js';
 import { ArgConsts, ECommand } from '../../lib/index.js';
 
 export default class extends ECommand {
 	constructor(client) {
 		super(client, {
-			aliases:           ['cache'],
-			description:       {
+			aliases:                   ['cache'],
+			description:               {
 				content:  'Caches messages in a channel',
 				usage:    'cache [channel]',
 				examples: ['cache', 'cache #general']
 			},
-			clientPermissions: [Permissions.FLAGS.READ_MESSAGE_HISTORY],
-			args:              [
+			clientPermissions: [PermissionsBitField.Flags.ReadMessageHistory],
+			args:                      [
 				{
 					id:       'channel',
 					type:     ArgConsts.TYPE.CHANNEL,
@@ -19,8 +19,8 @@ export default class extends ECommand {
 					default:  m => m.channel
 				},
 			],
-			guildOnly:         true,
-			ownerOnly:         true,
+			guildOnly:                 true,
+			ownerOnly:                 true,
 		});
 	}
 
