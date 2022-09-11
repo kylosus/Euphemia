@@ -34,6 +34,10 @@ export default class extends ModerationCommand {
 	async run(message, { reason, role }) {
 		const result = new ModerationCommandResult(reason);
 
+		if (!role.editable) {
+			throw 'Bot cannot modify this role'
+		}
+
 		const members = await Promise.all(role.members.map(async m => {
 			await m.roles.remove(role);
 			return m;
