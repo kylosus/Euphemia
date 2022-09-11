@@ -33,7 +33,7 @@ export default class extends ECommand {
 			throw `${user.toString()} has no banner`;
 		}
 
-		const member = await message.guild.members.fetch(user).catch(() => {
+		const member = await message.guild.members.fetch({ user }).catch(() => {
 		});
 		const color  = member?.displayColor;
 

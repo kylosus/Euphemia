@@ -27,7 +27,7 @@ export default class extends ECommand {
 	}
 
 	async run(message, { id }) {
-		const carlMessage = await message.channel.messages.fetch(id);
+		const carlMessage = await message.channel.messages.fetch({ message: id });
 
 		if (!carlMessage.attachments.size) {
 			throw 'No attachments found';

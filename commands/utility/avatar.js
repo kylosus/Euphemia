@@ -32,7 +32,7 @@ export default class extends ECommand {
 			color:   null
 		};
 
-		const member = await message.guild.members.fetch(user).catch(() => {});
+		const member = await message.guild.members.fetch({ user }).catch(() => {});
 		result.color = member?.displayColor;
 
 		result.avatars = [

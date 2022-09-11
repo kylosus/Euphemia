@@ -61,7 +61,7 @@ export default class extends ECommand {
 			throw 'Channel not found';
 		})();
 
-		const toEdit = await channel.messages.fetch(messageID);
+		const toEdit = await channel.messages.fetch({ message: messageID });
 
 		if (toEdit.author.id !== toEdit.guild.members.me.id) {
 			throw 'Cannot edit messages of other users';

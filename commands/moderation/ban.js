@@ -36,7 +36,7 @@ export default class extends ModerationCommand {
 		const result = new ModerationCommandResult(reason);
 
 		await Promise.all(users.map(async user => {
-			const member = await message.guild.members.fetch(user.id).catch(() => {
+			const member = await message.guild.members.fetch({ user }).catch(() => {
 			});
 
 			if (member && !member.bannable) {
