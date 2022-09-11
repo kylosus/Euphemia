@@ -105,7 +105,7 @@ export default class extends ModerationCommand {
 			}
 
 			try {
-				await m.ban({ days: 0, reason });
+				await m.ban({ deleteMessageDays: 0, reason });
 			} catch (err) {
 				return result.addFailed(m.id, err.message);
 			}
