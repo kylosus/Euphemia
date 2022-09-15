@@ -3,6 +3,8 @@ import { ArgConsts, ECommand }           from '../../lib/index.js';
 import { getOrSetMutedRole, muteMember } from '../../modules/mute/index.js';
 import dayjs                             from 'dayjs';
 
+const SPANK_MILLISECONDS = 60000;
+
 export default class extends ECommand {
 	constructor(client) {
 		super(client, {
@@ -12,7 +14,7 @@ export default class extends ECommand {
 				usage:    '<member1> [member2 ...]',
 				examples: ['spank @Person1', 'spank @Person1 @Person2']
 			},
-			clientPermissions: [PermissionsBitField.Flags.ManageRoles, PermissionsBitField.Flags.ManageRoles],
+			clientPermissions: [PermissionsBitField.Flags.UseVAD],
 			args:                      [
 				{
 					id:      'member',
@@ -31,19 +33,14 @@ export default class extends ECommand {
 		}
 
 		const toMute = (() => {
-			if (!message.member.permissions.has(PermissionsBitField.Flags.ManageRoles)) {
+			if (!message.member.permissions.has(PermissionsBitField.Flags.UseVAD)) {
 				return message.member;
 			}
 
 			return member;
 		})();
 
-		const role = await getOrSetMutedRole(message.guild);
-
-		await toMute.roles.add(role, 'Spanked');
-
-		const duration = dayjs().add(1, 'minutes').toISOString();
-		await muteMember(message.guild, toMute, role, 'Spanked', duration);
+		await toMute.timeout(SPANK_MILLISECONDS, 'Spanked');
 
 		if (message.member.id === toMute.id) {
 			return 'Nice try. You got yourself spanked';
