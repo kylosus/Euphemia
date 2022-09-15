@@ -1,7 +1,5 @@
 import { PermissionsBitField }           from 'discord.js';
 import { ArgConsts, ECommand }           from '../../lib/index.js';
-import { getOrSetMutedRole, muteMember } from '../../modules/mute/index.js';
-import dayjs                             from 'dayjs';
 
 const SPANK_MILLISECONDS = 60000;
 
