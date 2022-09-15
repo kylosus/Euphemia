@@ -27,7 +27,7 @@ export default class extends ECommand {
 	async run(message, { amount }) {
 		// Bad fix?e
 		const permissions = message.member.permissionsIn(message.channel);
-		if (!permissions.has(Permissions.FLAGS.MANAGE_MESSAGES)) {
+		if (!permissions.has(PermissionsBitField.Flags.ManageMessages)) {
 			throw 'You cannot purge messages in this channel';
 		}
 
