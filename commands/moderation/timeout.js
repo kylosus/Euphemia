@@ -17,8 +17,8 @@ export default class extends ModerationCommand {
 				usage:    '[minutes] <member1> [member2 ...]',
 				examples: ['mute @Person1', 'mute 5 @Person1 @Person2']
 			},
-			userPermissions:   [PermissionsBitField.Flags.UseVAD],
-			clientPermissions: [PermissionsBitField.Flags.UseVAD],
+			userPermissions:   [PermissionsBitField.Flags.ModerateMembers],
+			clientPermissions: [PermissionsBitField.Flags.ModerateMembers],
 			args:              [
 				{
 					id:      'members',

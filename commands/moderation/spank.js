@@ -12,7 +12,7 @@ export default class extends ECommand {
 				usage:    '<member1> [member2 ...]',
 				examples: ['spank @Person1', 'spank @Person1 @Person2']
 			},
-			clientPermissions: [PermissionsBitField.Flags.UseVAD],
+			clientPermissions: [PermissionsBitField.Flags.ModerateMembers],
 			args:                      [
 				{
 					id:      'member',
@@ -31,7 +31,7 @@ export default class extends ECommand {
 		}
 
 		const toMute = (() => {
-			if (!message.member.permissions.has(PermissionsBitField.Flags.UseVAD)) {
+			if (!message.member.permissions.has(PermissionsBitField.Flags.ModerateMembers)) {
 				return message.member;
 			}
 
