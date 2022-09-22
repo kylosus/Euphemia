@@ -31,6 +31,7 @@ export default class extends ECommand {
 			cached:      true,
 			guildOnly:   false,
 			ownerOnly:   false,
+			slash:       true
 		});
 	}
 

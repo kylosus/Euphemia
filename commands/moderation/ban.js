@@ -29,6 +29,7 @@ export default class extends ModerationCommand {
 			],
 			guildOnly:         true,
 			ownerOnly:         false,
+			slash:             true
 		});
 	}
 
@@ -36,7 +37,8 @@ export default class extends ModerationCommand {
 		const result = new ModerationCommandResult(reason);
 
 		await Promise.all(users.map(async user => {
-			const member = await message.guild.members.fetch({ user }).catch(() => {});
+			const member = await message.guild.members.fetch({ user }).catch(() => {
+			});
 
 			if (member && !member.bannable) {
 				return result.addFailed(user, 'Member too high in the hierarchy');
