@@ -25,25 +25,27 @@ export default class extends ModerationCommand {
 					message: 'Please enter the ID of the first user that joined'
 				},
 				{
-					id:       'to',
-					type:     ArgConsts.TYPE.MEMBER,
-					optional: true,
-					default:  message => message.guild.members.cache
+					id:          'to',
+					type:        ArgConsts.TYPE.MEMBER,
+					optional:    true,
+					defaultFunc: message => message.guild.members.cache
 						.reduce(
 							(acc, m) => m.joinedTimestamp > acc.joinedTimestamp ? m : acc,
 							message.guild.members.cache.last()
 						)
 				},
 				{
-					id:       'reason',
-					type:     ArgConsts.TYPE.REASON,
-					optional: true,
-					default:  () => null,
+					id:          'reason',
+					type:        ArgConsts.TYPE.REASON,
+					optional:    true,
+					defaultFunc: () => null,
 				},
 			],
 			fetchMembers:      true,
 			guildOnly:         true,
 			ownerOnly:         false,
+			// slash:             true,
+			// defer:             true
 		});
 	}
 
@@ -87,11 +89,13 @@ export default class extends ModerationCommand {
 				filter: interaction => interaction.isButton() && interaction.user.id === message.author.id,
 				time:   15_000
 			});
+
 		} catch (err) {
 			throw 'Cancelled';
 		}
 
-		interaction.deferUpdate().catch(() => {});
+		interaction.deferUpdate().catch(() => {
+		});
 
 		if (interaction.customId !== PROMPT_YES) {
 			throw 'Cancelled';
@@ -99,19 +103,21 @@ export default class extends ModerationCommand {
 
 		const result = new ModerationCommandResult(reason);
 
-		await Promise.all(range.map(async m => {
-			if (!m.bannable) {
-				return result.addFailed(m, 'Member too high in the hierarchy');
-			}
+		result.addPassed(message.member);
 
-			try {
-				await m.ban({ deleteMessageDays: 1, reason });
-			} catch (err) {
-				return result.addFailed(m, err.message);
-			}
-
-			result.addPassed(m);
-		}));
+		// await Promise.all(range.map(async m => {
+		// 	if (!m.bannable) {
+		// 		return result.addFailed(m, 'Member too high in the hierarchy');
+		// 	}
+		//
+		// 	try {
+		// 		await m.ban({ deleteMessageDays: 1, reason });
+		// 	} catch (err) {
+		// 		return result.addFailed(m, err.message);
+		// 	}
+		//
+		// 	result.addPassed(m);
+		// }));
 
 		return result;
 	}

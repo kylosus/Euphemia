@@ -13,7 +13,8 @@ export default class extends ECommand {
 				examples: ['jojo']
 			},
 			guildOnly:   false,
-			ownerOnly:   false
+			ownerOnly:   false,
+			slash:       true
 		});
 	}
 

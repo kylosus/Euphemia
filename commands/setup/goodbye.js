@@ -22,16 +22,16 @@ export default class extends ECommand {
 			userPermissions: [PermissionsBitField.Flags.ManageGuild],
 			args:            [
 				{
-					id:       'message',
-					type:     ArgConsts.TYPE.JSON,
-					optional: true,
-					default:  () => null
+					id:          'message',
+					type:        ArgConsts.TYPE.JSON,
+					optional:    true,
+					defaultFunc: () => null
 				},
 				{
-					id:       'channel',
-					type:     ArgConsts.TYPE.CHANNEL,
-					optional: true,
-					default:  () => null
+					id:          'channel',
+					type:        ArgConsts.TYPE.CHANNEL,
+					optional:    true,
+					defaultFunc: () => null
 				},
 			],
 			guildOnly:       true,

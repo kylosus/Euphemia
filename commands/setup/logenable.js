@@ -5,8 +5,8 @@ import { getSettings }         from './log.js';
 export default class extends ECommand {
 	constructor(client) {
 		super(client, {
-			aliases:                 ['logenable', 'logen'],
-			description:             {
+			aliases:         ['logenable', 'logen'],
+			description:     {
 				content:  'Enables log events in channels. Run without the second argument to enable everything',
 				usage:    '[channel (or current channel)] [event name]',
 				examples: [
@@ -16,22 +16,22 @@ export default class extends ECommand {
 				]
 			},
 			userPermissions: [PermissionsBitField.Flags.ManageGuild],
-			args:                    [
+			args:            [
 				{
-					id:       'channel',
-					type:     ArgConsts.TYPE.CHANNEL,
-					optional: true,
-					default:  m => m.channel
+					id:          'channel',
+					type:        ArgConsts.TYPE.CHANNEL,
+					optional:    true,
+					defaultFunc: m => m.channel
 				},
 				{
-					id:       'event',
-					type:     ArgConsts.TYPE.TEXT,
-					optional: true,
-					default:  () => null
+					id:          'event',
+					type:        ArgConsts.TYPE.TEXT,
+					optional:    true,
+					defaultFunc: () => null
 				},
 			],
-			guildOnly:               true,
-			ownerOnly:               false,
+			guildOnly:       true,
+			ownerOnly:       false,
 		});
 	}
 

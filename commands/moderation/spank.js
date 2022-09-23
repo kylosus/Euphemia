@@ -1,27 +1,29 @@
-import { PermissionsBitField }           from 'discord.js';
-import { ArgConsts, ECommand }           from '../../lib/index.js';
+import { PermissionsBitField } from 'discord.js';
+import { ArgConsts, ECommand } from '../../lib/index.js';
 
 const SPANK_MILLISECONDS = 60000;
 
 export default class extends ECommand {
 	constructor(client) {
 		super(client, {
-			aliases:                   ['spank'],
-			description:               {
+			aliases:           ['spank'],
+			description:       {
 				content:  'Spanks bad people',
 				usage:    '<member1> [member2 ...]',
 				examples: ['spank @Person1', 'spank @Person1 @Person2']
 			},
 			clientPermissions: [PermissionsBitField.Flags.ModerateMembers],
-			args:                      [
+			args:              [
 				{
-					id:      'member',
-					type:    ArgConsts.TYPE.MEMBER,
-					message: 'Are you trying to spank thin air?',
+					id:          'member',
+					type:        ArgConsts.TYPE.MEMBER,
+					description: 'The baddie to spank',
+					message:     'Are you trying to spank thin air?',
 				}
 			],
-			guildOnly:                 true,
-			ownerOnly:                 false,
+			guildOnly:         true,
+			ownerOnly:         false,
+			slash:             true
 		});
 	}
 

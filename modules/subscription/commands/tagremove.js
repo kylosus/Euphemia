@@ -6,22 +6,22 @@ import { TagArgType }                      from './util.js';
 export default class extends ECommand {
 	constructor(client) {
 		super(client, {
-			aliases:                 ['tagremove', 'removetag', 'deltag', 'tagdel', 'tagdelete', 'deletetag'],
-			description:             {
+			aliases:         ['tagremove', 'removetag', 'deltag', 'tagdel', 'tagdelete', 'deletetag'],
+			description:     {
 				content:  'Adds a new tag',
 				usage:    '<name>',
 				examples: ['tagremove stuff']
 			},
 			userPermissions: [PermissionsBitField.Flags.ManageRoles],
-			args:                    [
+			args:            [
 				{
 					id:      'tagName',
 					type:    TagArgType,
 					message: 'Please enter a tag name'
 				}
 			],
-			guildOnly:               true,
-			ownerOnly:               false
+			guildOnly:       true,
+			ownerOnly:       false
 		});
 	}
 

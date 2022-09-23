@@ -5,28 +5,31 @@ import { ModerationCommand, ModerationCommandResult }   from '../../modules/mode
 export default class extends ModerationCommand {
 	constructor(client) {
 		super(client, {
-			actionName:              'warn',
-			aliases:                 ['warn'],
-			description:             {
+			actionName:      'warn',
+			aliases:         ['warn'],
+			description:     {
 				content:  'Warns a member.',
 				usage:    '<member> [member2...] <reason>',
 				examples: ['warn @member Some reason', 'warn @member1 @member2 Some other reason']
 			},
 			userPermissions: [PermissionsBitField.Flags.ManageGuild],
-			args:                    [
+			args:            [
 				{
-					id:      'members',
-					type:    ArgConsts.TYPE.MEMBERS,
-					message: 'Please mention members to warn'
+					id:          'members',
+					type:        ArgConsts.TYPE.MEMBERS,
+					description: 'The member to mute',
+					message:     'Please mention members to warn'
 				},
 				{
-					id:      'reason',
-					type:    ArgConsts.TYPE.REASON,
-					message: 'Please add a reason'
+					id:          'reason',
+					type:        ArgConsts.TYPE.REASON,
+					description: 'Reason for the mute',
+					message:     'Please add a reason'
 				}
 			],
-			guildOnly:               true,
-			ownerOnly:               false,
+			guildOnly:       true,
+			ownerOnly:       false,
+			slash:           true
 		});
 	}
 

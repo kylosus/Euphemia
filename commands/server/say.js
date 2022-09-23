@@ -4,28 +4,31 @@ import { ArgConsts, ECommand }               from '../../lib/index.js';
 export default class extends ECommand {
 	constructor(client) {
 		super(client, {
-			aliases:                 ['say'],
-			description:             {
+			aliases:         ['say'],
+			description:     {
 				content:  'Says something. Supports embeds',
 				usage:    '[channel or current channel] <text>',
 				examples: ['say something', 'say #general {JSON}']
 			},
 			userPermissions: [PermissionsBitField.Flags.ManageMessages],
-			args:                    [
+			args:            [
 				{
-					id:       'channel',
-					type:     ArgConsts.TYPE.CHANNEL,
-					optional: true,
-					default:  m => m.channel
+					id:          'channel',
+					type:        ArgConsts.TYPE.CHANNEL,
+					description: 'The channel to send the message in',
+					optional:    true,
+					defaultFunc: m => m.channel
 				},
 				{
-					id:      'text',
-					type:    ArgConsts.TYPE.TEXT,
-					message: 'Please provide text'
+					id:          'text',
+					type:        ArgConsts.TYPE.TEXT,
+					description: 'The text to send',
+					message:     'Please provide text'
 				}
 			],
-			guildOnly:               true,
-			ownerOnly:               false,
+			guildOnly:       true,
+			ownerOnly:       false,
+			slash:           true
 		});
 	}
 

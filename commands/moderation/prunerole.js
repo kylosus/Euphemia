@@ -5,29 +5,32 @@ import { ModerationCommand, ModerationCommandResult } from '../../modules/modera
 export default class extends ModerationCommand {
 	constructor(client) {
 		super(client, {
-			actionName:              'prunerole',
-			aliases:                 ['prunerole', 'purgerole'],
-			description:             {
+			actionName:      'prunerole',
+			aliases:         ['prunerole', 'purgerole'],
+			description:     {
 				content:  'Removes all members in a role',
 				usage:    '<role>',
 				examples: ['edit https://discord.com/channels/292277485310312448/292277485310312448/850097454262386738 {JSON}']
 			},
 			userPermissions: [PermissionsBitField.Flags.Administrator],
-			args:                    [
+			args:            [
 				{
-					id:      'role',
-					type:    ArgConsts.TYPE.ROLE_LOOSE,
-					message: 'Please provide a role',
+					id:          'role',
+					type:        ArgConsts.TYPE.ROLE_LOOSE,
+					description: 'The role to prune',
+					message:     'Please provide a role',
 				},
 				{
-					id:       'reason',
-					type:     ArgConsts.TYPE.REASON,
-					optional: true,
-					default:  () => null
+					id:          'reason',
+					type:        ArgConsts.TYPE.REASON,
+					optional:    true,
+					defaultFunc: () => null
 				},
 			],
-			guildOnly:               true,
-			ownerOnly:               true,
+			guildOnly:       true,
+			ownerOnly:       true,
+			slash:           true,
+			defer:           true
 		});
 	}
 
@@ -35,7 +38,7 @@ export default class extends ModerationCommand {
 		const result = new ModerationCommandResult(reason);
 
 		if (!role.editable) {
-			throw 'Bot cannot modify this role'
+			throw 'Bot cannot modify this role';
 		}
 
 		const members = await Promise.all(role.members.map(async m => {

@@ -5,8 +5,8 @@ import { getSettings }         from './log.js';
 export default class extends ECommand {
 	constructor(client) {
 		super(client, {
-			aliases:                 ['logdisable', 'logdis'],
-			description:             {
+			aliases:         ['logdisable', 'logdis'],
+			description:     {
 				content:  'Disables log events in channels. Run without the second argument to disable everything',
 				usage:    '[channel (or current channel)] [event name]',
 				examples: [
@@ -16,16 +16,16 @@ export default class extends ECommand {
 				]
 			},
 			userPermissions: [PermissionsBitField.Flags.ManageGuild],
-			args:                    [
+			args:            [
 				{
-					id:       'event',
-					type:     ArgConsts.TYPE.TEXT,
-					optional: true,
-					default:  () => null
+					id:          'event',
+					type:        ArgConsts.TYPE.TEXT,
+					optional:    true,
+					defaultFunc: () => null
 				},
 			],
-			guildOnly:               true,
-			ownerOnly:               false,
+			guildOnly:       true,
+			ownerOnly:       false,
 		});
 	}
 

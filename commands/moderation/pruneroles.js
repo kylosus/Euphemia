@@ -5,29 +5,29 @@ import { ModerationCommand, ModerationCommandResult } from '../../modules/modera
 export default class extends ModerationCommand {
 	constructor(client) {
 		super(client, {
-			actionName:              'pruneroles',
-			aliases:                 ['pruneroles', 'purgeroles'],
-			description:             {
+			actionName:      'pruneroles',
+			aliases:         ['pruneroles', 'purgeroles'],
+			description:     {
 				content:  'Removes all members in multiple roles',
 				usage:    '<role1> [role2 ...]',
 				examples: ['pruneroles 123456 Members 2345678']
 			},
 			userPermissions: [PermissionsBitField.Flags.Administrator],
-			args:                    [
+			args:            [
 				{
 					id:      'roles',
 					type:    ArgConsts.TYPE.ROLES,
 					message: 'Please provide role ids',
 				},
 				{
-					id:       'reason',
-					type:     ArgConsts.TYPE.REASON,
-					optional: true,
-					default:  () => null
+					id:          'reason',
+					type:        ArgConsts.TYPE.REASON,
+					optional:    true,
+					defaultFunc: () => null
 				},
 			],
-			guildOnly:               true,
-			ownerOnly:               true,
+			guildOnly:       true,
+			ownerOnly:       true,
 		});
 	}
 

@@ -16,19 +16,22 @@ export default class extends ECommand {
 			userPermissions: [PermissionsBitField.Flags.ManageRoles],
 			args:            [
 				{
-					id:      'role',
-					type:    ArgConsts.TYPE.ROLE_OR_ID_LOOSE,
-					message: 'Please mention a role to ping',
+					id:          'role',
+					type:        ArgConsts.TYPE.ROLE_LOOSE,
+					description: 'The role to ping',
+					message:     'Please mention a role to ping',
 				},
 				{
-					id:       'text',
-					type:     ArgConsts.TYPE.TEXT,
-					optional: true,
-					default:  () => null,
+					id:          'text',
+					type:        ArgConsts.TYPE.TEXT,
+					description: 'The text to send',
+					optional:    true,
+					defaultFunc: () => null,
 				},
 			],
 			guildOnly:       true,
 			ownerOnly:       false,
+			slash:           true
 		});
 	}
 
@@ -51,9 +54,9 @@ export default class extends ECommand {
 		return DecisionMessage.register(resultMessage, [
 			{
 				component: new ButtonBuilder()
-					.setCustomId('join')
-					.setLabel('Join role')
-					.setStyle(ButtonStyle.Secondary),
+							   .setCustomId('join')
+							   .setLabel('Join role')
+							   .setStyle(ButtonStyle.Secondary),
 				action:    async ({ member }) => {
 					if (member.roles.cache.has(role.id)) {
 						throw `You already have the ${inlineCode(role.name)} role`;
@@ -66,9 +69,9 @@ export default class extends ECommand {
 			},
 			{
 				component: new ButtonBuilder()
-					.setCustomId('leave')
-					.setLabel('Leave role')
-					.setStyle(ButtonStyle.Secondary),
+							   .setCustomId('leave')
+							   .setLabel('Leave role')
+							   .setStyle(ButtonStyle.Secondary),
 				action:    async ({ member }) => {
 					if (!member.roles.cache.has(role.id)) {
 						throw `You do not have the ${inlineCode(role.name)} role`;

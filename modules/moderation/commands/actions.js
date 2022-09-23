@@ -8,36 +8,36 @@ import { getIdMax, getModeratorTargetPage }                                     
 export default class extends ECommand {
 	constructor(client) {
 		super(client, {
-			aliases:                 ['actions'],
-			description:             {
+			aliases:         ['actions'],
+			description:     {
 				content:  'Lists moderation actions in the server',
 				usage:    '[from @moderator] [to @member]',
 				examples: ['actions', 'actions from=@moderator', 'actions from @moderator to @user']
 			},
 			userPermissions: [PermissionsBitField.Flags.ManageGuild],
-			args:                    [
+			args:            [
 				{
-					id:       'moderator',
-					type:     new ArgumentType(
-						new RegExp(/from[=\s]?/.source + ArgConsts.userIdRegex.source),
-						ArgConsts.idExtractFlatten
-					),
-					optional: true,
-					default:  () => undefined
+					id:          'moderator',
+					type:        new ArgumentType({
+						regex:      new RegExp(/from[=\s]?/.source + ArgConsts.userIdRegex.source),
+						normalizer: ArgConsts.idExtractFlatten
+					}),
+					optional:    true,
+					defaultFunc: () => undefined
 				},
 				{
-					id:       'target',
-					type:     new ArgumentType(
-						new RegExp(/to[=\s]?/.source + ArgConsts.userIdRegex.source),
-						ArgConsts.idExtractFlatten
-					),
-					optional: true,
-					default:  () => undefined
+					id:          'target',
+					type:        new ArgumentType({
+						regex:      new RegExp(/to[=\s]?/.source + ArgConsts.userIdRegex.source),
+						normalizer: ArgConsts.idExtractFlatten
+					}),
+					optional:    true,
+					defaultFunc: () => undefined
 				},
 			],
-			guildOnly:               true,
-			nsfw:                    false,
-			ownerOnly:               false,
+			guildOnly:       true,
+			nsfw:            false,
+			ownerOnly:       false,
 		});
 	}
 

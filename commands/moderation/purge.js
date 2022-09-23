@@ -7,20 +7,25 @@ const DELETE_AFTER = 2000;
 export default class extends ECommand {
 	constructor(client) {
 		super(client, {
-			aliases:                   ['purge', 'p'],
-			description:               {
+			aliases:           ['purge', 'p'],
+			description:       {
 				content:  'Purges messages in the channel.',
 				usage:    '[amount]',
 				examples: ['purge', 'purge 100'],
 			},
 			userPermissions:   [PermissionsBitField.Flags.ManageMessages, PermissionsBitField.Flags.ReadMessageHistory],
 			clientPermissions: [PermissionsBitField.Flags.ManageMessages, PermissionsBitField.Flags.ReadMessageHistory],
-			args:                      [{
-				id: 'amount', type: ArgConsts.TYPE.NUMBER, optional: true, default: () => 1,
+			args:              [{
+				id:          'amount',
+				type:        ArgConsts.TYPE.NUMBER,
+				description: 'Number of messages to prune',
+				optional:    true,
+				defaultFunc: () => 1,
 			}],
-			guildOnly:                 true,
-			ownerOnly:                 false,
-			deleteAfter:               DELETE_AFTER
+			guildOnly:         true,
+			ownerOnly:         false,
+			deleteAfter:       DELETE_AFTER,
+			slash:             true
 		});
 	}
 

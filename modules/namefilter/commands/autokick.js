@@ -1,6 +1,6 @@
 import { EmbedBuilder, PermissionsBitField } from 'discord.js';
-import { ECommand }                  from '../../../lib/index.js';
-import * as AutoKick                 from '../index.js';
+import { ECommand }                          from '../../../lib/index.js';
+import * as AutoKick                         from '../index.js';
 
 export default class extends ECommand {
 	constructor(client) {

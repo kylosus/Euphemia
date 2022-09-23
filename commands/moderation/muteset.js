@@ -5,24 +5,26 @@ import { setMutedRole, setNewMutedRole } from '../../modules/mute/index.js';
 export default class extends ECommand {
 	constructor(client) {
 		super(client, {
-			aliases:                   ['muteset', 'setmute'],
-			description:               {
+			aliases:           ['muteset', 'setmute'],
+			description:       {
 				content:  'Sets muted role for the server',
 				usage:    '[role]',
 				examples: ['muteset', 'muteset Some role', 'muteset 422621940868579338']
 			},
 			userPermissions:   [PermissionsBitField.Flags.ManageRoles],
 			clientPermissions: [PermissionsBitField.Flags.ManageRoles, PermissionsBitField.Flags.ManageGuild],
-			args:                      [
+			args:              [
 				{
-					id:       'role',
-					type:     ArgConsts.TYPE.ROLE_LOOSE,
-					optional: true,
-					default:  () => null
+					id:          'role',
+					type:        ArgConsts.TYPE.ROLE_LOOSE,
+					description: 'The muted role',
+					optional:    true,
+					defaultFunc: () => null
 				}
 			],
-			guildOnly:                 true,
-			ownerOnly:                 false,
+			guildOnly:         true,
+			ownerOnly:         false,
+			slash:             true
 		});
 	}
 

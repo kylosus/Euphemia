@@ -13,7 +13,8 @@ export default class extends ECommand {
 				examples: ['ment']
 			},
 			guildOnly:   false,
-			ownerOnly:   false
+			ownerOnly:   false,
+			slash:       true
 		});
 	}
 

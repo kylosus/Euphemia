@@ -4,16 +4,17 @@ import { ECommand }                          from '../../lib/index.js';
 export default class extends ECommand {
 	constructor(client) {
 		super(client, {
-			aliases:                   ['lockdown', 'ld', 'automute'],
-			description:               {
+			aliases:           ['lockdown', 'ld', 'automute'],
+			description:       {
 				content:  'Automatically mutes every new member on join.',
 				usage:    '',
 				examples: ['lockdown'],
 			},
 			userPermissions:   [PermissionsBitField.Flags.ManageRoles],
 			clientPermissions: [PermissionsBitField.Flags.ManageRoles],
-			guildOnly:                 true,
-			ownerOnly:                 false,
+			guildOnly:         true,
+			ownerOnly:         false,
+			slash:             true
 		});
 	}
 

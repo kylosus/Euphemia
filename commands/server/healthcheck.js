@@ -15,7 +15,9 @@ export default class extends ECommand {
 			userPermissions: [PermissionsBitField.Flags.ManageGuild],
 			guildOnly:       true,
 			ownerOnly:       false,
-			typing:          true
+			typing:          true,
+			slash:           true,
+			defer:           true
 		});
 	}
 

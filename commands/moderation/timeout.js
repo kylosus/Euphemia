@@ -21,25 +21,29 @@ export default class extends ModerationCommand {
 			clientPermissions: [PermissionsBitField.Flags.ModerateMembers],
 			args:              [
 				{
-					id:      'members',
-					type:    ArgConsts.TYPE.MEMBERS,
-					message: 'Please mention members to timeout'
+					id:          'members',
+					type:        ArgConsts.TYPE.MEMBERS,
+					description: 'The member to timeout',
+					message:     'Please mention members to timeout'
 				},
 				{
-					id:       'duration',
-					type:     ArgConsts.TYPE.DURATION,
-					optional: true,
-					default:  () => dayjs.duration({ minutes: 5 })
+					id:          'duration',
+					type:        ArgConsts.TYPE.DURATION,
+					description: 'Duration of the timeout',
+					optional:    true,
+					defaultFunc: () => dayjs.duration({ minutes: 5 })
 				},
 				{
-					id:       'reason',
-					type:     ArgConsts.TYPE.REASON,
-					optional: true,
-					default:  () => null
+					id:          'reason',
+					type:        ArgConsts.TYPE.REASON,
+					description: 'Reason for the timeout',
+					optional:    true,
+					defaultFunc: () => null
 				},
 			],
 			guildOnly:         true,
 			ownerOnly:         false,
+			slash:             true
 		});
 	}
 
