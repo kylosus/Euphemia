@@ -28,15 +28,17 @@ export default class extends ECommand {
 			},
 			args:        [
 				{
-					id:       'anime',
-					type:     ArgConsts.TYPE.TEXT,
-					optional: true,
-					default:  () => '*'
+					id:          'anime',
+					type:        ArgConsts.TYPE.TEXT,
+					description: 'Anime title to search',
+					optional:    true,
+					defaultFunc: () => '*'
 				}
 			],
 			cached:      true,
 			guildOnly:   false,
 			ownerOnly:   false,
+			slash:       true
 		});
 	}
 
