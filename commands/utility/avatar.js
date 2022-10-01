@@ -21,7 +21,8 @@ export default class extends ECommand {
 				}
 			],
 			guildOnly:   false,
-			ownerOnly:   false
+			ownerOnly:   false,
+			slash:       true
 		});
 	}
 
