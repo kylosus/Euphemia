@@ -30,14 +30,11 @@ export default class extends ECommand {
 			guildOnly:       true,
 			ownerOnly:       false,
 			slash:           true,
+			ephemeral:       true
 		});
 	}
 
 	async run(message, { channel, text }) {
 		await channel.send(resolveMessageArg(text));
-	}
-
-	async shipInteraction(interaction, { channel, text }) {
-		channel.send(resolveMessageArg(text));
 	}
 }

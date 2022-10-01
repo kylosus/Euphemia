@@ -34,7 +34,7 @@ const register = async (message, generator, options) => {
 
 	const row = new ActionRowBuilder().addComponents(selectMenu);
 
-	const botMessage = await message.channel.send({ embeds: [firstEmbed], components: [row] });
+	const botMessage = await message.reply({ embeds: [firstEmbed], components: [row] });
 
 	_watcher({ message: botMessage, generator, options });
 };

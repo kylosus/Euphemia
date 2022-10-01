@@ -31,7 +31,8 @@ export default class extends ECommand {
 			],
 			guildOnly:       true,
 			ownerOnly:       false,
-			slash:           true
+			slash:           true,
+			ephemeral:       true
 		});
 	}
 
@@ -40,23 +41,16 @@ export default class extends ECommand {
 			throw 'I do not have enough permissions to assign this role';
 		}
 
-		return {
-			text: `${text ?? ''}\n\n${role.toString()}`,
-			role
-		};
-	}
-
-	async ship(message, { role, text }) {
 		const resultMessage = await message.channel.send({
-			content: text
+			content: `${text}\n\n${role.toString()}`
 		});
 
-		return DecisionMessage.register(resultMessage, [
+		await DecisionMessage.register(resultMessage, [
 			{
 				component: new ButtonBuilder()
-							   .setCustomId('join')
-							   .setLabel('Join role')
-							   .setStyle(ButtonStyle.Secondary),
+					.setCustomId('join')
+					.setLabel('Join role')
+					.setStyle(ButtonStyle.Secondary),
 				action:    async ({ member }) => {
 					if (member.roles.cache.has(role.id)) {
 						throw `You already have the ${inlineCode(role.name)} role`;
@@ -69,9 +63,9 @@ export default class extends ECommand {
 			},
 			{
 				component: new ButtonBuilder()
-							   .setCustomId('leave')
-							   .setLabel('Leave role')
-							   .setStyle(ButtonStyle.Secondary),
+					.setCustomId('leave')
+					.setLabel('Leave role')
+					.setStyle(ButtonStyle.Secondary),
 				action:    async ({ member }) => {
 					if (!member.roles.cache.has(role.id)) {
 						throw `You do not have the ${inlineCode(role.name)} role`;

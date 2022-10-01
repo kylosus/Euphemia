@@ -44,7 +44,7 @@ export default class extends ModerationCommand {
 			fetchMembers:      true,
 			guildOnly:         true,
 			ownerOnly:         false,
-			// slash:             true,
+			slash:             true,
 			// defer:             true
 		});
 	}
@@ -105,19 +105,19 @@ export default class extends ModerationCommand {
 
 		result.addPassed(message.member);
 
-		// await Promise.all(range.map(async m => {
-		// 	if (!m.bannable) {
-		// 		return result.addFailed(m, 'Member too high in the hierarchy');
-		// 	}
-		//
-		// 	try {
-		// 		await m.ban({ deleteMessageDays: 1, reason });
-		// 	} catch (err) {
-		// 		return result.addFailed(m, err.message);
-		// 	}
-		//
-		// 	result.addPassed(m);
-		// }));
+		await Promise.all(range.map(async m => {
+			if (!m.bannable) {
+				return result.addFailed(m, 'Member too high in the hierarchy');
+			}
+
+			try {
+				await m.ban({ deleteMessageDays: 1, reason });
+			} catch (err) {
+				return result.addFailed(m, err.message);
+			}
+
+			result.addPassed(m);
+		}));
 
 		return result;
 	}
