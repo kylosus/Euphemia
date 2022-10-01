@@ -1,7 +1,7 @@
 import { codeBlock, EmbedBuilder, PermissionsBitField } from 'discord.js';
 import { ArgConsts, ECommand }                          from '../../../lib/index.js';
 import { getAction, updateReason }                      from '../db.js';
-import { BotConfig }                                    from '../../../config.js';
+import { BotConfig }                                    from '../../../config/config.js';
 
 export default class extends ECommand {
 	constructor(client) {

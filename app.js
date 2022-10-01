@@ -10,7 +10,7 @@ import { GatewayIntentBits }                        from 'discord.js';
 import { EClient, ECommandHandler, SQLiteProvider } from './lib/index.js';
 
 // Make this independent of cwd
-import { BotConfig }                                from './config.js';
+import { BotConfig }                                from './config/config.js';
 import * as modules                                 from './modules/index.js';
 import { registerEvents }                           from './events/event.js';
 
@@ -65,7 +65,7 @@ await client.commandHandler.loadModules();
 
 // Init DB
 const db = await sqlite.open({
-	filename: new URL('settings.sqlite3', import.meta.url).pathname,
+	filename: new URL('./config/settings.sqlite3', import.meta.url).pathname,
 	driver:   sqlite3.Database
 });
 

@@ -1,6 +1,6 @@
 import { ActionRowBuilder, ButtonBuilder, EmbedBuilder } from 'discord.js';
 import { makeError }                                     from '../../lib/ECommand.js';
-import { BotConfig }                                     from '../../config.js';
+import { BotConfig }                                     from '../../config/config.js';
 
 const register = async (message, decisions = [{
 	component: new ButtonBuilder(),
