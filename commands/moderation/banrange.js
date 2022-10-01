@@ -94,8 +94,11 @@ export default class extends ModerationCommand {
 			throw 'Cancelled';
 		}
 
-		interaction.deferUpdate().catch(() => {
-		});
+		interaction.deferUpdate().catch(() => {});
+
+		buttons.components.forEach(b => b.setDisabled());
+
+		sent.edit({ components: [buttons] });
 
 		if (interaction.customId !== PROMPT_YES) {
 			throw 'Cancelled';
