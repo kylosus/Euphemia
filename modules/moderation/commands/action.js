@@ -77,6 +77,6 @@ export default class extends ECommand {
 
 		embed.setTimestamp(result.timestamp);
 
-		return message.channel.send({ embeds: [embed] });
+		return message.reply({ embeds: [embed] });
 	}
 }

@@ -67,7 +67,7 @@ export default class extends ECommand {
 			return this.client.config.COLOR_NO;
 		})(result);
 
-		return message.channel.send({
+		return message.reply({
 			embeds: [new EmbedBuilder()
 				.setColor(color)
 				.addFields(

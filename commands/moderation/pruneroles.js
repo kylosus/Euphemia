@@ -57,6 +57,6 @@ export default class extends ModerationCommand {
 		const content = _.map(({ role, members }) => `${members.length} from ${role}`);
 		embed.setDescription(content.join('\n'));
 
-		return message.channel.send({ embeds: [embed] });
+		return message.reply({ embeds: [embed] });
 	}
 }

@@ -46,7 +46,7 @@ export default class extends ECommand {
 	}
 
 	async ship(message, { user, color, banner }) {
-		return message.channel.send({
+		return message.reply({
 			embeds: [new EmbedBuilder()
 				.setColor(color)
 				.setDescription(`${user.toString()}'s banner`)

@@ -23,7 +23,7 @@ const register = async (message, generator, options) => {
 	const firstEmbed = generator(current);
 
 	// if (options.length === 1) {
-	// 	return message.channel.send({ embeds: [firstEmbed] });
+	// 	return message.reply({ embeds: [firstEmbed] });
 	// }
 
 	const selectMenu = new SelectMenuBuilder()

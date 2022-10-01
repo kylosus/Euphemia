@@ -108,6 +108,6 @@ export default class extends ModerationCommand {
 			{ name: 'Reason', value: result?.reason ?? '*No reason provided*' }
 		);
 
-		return message.channel.send({ embeds: [embed] });
+		return message.reply({ embeds: [embed] });
 	}
 }

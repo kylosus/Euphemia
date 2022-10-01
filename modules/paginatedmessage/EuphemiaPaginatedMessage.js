@@ -42,7 +42,7 @@ const register = async (message, generator, args) => {
 		.setFooter({ text: `1/${args.length}` });
 
 	if (args.length === 1) {
-		return message.channel.send({ embeds: [firstEmbed] });
+		return message.reply({ embeds: [firstEmbed] });
 	}
 
 	const buttons = new ActionRowBuilder()

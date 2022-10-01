@@ -117,7 +117,7 @@ export default class extends ECommand {
 				inline: false
 			});
 
-		return message.channel.send({ embeds: [embed] });
+		return message.reply({ embeds: [embed] });
 	}
 
 	async shipPage(message, result) {
@@ -136,7 +136,7 @@ export default class extends ECommand {
 				});
 			});
 
-		return message.channel.send({ embeds: [embed] });
+		return message.reply({ embeds: [embed] });
 	}
 
 	async ship(message, result) {

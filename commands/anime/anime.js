@@ -134,7 +134,7 @@ export default class extends ECommand {
 
 		embed.addFields({ name: duration[0], value: duration[1], inline: true });
 
-		return message.channel.send({ embeds: [embed] });
+		return message.reply({ embeds: [embed] });
 	}
 }
 

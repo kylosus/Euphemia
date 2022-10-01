@@ -51,7 +51,7 @@ export default class extends ECommand {
 	// so I will replace EmbedBuilder with my own AutoEmbed or SafeEmbed implementation with automatic
 	// trims
 	async ship(message, { AdminRoles, ElevatedRoles, EmptyRoles }) {
-		return message.channel.send({
+		return message.reply({
 			embeds: [new EmbedBuilder()
 				.setColor(this.client.config.COLOR_OK)
 				.setAuthor({

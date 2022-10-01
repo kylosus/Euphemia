@@ -48,7 +48,7 @@ export default class extends ECommand {
 	}
 
 	async ship(message, [elapsed, result]) {
-		return message.channel.send({
+		return message.reply({
 			embeds: [new AutoEmbed()
 				.setColor(this.client.config.COLOR_OK)
 				.setTitle(`Evaluated in ${elapsed}ms.`)

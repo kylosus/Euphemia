@@ -74,7 +74,7 @@ export default class extends ECommand {
 	}
 
 	async ship(message, [id, reason]) {
-		return message.channel.send({
+		return message.reply({
 			embeds: [new EmbedBuilder()
 				.setColor(this.client.config.COLOR_OK)
 				.setTitle(`Updated Action [${id}] reason in ${message.guild}`)

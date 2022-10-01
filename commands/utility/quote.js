@@ -54,6 +54,6 @@ export default class extends ECommand {
 			embed.setImage(attachment.proxyURL);
 		}
 
-		return message.channel.send({ embeds: [embed] });
+		return message.reply({ embeds: [embed] });
 	}
 }
