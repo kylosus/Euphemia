@@ -1,5 +1,6 @@
-import { EmbedBuilder, PermissionsBitField } from 'discord.js';
-import { ArgConsts, ECommand }               from '../../lib/index.js';
+import { PermissionsBitField } from 'discord.js';
+import { ArgConsts, ECommand } from '../../lib/index.js';
+import { resolveMessageArg }   from './util.js';
 
 export default class extends ECommand {
 	constructor(client) {
@@ -29,21 +30,10 @@ export default class extends ECommand {
 			],
 			guildOnly:         true,
 			ownerOnly:         false,
-			slash:             true
 		});
 	}
 
 	async run(message, { channel, text }) {
-		await message.delete();
-		return { channel, text };
-	}
-
-	async ship(message, { channel, text }) {
-		try {
-			const json = JSON.parse(text);
-			return channel.send({ content: json.content, embeds: [new EmbedBuilder(json)] });
-		} catch (err) {
-			return channel.send({ content: text });
-		}
+		await channel.send(resolveMessageArg(text));
 	}
 }
