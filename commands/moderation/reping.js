@@ -26,7 +26,7 @@ export default class extends ECommand {
 					type:        ArgConsts.TYPE.TEXT,
 					description: 'The text to send',
 					optional:    true,
-					defaultFunc: () => null,
+					defaultFunc: () => '',
 				},
 			],
 			guildOnly:       true,

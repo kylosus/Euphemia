@@ -5,7 +5,8 @@ import {
 }                                                                               from '../../modules/moderation/index.js';
 import dayjs                                                                    from 'dayjs';
 
-const WEEK = dayjs.duration({ weeks: 1 }).asMilliseconds();
+const MINUTE = dayjs.duration({ minutes: 1 }).asMilliseconds();
+const WEEK   = dayjs.duration({ weeks: 1 }).asMilliseconds();
 
 export default class extends ModerationCommand {
 	constructor(client) {
@@ -48,7 +49,7 @@ export default class extends ModerationCommand {
 	}
 
 	async run(message, { members, reason, ...args }) {
-		const duration = args.duration.asMilliseconds();
+		const duration = args.duration.asMilliseconds?.() ?? args.duration * MINUTE;
 
 		if (duration > WEEK) {
 			throw `Maximum timeout duration is ${inlineCode('1 week')}`;
