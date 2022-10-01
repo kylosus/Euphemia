@@ -14,6 +14,7 @@ export default class extends ECommand {
 			},
 			userPermissions: [PermissionsBitField.Flags.ManageGuild],
 			guildOnly:       true,
+			fetchMembers:    true,
 			ownerOnly:       false,
 			typing:          true,
 			slash:           true,
@@ -28,18 +29,18 @@ export default class extends ECommand {
 			EmptyRoles:    new Collection()
 		};
 
-		health.AdminRoles    = message.guild.roles.cache.filter(r => r.PermissionsBitField.has(PermissionsBitField.FLAGS.ADMINISTRATOR));
-		health.ElevatedRoles = message.guild.roles.cache.filter(r => r.PermissionsBitField.has([
-			PermissionsBitField.FLAGS.MANAGE_GUILD,
-			PermissionsBitField.FLAGS.ManageMessages,
-			PermissionsBitField.FLAGS.MANAGE_ROLES,
-			PermissionsBitField.FLAGS.BanMembers,
-			PermissionsBitField.FLAGS.KICK_MEMBERS,
-			PermissionsBitField.FLAGS.DEAFEN_MEMBERS,
-			PermissionsBitField.FLAGS.MANAGE_CHANNELS,
-			PermissionsBitField.FLAGS.MANAGE_NICKNAMES,
-			PermissionsBitField.FLAGS.MENTION_EVERYONE,
-			PermissionsBitField.FLAGS.PRIORITY_SPEAKER
+		health.AdminRoles    = message.guild.roles.cache.filter(r => r.permissions.any(PermissionsBitField.Flags.Administrator));
+		health.ElevatedRoles = message.guild.roles.cache.filter(r => r.permissions.any([
+			PermissionsBitField.Flags.ManageGuild,
+			PermissionsBitField.Flags.ManageMessages,
+			PermissionsBitField.Flags.ManageRoles,
+			PermissionsBitField.Flags.BanMembers,
+			PermissionsBitField.Flags.KickMembers,
+			PermissionsBitField.Flags.DeafenMembers,
+			PermissionsBitField.Flags.ManageChannels,
+			PermissionsBitField.Flags.ManageNicknames,
+			PermissionsBitField.Flags.MentionEveryone,
+			PermissionsBitField.Flags.PrioritySpeaker
 		], false));
 		health.EmptyRoles    = message.guild.roles.cache.filter(r => !r.members.size);
 
@@ -59,7 +60,9 @@ export default class extends ECommand {
 					iconURL: message.guild.iconURL()
 				})
 				// .setDescription('Score here')
-				.setImage(message.guild.bannerURL())
+
+				.setThumbnail(message.guild.iconURL({ size: 4096 }))
+				.setImage(message.guild.bannerURL({ size: 4096 }))
 
 				.addFields(
 					{
