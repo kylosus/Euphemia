@@ -1,6 +1,7 @@
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, PermissionsBitField } from 'discord.js';
 import { ArgConsts, AutoEmbed }                                              from '../../lib/index.js';
 import { ModerationCommand, ModerationCommandResult }                        from '../../modules/moderation/index.js';
+import { banUsers }                                                          from './util.js';
 
 const PROMPT_YES         = 'YES';
 const PROMPT_NO          = 'NO';
@@ -97,22 +98,6 @@ export default class extends ModerationCommand {
 			throw 'Cancelled';
 		}
 
-		const result = new ModerationCommandResult(reason);
-
-		await Promise.all(range.map(async m => {
-			if (!m.bannable) {
-				return result.addFailed(m, 'Member too high in the hierarchy');
-			}
-
-			try {
-				await m.ban({ deleteMessageDays: 1, reason });
-			} catch (err) {
-				return result.addFailed(m, err.message);
-			}
-
-			result.addPassed(m);
-		}));
-
-		return result;
+		return banUsers({ message, range, reason, deleteMessageDays: 1 });
 	}
 }
