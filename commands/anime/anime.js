@@ -20,7 +20,7 @@ export default class extends ECommand {
 			description: {
 				content:  'Searches for anime on AniList',
 				usage:    '[anime title]',
-				examples: ['next Clannad']
+				examples: ['anime Clannad']
 			},
 			args:        [
 				{
