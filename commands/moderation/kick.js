@@ -37,7 +37,11 @@ export default class extends ModerationCommand {
 
 		await Promise.all(members.map(async m => {
 			if (!m.kickable) {
-				return result.addFailed(m, 'Member too high in the hierarchy');
+				return result.addFailed(m, 'Missing client permissions');
+			}
+
+			if (m.roles.highest.comparePositionTo(message.member.roles.highest) >= 0) {
+				return result.addFailed(m, 'Missing user permissions');
 			}
 
 			try {

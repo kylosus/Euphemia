@@ -38,6 +38,9 @@ export default class extends ModerationCommand {
 		if (!role.editable) {
 			throw new EmbedError('I cannot modify this role');
 		}
+
+		if (role.comparePositionTo(message.member.roles.highest) >= 0) {
+			throw new EmbedError('You cannot modify this role');
 		}
 
 		const members = await Promise.all(role.members.map(async m => {
