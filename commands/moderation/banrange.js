@@ -1,6 +1,6 @@
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, PermissionsBitField } from 'discord.js';
 import { ArgConsts, AutoEmbed }                                              from '../../lib/index.js';
-import { ModerationCommand, ModerationCommandResult }                        from '../../modules/moderation/index.js';
+import { ModerationCommand }                                                 from '../../modules/moderation/index.js';
 import { banUsers }                                                          from './util.js';
 import { EmbedError }                                                        from '../../lib/Error/index.js';
 
