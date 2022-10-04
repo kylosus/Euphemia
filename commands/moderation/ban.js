@@ -1,7 +1,7 @@
-import { EmbedBuilder, PermissionsBitField }          from 'discord.js';
-import { ArgConsts }                                  from '../../lib/index.js';
-import { ModerationCommand, ModerationCommandResult } from '../../modules/moderation/index.js';
-import { banUsers }                                   from './util.js';
+import { EmbedBuilder, PermissionsBitField } from 'discord.js';
+import { ArgConsts }                         from '../../lib/index.js';
+import { ModerationCommand }                 from '../../modules/moderation/index.js';
+import { banUsers }                          from './util.js';
 
 export default class extends ModerationCommand {
 	constructor(client) {

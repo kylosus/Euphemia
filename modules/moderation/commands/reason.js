@@ -2,6 +2,7 @@ import { codeBlock, EmbedBuilder, PermissionsBitField } from 'discord.js';
 import { ArgConsts, ECommand }                          from '../../../lib/index.js';
 import { getAction, updateReason }                      from '../db.js';
 import { BotConfig }                                    from '../../../config.js';
+import { EmbedError }                                   from '../../../lib/Error/index.js';
 
 export default class extends ECommand {
 	constructor(client) {
@@ -35,7 +36,7 @@ export default class extends ECommand {
 		const result = await getAction({ guild: message.guild, id: number });
 
 		if (!result) {
-			throw 'Action number not found';
+			throw new EmbedError('Action number not found');
 		}
 
 		const reason = await (async reason => {
@@ -58,7 +59,7 @@ export default class extends ECommand {
 			});
 
 			if (!reactions.has(BotConfig.EMOJI_OK)) {
-				throw 'Cancelled';
+				throw new EmbedError('Cancelled');
 			}
 
 			return newreason;

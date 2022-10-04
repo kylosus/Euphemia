@@ -2,6 +2,7 @@ import { codeBlock, EmbedBuilder } from 'discord.js';
 import { ArgConsts, ECommand }     from '../../lib/index.js';
 import { capitalize }              from '../../lib/util/StringDoctor.js';
 import pjson                       from '../../package.json' assert { type: 'json' };
+import { EmbedError }              from '../../lib/Error/index.js';
 
 export default class extends ECommand {
 	constructor(client) {
@@ -34,7 +35,7 @@ export default class extends ECommand {
 		const c = this.client.commandHandler.commands.get(command);
 
 		if (!c) {
-			throw `Command ${command} not found`;
+			throw new EmbedError(`Command ${command} not found`);
 		}
 
 		return c;
@@ -70,11 +71,11 @@ export default class extends ECommand {
 		embed.setTitle(`Command name: ${result.aliases.join('/')}`);
 		embed.setDescription(result.description.content);
 
-		if (result.description.usage.length) {
-			embed.addFields({ name: 'Arguments', value: codeBlock(result.description.usage) });
-		}
+			if (result.description.usage.length) {
+				embed.addFields({ name: 'Arguments', value: codeBlock(result.description.usage) });
+			}
 
-		embed.addFields({ name: 'Usage', value: codeBlock(result.description.examples.join('\n')) });
+			embed.addFields({ name: 'Usage', value: codeBlock(result.description.examples.join('\n')) });
 
 		return message.channel.send({ embeds: [embed] });
 	}

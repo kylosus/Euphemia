@@ -5,6 +5,7 @@ import { truncate }                            from 'lodash-es';
 import dayjs                                   from 'dayjs';
 import duration                                from 'dayjs/plugin/duration.js';
 import relativeTime                            from 'dayjs/plugin/relativeTime.js';
+import { EmbedError }                          from '../../lib/Error/index.js';
 
 dayjs.extend(duration);
 dayjs.extend(relativeTime);
@@ -19,7 +20,7 @@ export default class extends ECommand {
 			description: {
 				content:  'Searches for anime on AniList',
 				usage:    '[anime title]',
-				examples: ['next Clannad']
+				examples: ['anime Clannad']
 			},
 			args:        [
 				{
@@ -62,7 +63,7 @@ export default class extends ECommand {
 		};
 
 		const { data } = await fetchAnime(query, variables).catch(() => {
-			throw 'Anime not found';
+			throw new EmbedError('Anime not found');
 		});
 
 		return data.Media;

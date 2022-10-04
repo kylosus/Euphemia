@@ -1,5 +1,6 @@
 import { EmbedBuilder, PermissionsBitField } from 'discord.js';
 import { ArgConsts, ArgumentType, ECommand } from '../../lib/index.js';
+import { EmbedError }                        from '../../lib/Error/index.js';
 
 export default class extends ECommand {
 	constructor(client) {
@@ -54,17 +55,17 @@ export default class extends ECommand {
 		const { guildID, channelID, messageID } = url;
 
 		if (guildID !== message.guild.id) {
-			throw 'Please link to a message in this server';
+			throw new EmbedError('Please link to a message in this server');
 		}
 
 		const channel = message.guild.channels.cache.get(channelID) || (() => {
-			throw 'Channel not found';
+			throw new EmbedError('Channel not found');
 		})();
 
 		const toEdit = await channel.messages.fetch({ message: messageID });
 
 		if (toEdit.author.id !== toEdit.guild.members.me.id) {
-			throw 'Cannot edit messages of other users';
+			throw new EmbedError('Cannot edit messages of other users');
 		}
 
 		try {
