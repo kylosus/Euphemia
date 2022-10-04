@@ -71,11 +71,11 @@ export default class extends ECommand {
 		embed.setTitle(`Command name: ${result.aliases.join('/')}`);
 		embed.setDescription(result.description.content);
 
-		if (result.description.usage.length) {
-			embed.addFields({ name: 'Arguments', value: codeBlock(result.description.usage) });
-		}
+			if (result.description.usage.length) {
+				embed.addFields({ name: 'Arguments', value: codeBlock(result.description.usage) });
+			}
 
-		embed.addFields({ name: 'Usage', value: codeBlock(result.description.examples.join('\n')) });
+			embed.addFields({ name: 'Usage', value: codeBlock(result.description.examples.join('\n')) });
 
 		return message.channel.send({ embeds: [embed] });
 	}
