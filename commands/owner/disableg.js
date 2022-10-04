@@ -1,4 +1,5 @@
 import { ArgConsts, ECommand } from '../../lib/index.js';
+import { EmbedError }          from '../../lib/Error/index.js';
 
 export default class extends ECommand {
 	constructor(client) {
@@ -25,7 +26,7 @@ export default class extends ECommand {
 		const c = this.client.commandHandler.commands.get(command);
 
 		if (!c) {
-			throw `Command \`${command}\` not found`;
+			throw new EmbedError(`Command \`${command}\` not found`);
 		}
 
 		const response = c.disabled ? `\`${c.aliases[0]}\` is already disabled` : `Disabled \`${c.aliases[0]}\``;

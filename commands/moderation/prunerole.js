@@ -1,6 +1,7 @@
 import { EmbedBuilder, PermissionsBitField }          from 'discord.js';
 import { ArgConsts }                                  from '../../lib/index.js';
 import { ModerationCommand, ModerationCommandResult } from '../../modules/moderation/index.js';
+import { EmbedError }                                 from '../../lib/Error/index.js';
 
 export default class extends ModerationCommand {
 	constructor(client) {
@@ -35,7 +36,8 @@ export default class extends ModerationCommand {
 		const result = new ModerationCommandResult(reason);
 
 		if (!role.editable) {
-			throw 'Bot cannot modify this role'
+			throw new EmbedError('I cannot modify this role');
+		}
 		}
 
 		const members = await Promise.all(role.members.map(async m => {

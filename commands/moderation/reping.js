@@ -2,6 +2,7 @@ import { inlineCode, ButtonBuilder, ButtonStyle, PermissionsBitField } from 'dis
 import { ArgConsts }                                                   from '../../lib/index.js';
 import { ECommand }                                                    from '../../lib/index.js';
 import { DecisionMessage }                                             from '../../modules/decisionmessage/index.js';
+import { EmbedError }                                                  from '../../lib/Error/index.js';
 
 export default class extends ECommand {
 	constructor(client) {
@@ -34,7 +35,7 @@ export default class extends ECommand {
 
 	async run(message, { role, text }) {
 		if (!role.editable) {
-			throw 'I do not have enough permissions to assign this role';
+			throw new EmbedError('I do not have enough permissions to assign this role');
 		}
 
 		return {

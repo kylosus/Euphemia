@@ -1,6 +1,7 @@
 import { EmbedBuilder }        from 'discord.js';
 import { ArgConsts, ECommand } from '../../lib/index.js';
 import { IMAGE_OPTIONS }       from './util.js';
+import { EmbedError }          from '../../lib/Error/index.js';
 
 export default class extends ECommand {
 	constructor(client) {
@@ -30,7 +31,7 @@ export default class extends ECommand {
 		const banner = user.bannerURL(IMAGE_OPTIONS);
 
 		if (!banner) {
-			throw `${user.toString()} has no banner`;
+			throw new EmbedError(`${user.toString()} has no banner`);
 		}
 
 		const member = await message.guild.members.fetch({ user }).catch(() => {

@@ -5,6 +5,7 @@ import { createTag }                                            from '../db.js';
 import { subscribe }                                            from './subscribe.js';
 import { unsubscribe }                                          from './unsubscribe.js';
 import { TagArgType }                                           from './util.js';
+import { EmbedError }                                           from '../../../lib/Error/index.js';
 
 export default class extends ECommand {
 	constructor(client) {
@@ -37,7 +38,7 @@ export default class extends ECommand {
 		} catch (error) {
 			// Not a great way of handling errors
 			if (error.code === 'SQLITE_CONSTRAINT') {
-				throw `Tag ${inlineCode(tagName)} already exists`;
+				throw new EmbedError(`Tag ${inlineCode(tagName)} already exists`);
 			}
 
 			throw error;

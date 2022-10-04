@@ -6,6 +6,7 @@ import { chunk, TagArgType }                                   from './util.js';
 import { DecisionMessage }                                     from '../../decisionmessage/index.js';
 import { subscribe }                                           from './subscribe.js';
 import { unsubscribe }                                         from './unsubscribe.js';
+import { EmbedError }                                          from '../../../lib/Error/index.js';
 
 export default class extends ECommand {
 	constructor(client) {
@@ -35,7 +36,7 @@ export default class extends ECommand {
 		});
 
 		if (!res.length) {
-			throw `Tag ${inlineCode(tagName)} not found or empty`;
+			throw new EmbedError(`Tag ${inlineCode(tagName)} not found or empty`);
 		}
 
 		// Best effort

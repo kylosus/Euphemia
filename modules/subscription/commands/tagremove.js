@@ -2,6 +2,7 @@ import { inlineCode, PermissionsBitField } from 'discord.js';
 import { ECommand }                        from '../../../lib/index.js';
 import { disableTag }                      from '../db.js';
 import { TagArgType }                      from './util.js';
+import { EmbedError }                      from '../../../lib/Error/index.js';
 
 export default class extends ECommand {
 	constructor(client) {
@@ -36,14 +37,14 @@ export default class extends ECommand {
 		} catch (error) {
 			// Not a great way of handling errors
 			if (error.code === 'SQLITE_CONSTRAINT') {
-				throw `Tag ${inlineCode(tagName)} already exists`;
+				throw new EmbedError(`Tag ${inlineCode(tagName)} already exists`);
 			}
 
 			throw error;
 		}
 
 		if (removed.changes === 0) {
-			throw `Tag ${inlineCode(tagName)} not found`;
+			throw new EmbedError(`Tag ${inlineCode(tagName)} not found`);
 		}
 
 		return `Removed tag ${inlineCode(tagName)}`;

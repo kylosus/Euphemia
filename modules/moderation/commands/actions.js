@@ -4,6 +4,7 @@ import {
 	CircularListGenerator, PaginatedMessage
 }                                                                                 from '../../paginatedmessage/index.js';
 import { getIdMax, getModeratorTargetPage }                                       from '../db.js';
+import { EmbedError }                                                             from '../../../lib/Error/index.js';
 
 export default class extends ECommand {
 	constructor(client) {
@@ -47,7 +48,7 @@ export default class extends ECommand {
 		const { length } = await getIdMax({ guild: message.guild });
 
 		if (!length) {
-			throw 'No entries found';
+			throw new EmbedError('No entries found');
 		}
 
 		const [next, prev] = (() => {

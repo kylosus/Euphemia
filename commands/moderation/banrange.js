@@ -2,6 +2,7 @@ import { ActionRowBuilder, ButtonBuilder, ButtonStyle, PermissionsBitField } fro
 import { ArgConsts, AutoEmbed }                                              from '../../lib/index.js';
 import { ModerationCommand, ModerationCommandResult }                        from '../../modules/moderation/index.js';
 import { banUsers }                                                          from './util.js';
+import { EmbedError }                                                        from '../../lib/Error/index.js';
 
 const PROMPT_YES         = 'YES';
 const PROMPT_NO          = 'NO';
@@ -56,7 +57,7 @@ export default class extends ModerationCommand {
 			.filter(({ joinedTimestamp: jts }) => jts <= to.joinedTimestamp);
 
 		if (range.size > MAX_BANNABLE_USERS) {
-			throw `I cannot ban more than ${MAX_BANNABLE_USERS} users at a time.`;
+			throw new EmbedError(`I cannot ban more than ${MAX_BANNABLE_USERS} users at a time`);
 		}
 
 		const buttons = new ActionRowBuilder()
@@ -89,13 +90,14 @@ export default class extends ModerationCommand {
 				time:   15_000
 			});
 		} catch (err) {
-			throw 'Cancelled';
+			// TODO: perhaps an EmbedNotification type?
+			throw new EmbedError('Cancelled');
 		}
 
 		interaction.deferUpdate().catch(() => {});
 
 		if (interaction.customId !== PROMPT_YES) {
-			throw 'Cancelled';
+			throw new EmbedError('Cancelled');
 		}
 
 		return banUsers({ message, range, reason, deleteMessageDays: 1 });

@@ -2,6 +2,7 @@ import { inlineCode }          from 'discord.js';
 import { ECommand }            from '../../../lib/index.js';
 import { unsubscribeUserFrom } from '../db.js';
 import { TagArgType }          from './util.js';
+import { EmbedError }          from '../../../lib/Error/index.js';
 
 export default class extends ECommand {
 	constructor(client) {
@@ -41,7 +42,7 @@ export async function unsubscribe({ guild, user, tagName }) {
 	});
 
 	if (result.changes === 0) {
-		throw `Tag ${inlineCode(tagName)} not found or you are not subscribed to it`;
+		throw new EmbedError(`Tag ${inlineCode(tagName)} not found or you are not subscribed to it`);
 	}
 
 	return `Unsubscribed from ${inlineCode(tagName)}`;
