@@ -14,13 +14,15 @@ export default class extends ECommand {
 			},
 			args:        [
 				{
-					id:      'tagName',
-					type:    TagArgType,
-					message: 'Please enter a tag name'
+					id:          'tagName',
+					type:        TagArgType,
+					description: 'The tag to unsubscribe from',
+					message:     'Please enter a tag name'
 				}
 			],
 			guildOnly:   true,
-			ownerOnly:   false
+			ownerOnly:   false,
+			slash:       true
 		});
 	}
 

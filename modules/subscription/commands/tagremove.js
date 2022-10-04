@@ -15,13 +15,15 @@ export default class extends ECommand {
 			userPermissions: [PermissionsBitField.Flags.ManageRoles],
 			args:            [
 				{
-					id:      'tagName',
-					type:    TagArgType,
-					message: 'Please enter a tag name'
+					id:          'tagName',
+					type:        TagArgType,
+					description: 'The tag to remove',
+					message:     'Please enter a tag name'
 				}
 			],
 			guildOnly:       true,
-			ownerOnly:       false
+			ownerOnly:       false,
+			slash:           true
 		});
 	}
 

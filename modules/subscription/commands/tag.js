@@ -18,13 +18,15 @@ export default class extends ECommand {
 			},
 			args:        [
 				{
-					id:      'tagName',
-					type:    TagArgType,
-					message: 'Please enter a valid tag name'
+					id:          'tagName',
+					type:        TagArgType,
+					description: 'The tag to ping',
+					message:     'Please enter a valid tag name'
 				}
 			],
 			guildOnly:   true,
-			ownerOnly:   false
+			ownerOnly:   false,
+			slash:       true
 		});
 	}
 

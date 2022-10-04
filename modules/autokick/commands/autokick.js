@@ -15,6 +15,7 @@ export default class extends ECommand {
 			clientPermissions: [PermissionsBitField.Flags.KickMembers],
 			guildOnly:         true,
 			ownerOnly:         false,
+			slash:             true
 		});
 	}
 

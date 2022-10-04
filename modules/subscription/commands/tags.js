@@ -14,7 +14,8 @@ export default class extends ECommand {
 				examples: ['tags']
 			},
 			guildOnly:   true,
-			ownerOnly:   false
+			ownerOnly:   false,
+			slash:       true
 		});
 	}
 
