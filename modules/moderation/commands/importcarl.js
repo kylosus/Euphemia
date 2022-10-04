@@ -15,14 +15,16 @@ export default class extends ECommand {
 			},
 			args:        [
 				{
-					id:      'id',
-					type:    ArgConsts.TYPE.ID,
-					message: 'Please provide a message id.'
+					id:          'id',
+					type:        ArgConsts.TYPE.ID,
+					description: 'The message ID with carlbot attachment',
+					message:     'Please provide a message id.'
 				}
 			],
 			guildOnly:   true,
 			nsfw:        false,
 			ownerOnly:   true,
+			slash:       true
 		});
 	}
 
@@ -49,7 +51,8 @@ export default class extends ECommand {
 			};
 		});
 
-		this.sendNotice(message, `Inserting ${entry.length} entries`).catch(() => {});
+		this.sendNotice(message, `Inserting ${entry.length} entries`).catch(() => {
+		});
 
 		// Should probably use a transaction
 		await Promise.all(entry.map(e => forceInsert(e)));

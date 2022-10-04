@@ -38,6 +38,7 @@ export default class extends ECommand {
 			guildOnly:       true,
 			nsfw:            false,
 			ownerOnly:       false,
+			// slash:           true
 		});
 	}
 

@@ -18,14 +18,16 @@ export default class extends ECommand {
 			userPermissions: [PermissionsBitField.Flags.ManageGuild],
 			args:            [
 				{
-					id:      'number',
-					type:    ArgConsts.TYPE.NUMBER,
-					message: 'Please specify an action number'
+					id:          'number',
+					type:        ArgConsts.TYPE.NUMBER,
+					description: 'The action number',
+					message:     'Please specify an action number'
 				}
 			],
 			guildOnly:       true,
 			nsfw:            false,
 			ownerOnly:       false,
+			slash:           true
 		});
 	}
 
