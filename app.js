@@ -65,7 +65,7 @@ await client.commandHandler.loadModules();
 
 // Init DB
 const db = await sqlite.open({
-	filename: new URL('./config/settings.sqlite3', import.meta.url).pathname,
+	filename: new URL('./data/settings.sqlite3', import.meta.url).pathname,
 	driver:   sqlite3.Database
 });
 
