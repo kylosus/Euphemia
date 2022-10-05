@@ -14,7 +14,7 @@ export default class extends ECommand {
 			},
 			args:        [
 				{
-					id:          'tagName',
+					id:          'tag',
 					type:        TagArgType,
 					description: 'The tag to unsubscribe from',
 					message:     'Please enter a tag name'
@@ -26,11 +26,11 @@ export default class extends ECommand {
 		});
 	}
 
-	async run(message, { tagName }) {
+	async run(message, { tag }) {
 		return unsubscribe({
-			guild: message.guild,
-			user:  message.author,
-			tagName
+			guild:   message.guild,
+			user:    message.author,
+			tagName: tag
 		});
 	}
 }

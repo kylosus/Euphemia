@@ -14,7 +14,7 @@ export default class extends ECommand {
 			},
 			args:        [
 				{
-					id:          'tagName',
+					id:          'tag',
 					type:        TagArgType,
 					description: 'The tag to subscribe to',
 					message:     'Please enter a tag name'
@@ -26,8 +26,8 @@ export default class extends ECommand {
 		});
 	}
 
-	async run(message, { tagName }) {
-		return await subscribe({ user: message.author, tagName });
+	async run(message, { tag }) {
+		return await subscribe({ user: message.author, tagName: tag });
 	}
 }
 

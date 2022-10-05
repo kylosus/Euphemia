@@ -27,27 +27,27 @@ export default class extends ECommand {
 		});
 	}
 
-	async run(message, { tagName }) {
+	async run(message, { tag }) {
 		let removed = null;
 
 		try {
 			removed = disableTag({
 				guild: message.guild,
-				name:  tagName,
+				name:  tag,
 			});
 		} catch (error) {
 			// Not a great way of handling errors
 			if (error.code === 'SQLITE_CONSTRAINT') {
-				throw `Tag ${inlineCode(tagName)} already exists`;
+				throw `Tag ${inlineCode(tag)} already exists`;
 			}
 
 			throw error;
 		}
 
 		if (removed.changes === 0) {
-			throw `Tag ${inlineCode(tagName)} not found`;
+			throw `Tag ${inlineCode(tag)} not found`;
 		}
 
-		return `Removed tag ${inlineCode(tagName)}`;
+		return `Removed tag ${inlineCode(tag)}`;
 	}
 }

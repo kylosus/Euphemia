@@ -17,7 +17,7 @@ export default class extends ECommand {
 			},
 			args:        [
 				{
-					id:          'tagName',
+					id:          'tag',
 					type:        TagArgType,
 					description: 'Name of the new tag',
 					message:     'Please enter a tag name'
@@ -29,23 +29,23 @@ export default class extends ECommand {
 		});
 	}
 
-	async run(message, { tagName }) {
+	async run(message, { tag }) {
 		try {
 			await createTag({
 				guild:   message.guild,
-				name:    tagName,
+				name:    tag,
 				creator: message.author
 			});
 		} catch (error) {
 			// Not a great way of handling errors
 			if (error.code === 'SQLITE_CONSTRAINT') {
-				throw `Tag ${inlineCode(tagName)} already exists`;
+				throw `Tag ${inlineCode(tag)} already exists`;
 			}
 
 			throw error;
 		}
 
-		return { tagName, result: `Created tag ${inlineCode(tagName)}` };
+		return { tagName: tag, result: `Created tag ${inlineCode(tag)}` };
 
 	}
 

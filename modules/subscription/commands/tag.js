@@ -18,7 +18,7 @@ export default class extends ECommand {
 			},
 			args:        [
 				{
-					id:          'tagName',
+					id:          'tag',
 					type:        TagArgType,
 					description: 'The tag to ping',
 					message:     'Please enter a valid tag name'
@@ -30,14 +30,14 @@ export default class extends ECommand {
 		});
 	}
 
-	async run(message, { tagName }) {
+	async run(message, { tag }) {
 		const res = await getSubscribedUsers({
 			guild: message.guild,
-			name:  tagName,
+			name:  tag,
 		});
 
 		if (!res.length) {
-			throw `Tag ${inlineCode(tagName)} not found or empty`;
+			throw `Tag ${inlineCode(tag)} not found or empty`;
 		}
 
 		// Best effort
@@ -47,7 +47,7 @@ export default class extends ECommand {
 			channel: message.channel
 		}).catch(console.error);
 
-		return { tagName, users: res.map(r => r.user) };
+		return { tagName: tag, users: res.map(r => r.user) };
 	}
 
 	async ship(message, { tagName, users }) {
