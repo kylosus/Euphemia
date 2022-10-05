@@ -1,7 +1,9 @@
-import { inlineCode, ButtonBuilder, ButtonStyle, PermissionsBitField } from 'discord.js';
-import { ArgConsts }                                                   from '../../lib/index.js';
-import { ECommand }                                                    from '../../lib/index.js';
-import { DecisionMessage }                                             from '../../modules/decisionmessage/index.js';
+import { inlineCode, ButtonBuilder, ButtonStyle, PermissionsBitField, MessagePayload } from 'discord.js';
+import { ArgConsts }                                                                   from '../../lib/index.js';
+import { ECommand }                                                                    from '../../lib/index.js';
+import {
+	DecisionMessage
+}                                                                                      from '../../modules/decisionmessage/index.js';
 
 export default class extends ECommand {
 	constructor(client) {
@@ -41,11 +43,11 @@ export default class extends ECommand {
 			throw 'I do not have enough permissions to assign this role';
 		}
 
-		const resultMessage = await message.channel.send({
+		const messagePayload = MessagePayload.create(message, {
 			content: `${text}\n\n${role.toString()}`
 		});
 
-		await DecisionMessage.register(resultMessage, [
+		await DecisionMessage.register(message, messagePayload, [
 			{
 				component: new ButtonBuilder()
 					.setCustomId('join')

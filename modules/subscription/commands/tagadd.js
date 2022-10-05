@@ -1,10 +1,10 @@
-import { inlineCode, ButtonBuilder, EmbedBuilder, ButtonStyle } from 'discord.js';
-import { ECommand }                                             from '../../../lib/index.js';
-import { DecisionMessage }                                      from '../../decisionmessage/index.js';
-import { createTag }                                            from '../db.js';
-import { subscribe }                                            from './subscribe.js';
-import { unsubscribe }                                          from './unsubscribe.js';
-import { TagArgType }                                           from './util.js';
+import { inlineCode, ButtonBuilder, EmbedBuilder, ButtonStyle, MessagePayload } from 'discord.js';
+import { ECommand }                                                             from '../../../lib/index.js';
+import { DecisionMessage }                                                      from '../../decisionmessage/index.js';
+import { createTag }                                                            from '../db.js';
+import { subscribe }                                                            from './subscribe.js';
+import { unsubscribe }                                                          from './unsubscribe.js';
+import { TagArgType }                                                           from './util.js';
 
 export default class extends ECommand {
 	constructor(client) {
@@ -50,13 +50,19 @@ export default class extends ECommand {
 	}
 
 	async ship(message, { tagName, result }) {
-		const resultMessage = await message.channel.send({
+		// const resultMessage = await message.reply({
+		// 	embeds: [new EmbedBuilder()
+		// 		.setColor(this.client.config.COLOR_OK)
+		// 		.setDescription(result)]
+		// });
+
+		const messagePayload = MessagePayload.create(message, {
 			embeds: [new EmbedBuilder()
 				.setColor(this.client.config.COLOR_OK)
 				.setDescription(result)]
 		});
 
-		return DecisionMessage.register(resultMessage, [
+		return DecisionMessage.register(message, messagePayload, [
 			{
 				component: new ButtonBuilder()
 					.setCustomId('join')

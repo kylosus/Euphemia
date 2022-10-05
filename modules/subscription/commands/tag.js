@@ -1,11 +1,11 @@
-import { inlineCode, userMention, ButtonBuilder, ButtonStyle } from 'discord.js';
-import { ECommand }                                            from '../../../lib/index.js';
-import * as EmbedLimits                                        from '../../../lib/EmbedLimits.js';
-import { getSubscribedUsers, registerTagMention }              from '../db.js';
-import { chunk, TagArgType }                                   from './util.js';
-import { DecisionMessage }                                     from '../../decisionmessage/index.js';
-import { subscribe }                                           from './subscribe.js';
-import { unsubscribe }                                         from './unsubscribe.js';
+import { inlineCode, userMention, ButtonBuilder, ButtonStyle, MessagePayload } from 'discord.js';
+import { ECommand }                                                            from '../../../lib/index.js';
+import * as EmbedLimits                                                        from '../../../lib/EmbedLimits.js';
+import { getSubscribedUsers, registerTagMention }                              from '../db.js';
+import { chunk, TagArgType }                                                   from './util.js';
+import { DecisionMessage }                                                     from '../../decisionmessage/index.js';
+import { subscribe }                                                           from './subscribe.js';
+import { unsubscribe }                                                         from './unsubscribe.js';
 
 export default class extends ECommand {
 	constructor(client) {
@@ -54,17 +54,19 @@ export default class extends ECommand {
 		const header           = `🏓 Users subscribed to ${inlineCode(tagName)}:\n`;
 		const [first, ...rest] = chunk(users.map(userMention), EmbedLimits.CONTENT - header.length);
 
-		let lastMessage = await message.channel.send({
+		let lastMessage = MessagePayload.create(message, {
 			content: `${header}${first.join('')}`
 		});
 
 		for (const c of rest) {
-			lastMessage = await message.channel.send({
+			await message.channel.send(lastMessage);
+
+			lastMessage = MessagePayload.create(message, {
 				content: c.join('')
 			});
 		}
 
-		return DecisionMessage.register(lastMessage, [
+		return DecisionMessage.register(message, lastMessage, [
 			{
 				component: new ButtonBuilder()
 					.setCustomId('join')

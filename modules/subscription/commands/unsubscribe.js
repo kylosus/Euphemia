@@ -43,7 +43,7 @@ export async function unsubscribe({ guild, user, tagName }) {
 	});
 
 	if (result.changes === 0) {
-		throw `Tag ${inlineCode(tagName)} not found or you are not subscribed to it`;
+		throw `You are not subscribed to ${inlineCode(tagName)}`;
 	}
 
 	return `Unsubscribed from ${inlineCode(tagName)}`;
