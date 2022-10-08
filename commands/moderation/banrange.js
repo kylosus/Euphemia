@@ -57,7 +57,15 @@ export default class extends ModerationCommand {
 			.filter(({ joinedTimestamp: jts }) => jts <= to.joinedTimestamp);
 
 		if (range.size > MAX_BANNABLE_USERS) {
-			throw new EmbedError(`I cannot ban more than ${MAX_BANNABLE_USERS} users at a time`);
+			const lastUnbanned = range.at(MAX_BANNABLE_USERS);
+
+			range = range.first(MAX_BANNABLE_USERS);
+
+			this.sendNotice(
+				message,
+				`I cannot ban more than ${MAX_BANNABLE_USERS} users at a time
+				Last unbanned user is ${lastUnbanned}`
+			).catch(() => {});
 		}
 
 		const buttons = new ActionRowBuilder()
@@ -93,8 +101,6 @@ export default class extends ModerationCommand {
 			// TODO: perhaps an EmbedNotification type?
 			throw new EmbedError('Cancelled');
 		}
-
-		// interaction.deferUpdate().catch(() => {});
 
 		if (interaction.customId !== PROMPT_YES) {
 			throw new EmbedError('Cancelled');

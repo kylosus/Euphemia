@@ -46,7 +46,10 @@ export default class extends ModerationCommand {
 
 		await Promise.all(channels.map(async c => {
 			try {
-				await c.permissionOverwrites.edit(message.guild.id, { SendMessages: toggle });
+				await c.permissionOverwrites.edit(message.guild.id, {
+					SendMessages:          toggle,
+					SendMessagesInThreads: toggle
+				});
 
 				if (!toggle) {
 					const highestRole = message.member.roles.highest;
@@ -56,7 +59,10 @@ export default class extends ModerationCommand {
 						return;
 					}
 
-					await c.permissionOverwrites.edit(highestRole, { SendMessages: true });
+					await c.permissionOverwrites.edit(highestRole, {
+						SendMessages:          true,
+						SendMessagesInThreads: true
+					});
 				}
 			} catch (err) {
 				return result.addFailed(c, err.message || 'Unknown error');
