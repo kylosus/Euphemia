@@ -8,7 +8,7 @@ export default class extends ECommand {
 		super(client, {
 			aliases:         ['tagremove', 'removetag', 'deltag', 'tagdel', 'tagdelete', 'deletetag'],
 			description:     {
-				content:  'Adds a new tag',
+				content:  'Removes a tag',
 				usage:    '<name>',
 				examples: ['tagremove stuff']
 			},
