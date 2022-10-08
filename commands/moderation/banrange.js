@@ -1,7 +1,7 @@
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, PermissionsBitField } from 'discord.js';
 import { ArgConsts, AutoEmbed }                                              from '../../lib/index.js';
 import { ModerationCommand }                                                 from '../../modules/moderation/index.js';
-import { banUsers }                                                          from './util.js';
+import { banMembers }                                                        from './util.js';
 import { EmbedError }                                                        from '../../lib/Error/index.js';
 
 const PROMPT_YES         = 'YES';
@@ -94,12 +94,12 @@ export default class extends ModerationCommand {
 			throw new EmbedError('Cancelled');
 		}
 
-		interaction.deferUpdate().catch(() => {});
+		// interaction.deferUpdate().catch(() => {});
 
 		if (interaction.customId !== PROMPT_YES) {
 			throw new EmbedError('Cancelled');
 		}
 
-		return banUsers({ message, range, reason, deleteMessageDays: 1 });
+		this.sendNoticeInteraction(interaction, 'Executing...').catch(() => {});
 	}
 }
