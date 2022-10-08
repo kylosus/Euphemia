@@ -15,7 +15,7 @@ export default class extends ECommand {
 			userPermissions: [PermissionsBitField.Flags.ManageRoles],
 			args:            [
 				{
-					id:          'tagName',
+					id:          'tag',
 					type:        TagArgType,
 					description: 'The tag to remove',
 					message:     'Please enter a tag name'
