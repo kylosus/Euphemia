@@ -37,7 +37,7 @@ export default class extends ECommand {
 		});
 
 		if (!res.length) {
-			throw `Tag ${inlineCode(tag)} not found or empty`;
+			throw new EmbedError(`Tag ${inlineCode(tag)} not found or empty`);
 		}
 
 		// Best effort

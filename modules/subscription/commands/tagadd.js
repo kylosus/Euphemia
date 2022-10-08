@@ -5,6 +5,7 @@ import { createTag }                                                            
 import { subscribe }                                                            from './subscribe.js';
 import { unsubscribe }                                                          from './unsubscribe.js';
 import { TagArgType }                                                           from './util.js';
+import { EmbedError }                                                           from '../../../lib/Error/index.js';
 
 export default class extends ECommand {
 	constructor(client) {
@@ -39,7 +40,7 @@ export default class extends ECommand {
 		} catch (error) {
 			// Not a great way of handling errors
 			if (error.code === 'SQLITE_CONSTRAINT') {
-				throw `Tag ${inlineCode(tag)} already exists`;
+				throw new EmbedError(`Tag ${inlineCode(tag)} already exists`);
 			}
 
 			throw error;
@@ -50,12 +51,6 @@ export default class extends ECommand {
 	}
 
 	async ship(message, { tagName, result }) {
-		// const resultMessage = await message.reply({
-		// 	embeds: [new EmbedBuilder()
-		// 		.setColor(this.client.config.COLOR_OK)
-		// 		.setDescription(result)]
-		// });
-
 		const messagePayload = MessagePayload.create(message, {
 			embeds: [new EmbedBuilder()
 				.setColor(this.client.config.COLOR_OK)

@@ -2,6 +2,7 @@ import { inlineCode }          from 'discord.js';
 import { ECommand }            from '../../../lib/index.js';
 import { unsubscribeUserFrom } from '../db.js';
 import { TagArgType }          from './util.js';
+import { EmbedError }          from '../../../lib/Error/index.js';
 
 export default class extends ECommand {
 	constructor(client) {
@@ -35,16 +36,16 @@ export default class extends ECommand {
 	}
 }
 
-export async function unsubscribe({ guild, user, tagName }) {
+export async function unsubscribe({ guild, user, tag }) {
 	const result = await unsubscribeUserFrom({
 		guild,
 		user,
-		tagName
+		tagName: tag
 	});
 
 	if (result.changes === 0) {
-		throw `You are not subscribed to ${inlineCode(tagName)}`;
+		throw new EmbedError(`You are not subscribed to ${inlineCode(tag)}`);
 	}
 
-	return `Unsubscribed from ${inlineCode(tagName)}`;
+	return `Unsubscribed from ${inlineCode(tag)}`;
 }

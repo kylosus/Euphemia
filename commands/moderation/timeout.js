@@ -4,6 +4,7 @@ import {
 	ModerationCommand, ModerationCommandResult
 }                                                                               from '../../modules/moderation/index.js';
 import dayjs                                                                    from 'dayjs';
+import { EmbedError }                                                           from '../../lib/Error/index.js';
 
 const MINUTE = dayjs.duration({ minutes: 1 }).asMilliseconds();
 const WEEK   = dayjs.duration({ weeks: 1 }).asMilliseconds();
@@ -52,7 +53,7 @@ export default class extends ModerationCommand {
 		const duration = args.duration.asMilliseconds?.() ?? args.duration * MINUTE;
 
 		if (duration > WEEK) {
-			throw `Maximum timeout duration is ${inlineCode('1 week')}`;
+			throw new EmbedError(`Maximum timeout duration is ${inlineCode('1 week')}`);
 		}
 
 		const result = new ModerationCommandResult(reason, dayjs().add(args.duration).toISOString());

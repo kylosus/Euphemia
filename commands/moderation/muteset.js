@@ -1,6 +1,7 @@
 import { PermissionsBitField }           from 'discord.js';
 import { ArgConsts, ECommand }           from '../../lib/index.js';
 import { setMutedRole, setNewMutedRole } from '../../modules/mute/index.js';
+import { EmbedError }                    from '../../lib/Error/index.js';
 
 export default class extends ECommand {
 	constructor(client) {
@@ -35,7 +36,7 @@ export default class extends ECommand {
 		}
 
 		if (role.position >= message.guild.members.me.roles.highest.position) {
-			throw 'Cannot assign as the muted role. Role is too high in the hierarchy';
+			throw new EmbedError('Cannot assign as the muted role. Role is too high in the hierarchy');
 		}
 
 		await setMutedRole(message.guild, role);

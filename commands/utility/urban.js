@@ -4,6 +4,7 @@ import { CircularList, PaginatedMessage }   from '../../modules/index.js';
 import { truncate }                         from 'lodash-es';
 import { promisify }                        from 'util';
 import ud                                   from 'urban-dictionary';
+import { EmbedError }                       from '../../lib/Error/index.js';
 
 const define = promisify(ud.define);
 
@@ -34,7 +35,7 @@ export default class extends ECommand {
 		try {
 			return await define(text);
 		} catch (err) {
-			throw `Could not find any definitions for ${text}`;
+			throw new EmbedError(`Could not find any definitions for ${text}`);
 		}
 	}
 

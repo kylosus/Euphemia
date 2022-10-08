@@ -2,6 +2,7 @@ import { inlineCode }      from 'discord.js';
 import { ECommand }        from '../../../lib/index.js';
 import { subscribeUserTo } from '../db.js';
 import { TagArgType }      from './util.js';
+import { EmbedError }      from '../../../lib/Error/index.js';
 
 export default class extends ECommand {
 	constructor(client) {
@@ -42,14 +43,14 @@ export async function subscribe({ user, tagName }) {
 	} catch (err) {
 		// Not a great way of handling errors
 		if (err.code === 'SQLITE_CONSTRAINT') {
-			throw `You are already in ${inlineCode(tagName)}`;
+			throw new EmbedError(`You are already in ${inlineCode(tagName)}`);
 		}
 
 		throw err;
 	}
 
 	if (result.changes === 0) {
-		throw `Tag ${inlineCode(tagName)} not found`;
+		throw new EmbedError(`Tag ${inlineCode(tagName)} not found`);
 	}
 
 	return `Subscribed to ${inlineCode(tagName)}`;

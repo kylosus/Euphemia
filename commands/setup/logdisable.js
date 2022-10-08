@@ -1,6 +1,7 @@
 import { PermissionsBitField } from 'discord.js';
 import { ArgConsts, ECommand } from '../../lib/index.js';
 import { getSettings }         from './log.js';
+import { EmbedError }          from '../../lib/Error/index.js';
 
 export default class extends ECommand {
 	constructor(client) {
@@ -35,7 +36,7 @@ export default class extends ECommand {
 		// Single event
 		if (event) {
 			if (!Object.hasOwnProperty.call(entry, event)) {
-				throw `Event ${event} not found`;
+				throw new EmbedError(`Event ${event} not found`);
 			}
 
 			entry[event] = null;

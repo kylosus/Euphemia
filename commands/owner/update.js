@@ -1,6 +1,7 @@
 import { AutoEmbed, ECommand }   from '../../lib/index.js';
 import { spawn }                 from 'child_process';
 import { inlineCode, codeBlock } from 'discord.js';
+import { EmbedError }            from '../../lib/Error/index.js';
 
 export default class extends ECommand {
 	constructor(client) {
@@ -35,7 +36,7 @@ export default class extends ECommand {
 		});
 
 		if (exitCode) {
-			throw error;
+			throw new EmbedError(error);
 		}
 
 		return result;

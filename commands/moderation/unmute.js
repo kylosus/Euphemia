@@ -2,6 +2,7 @@ import { PermissionsBitField }                        from 'discord.js';
 import { ArgConsts }                                  from '../../lib/index.js';
 import { ModerationCommand, ModerationCommandResult } from '../../modules/moderation/index.js';
 import { getMutedRole, unmuteMember }                 from '../../modules/mute/index.js';
+import { EmbedError }                                 from '../../lib/Error/index.js';
 
 export default class extends ModerationCommand {
 	constructor(client) {
@@ -41,7 +42,7 @@ export default class extends ModerationCommand {
 		const role = await getMutedRole(message.guild);
 
 		if (!role) {
-			throw 'Muted role not found';
+			throw new EmbedError('Muted role not found');
 		}
 
 		await Promise.all(members.map(async m => {

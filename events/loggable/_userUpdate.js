@@ -29,7 +29,7 @@ export default async (oldUser, newUser) => {
 				.setDescription(`${newUser.toString()}  ${inlineCode(newUser.tag)}`)
 				.addFields(
 					{ name: 'Old username', value: oldUser.tag, inline: true },
-					{ name: 'New username', value: oldUser.tag, inline: true }
+					{ name: 'New username', value: newUser.tag, inline: true }
 				)
 				.setTimestamp()]
 		});

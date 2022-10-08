@@ -3,6 +3,7 @@ import { ECommand }                                     from '../../../lib/index
 import { getTagIdMax, getTagsForward, getTagsBackward } from '../db.js';
 import { CircularListGenerator, PaginatedMessage }      from '../../paginatedmessage/index.js';
 import { COLOR, PER_PAGE }                              from './consts.js';
+import { EmbedError }                                   from '../../../lib/Error/index.js';
 
 export default class extends ECommand {
 	constructor(client) {
@@ -25,7 +26,7 @@ export default class extends ECommand {
 		const { length } = await getTagIdMax({ guild: message.guild });
 
 		if (!length) {
-			throw 'There are no tags in the server';
+			throw new EmbedError('There are no tags in the server');
 		}
 
 		const [next, prev] = (() => {

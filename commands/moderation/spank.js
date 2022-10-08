@@ -1,5 +1,6 @@
 import { PermissionsBitField } from 'discord.js';
 import { ArgConsts, ECommand } from '../../lib/index.js';
+import { EmbedError }          from '../../lib/Error/index.js';
 
 const SPANK_MILLISECONDS = 60000;
 
@@ -29,7 +30,7 @@ export default class extends ECommand {
 
 	async run(message, { member }) {
 		if (message.member.id === member.id) {
-			throw 'Are you trying to spank yourself?';
+			throw new EmbedError('Are you trying to spank yourself?');
 		}
 
 		const toMute = (() => {
@@ -39,6 +40,10 @@ export default class extends ECommand {
 
 			return member;
 		})();
+
+		if (!toMute.moderatable) {
+			throw new EmbedError(`${member} is too powerful to spank!`);
+		}
 
 		await toMute.timeout(SPANK_MILLISECONDS, 'Spanked');
 

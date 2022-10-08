@@ -4,6 +4,7 @@ import { ECommand }                                                             
 import {
 	DecisionMessage
 }                                                                                      from '../../modules/decisionmessage/index.js';
+import { EmbedError }                                                                  from '../../lib/Error/index.js';
 
 export default class extends ECommand {
 	constructor(client) {
@@ -40,7 +41,7 @@ export default class extends ECommand {
 
 	async run(message, { role, text }) {
 		if (!role.editable) {
-			throw 'I do not have enough permissions to assign this role';
+			throw new EmbedError('I do not have enough permissions to assign this role');
 		}
 
 		const messagePayload = MessagePayload.create(message, {

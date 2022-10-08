@@ -3,6 +3,7 @@ import { fetchAnime }                from './util.js';
 import { readFileSync }              from 'fs';
 import { SelectionPaginatedMessage } from '../../modules/index.js';
 import { EmbedBuilder }              from 'discord.js';
+import { EmbedError }                from '../../lib/Error/index.js';
 
 const query = readFileSync(new URL('./va-query.graphql', import.meta.url), 'utf8');
 
@@ -38,11 +39,11 @@ export default class extends ECommand {
 		};
 
 		const { data } = await fetchAnime(query, variables).catch(() => {
-			throw 'Character not found';
+			throw new EmbedError('Character not found');
 		});
 
 		if (!data.Page.characters.length) {
-			throw 'No voice actors found for the character';
+			throw new EmbedError('No voice actors found for the character');
 		}
 
 		return data.Page.characters;
@@ -58,7 +59,7 @@ export default class extends ECommand {
 			}));
 
 		if (!selectionOptions.length) {
-			throw 'No voice actors found for the character';
+			throw new EmbedError('No voice actors found for the character');
 		}
 
 		return SelectionPaginatedMessage.register(message, s => {

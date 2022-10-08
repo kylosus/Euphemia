@@ -1,5 +1,6 @@
 import { codeBlock, EmbedBuilder, PermissionsBitField } from 'discord.js';
 import { ArgConsts, ECommand }                          from '../../lib/index.js';
+import { EmbedError }                                   from '../../lib/Error/index.js';
 
 export default class extends ECommand {
 	constructor(client) {
@@ -33,7 +34,7 @@ export default class extends ECommand {
 		const m = await channel.messages.fetch({ message: id });
 
 		if (!m.embeds) {
-			throw 'Message has no embeds';
+			throw new EmbedError('Message has no embeds');
 		}
 
 		return m.embeds[0].toJSON();

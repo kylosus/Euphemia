@@ -5,6 +5,7 @@ import { CircularList, PaginatedMessage }        from '../../paginatedmessage/in
 import { chunk }                                 from 'lodash-es';
 import { COLOR, PER_PAGE }                       from './consts.js';
 import { TagArgType }                            from './util.js';
+import { EmbedError }                            from '../../../lib/Error/index.js';
 
 
 export default class extends ECommand {
@@ -37,7 +38,7 @@ export default class extends ECommand {
 		});
 
 		if (!res.length) {
-			throw `Tag ${inlineCode(tag)} not found or empty`;
+			throw new EmbedError(`Tag ${inlineCode()} not found or empty`);
 		}
 
 		return { tagName: tag, users: res.map(r => r.user) };

@@ -1,7 +1,9 @@
 import { PermissionsBitField } from 'discord.js';
 import { ArgConsts, ECommand } from '../../lib/index.js';
+import { EmbedError }          from '../../lib/Error/index.js';
 
 // 2 seconds
+const MAX_MESSAGES = 100;
 const DELETE_AFTER = 2000;
 
 export default class extends ECommand {
@@ -33,10 +35,16 @@ export default class extends ECommand {
 		// Bad fix?e
 		const permissions = message.member.permissionsIn(message.channel);
 		if (!permissions.has(PermissionsBitField.Flags.ManageMessages)) {
-			throw 'You cannot purge messages in this channel';
+			throw new EmbedError('You cannot purge messages in this channel');
 		}
 
-		const deleted = (await message.channel.bulkDelete(amount + 1)).size - 1;
+		if (amount > MAX_MESSAGES) {
+			amount = MAX_MESSAGES;
+		}
+
+		await message.delete();
+
+		const deleted = (await message.channel.bulkDelete(amount)).size;
 		return `Purged ${deleted} message${deleted > 1 ? 's' : ''}`;
 	}
 }

@@ -1,6 +1,8 @@
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, PermissionsBitField } from 'discord.js';
 import { ArgConsts, AutoEmbed }                                              from '../../lib/index.js';
-import { ModerationCommand, ModerationCommandResult }                        from '../../modules/moderation/index.js';
+import { ModerationCommand }                                                 from '../../modules/moderation/index.js';
+import { banMembers }                                                        from './util.js';
+import { EmbedError }                                                        from '../../lib/Error/index.js';
 
 const PROMPT_YES         = 'YES';
 const PROMPT_NO          = 'NO';
@@ -57,7 +59,15 @@ export default class extends ModerationCommand {
 			.filter(({ joinedTimestamp: jts }) => jts <= to.joinedTimestamp);
 
 		if (range.size > MAX_BANNABLE_USERS) {
-			throw `I cannot ban more than ${MAX_BANNABLE_USERS} users at a time.`;
+			const lastUnbanned = range.at(MAX_BANNABLE_USERS);
+
+			range = range.first(MAX_BANNABLE_USERS);
+
+			this.sendNotice(
+				message,
+				`I cannot ban more than ${MAX_BANNABLE_USERS} users at a time
+				Last unbanned user is ${lastUnbanned}`
+			).catch(() => {});
 		}
 
 		const buttons = new ActionRowBuilder()
@@ -91,37 +101,20 @@ export default class extends ModerationCommand {
 			});
 
 		} catch (err) {
-			throw 'Cancelled';
+			// TODO: perhaps an EmbedNotification type?
+			throw new EmbedError('Cancelled');
 		}
-
-		interaction.deferUpdate().catch(() => {});
 
 		buttons.components.forEach(b => b.setDisabled());
 
 		sent.edit({ components: [buttons] });
 
 		if (interaction.customId !== PROMPT_YES) {
-			throw 'Cancelled';
+			throw new EmbedError('Cancelled');
 		}
 
-		const result = new ModerationCommandResult(reason);
+		this.sendNoticeInteraction(interaction, 'Executing...').catch(() => {});
 
-		result.addPassed(message.member);
-
-		await Promise.all(range.map(async m => {
-			if (!m.bannable) {
-				return result.addFailed(m, 'Member too high in the hierarchy');
-			}
-
-			try {
-				await m.ban({ deleteMessageDays: 1, reason });
-			} catch (err) {
-				return result.addFailed(m, err.message);
-			}
-
-			result.addPassed(m);
-		}));
-
-		return result;
+		return banMembers({ message, members: range, reason, deleteMessageDays: 1 });
 	}
 }

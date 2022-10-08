@@ -1,6 +1,7 @@
 import { ArgConsts, ECommand } from '../../../lib/index.js';
 import { forceInsert }         from '../db.js';
 import got                     from 'got';
+import { EmbedError }          from '../../../lib/Error/index.js';
 
 const CARL_ID = '235148962103951360';
 
@@ -32,7 +33,7 @@ export default class extends ECommand {
 		const carlMessage = await message.channel.messages.fetch({ message: id });
 
 		if (!carlMessage.attachments.size) {
-			throw 'No attachments found';
+			throw new EmbedError('No attachments found');
 		}
 
 		const { url } = carlMessage.attachments.first();

@@ -1,6 +1,7 @@
 import { Collection, time, TimestampStyles, EmbedBuilder } from 'discord.js';
 import { ArgConsts, ECommand }                             from '../../lib/index.js';
 import got                                                 from 'got';
+import { EmbedError }                                      from '../../lib/Error/index.js';
 import dayjs                                               from 'dayjs';
 
 const ANILIST_URL = 'https://graphql.anilist.co';
@@ -79,7 +80,7 @@ export default class extends ECommand {
 		})(anime === '*' ? null : anime);
 
 		const { data } = await fetchAnime(query, variables).catch(() => {
-			throw 'Anime not found';
+			throw new EmbedError('Anime not found');
 		});
 
 		if (!data.Page) {

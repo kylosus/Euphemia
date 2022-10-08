@@ -3,6 +3,9 @@ import {
 	ArgConsts, ECommand
 }                                                                                           from '../../../lib/index.js';
 import { getAction }                                                                        from '../db.js';
+import {
+	EmbedError
+}                                                                                           from '../../../lib/Error/index.js';
 
 const COLOR = '#2CDDD7';
 
@@ -35,7 +38,7 @@ export default class extends ECommand {
 		const result = await getAction({ guild: message.guild, id: number });
 
 		if (!result) {
-			throw 'Action number not found';
+			throw new EmbedError('Action number not found');
 		}
 
 		return result;
