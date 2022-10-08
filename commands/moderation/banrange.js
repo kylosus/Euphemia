@@ -101,5 +101,7 @@ export default class extends ModerationCommand {
 		}
 
 		this.sendNoticeInteraction(interaction, 'Executing...').catch(() => {});
+
+		return banMembers({ message, members: range, reason, deleteMessageDays: 1 });
 	}
 }
