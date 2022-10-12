@@ -38,7 +38,7 @@ export default class extends ECommand {
 	async run(message, { user }) {
 		// hehe
 		if (message.author.id === ME && user.toLowerCase() === 'pablo escobar') {
-			return { user, match: 10000000000000 });
+			return { user, match: 10000000000000 };
 		}
 
 		const error = new EmbedError('Please mention someone to match with');
