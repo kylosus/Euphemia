@@ -43,7 +43,7 @@ export default class extends ECommand {
 
 		const error = new EmbedError('Please mention someone to match with');
 
-		const idMention = user.match(userIdRegex) || (() => { throw error; });
+		const idMention = user.match(userIdRegex) || (() => { throw error; })();
 		const idRaw     = idExtract(idMention)[0];
 
 		const member = await message.guild.members.fetch(idRaw).catch(() => { throw error; });
