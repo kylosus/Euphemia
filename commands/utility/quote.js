@@ -1,5 +1,5 @@
-import { EmbedBuilder }        from 'discord.js';
-import { ArgConsts, ECommand } from '../../lib/index.js';
+import { Colors, EmbedBuilder } from 'discord.js';
+import { ArgConsts, ECommand }  from '../../lib/index.js';
 
 export default class extends ECommand {
 	constructor(client) {
@@ -12,15 +12,15 @@ export default class extends ECommand {
 			},
 			args:        [
 				{
+					id:      'id',
+					type:    ArgConsts.TYPE.BARE_ID,
+					message: 'Please provide a message id.'
+				},
+				{
 					id:       'channel',
 					type:     ArgConsts.TYPE.CHANNEL,
 					optional: true,
 					default:  m => m.channel
-				},
-				{
-					id:      'id',
-					type:    ArgConsts.TYPE.TEXT,
-					message: 'Please provide a message id.'
 				}
 			],
 			guildOnly:   true,
@@ -33,7 +33,7 @@ export default class extends ECommand {
 	}
 
 	async ship(message, result) {
-		const embed = new EmbedBuilder().setColor(result.member ? result.member.displayColor : 'WHITE')
+		const embed = new EmbedBuilder().setColor(result.member?.displayColor ?? Colors.White)
 			.addFields({ name: 'Jump to message', value: `[Link](${result.url})` })
 			.setDescription(result.content || '*No content*')
 			.setFooter({ text: `In #${result.channel.name}` })
