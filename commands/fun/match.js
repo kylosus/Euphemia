@@ -49,7 +49,7 @@ export default class extends ECommand {
 		const member = await message.guild.members.fetch(idRaw).catch(() => { throw error; });
 
 		const sortedIds = [message.author, member.user]
-			.sort((a, b) => b.createdTimestamp - a.createdTimestamp)
+			.sort((a, b) => a.createdTimestamp - b.createdTimestamp)
 			.map(u => u.id);
 
 		const match = parseInt(
