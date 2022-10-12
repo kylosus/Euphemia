@@ -48,8 +48,12 @@ export default class extends ECommand {
 
 		const member = await message.guild.members.fetch(idRaw).catch(() => { throw error; });
 
+		const sortedIds = [message.author, member.user]
+			.sort((a, b) => b.createdTimestamp - a.createdTimestamp)
+			.map(u => u.id);
+
 		const match = parseInt(
-			crypto.createHash('md5').update(message.author.id + member.user.id).digest('hex'),
+			crypto.createHash('md5').update(sortedIds.join('')).digest('hex'),
 			16
 		) % MAX_MATCH;
 
