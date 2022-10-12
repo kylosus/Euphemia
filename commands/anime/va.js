@@ -28,7 +28,8 @@ export default class extends ECommand {
 			cacheEviction: 1000 * 60 * 60 * 24,	// 1 day
 			guildOnly:     false,
 			ownerOnly:     false,
-			slash:         true
+			slash:         true,
+			defer:         true
 		});
 	}
 
