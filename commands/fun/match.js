@@ -38,7 +38,7 @@ export default class extends ECommand {
 	async run(message, { user }) {
 		// hehe
 		if (message.author.id === ME && user.toLowerCase() === 'pablo escobar') {
-			return { user, match: 1000 };
+			return { user, match: 10000000000000 });
 		}
 
 		const error = new EmbedError('Please mention someone to match with');
@@ -55,7 +55,7 @@ export default class extends ECommand {
 		const match = parseInt(
 			crypto.createHash('md5').update(sortedIds.join('')).digest('hex'),
 			16
-		) % MAX_MATCH;
+		) % (MAX_MATCH + 1);
 
 		return { user: member, match };
 	}
