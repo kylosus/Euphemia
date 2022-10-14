@@ -12,13 +12,14 @@ const COLOR = '#2CDDD7';
 export default class extends ECommand {
 	constructor(client) {
 		super(client, {
-			aliases:         ['action'],
-			description:     {
+			aliases:     ['action'],
+			description: {
 				content:  'Shows details of a specified action',
 				usage:    '<action number>',
 				examples: ['action 1']
 			},
-			userPermissions: [PermissionsBitField.Flags.ManageGuild],
+			// For Valk
+			userPermissions: [PermissionsBitField.Flags.ManageRoles],
 			args:            [
 				{
 					id:          'number',

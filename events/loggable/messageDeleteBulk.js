@@ -2,7 +2,13 @@ import { Buffer }                    from 'node:buffer';
 import { AttachmentBuilder, Colors } from 'discord.js';
 import { AutoEmbed, EmbedLimits }    from '../../lib/index.js';
 
+const MOD_CHANNEL = '293432840538947584';
+
 export default async (channel, messages) => {
+	if (channel.id === MOD_CHANNEL) {
+		return;
+	}
+	
 	const embed = new AutoEmbed()
 		.setColor(Colors.DarkPurple)
 		.setTitle(`🗑 ${messages.size} messages bulk deleted in #${messages.first().channel.name}`)

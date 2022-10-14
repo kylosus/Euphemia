@@ -2,7 +2,13 @@ import { inlineCode, channelMention, EmbedBuilder, Colors } from 'discord.js';
 import { EmbedLimits }                                      from '../../lib/index.js';
 import { truncate }                                         from 'lodash-es';
 
+const MOD_CHANNEL = '293432840538947584';
+
 export default async (channel, oldMessage, newMessage) => {
+	if (channel.id === MOD_CHANNEL) {
+		return;
+	}
+	
 	if (oldMessage.content === newMessage.content || !oldMessage.content || !newMessage.content) {
 		return;
 	}

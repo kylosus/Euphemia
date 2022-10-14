@@ -5,6 +5,8 @@ import * as moderation       from './moderation/index.js';
 // import * as namefilter       from './namefilter/index.js';
 import * as paginatedmessage from './paginatedmessage/index.js';
 import * as subscription     from './subscription/index.js';
+import * as rules            from './rules/index.js';
+
 
 export const init = async (client, _db) => {
 	await autokick.init(client);
@@ -14,6 +16,7 @@ export const init = async (client, _db) => {
 	// await namefilter.init(client);
 	await paginatedmessage.init(client);
 	await subscription.init(client, _db);
+	await rules.init(client);
 };
 
 export { CircularList, PaginatedMessage, SelectionPaginatedMessage } from './paginatedmessage/index.js';

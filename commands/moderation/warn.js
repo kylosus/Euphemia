@@ -12,7 +12,8 @@ export default class extends ModerationCommand {
 				usage:    '<member> [member2...] <reason>',
 				examples: ['warn @member Some reason', 'warn @member1 @member2 Some other reason']
 			},
-			userPermissions: [PermissionsBitField.Flags.ManageGuild],
+			// For Valk
+			userPermissions: [PermissionsBitField.Flags.ManageRoles],
 			args:            [
 				{
 					id:          'members',

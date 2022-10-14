@@ -2,7 +2,13 @@ import { channelMention, EmbedBuilder, Colors } from 'discord.js';
 import { EmbedLimits }                          from '../../lib/index.js';
 import { truncate }                             from 'lodash-es';
 
+const MOD_CHANNEL = '293432840538947584';
+
 export default async (channel, message) => {
+	if (channel.id === MOD_CHANNEL) {
+		return;
+	}
+
 	const embed = new EmbedBuilder()
 		.setColor(Colors.DarkPurple)
 		.setTitle(`🗑 Message deleted in #${message.channel.name}`)

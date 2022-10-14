@@ -9,13 +9,14 @@ import { EmbedError }                                                           
 export default class extends ECommand {
 	constructor(client) {
 		super(client, {
-			aliases:         ['actions'],
-			description:     {
+			aliases:     ['actions'],
+			description: {
 				content:  'Lists moderation actions in the server',
 				usage:    '[from @moderator] [to @member]',
 				examples: ['actions', 'actions from=@moderator', 'actions from @moderator to @user']
 			},
-			userPermissions: [PermissionsBitField.Flags.ManageGuild],
+			// For Valk
+			userPermissions: [PermissionsBitField.Flags.ManageRoles],
 			args:            [
 				{
 					id:          'moderator',
