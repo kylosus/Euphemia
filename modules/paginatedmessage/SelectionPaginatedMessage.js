@@ -2,7 +2,7 @@ import { ActionRowBuilder, SelectMenuBuilder } from 'discord.js';
 
 const _watcher = ({ message, generator, options }) => {
 	// handle errors!
-	message.createMessageComponentCollector({
+	return message.createMessageComponentCollector({
 		filter: async interaction => {
 			if (!interaction.isSelectMenu()) {
 				return;
