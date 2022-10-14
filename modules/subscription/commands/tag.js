@@ -6,6 +6,7 @@ import { chunk, TagArgType }                                                   f
 import { DecisionMessage }                                                     from '../../decisionmessage/index.js';
 import { subscribe }                                                           from './subscribe.js';
 import { unsubscribe }                                                         from './unsubscribe.js';
+import { EmbedError }                                                          from '../../../lib/Error/index.js';
 
 export default class extends ECommand {
 	constructor(client) {

@@ -14,7 +14,7 @@ export const countNormalizer = count => {
 		return `${count}nd`;
 	case 3:
 		return `${count}rd`;
-	defaultFunc:
+	default:
 		return `${count}th`;
 	}
 };

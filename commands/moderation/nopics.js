@@ -83,8 +83,8 @@ export default class extends ModerationCommand {
 			embed.addFields({
 				name:  'Failed',
 				value: result.failed
-						   .map(({ id, reason = 'Unknown reason' }) => `${wrap(id)} - ${reason}`)
-						   .join(' ')
+					.map(({ id, reason = 'Unknown reason' }) => `${wrap(id)} - ${reason}`)
+					.join(' ')
 			});
 		}
 
