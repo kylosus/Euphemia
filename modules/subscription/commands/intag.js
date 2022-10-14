@@ -38,7 +38,7 @@ export default class extends ECommand {
 		});
 
 		if (!res.length) {
-			throw new EmbedError(`Tag ${inlineCode()} not found or empty`);
+			throw new EmbedError(`Tag ${inlineCode(tag)} not found or empty`);
 		}
 
 		return { tagName: tag, users: res.map(r => r.user) };
