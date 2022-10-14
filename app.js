@@ -52,8 +52,9 @@ class Client extends EClient {
 		);
 
 		this.commandHandler = new ECommandHandler(this, {
-			prefix: process.env.BOT_PREFIX || BotConfig.PREFIX || ';',
-			path:   new URL('commands', import.meta.url).pathname
+			prefix:    process.env.BOT_PREFIX || BotConfig.PREFIX || ';',
+			path:      new URL('commands', import.meta.url).pathname,
+			testGuild: process.env.TEST_GUILD
 		});
 	}
 }
