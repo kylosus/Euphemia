@@ -54,7 +54,7 @@ const register = async (message, generator, options) => {
 	const botMessage = await message.reply({ embeds: [firstEmbed], components: [row] });
 
 	// ?????
-	if (message.isChatInputCommand()) {
+	if (message.isChatInputCommand?.()) {
 		return _watcher_interaction({
 			originalInteraction: message,
 			interactionReply: botMessage,
