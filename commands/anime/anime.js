@@ -49,8 +49,7 @@ export default class extends ECommand {
 				genres
 				id
 				idMal
-				nextAiringEpisode { episode timeUntilAiring }
-				popularity
+				nextAiringEpisode { episode airingAt }
 				siteUrl
 				source
 				status
@@ -76,34 +75,27 @@ export default class extends ECommand {
 			.setTitle(result.title?.userPreferred)
 			.setThumbnail(result.coverImage?.large)
 			.setDescription(`[AniList](${result?.siteUrl}) | [MyAnimeList](https://myanimelist.net/anime/${result.idMal})`)
-			.addFields(
-				{ name: 'Average score', value: `${result.averageScore ?? '-'}%`, inline: true },
-				{ name: 'Popularity', value: String(result?.popularity), inline: true },
-				{ name: 'Format', value: _normalizeConstant(result.format) || 'unknown', inline: true },
-				{ name: 'Source', value: result.source ? _normalizeConstant(result.source) : 'unknown', inline: true },
-				{ name: 'Episodes', value: String(result.episodes) ?? 'unknown', inline: true },
-				{ name: 'Status', value: _normalizeConstant(result.status) || 'unknown', inline: true },
-			);
+			.addFields([
+				{ name: 'Average score', value: `${result.averageScore || '-'}%`, inline: true },
+				{ name: 'Format', value: _normalizeConstant(result.format || 'Unknown'), inline: true },
+				{ name: 'Source', value: _normalizeConstant(result.source || 'Unknown'), inline: true },
+				{ name: 'Episodes', value: String(result.episodes || 'Unknown'), inline: true },
+			]);
 
-		if (result.startDate.month) {
-			embed.addFields({
-				name:   'Start',
-				value:  `${result?.startDate.day}/${result?.startDate.month}/${result?.startDate.year}`,
-				inline: true
-			});
-		}
+		embed.addFields({
+			name:   'Start',
+			value:  result.startDate?.month ? dateToTimestamp(result.startDate) : 'Unknown',
+			inline: true
+		});
 
 		embed.addFields({
 			name:   'End',
-			value:  (({ day, month, year }) => {
-				if (!month) {
-					return 'Still airing';
-				}
-
-				return `${day}/${month}/${year}`;
-			})(result.endDate),
+			value:  result.endDate?.month ? dateToTimestamp(result.endDate) : 'Unknown',
 			inline: true
 		});
+
+		embed.addFields({ name: 'Status', value: _normalizeConstant(result.status || 'Unknown'), inline: true});
+
 
 		if (result.genres) {
 			embed.addFields({ name: 'Genres', value: result.genres.slice(0, GENRE_MAX).join('\n'), inline: true });
@@ -117,26 +109,30 @@ export default class extends ECommand {
 		}
 
 		const duration = (() => {
-			if (result.nextAiringEpisode) {
-				const duration = dayjs.duration(result.nextAiringEpisode.timeUntilAiring, 'seconds');
-				return ['Next', duration.format('D [days] H [hours] m [minutes]')];
+			if (result.nextAiringEpisode?.airingAt) {
+				return [
+					`Next Episode ${result.nextAiringEpisode.episode || '?'}`,
+					`${time(result.nextAiringEpisode.airingAt, TimestampStyles.RelativeTime)}`
+				];
 			}
 
-			// this is stupid, just use moment { day: 'whatever' }
-			const date         = dayjs(`${result?.startDate.year}${('0' + result?.startDate.month).slice(-2)}${('0' + result?.startDate.day).slice(-2)}`, 'YYYYMMDD');
-			const relativeDate = time(date.toDate(), TimestampStyles.RelativeTime);
+			const date = result.startDate?.month ? dateToTimestamp(result.startDate, TimestampStyles.RelativeTime) : 'Soon';
 
 			if (result.status === 'FINISHED') {
-				return ['Aired', relativeDate];
+				return ['Aired', date];
 			}
 
-			return ['Will Air', relativeDate];
+			return ['Will Air', date];
 		})();
 
 		embed.addFields({ name: duration[0], value: duration[1], inline: true });
 
 		return message.reply({ embeds: [embed] });
 	}
+}
+
+function dateToTimestamp({ day = 1, month = 1, year = 1 }, style = TimestampStyles.LongDate) {
+	return time(new Date(year, month, day), style);
 }
 
 function _normalizeConstant(string) {
