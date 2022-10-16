@@ -6,14 +6,16 @@ export const banUsers = async ({ message, users, deleteMessageDays = 0, reason }
 	await Promise.all(users.map(async user => {
 		const member = await message.guild.members.fetch({ user }).catch(() => {});
 
-		// If client can't ban
-		if (!member?.bannable) {
-			return result.addFailed(user, 'Missing client permissions');
-		}
+		if (member) {
+			// If client can't ban
+			if (!member.bannable) {
+				return result.addFailed(user, 'Missing client permissions');
+			}
 
-		// If the command author can't ban
-		if (member?.roles?.highest?.comparePositionTo(message.member.roles.highest) >= 0) {
-			return result.addFailed(user, 'Missing user permissions');
+			// If the command author can't ban
+			if (member.roles.highest.comparePositionTo(message.member.roles.highest) >= 0) {
+				return result.addFailed(user, 'Missing user permissions');
+			}
 		}
 
 		try {
@@ -34,12 +36,12 @@ export const banMembers = async ({ message, members, deleteMessageDays = 0, reas
 
 	await Promise.all(members.map(async member => {
 		// If client can't ban
-		if (!member?.bannable) {
+		if (!member.bannable) {
 			return result.addFailed(member, 'Missing client permissions');
 		}
 
 		// If the command author can't ban
-		if (member?.roles?.highest?.comparePositionTo(message.member.roles.highest) >= 0) {
+		if (member.roles.highestm.comparePositionTo(message.member.roles.highest) >= 0) {
 			return result.addFailed(member, 'Missing user permissions');
 		}
 
