@@ -2,7 +2,6 @@ import { Collection, time, TimestampStyles, EmbedBuilder } from 'discord.js';
 import { ArgConsts, ECommand }                             from '../../lib/index.js';
 import got                                                 from 'got';
 import { EmbedError }                                      from '../../lib/Error/index.js';
-import dayjs                                               from 'dayjs';
 
 const ANILIST_URL = 'https://graphql.anilist.co';
 
@@ -67,7 +66,7 @@ export default class extends ECommand {
 						id
 						siteUrl
 						episodes
-						coverImage { color medium }
+						coverImage { color large }
 						title { userPreferred }
 						startDate { year month day }
 						nextAiringEpisode { episode airingAt }
@@ -91,12 +90,6 @@ export default class extends ECommand {
 	async shipOne(message, result) {
 		const duration = ((a) => {
 			if (!a.nextAiringEpisode?.airingAt) {
-				const duration = dayjs(`${a.startDate.year ?? '-'}-${a.startDate.month}-${a.startDate.day}`);
-
-				if (duration.isValid()) {
-					return time(duration.unix(), TimestampStyles.LongDate);
-				}
-
 				return 'Some time in the future';
 			}
 
@@ -108,10 +101,10 @@ export default class extends ECommand {
 
 		embed
 			.setTitle(result.title.userPreferred)
-			.setThumbnail(result.coverImage.medium)
+			.setThumbnail(result.coverImage.large)
 			.setURL(result.siteUrl)
 			.addFields({
-				name:   `Episode ${result.nextAiringEpisode?.episode ?? '1'}/${result.episodes ?? '?'} in`,
+				name:   `Episode ${result.nextAiringEpisode?.episode ?? '1'}/${result.episodes ?? '?'}`,
 				value:  duration,
 				inline: false
 			});
