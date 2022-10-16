@@ -1,5 +1,6 @@
-import { Colors, EmbedBuilder } from 'discord.js';
-import { ArgConsts, ECommand }  from '../../lib/index.js';
+import { Colors, EmbedBuilder, inlineCode } from 'discord.js';
+import { ArgConsts, ECommand }              from '../../lib/index.js';
+import { EmbedError }                       from '../../lib/Error/index.js';
 
 export default class extends ECommand {
 	constructor(client) {
@@ -17,10 +18,10 @@ export default class extends ECommand {
 					message: 'Please provide a message id.'
 				},
 				{
-					id:       'channel',
-					type:     ArgConsts.TYPE.CHANNEL,
-					optional: true,
-					default:  m => m.channel
+					id:          'channel',
+					type:        ArgConsts.TYPE.CHANNEL,
+					optional:    true,
+					defaultFunc: m => m.channel
 				}
 			],
 			guildOnly:   true,
@@ -29,7 +30,9 @@ export default class extends ECommand {
 	}
 
 	async run(message, { channel, id }) {
-		return channel.messages.fetch({ message: id });
+		return channel.messages.fetch(String(id)).catch(() => {
+			throw new EmbedError(`Message ${channel}/${inlineCode(id)} not found`);
+		});
 	}
 
 	async ship(message, result) {
