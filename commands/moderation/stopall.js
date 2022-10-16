@@ -25,16 +25,16 @@ export default class extends ModerationCommand {
 			clientPermissions: [PermissionsBitField.Flags.ManageRoles],
 			args:              [
 				{
-					id:       'toggle',
-					type:     ArgConsts.TYPE.WORD,
-					optional: true,
-					default:  () => 'on'
+					id:          'toggle',
+					type:        ArgConsts.TYPE.WORD,
+					optional:    true,
+					defaultFunc: () => 'on'
 				},
 				{
-					id:       'reason',
-					type:     ArgConsts.TYPE.REASON,
-					optional: true,
-					default:  () => null
+					id:          'reason',
+					type:        ArgConsts.TYPE.REASON,
+					optional:    true,
+					defaultFunc: () => null
 				}
 			],
 			guildOnly:         true,
