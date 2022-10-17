@@ -65,7 +65,7 @@ export default class extends ECommand {
 			embed.addFields({ name: 'Failed', value: codeBlock(result.failedReason ?? 'Unknown reason') });
 		}
 
-		if (result.action === 'MUTE') {
+		if (result.action === 'MUTE' || result.action === 'TIMEOUT') {
 			embed.addFields({
 				name:  'Muted:',
 				value: (t => {
