@@ -67,18 +67,18 @@ export default class extends ECommand {
 
 		if (result.action === 'MUTE') {
 			embed.addFields({
-				name:  'Muted for',
+				name:  'Muted:',
 				value: (t => {
 					if (!t) {
 						return 'Forever';
 					}
 
-					return time(t, TimestampStyles.RelativeTime);
+					return `${time(new Date(result.timestamp), TimestampStyles.LongDateTime)} - ${time(new Date(t), TimestampStyles.LongDateTime)}`;
 				})(result.aux)
 			});
 		}
 
-		embed.setTimestamp(result.timestamp);
+		embed.setTimestamp(new Date(result.timestamp));
 
 		return message.channel.send({ embeds: [embed] });
 	}
