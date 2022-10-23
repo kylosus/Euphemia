@@ -17,7 +17,7 @@
 // 					id: 'discriminator',
 // 					type: new ArgumentType(/\d{4}/, flatten),
 // 					optional: true,
-// 					default: m => m.author.discriminator
+// 					defaultFunc: m => m.author.discriminator
 // 				}
 // 			],
 // 			guildOnly: true,

@@ -27,25 +27,27 @@ export default class extends ModerationCommand {
 					message: 'Please enter the ID of the first user that joined'
 				},
 				{
-					id:       'to',
-					type:     ArgConsts.TYPE.MEMBER,
-					optional: true,
-					default:  message => message.guild.members.cache
+					id:          'to',
+					type:        ArgConsts.TYPE.MEMBER,
+					optional:    true,
+					defaultFunc: message => message.guild.members.cache
 						.reduce(
 							(acc, m) => m.joinedTimestamp > acc.joinedTimestamp ? m : acc,
 							message.guild.members.cache.last()
 						)
 				},
 				{
-					id:       'reason',
-					type:     ArgConsts.TYPE.REASON,
-					optional: true,
-					default:  () => null,
+					id:          'reason',
+					type:        ArgConsts.TYPE.REASON,
+					optional:    true,
+					defaultFunc: () => null,
 				},
 			],
 			fetchMembers:      true,
 			guildOnly:         true,
 			ownerOnly:         false,
+			slash:             true,
+			// defer:             true
 		});
 	}
 
@@ -97,10 +99,15 @@ export default class extends ModerationCommand {
 				filter: interaction => interaction.isButton() && interaction.user.id === message.author.id,
 				time:   15_000
 			});
+
 		} catch (err) {
 			// TODO: perhaps an EmbedNotification type?
 			throw new EmbedError('Cancelled');
 		}
+
+		buttons.components.forEach(b => b.setDisabled());
+
+		sent.edit({ components: [buttons] });
 
 		if (interaction.customId !== PROMPT_YES) {
 			throw new EmbedError('Cancelled');

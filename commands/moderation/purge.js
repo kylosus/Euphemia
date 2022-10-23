@@ -18,11 +18,16 @@ export default class extends ECommand {
 			userPermissions:   [PermissionsBitField.Flags.ManageMessages, PermissionsBitField.Flags.ReadMessageHistory],
 			clientPermissions: [PermissionsBitField.Flags.ManageMessages, PermissionsBitField.Flags.ReadMessageHistory],
 			args:              [{
-				id: 'amount', type: ArgConsts.TYPE.NUMBER, optional: true, default: () => 1,
+				id:          'amount',
+				type:        ArgConsts.TYPE.NUMBER,
+				description: 'Number of messages to prune',
+				optional:    true,
+				defaultFunc: () => 1,
 			}],
 			guildOnly:         true,
 			ownerOnly:         false,
-			deleteAfter:       DELETE_AFTER
+			deleteAfter:       DELETE_AFTER,
+			slash:             true
 		});
 	}
 

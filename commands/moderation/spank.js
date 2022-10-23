@@ -16,13 +16,15 @@ export default class extends ECommand {
 			clientPermissions: [PermissionsBitField.Flags.ModerateMembers],
 			args:              [
 				{
-					id:      'member',
-					type:    ArgConsts.TYPE.MEMBER,
-					message: 'Are you trying to spank thin air?',
+					id:          'member',
+					type:        ArgConsts.TYPE.MEMBER,
+					description: 'The baddie to spank',
+					message:     'Are you trying to spank thin air?',
 				}
 			],
 			guildOnly:         true,
 			ownerOnly:         false,
+			slash:             true
 		});
 	}
 

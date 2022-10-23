@@ -14,10 +14,10 @@ export default class extends ECommand {
 			userPermissions: [PermissionsBitField.Flags.ManageMessages],
 			args:            [
 				{
-					id:       'channel',
-					type:     ArgConsts.TYPE.CHANNEL,
-					optional: true,
-					default:  m => m.channel
+					id:          'channel',
+					type:        ArgConsts.TYPE.CHANNEL,
+					optional:    true,
+					defaultFunc: m => m.channel
 				},
 				{
 					id:      'id',
@@ -41,7 +41,7 @@ export default class extends ECommand {
 	}
 
 	async ship(message, result) {
-		return message.channel.send({
+		return message.reply({
 			embeds: [new EmbedBuilder()
 				.setColor(this.client.config.COLOR_OK)
 				.setDescription(codeBlock(JSON.stringify(result, null, 4)))]

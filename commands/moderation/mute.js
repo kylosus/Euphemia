@@ -20,25 +20,29 @@ export default class extends ModerationCommand {
 			clientPermissions: [PermissionsBitField.Flags.ManageRoles, PermissionsBitField.Flags.ManageGuild],
 			args:              [
 				{
-					id:      'members',
-					type:    ArgConsts.TYPE.MEMBERS,
-					message: 'Please mention members to mute'
+					id:          'members',
+					type:        ArgConsts.TYPE.MEMBERS,
+					description: 'Member to mute',
+					message:     'Please mention members to mute'
 				},
 				{
-					id:       'duration',
-					type:     ArgConsts.TYPE.DURATION,
-					optional: true,
-					default:  () => null
+					id:          'duration',
+					type:        ArgConsts.TYPE.DURATION,
+					description: 'Duration of the mute',
+					optional:    true,
+					defaultFunc: () => null
 				},
 				{
-					id:       'reason',
-					type:     ArgConsts.TYPE.REASON,
-					optional: true,
-					default:  () => null
+					id:          'reason',
+					type:        ArgConsts.TYPE.REASON,
+					description: 'Reason for the mute',
+					optional:    true,
+					defaultFunc: () => null
 				},
 			],
 			guildOnly:         true,
 			ownerOnly:         false,
+			slash:             true
 		});
 	}
 
@@ -104,6 +108,6 @@ export default class extends ModerationCommand {
 			{ name: 'Reason', value: result?.reason ?? '*No reason provided*' }
 		);
 
-		return message.channel.send({ embeds: [embed] });
+		return message.reply({ embeds: [embed] });
 	}
 }

@@ -19,27 +19,29 @@ export default class extends ECommand {
 			},
 			args:        [
 				{
-					id:      'tagName',
-					type:    TagArgType,
-					message: 'Please enter a tag name'
+					id:          'tag',
+					type:        TagArgType,
+					description: 'The name of the tag to show',
+					message:     'Please enter a tag name'
 				}
 			],
 			guildOnly:   true,
-			ownerOnly:   false
+			ownerOnly:   false,
+			slash:       true
 		});
 	}
 
-	async run(message, { tagName }) {
+	async run(message, { tag }) {
 		const res = await getSubscribedUsers({
 			guild: message.guild,
-			name:  tagName,
+			name:  tag,
 		});
 
 		if (!res.length) {
-			throw new EmbedError(`Tag ${inlineCode(tagName)} not found or empty`);
+			throw new EmbedError(`Tag ${inlineCode(tag)} not found or empty`);
 		}
 
-		return { tagName, users: res.map(r => r.user) };
+		return { tagName: tag, users: res.map(r => r.user) };
 	}
 
 	async ship(message, { tagName, users }) {

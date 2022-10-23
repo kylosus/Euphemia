@@ -22,14 +22,16 @@ export default class extends ECommand {
 			userPermissions: [PermissionsBitField.Flags.ManageRoles],
 			args:            [
 				{
-					id:      'number',
-					type:    ArgConsts.TYPE.NUMBER,
-					message: 'Please specify an action number'
+					id:          'number',
+					type:        ArgConsts.TYPE.NUMBER,
+					description: 'The action number',
+					message:     'Please specify an action number'
 				}
 			],
 			guildOnly:       true,
 			nsfw:            false,
 			ownerOnly:       false,
+			slash:           true
 		});
 	}
 
@@ -81,6 +83,6 @@ export default class extends ECommand {
 
 		embed.setTimestamp(new Date(result.timestamp));
 
-		return message.channel.send({ embeds: [embed] });
+		return message.reply({ embeds: [embed] });
 	}
 }

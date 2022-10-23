@@ -1,34 +1,37 @@
 import { codeBlock, EmbedBuilder, PermissionsBitField } from 'discord.js';
 import { ArgConsts, ECommand }                          from '../../../lib/index.js';
 import { getAction, updateReason }                      from '../db.js';
-import { BotConfig }                                    from '../../../config.js';
+import { BotConfig }                                    from '../../../config/config.js';
 import { EmbedError }                                   from '../../../lib/Error/index.js';
 
 export default class extends ECommand {
 	constructor(client) {
 		super(client, {
-			aliases:                 ['reason'],
-			description:             {
+			aliases:         ['reason'],
+			description:     {
 				content:  'Changes reason for an action',
 				usage:    '<action number>',
 				examples: ['action 1']
 			},
 			userPermissions: [PermissionsBitField.Flags.ManageGuild],
-			args:                    [
+			args:            [
 				{
-					id:      'number',
-					type:    ArgConsts.TYPE.NUMBER,
-					message: 'Please specify an action number'
+					id:          'number',
+					type:        ArgConsts.TYPE.NUMBER,
+					description: 'The action number to modify',
+					message:     'Please specify an action number'
 				},
 				{
-					id:      'newreason',
-					type:    ArgConsts.TYPE.TEXT,
-					message: 'Please enter a reason'
+					id:          'newreason',
+					description: 'The new reason to add/modify',
+					type:        ArgConsts.TYPE.TEXT,
+					message:     'Please enter a reason'
 				}
 			],
-			guildOnly:               true,
-			nsfw:                    false,
-			ownerOnly:               false,
+			guildOnly:       true,
+			nsfw:            false,
+			ownerOnly:       false,
+			slash:           true
 		});
 	}
 
@@ -75,7 +78,7 @@ export default class extends ECommand {
 	}
 
 	async ship(message, [id, reason]) {
-		return message.channel.send({
+		return message.reply({
 			embeds: [new EmbedBuilder()
 				.setColor(this.client.config.COLOR_OK)
 				.setTitle(`Updated Action [${id}] reason in ${message.guild}`)

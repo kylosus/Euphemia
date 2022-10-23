@@ -14,8 +14,8 @@ export default class extends ECommand {
 			userPermissions: [PermissionsBitField.Flags.Administrator],
 			args:            [
 				{
-					id:       'url',
-					type:     new ArgumentType(
+					id:          'url',
+					type:        new ArgumentType(
 						/https:\/\/(\w+\.)?discord\.com\/channels\/\d+\/\d+\/\d+/,
 						ArgConsts.flatten,
 						(_, u) => {
@@ -32,9 +32,9 @@ export default class extends ECommand {
 							};
 						}
 					),
-					message:  'Please provide message url',
-					optional: true,
-					default:  m => m.reference ||
+					message:     'Please provide message url',
+					optional:    true,
+					defaultFunc: m => m.reference ||
 						m.channel.messages.cache.find(i => i.author.id === this.client.user.id) ||
 						(() => {
 							throw 'Please link to a message';

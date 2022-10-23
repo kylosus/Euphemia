@@ -7,46 +7,48 @@ import { EmbedError }                      from '../../../lib/Error/index.js';
 export default class extends ECommand {
 	constructor(client) {
 		super(client, {
-			aliases:                 ['tagremove', 'removetag', 'deltag', 'tagdel', 'tagdelete', 'deletetag'],
-			description:             {
-				content:  'Adds a new tag',
+			aliases:         ['tagremove', 'removetag', 'deltag', 'tagdel', 'tagdelete', 'deletetag'],
+			description:     {
+				content:  'Removes a tag',
 				usage:    '<name>',
 				examples: ['tagremove stuff']
 			},
 			userPermissions: [PermissionsBitField.Flags.ManageRoles],
-			args:                    [
+			args:            [
 				{
-					id:      'tagName',
-					type:    TagArgType,
-					message: 'Please enter a tag name'
+					id:          'tag',
+					type:        TagArgType,
+					description: 'The tag to remove',
+					message:     'Please enter a tag name'
 				}
 			],
-			guildOnly:               true,
-			ownerOnly:               false
+			guildOnly:       true,
+			ownerOnly:       false,
+			slash:           true
 		});
 	}
 
-	async run(message, { tagName }) {
+	async run(message, { tag }) {
 		let removed = null;
 
 		try {
 			removed = disableTag({
 				guild: message.guild,
-				name:  tagName,
+				name:  tag,
 			});
 		} catch (error) {
 			// Not a great way of handling errors
 			if (error.code === 'SQLITE_CONSTRAINT') {
-				throw new EmbedError(`Tag ${inlineCode(tagName)} already exists`);
+				throw new EmbedError(`Tag ${inlineCode(tag)} already exists`);
 			}
 
 			throw error;
 		}
 
 		if (removed.changes === 0) {
-			throw new EmbedError(`Tag ${inlineCode(tagName)} not found`);
+			throw new EmbedError(`Tag ${inlineCode(tag)} not found`);
 		}
 
-		return `Removed tag ${inlineCode(tagName)}`;
+		return `Removed tag ${inlineCode(tag)}`;
 	}
 }

@@ -1,18 +1,19 @@
 import { ActionRowBuilder, ButtonBuilder, EmbedBuilder } from 'discord.js';
 import { makeError }                                     from '../../lib/ECommand.js';
-import { BotConfig }                                     from '../../config.js';
+import { BotConfig }                                     from '../../config/config.js';
 
-const register = async (message, decisions = [{
+const register = async (message, messagePayload, decisions = [{
 	component: new ButtonBuilder(),
 	// eslint-disable-next-line no-unused-vars
-	action: async (interaction) => {
-	}
-}], collectorOptions                       = {}) => {
+	action: async (interaction) => {}
+}], collectorOptions                                       = {}) => {
 	const buttons = new ActionRowBuilder();
 
 	decisions.forEach(d => buttons.addComponents(d.component));
 
-	const newMessage = await message.edit({ components: [buttons] });
+	messagePayload.options.components = [buttons];
+
+	const newMessage = await message.reply(messagePayload);
 
 	newMessage.createMessageComponentCollector({
 		filter: async interaction => {

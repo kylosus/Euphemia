@@ -6,7 +6,8 @@ import {
 import dayjs                                                                    from 'dayjs';
 import { EmbedError }                                                           from '../../lib/Error/index.js';
 
-const WEEK = dayjs.duration({ weeks: 1 }).asMilliseconds();
+const MINUTE = dayjs.duration({ minutes: 1 }).asMilliseconds();
+const WEEK   = dayjs.duration({ weeks: 1 }).asMilliseconds();
 
 export default class extends ModerationCommand {
 	constructor(client) {
@@ -22,30 +23,34 @@ export default class extends ModerationCommand {
 			clientPermissions: [PermissionsBitField.Flags.ModerateMembers],
 			args:              [
 				{
-					id:      'members',
-					type:    ArgConsts.TYPE.MEMBERS,
-					message: 'Please mention members to timeout'
+					id:          'members',
+					type:        ArgConsts.TYPE.MEMBERS,
+					description: 'The member to timeout',
+					message:     'Please mention members to timeout'
 				},
 				{
-					id:       'duration',
-					type:     ArgConsts.TYPE.DURATION,
-					optional: true,
-					default:  () => dayjs.duration({ minutes: 5 })
+					id:          'duration',
+					type:        ArgConsts.TYPE.DURATION,
+					description: 'Duration of the timeout',
+					optional:    true,
+					defaultFunc: () => dayjs.duration({ minutes: 5 })
 				},
 				{
-					id:       'reason',
-					type:     ArgConsts.TYPE.REASON,
-					optional: true,
-					default:  () => null
+					id:          'reason',
+					type:        ArgConsts.TYPE.REASON,
+					description: 'Reason for the timeout',
+					optional:    true,
+					defaultFunc: () => null
 				},
 			],
 			guildOnly:         true,
 			ownerOnly:         false,
+			slash:             true
 		});
 	}
 
 	async run(message, { members, reason, ...args }) {
-		const duration = args.duration.asMilliseconds();
+		const duration = args.duration.asMilliseconds?.() ?? args.duration * MINUTE;
 
 		if (duration > WEEK) {
 			throw new EmbedError(`Maximum timeout duration is ${inlineCode('1 week')}`);
@@ -86,6 +91,6 @@ export default class extends ModerationCommand {
 			{ name: 'Reason', value: result?.reason ?? '*No reason provided*' }
 		);
 
-		return message.channel.send({ embeds: [embed] });
+		return message.reply({ embeds: [embed] });
 	}
 }

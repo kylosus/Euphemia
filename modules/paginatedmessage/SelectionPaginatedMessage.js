@@ -2,7 +2,7 @@ import { ActionRowBuilder, SelectMenuBuilder } from 'discord.js';
 
 const _watcher = ({ message, generator, options }) => {
 	// handle errors!
-	message.createMessageComponentCollector({
+	return message.createMessageComponentCollector({
 		filter: async interaction => {
 			if (!interaction.isSelectMenu()) {
 				return;
@@ -17,13 +17,30 @@ const _watcher = ({ message, generator, options }) => {
 	});
 };
 
+const _watcher_interaction = ({ originalInteraction, interactionReply, generator, options }) => {
+	// handle errors!
+	return interactionReply.createMessageComponentCollector({
+		filter: async interaction => {
+			if (!interaction.isSelectMenu()) {
+				return;
+			}
+
+			// Possibly unsafe
+			const embed = generator(options[interaction.values[0]].data);
+			originalInteraction.editReply({ embeds: [embed] });
+
+			await interaction.deferUpdate();
+		}
+	});
+};
+
 const register = async (message, generator, options) => {
 	const current = options[0].data;
 
 	const firstEmbed = generator(current);
 
 	// if (options.length === 1) {
-	// 	return message.channel.send({ embeds: [firstEmbed] });
+	// 	return message.reply({ embeds: [firstEmbed] });
 	// }
 
 	const selectMenu = new SelectMenuBuilder()
@@ -34,9 +51,19 @@ const register = async (message, generator, options) => {
 
 	const row = new ActionRowBuilder().addComponents(selectMenu);
 
-	const botMessage = await message.channel.send({ embeds: [firstEmbed], components: [row] });
+	const botMessage = await message.reply({ embeds: [firstEmbed], components: [row] });
 
-	_watcher({ message: botMessage, generator, options });
+	// ?????
+	if (message.isChatInputCommand?.()) {
+		return _watcher_interaction({
+			originalInteraction: message,
+			interactionReply: botMessage,
+			generator,
+			options
+		});
+	}
+
+	return _watcher({ message: botMessage, generator, options });
 };
 
 export {

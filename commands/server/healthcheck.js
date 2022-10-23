@@ -14,6 +14,7 @@ export default class extends ECommand {
 			},
 			userPermissions: [PermissionsBitField.Flags.ManageGuild],
 			guildOnly:       true,
+			fetchMembers:    true,
 			ownerOnly:       false,
 			typing:          true,
 			slash:           true,
@@ -28,8 +29,8 @@ export default class extends ECommand {
 			EmptyRoles:    new Collection()
 		};
 
-		health.AdminRoles    = message.guild.roles.cache.filter(r => r.PermissionsBitField.has(PermissionsBitField.FLAGS.ADMINISTRATOR));
-		health.ElevatedRoles = message.guild.roles.cache.filter(r => r.PermissionsBitField.has([
+		health.AdminRoles    = message.guild.roles.cache.filter(r => r.permissions.any(PermissionsBitField.Flags.Administrator));
+		health.ElevatedRoles = message.guild.roles.cache.filter(r => r.permissions.any([
 			PermissionsBitField.Flags.ManageGuild,
 			PermissionsBitField.Flags.ManageMessages,
 			PermissionsBitField.Flags.ManageRoles,
@@ -51,7 +52,7 @@ export default class extends ECommand {
 	// so I will replace EmbedBuilder with my own AutoEmbed or SafeEmbed implementation with automatic
 	// trims
 	async ship(message, { AdminRoles, ElevatedRoles, EmptyRoles }) {
-		return message.channel.send({
+		return message.reply({
 			embeds: [new EmbedBuilder()
 				.setColor(this.client.config.COLOR_OK)
 				.setAuthor({
@@ -59,7 +60,9 @@ export default class extends ECommand {
 					iconURL: message.guild.iconURL()
 				})
 				// .setDescription('Score here')
-				.setImage(message.guild.bannerURL())
+
+				.setThumbnail(message.guild.iconURL({ size: 4096 }))
+				.setImage(message.guild.bannerURL({ size: 4096 }))
 
 				.addFields(
 					{

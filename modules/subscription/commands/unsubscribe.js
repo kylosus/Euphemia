@@ -15,35 +15,37 @@ export default class extends ECommand {
 			},
 			args:        [
 				{
-					id:      'tagName',
-					type:    TagArgType,
-					message: 'Please enter a tag name'
+					id:          'tag',
+					type:        TagArgType,
+					description: 'The tag to unsubscribe from',
+					message:     'Please enter a tag name'
 				}
 			],
 			guildOnly:   true,
-			ownerOnly:   false
+			ownerOnly:   false,
+			slash:       true
 		});
 	}
 
-	async run(message, { tagName }) {
+	async run(message, { tag }) {
 		return unsubscribe({
-			guild: message.guild,
-			user:  message.author,
-			tagName
+			guild:   message.guild,
+			user:    message.author,
+			tagName: tag
 		});
 	}
 }
 
-export async function unsubscribe({ guild, user, tagName }) {
+export async function unsubscribe({ guild, user, tag }) {
 	const result = await unsubscribeUserFrom({
 		guild,
 		user,
-		tagName
+		tagName: tag
 	});
 
 	if (result.changes === 0) {
-		throw new EmbedError(`Tag ${inlineCode(tagName)} not found or you are not subscribed to it`);
+		throw new EmbedError(`You are not subscribed to ${inlineCode(tag)}`);
 	}
 
-	return `Unsubscribed from ${inlineCode(tagName)}`;
+	return `Unsubscribed from ${inlineCode(tag)}`;
 }

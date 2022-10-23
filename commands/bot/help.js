@@ -15,10 +15,11 @@ export default class extends ECommand {
 			},
 			args:        [
 				{
-					id:       'command',
-					type:     ArgConsts.TYPE.TEXT,
-					optional: true,
-					default:  () => null
+					id:          'command',
+					type:        ArgConsts.TYPE.TEXT,
+					description: 'Name of the command',
+					optional:    true,
+					defaultFunc: () => null
 				},
 			],
 			guildOnly:   false,
@@ -65,7 +66,7 @@ export default class extends ECommand {
 				);
 			});
 
-			return message.channel.send({ embeds: [embed] });
+			return message.reply({ embeds: [embed] });
 		}
 
 		embed.setTitle(`Command name: ${result.aliases.join('/')}`);
@@ -77,6 +78,6 @@ export default class extends ECommand {
 
 			embed.addFields({ name: 'Usage', value: codeBlock(result.description.examples.join('\n')) });
 
-		return message.channel.send({ embeds: [embed] });
+		return message.reply({ embeds: [embed] });
 	}
 }

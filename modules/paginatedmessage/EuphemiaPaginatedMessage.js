@@ -8,7 +8,7 @@ const _FORWARD_EMOJI  = '>';
 const _BACKWARD_EMOJI = '<';
 
 const _watcher = ({ message, generator, args }) => {
-	message.createMessageComponentCollector({
+	return message.createMessageComponentCollector({
 		filter: async interaction => {
 			if (!interaction.isButton()) {
 				return;
@@ -35,6 +35,35 @@ const _watcher = ({ message, generator, args }) => {
 	});
 };
 
+const _watcher_interaction = ({ originalInteraction, interactionReply, generator, args }) => {
+	return interactionReply.createMessageComponentCollector({
+		filter: async interaction => {
+			if (!interaction.isButton()) {
+				return;
+			}
+
+			if (interaction.customId === _BACKWARD_EMOJI) {
+				const embed = generator(await args.previous())
+					.setFooter({ text: `${args.currentIndex + 1}/${args.length}` });
+
+				originalInteraction.editReply({ embeds: [embed] });
+			}
+
+			if (interaction.customId === _FORWARD_EMOJI) {
+				const current = await args.next();
+
+				const embed = generator(current)
+					.setFooter({ text: `${args.currentIndex + 1}/${args.length}` });
+
+				originalInteraction.editReply({ embeds: [embed] });
+			}
+
+			await interaction.deferUpdate();
+		}
+	});
+};
+
+
 const register = async (message, generator, args) => {
 	const current = await args.current;
 
@@ -42,7 +71,7 @@ const register = async (message, generator, args) => {
 		.setFooter({ text: `1/${args.length}` });
 
 	if (args.length === 1) {
-		return message.channel.send({ embeds: [firstEmbed] });
+		return message.reply({ embeds: [firstEmbed] });
 	}
 
 	const buttons = new ActionRowBuilder()
@@ -57,9 +86,18 @@ const register = async (message, generator, args) => {
 				.setStyle(ButtonStyle.Secondary)
 		);
 
-	const botMessage = await message.channel.send({ embeds: [firstEmbed], components: [buttons] });
+	const botMessage = await message.reply({ embeds: [firstEmbed], components: [buttons] });
 
-	_watcher({ message: botMessage, generator, args });
+	if (message.isChatInputCommand?.()) {
+		return _watcher_interaction({
+			originalInteraction: message,
+			interactionReply:    botMessage,
+			generator,
+			args
+		});
+	}
+
+	return _watcher({ message: botMessage, generator, args });
 };
 
 export {

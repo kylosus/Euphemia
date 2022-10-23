@@ -40,7 +40,7 @@ export default class ModerationCommand extends ECommand {
 			{ name: 'Reason', value: result?.reason ?? '*No reason provided*', inline: true }
 		);
 
-		return message.channel.send({ embeds: [embed] });
+		return message.reply({ embeds: [embed] });
 	}
 
 	async execute(message, args) {

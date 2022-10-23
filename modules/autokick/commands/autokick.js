@@ -5,16 +5,17 @@ import * as AutoKick                         from '../index.js';
 export default class extends ECommand {
 	constructor(client) {
 		super(client, {
-			aliases:                   ['autokick'],
-			description:               {
+			aliases:           ['autokick'],
+			description:       {
 				content:  'Automatically kicks every new member on join. Execute again to disable.',
 				usage:    '',
 				examples: ['autokick'],
 			},
 			userPermissions:   [PermissionsBitField.Flags.KickMembers],
 			clientPermissions: [PermissionsBitField.Flags.KickMembers],
-			guildOnly:                 true,
-			ownerOnly:                 false,
+			guildOnly:         true,
+			ownerOnly:         false,
+			slash:             true
 		});
 	}
 
@@ -26,7 +27,7 @@ export default class extends ECommand {
 	}
 
 	async ship(message, result) {
-		return message.channel.send({
+		return message.reply({
 			embeds: [new EmbedBuilder()
 				.setColor(this.client.config.COLOR_SPECIAL)
 				.setTitle(result)]

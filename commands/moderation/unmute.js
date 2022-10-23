@@ -7,30 +7,32 @@ import { EmbedError }                                 from '../../lib/Error/inde
 export default class extends ModerationCommand {
 	constructor(client) {
 		super(client, {
-			actionName:                'unmute',
-			aliases:                   ['unmute'],
-			description:               {
+			actionName:        'unmute',
+			aliases:           ['unmute'],
+			description:       {
 				content:  'Unmutes mentioned users',
 				usage:    '<member1> [member2 ...]',
 				examples: ['unmute @Person1', 'unmute @Person1 @Person2']
 			},
 			userPermissions:   [PermissionsBitField.Flags.ManageRoles],
 			clientPermissions: [PermissionsBitField.Flags.ManageRoles, PermissionsBitField.Flags.ManageGuild],
-			args:                      [
+			args:              [
 				{
-					id:      'members',
-					type:    ArgConsts.TYPE.MEMBERS,
-					message: 'Please mention members to unmute'
+					id:          'members',
+					type:        ArgConsts.TYPE.MEMBERS,
+					description: 'The member to unmute',
+					message:     'Please mention members to unmute'
 				},
 				{
-					id:       'reason',
-					type:     ArgConsts.TYPE.REASON,
-					optional: true,
-					default:  () => null
+					id:          'reason',
+					type:        ArgConsts.TYPE.REASON,
+					optional:    true,
+					defaultFunc: () => null
 				}
 			],
-			guildOnly:                 true,
-			ownerOnly:                 false,
+			guildOnly:         true,
+			ownerOnly:         false,
+			slash:             true
 		});
 	}
 

@@ -16,18 +16,21 @@ export default class extends ModerationCommand {
 			userPermissions: [PermissionsBitField.Flags.ManageRoles],
 			args:            [
 				{
-					id:      'members',
-					type:    ArgConsts.TYPE.MEMBERS,
-					message: 'Please mention members to warn'
+					id:          'members',
+					type:        ArgConsts.TYPE.MEMBERS,
+					description: 'The member to mute',
+					message:     'Please mention members to warn'
 				},
 				{
-					id:      'reason',
-					type:    ArgConsts.TYPE.REASON,
-					message: 'Please add a reason'
+					id:          'reason',
+					type:        ArgConsts.TYPE.REASON,
+					description: 'Reason for the mute',
+					message:     'Please add a reason'
 				}
 			],
 			guildOnly:       true,
 			ownerOnly:       false,
+			slash:           true
 		});
 	}
 

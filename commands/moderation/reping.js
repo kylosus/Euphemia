@@ -1,8 +1,10 @@
-import { inlineCode, ButtonBuilder, ButtonStyle, PermissionsBitField } from 'discord.js';
-import { ArgConsts }                                                   from '../../lib/index.js';
-import { ECommand }                                                    from '../../lib/index.js';
-import { DecisionMessage }                                             from '../../modules/decisionmessage/index.js';
-import { EmbedError }                                                  from '../../lib/Error/index.js';
+import { inlineCode, ButtonBuilder, ButtonStyle, PermissionsBitField, MessagePayload } from 'discord.js';
+import { ArgConsts }                                                                   from '../../lib/index.js';
+import { ECommand }                                                                    from '../../lib/index.js';
+import {
+	DecisionMessage
+}                                                                                      from '../../modules/decisionmessage/index.js';
+import { EmbedError }                                                                  from '../../lib/Error/index.js';
 
 export default class extends ECommand {
 	constructor(client) {
@@ -17,19 +19,23 @@ export default class extends ECommand {
 			userPermissions: [PermissionsBitField.Flags.ManageRoles],
 			args:            [
 				{
-					id:      'role',
-					type:    ArgConsts.TYPE.ROLE_LOOSE,
-					message: 'Please mention a role to ping',
+					id:          'role',
+					type:        ArgConsts.TYPE.ROLE_LOOSE,
+					description: 'The role to ping',
+					message:     'Please mention a role to ping',
 				},
 				{
-					id:       'text',
-					type:     ArgConsts.TYPE.TEXT,
-					optional: true,
-					default:  () => null,
+					id:          'text',
+					type:        ArgConsts.TYPE.TEXT,
+					description: 'The text to send',
+					optional:    true,
+					defaultFunc: () => '',
 				},
 			],
 			guildOnly:       true,
 			ownerOnly:       false,
+			slash:           true,
+			ephemeral:       true
 		});
 	}
 
@@ -38,18 +44,11 @@ export default class extends ECommand {
 			throw new EmbedError('I do not have enough permissions to assign this role');
 		}
 
-		return {
-			text: `${text ?? ''}\n\n${role.toString()}`,
-			role
-		};
-	}
-
-	async ship(message, { role, text }) {
-		const resultMessage = await message.channel.send({
-			content: text
+		const messagePayload = MessagePayload.create(message, {
+			content: `${text}\n\n${role.toString()}`
 		});
 
-		return DecisionMessage.register(resultMessage, [
+		await DecisionMessage.register(message, messagePayload, [
 			{
 				component: new ButtonBuilder()
 					.setCustomId('join')

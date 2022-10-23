@@ -18,21 +18,24 @@ export default class extends ECommand {
 			},
 			args:          [
 				{
-					id:      'characterName',
-					type:    ArgConsts.TYPE.TEXT,
-					message: 'Please enter a character name'
+					id:          'name',
+					type:        ArgConsts.TYPE.TEXT,
+					description: 'Name of the character',
+					message:     'Please enter a character name'
 				}
 			],
 			cached:        true,
 			cacheEviction: 1000 * 60 * 60 * 24,	// 1 day
 			guildOnly:     false,
 			ownerOnly:     false,
+			slash:         true,
+			defer:         true
 		});
 	}
 
-	async run(message, { characterName }) {
+	async run(message, { name }) {
 		const variables = {
-			characterName,
+			name,
 			maxCharacters: 25
 		};
 

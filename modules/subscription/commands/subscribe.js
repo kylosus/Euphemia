@@ -15,18 +15,20 @@ export default class extends ECommand {
 			},
 			args:        [
 				{
-					id:      'tagName',
-					type:    TagArgType,
-					message: 'Please enter a tag name'
+					id:          'tag',
+					type:        TagArgType,
+					description: 'The tag to subscribe to',
+					message:     'Please enter a tag name'
 				}
 			],
 			guildOnly:   true,
-			ownerOnly:   false
+			ownerOnly:   false,
+			slash:       true
 		});
 	}
 
-	async run(message, { tagName }) {
-		return await subscribe({ user: message.author, tagName });
+	async run(message, { tag }) {
+		return await subscribe({ user: message.author, tagName: tag });
 	}
 }
 

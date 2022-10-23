@@ -13,10 +13,10 @@ export default class extends ECommand {
 			},
 			args:        [
 				{
-					id:       'code',
-					type:     ArgConsts.TYPE.NUMBER,
-					optional: true,
-					default:  () => 0,
+					id:          'code',
+					type:        ArgConsts.TYPE.NUMBER,
+					optional:    true,
+					defaultFunc: () => 0,
 				},
 			],
 			guildOnly:   false,

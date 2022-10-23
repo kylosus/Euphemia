@@ -27,7 +27,7 @@ export default class extends ECommand {
 	}
 
 	async ship(message, result) {
-		return message.channel.send({
+		return message.reply({
 			embeds: [new EmbedBuilder()
 				.setTitle('This color')
 				.setColor(result)]

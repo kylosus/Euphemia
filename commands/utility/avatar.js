@@ -14,14 +14,15 @@ export default class extends ECommand {
 			},
 			args:        [
 				{
-					id:       'user',
-					type:     ArgConsts.TYPE.USER,
-					optional: true,
-					default:  m => m.author
+					id:          'user',
+					type:        ArgConsts.TYPE.USER,
+					optional:    true,
+					defaultFunc: m => m.author
 				}
 			],
 			guildOnly:   false,
-			ownerOnly:   false
+			ownerOnly:   false,
+			slash:       true
 		});
 	}
 

@@ -10,7 +10,7 @@ import { GatewayIntentBits }                        from 'discord.js';
 import { EClient, ECommandHandler, SQLiteProvider } from './lib/index.js';
 
 // Make this independent of cwd
-import { BotConfig }                                from './config.js';
+import { BotConfig }                                from './config/config.js';
 import * as modules                                 from './modules/index.js';
 import { registerEvents }                           from './events/event.js';
 
@@ -52,8 +52,9 @@ class Client extends EClient {
 		);
 
 		this.commandHandler = new ECommandHandler(this, {
-			prefix: process.env.BOT_PREFIX || BotConfig.PREFIX || ';',
-			path:   new URL('commands', import.meta.url).pathname
+			prefix:    process.env.BOT_PREFIX || BotConfig.PREFIX || ';',
+			path:      new URL('commands', import.meta.url).pathname,
+			testGuild: process.env.TEST_GUILD
 		});
 	}
 }
@@ -65,7 +66,7 @@ await client.commandHandler.loadModules();
 
 // Init DB
 const db = await sqlite.open({
-	filename: new URL('settings.sqlite3', import.meta.url).pathname,
+	filename: new URL('./data/settings.sqlite3', import.meta.url).pathname,
 	driver:   sqlite3.Database
 });
 

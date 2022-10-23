@@ -16,19 +16,22 @@ export default class extends ModerationCommand {
 			clientPermissions: [PermissionsBitField.Flags.KickMembers],
 			args:              [
 				{
-					id:      'members',
-					type:    ArgConsts.TYPE.MEMBERS,
-					message: 'Please mention members to kick'
+					id:          'members',
+					type:        ArgConsts.TYPE.MEMBERS,
+					description: 'Member to kick',
+					message:     'Please mention members to kick'
 				},
 				{
-					id:       'reason',
-					type:     ArgConsts.TYPE.REASON,
-					optional: true,
-					default:  () => 'No reason provided'
+					id:          'reason',
+					type:        ArgConsts.TYPE.REASON,
+					description: 'Reason for the kick',
+					optional:    true,
+					defaultFunc: () => 'No reason provided'
 				},
 			],
 			guildOnly:         true,
 			ownerOnly:         false,
+			slash:             true
 		});
 	}
 

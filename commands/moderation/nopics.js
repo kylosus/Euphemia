@@ -16,26 +16,28 @@ export default class extends ModerationCommand {
 			clientPermissions: [PermissionsBitField.Flags.ManageRoles],
 			args:              [
 				{
-					id:       'channels',
-					type:     ArgConsts.TYPE.CHANNELS,
-					optional: true,
-					default:  m => [m.channel]
+					id:          'channels',
+					type:        ArgConsts.TYPE.CHANNELS,
+					description: 'Channel to enable in',
+					optional:    true,
+					defaultFunc: m => [m.channel]
 				},
 				{
-					id:       'toggle',
-					type:     ArgConsts.TYPE.WORD,
-					optional: true,
-					default:  () => 'on'
+					id:          'toggle',
+					type:        ArgConsts.TYPE.TEXT,
+					optional:    true,
+					defaultFunc: () => 'on'
 				},
 				{
-					id:       'reason',
-					type:     ArgConsts.TYPE.REASON,
-					optional: true,
-					default:  () => null
+					id:          'reason',
+					type:        ArgConsts.TYPE.REASON,
+					optional:    true,
+					defaultFunc: () => null
 				}
 			],
 			guildOnly:         true,
 			ownerOnly:         false,
+			slash:             true
 		});
 	}
 
@@ -86,6 +88,6 @@ export default class extends ModerationCommand {
 			});
 		}
 
-		return message.channel.send({ embeds: [embed] });
+		return message.reply({ embeds: [embed] });
 	}
 }

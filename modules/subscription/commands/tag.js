@@ -1,12 +1,12 @@
-import { inlineCode, userMention, ButtonBuilder, ButtonStyle } from 'discord.js';
-import { ECommand }                                            from '../../../lib/index.js';
-import * as EmbedLimits                                        from '../../../lib/EmbedLimits.js';
-import { getSubscribedUsers, registerTagMention }              from '../db.js';
-import { chunk, TagArgType }                                   from './util.js';
-import { DecisionMessage }                                     from '../../decisionmessage/index.js';
-import { subscribe }                                           from './subscribe.js';
-import { unsubscribe }                                         from './unsubscribe.js';
-import { EmbedError }                                          from '../../../lib/Error/index.js';
+import { inlineCode, userMention, ButtonBuilder, ButtonStyle, MessagePayload } from 'discord.js';
+import { ECommand }                                                            from '../../../lib/index.js';
+import * as EmbedLimits                                                        from '../../../lib/EmbedLimits.js';
+import { getSubscribedUsers, registerTagMention }                              from '../db.js';
+import { chunk, TagArgType }                                                   from './util.js';
+import { DecisionMessage }                                                     from '../../decisionmessage/index.js';
+import { subscribe }                                                           from './subscribe.js';
+import { unsubscribe }                                                         from './unsubscribe.js';
+import { EmbedError }                                                          from '../../../lib/Error/index.js';
 
 export default class extends ECommand {
 	constructor(client) {
@@ -19,24 +19,26 @@ export default class extends ECommand {
 			},
 			args:        [
 				{
-					id:      'tagName',
-					type:    TagArgType,
-					message: 'Please enter a valid tag name'
+					id:          'tag',
+					type:        TagArgType,
+					description: 'The tag to ping',
+					message:     'Please enter a valid tag name'
 				}
 			],
 			guildOnly:   true,
-			ownerOnly:   false
+			ownerOnly:   false,
+			slash:       true
 		});
 	}
 
-	async run(message, { tagName }) {
+	async run(message, { tag }) {
 		const res = await getSubscribedUsers({
 			guild: message.guild,
-			name:  tagName,
+			name:  tag,
 		});
 
 		if (!res.length) {
-			throw new EmbedError(`Tag ${inlineCode(tagName)} not found or empty`);
+			throw new EmbedError(`Tag ${inlineCode(tag)} not found or empty`);
 		}
 
 		// Best effort
@@ -46,24 +48,26 @@ export default class extends ECommand {
 			channel: message.channel
 		}).catch(console.error);
 
-		return { tagName, users: res.map(r => r.user) };
+		return { tagName: tag, users: res.map(r => r.user) };
 	}
 
 	async ship(message, { tagName, users }) {
 		const header           = `🏓 Users subscribed to ${inlineCode(tagName)}:\n`;
 		const [first, ...rest] = chunk(users.map(userMention), EmbedLimits.CONTENT - header.length);
 
-		let lastMessage = await message.channel.send({
+		let lastMessage = MessagePayload.create(message, {
 			content: `${header}${first.join('')}`
 		});
 
 		for (const c of rest) {
-			lastMessage = await message.channel.send({
+			await message.channel.send(lastMessage);
+
+			lastMessage = MessagePayload.create(message, {
 				content: c.join('')
 			});
 		}
 
-		return DecisionMessage.register(lastMessage, [
+		return DecisionMessage.register(message, lastMessage, [
 			{
 				component: new ButtonBuilder()
 					.setCustomId('join')

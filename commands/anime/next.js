@@ -28,15 +28,17 @@ export default class extends ECommand {
 			},
 			args:        [
 				{
-					id:       'anime',
-					type:     ArgConsts.TYPE.TEXT,
-					optional: true,
-					default:  () => '*'
+					id:          'anime',
+					type:        ArgConsts.TYPE.TEXT,
+					description: 'Anime title to search',
+					optional:    true,
+					defaultFunc: () => '*'
 				}
 			],
 			cached:      true,
 			guildOnly:   false,
 			ownerOnly:   false,
+			slash:       true
 		});
 	}
 
@@ -109,7 +111,7 @@ export default class extends ECommand {
 				inline: false
 			});
 
-		return message.channel.send({ embeds: [embed] });
+		return message.reply({ embeds: [embed] });
 	}
 
 	async shipPage(message, result) {
@@ -128,7 +130,7 @@ export default class extends ECommand {
 				});
 			});
 
-		return message.channel.send({ embeds: [embed] });
+		return message.reply({ embeds: [embed] });
 	}
 
 	async ship(message, result) {

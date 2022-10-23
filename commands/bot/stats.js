@@ -19,6 +19,7 @@ export default class extends ECommand {
 			},
 			guildOnly:   false,
 			ownerOnly:   false,
+			slash:       true
 		});
 	}
 
@@ -27,7 +28,7 @@ export default class extends ECommand {
 	}
 
 	async ship(message, result) {
-		return message.channel.send({
+		return message.reply({
 			embeds:
 				[new EmbedBuilder()
 					.setAuthor({

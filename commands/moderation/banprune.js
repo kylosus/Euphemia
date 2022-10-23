@@ -17,19 +17,22 @@ export default class extends ModerationCommand {
 			clientPermissions: [PermissionsBitField.Flags.BanMembers],
 			args:              [
 				{
-					id:      'users',
-					type:    ArgConsts.TYPE.USERS,
-					message: 'Please mention users to prune'
+					id:          'users',
+					type:        ArgConsts.TYPE.USERS,
+					description: 'User to ban',
+					message:     'Please mention users to prune'
 				},
 				{
-					id:       'reason',
-					type:     ArgConsts.TYPE.REASON,
-					optional: true,
-					default:  () => null,
+					id:          'reason',
+					type:        ArgConsts.TYPE.REASON,
+					description: 'Reason for the ban',
+					optional:    true,
+					defaultFunc: () => null,
 				}
 			],
 			guildOnly:         true,
 			ownerOnly:         false,
+			slash:             true
 		});
 	}
 
