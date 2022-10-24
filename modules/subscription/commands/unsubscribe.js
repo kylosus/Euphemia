@@ -36,16 +36,16 @@ export default class extends ECommand {
 	}
 }
 
-export async function unsubscribe({ guild, user, tag }) {
+export async function unsubscribe({ guild, user, tagName }) {
 	const result = await unsubscribeUserFrom({
 		guild,
 		user,
-		tagName: tag
+		tagName
 	});
 
 	if (result.changes === 0) {
-		throw new EmbedError(`You are not subscribed to ${inlineCode(tag)}`);
+		throw new EmbedError(`You are not subscribed to ${inlineCode(tagName)}`);
 	}
 
-	return `Unsubscribed from ${inlineCode(tag)}`;
+	return `Unsubscribed from ${inlineCode(tagName)}`;
 }
