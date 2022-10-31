@@ -34,6 +34,11 @@ export default class extends ECommand {
 	}
 
 	async run(message, { channel, text }) {
-		await channel.send(resolveMessageArg(text));
+		await message.delete();
+		return { channel, text: resolveMessageArg(text) };
+	}
+
+	async ship(message, { channel, text }) {
+		return channel.send(resolveMessageArg(text));
 	}
 }
