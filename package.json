@@ -20,16 +20,20 @@
   "author": "jokersus#3343",
   "license": "GPL-3.0",
   "dependencies": {
+    "bufferutil": "^4.0.7",
     "dayjs": "^1.11.6",
     "discord-api-types": "^0.37.14",
     "discord.js": "^14.6.0",
     "dotenv": "^16.0.3",
+    "erlpack": "github:discord/erlpack",
     "got": "^12.5.2",
     "lodash-es": "^4.17.21",
     "node-cron": "^3.0.2",
     "sqlite": "^4.1.2",
     "sqlite3": "^5.1.2",
-    "urban-dictionary": "^3.0.2"
+    "urban-dictionary": "^3.0.2",
+    "utf-8-validate": "^5.0.10",
+    "zlib-sync": "^0.1.7"
   },
   "devDependencies": {
     "eslint": "^8.26.0"
