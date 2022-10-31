@@ -1,6 +1,6 @@
-query ($characterName: String, $maxCharacters: Int) {
+query ($name: String, $maxCharacters: Int) {
   Page(page: 0, perPage: $maxCharacters) {
-    characters(search: $characterName) {
+    characters(search: $name) {
       name {
         userPreferred
       }
