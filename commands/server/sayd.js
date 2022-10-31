@@ -39,6 +39,6 @@ export default class extends ECommand {
 	}
 
 	async ship(message, { channel, text }) {
-		return channel.send(resolveMessageArg(text));
+		return channel.send(text);
 	}
 }
