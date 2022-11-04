@@ -1,7 +1,7 @@
-import { Collection, time, TimestampStyles, EmbedBuilder } from 'discord.js';
-import { ArgConsts, ECommand }                             from '../../lib/index.js';
-import got                                                 from 'got';
-import { EmbedError }                                      from '../../lib/Error/index.js';
+import { Collection, time, TimestampStyles, EmbedBuilder, inlineCode } from 'discord.js';
+import { ArgConsts, ECommand }                                         from '../../lib/index.js';
+import got                                                             from 'got';
+import { EmbedError }                                                  from '../../lib/Error/index.js';
 
 const ANILIST_URL = 'https://graphql.anilist.co';
 
@@ -92,6 +92,13 @@ export default class extends ECommand {
 	async shipOne(message, result) {
 		const duration = ((a) => {
 			if (!a.nextAiringEpisode?.airingAt) {
+				if (a.startDate.year) {
+					const { month, year } = a.startDate;
+					const date            = `${month || '?'}/${year}`;
+
+					return `Some time in the future ${inlineCode(date)}`;
+				}
+
 				return 'Some time in the future';
 			}
 
