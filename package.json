@@ -30,7 +30,7 @@
     "lodash-es": "^4.17.21",
     "node-cron": "^3.0.2",
     "sqlite": "^4.1.2",
-    "sqlite3": "^5.1.2",
+    "sqlite3": "^5.1.5",
     "urban-dictionary": "^3.0.2",
     "utf-8-validate": "^5.0.10",
     "zlib-sync": "^0.1.7"
