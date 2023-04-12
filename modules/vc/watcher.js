@@ -12,7 +12,7 @@ const PARTY_CATEGORY_REGULAR_POSITION = 10;
 
 let INTERVAL_ID = null;
 
-const INTERVAL_MINUTES = 10;
+const INTERVAL_MINUTES = 15;
 const MILLISECOND      = 60 * 1000;
 
 const voiceStateUpdate = async (oldState, newState) => {
@@ -47,7 +47,7 @@ const voiceStateUpdate = async (oldState, newState) => {
 		}
 
 		INTERVAL_ID = setInterval(() => {
-			currentHours += INTERVAL_MINUTES / 60;
+			currentHours += (INTERVAL_MINUTES / 60).toFixed(2);
 
 			const timeString = (() => {
 				// Less than an hour, show minutes
