@@ -1,6 +1,6 @@
 import { EmbedBuilder, Colors } from 'discord.js';
 
-export default message => {
+export default async message => {
 	if (message.guild || message.author.id === message.client.user.id) {
 		return;
 	}
