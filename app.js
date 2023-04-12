@@ -30,7 +30,8 @@ class Client extends EClient {
 				config:   { TOKEN: '', ...BotConfig }
 			},
 			{
-				disableMentions: 'everyone',
+				// disableMentions: 'everyone',
+				allowedMentions: { parse: ['users', 'roles'] },
 				intents:         [
 					GatewayIntentBits.Guilds,
 					GatewayIntentBits.GuildMembers,
