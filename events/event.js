@@ -4,12 +4,12 @@ import { Guild, ChannelType } from 'discord.js';
 
 const directoryPath = new URL('loggable', import.meta.url);
 
-import disconnect   from './bot/disconnect.js';
-import error        from './bot/error.js';
-import guildCreate  from './bot/guildCreate.js';
-import ready        from './bot/ready.js';
-import message        from './bot/message.js';
-import reconnecting from './bot/reconnecting.js';
+import disconnect    from './bot/disconnect.js';
+import error         from './bot/error.js';
+import guildCreate   from './bot/guildCreate.js';
+import messageCreate from './bot/messageCreate.js';
+import ready         from './bot/ready.js';
+import reconnecting  from './bot/reconnecting.js';
 
 import _guildMemberAdd    from './loggable/_guildMemberAdd.js';
 import _guildMemberRemove from './loggable/_guildMemberRemove.js';
@@ -69,9 +69,9 @@ export const registerEvents = async client => {
 	await registerLoggable(client);	// This ignores events that start with '_'
 	client.on('ready',				() => ready(client));
 	client.on('error',				error);
-	client.on('messageCreate',			message);
 	client.on('reconnecting',		reconnecting);
 	client.on('disconnect',			disconnect);
+	client.on('messageCreate',		m => messageCreate(m).catch(_err('messageCreate')));
 	client.on('guildCreate',		g => guildCreate(g).catch(_err('guildCreate')));
 	client.on('guildMemberAdd',		m => _guildMemberAdd(m).catch(_err('guildMemberAdd')));
 	client.on('guildMemberRemove',	m => _guildMemberRemove(m).catch(_err('guildMemberRemove')));

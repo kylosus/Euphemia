@@ -19,6 +19,7 @@ export default class extends ECommand {
 					message: 'Please provide a role',
 				},
 			],
+			slash:        true,
 			guildOnly:    true,
 			ownerOnly:    false,
 			fetchMembers: true

@@ -31,7 +31,8 @@ export default class extends ModerationCommand {
 			guildOnly:       true,
 			ownerOnly:       true,
 			slash:           true,
-			defer:           true
+			defer:           true,
+			fetchMembers:    true
 		});
 	}
 

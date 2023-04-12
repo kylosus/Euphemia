@@ -28,6 +28,7 @@ export default class extends ModerationCommand {
 			],
 			guildOnly:       true,
 			ownerOnly:       true,
+			fetchMembers:    true
 		});
 	}
 
