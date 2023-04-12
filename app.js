@@ -39,6 +39,7 @@ class Client extends EClient {
 					// Intents.FLAGS.GUILD_INTEGRATIONS,
 					// Intents.FLAGS.GUILD_WEBHOOKS,
 					// Intents.FLAGS.GUILD_INVITES,
+					GatewayIntentBits.GuildVoiceStates,
 					// Intents.FLAGS.GUILD_VOICE_STATES,
 					// Intents.FLAGS.GUILD_PRESENCES,
 					GatewayIntentBits.GuildMessages,

@@ -8,6 +8,7 @@ import disconnect   from './bot/disconnect.js';
 import error        from './bot/error.js';
 import guildCreate  from './bot/guildCreate.js';
 import ready        from './bot/ready.js';
+import message        from './bot/message.js';
 import reconnecting from './bot/reconnecting.js';
 
 import _guildMemberAdd    from './loggable/_guildMemberAdd.js';
@@ -68,6 +69,7 @@ export const registerEvents = async client => {
 	await registerLoggable(client);	// This ignores events that start with '_'
 	client.on('ready',				() => ready(client));
 	client.on('error',				error);
+	client.on('messageCreate',			message);
 	client.on('reconnecting',		reconnecting);
 	client.on('disconnect',			disconnect);
 	client.on('guildCreate',		g => guildCreate(g).catch(_err('guildCreate')));
