@@ -55,7 +55,7 @@ const voiceStateUpdate = async (oldState, newState) => {
 		const voiceChannel = oldState.channel;
 
 		// Enough members
-		if (voiceChannel.members.size > 2) {
+		if (voiceChannel.members.size > 1) {
 			return;
 		}
 
