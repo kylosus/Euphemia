@@ -12,7 +12,7 @@ const PARTY_CATEGORY_REGULAR_POSITION = 10;
 
 let INTERVAL_ID = null;
 
-const INTERVAL_MINUTES = 5;
+const INTERVAL_MINUTES = 10;
 const MILLISECOND      = 60 * 1000;
 
 const voiceStateUpdate = async (oldState, newState) => {
@@ -40,13 +40,21 @@ const voiceStateUpdate = async (oldState, newState) => {
 		await musicChannel.setParent(partyCategory, { lockPermissions: false });
 
 		// Start the count
-		const channelNameBase = voiceChannel.name;
-
 		let currentHours = 0;
 
 		INTERVAL_ID = setInterval(() => {
 			currentHours += INTERVAL_MINUTES / 60;
-			voiceChannel.setName(`[${currentHours} hours] ${VOICE_CHANNEL_NAME}`).catch(console.error);
+
+			const timeString = (() => {
+				// Less than an hour, show minutes
+				if (currentHours < 1) {
+					return `${currentHours * 60} minutes`;
+				}
+
+				return `${currentHours} hours`;
+			})();
+
+			voiceChannel.setName(`[${timeString}] ${VOICE_CHANNEL_NAME}`).catch(console.error);
 		}, INTERVAL_MINUTES * MILLISECOND);
 	}
 
