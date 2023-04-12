@@ -36,8 +36,8 @@ const voiceStateUpdate = async (oldState, newState) => {
 
 		partyCategory.setPosition(PARTY_CATEGORY_PARTY_POSITION);
 
-		await voiceChannel.setParent(partyCategory);
-		await musicChannel.setParent(partyCategory);
+		await voiceChannel.setParent(partyCategory, { lockPermissions: false });
+		await musicChannel.setParent(partyCategory, { lockPermissions: false });
 
 		// Start the count
 		const channelNameBase = voiceChannel.name;
@@ -64,8 +64,8 @@ const voiceStateUpdate = async (oldState, newState) => {
 		const partyCategory   = voiceChannel.guild.channels.cache.get(PARTY_CATEGORY_ID);
 		const musicChannel    = voiceChannel.guild.channels.cache.get(MUSIC_CHANNEL_ID);
 
-		await voiceChannel.setParent(regularCategory);
-		await musicChannel.setParent(regularCategory);
+		await voiceChannel.setParent(regularCategory, { lockPermissions: false });
+		await musicChannel.setParent(regularCategory, { lockPermissions: false });
 
 		await musicChannel.setPosition(MUSIC_CHANNEL_REGULAR_POSITION);
 		await partyCategory.setPosition(PARTY_CATEGORY_REGULAR_POSITION);
