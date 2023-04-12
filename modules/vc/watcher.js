@@ -42,6 +42,10 @@ const voiceStateUpdate = async (oldState, newState) => {
 		// Start the count
 		let currentHours = 0;
 
+		if (INTERVAL_ID) {
+			return;
+		}
+
 		INTERVAL_ID = setInterval(() => {
 			currentHours += INTERVAL_MINUTES / 60;
 
@@ -80,6 +84,8 @@ const voiceStateUpdate = async (oldState, newState) => {
 
 		// Stop the count
 		clearInterval(INTERVAL_ID);
+		INTERVAL_ID = null;
+
 		await voiceChannel.setName(VOICE_CHANNEL_NAME);
 	}
 };
