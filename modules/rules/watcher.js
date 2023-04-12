@@ -8,7 +8,7 @@ const interactionCreate = client => {
 			return;
 		}
 
-		const roles = interaction.values.map(id => interaction.guild.roles.cache.get(id));
+		const roles = await Promise.all(interaction.values.map(id => interaction.guild.roles.fetch(id)));
 
 		if (!roles.length) {
 			throw 'Roles not found';
