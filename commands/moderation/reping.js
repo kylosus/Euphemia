@@ -81,4 +81,7 @@ export default class extends ECommand {
 			}
 		]);
 	}
+
+	// Empty ship because it's handled by DecisionMessage
+	async ship() {}
 }
