@@ -21,21 +21,21 @@
   "license": "GPL-3.0",
   "dependencies": {
     "bufferutil": "^4.0.7",
-    "dayjs": "^1.11.6",
-    "discord-api-types": "^0.37.14",
-    "discord.js": "^14.6.0",
+    "dayjs": "^1.11.7",
+    "discord-api-types": "^0.37.38",
+    "discord.js": "^14.9.0",
     "dotenv": "^16.0.3",
     "erlpack": "github:discord/erlpack",
-    "got": "^12.5.2",
+    "got": "^12.6.0",
     "lodash-es": "^4.17.21",
     "node-cron": "^3.0.2",
     "sqlite": "^4.1.2",
-    "sqlite3": "^5.1.2",
+    "sqlite3": "^5.1.6",
     "urban-dictionary": "^3.0.2",
-    "utf-8-validate": "^5.0.10",
-    "zlib-sync": "^0.1.7"
+    "utf-8-validate": "^6.0.3",
+    "zlib-sync": "^0.1.8"
   },
   "devDependencies": {
-    "eslint": "^8.26.0"
+    "eslint": "^8.38.0"
   }
 }

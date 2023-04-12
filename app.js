@@ -1,7 +1,7 @@
 import 'dotenv/config';
 
 import process from 'node:process';
-import { URL } from 'url';
+import { URL } from 'node:url';
 
 import sqlite3     from 'sqlite3';
 import * as sqlite from 'sqlite';
@@ -10,16 +10,16 @@ import { GatewayIntentBits }                        from 'discord.js';
 import { EClient, ECommandHandler, SQLiteProvider } from './lib/index.js';
 
 // Make this independent of cwd
-import { BotConfig }                                from './config/config.js';
-import * as modules                                 from './modules/index.js';
-import { registerEvents }                           from './events/event.js';
+import { BotConfig }      from './config/config.js';
+import * as modules       from './modules/index.js';
+import { registerEvents } from './events/event.js';
 
 if (process.getuid?.() === 0) {
-	console.warn('===================================');
-	console.warn('===================================');
-	console.warn('====DO NOT RUN THE BOT AS ROOT====');
-	console.warn('===================================');
-	console.warn('===================================');
+	console.warn('====================================');
+	console.warn('====================================');
+	console.warn('=====DO NOT RUN THE BOT AS ROOT=====');
+	console.warn('====================================');
+	console.warn('====================================');
 }
 
 class Client extends EClient {
@@ -34,7 +34,7 @@ class Client extends EClient {
 				intents:         [
 					GatewayIntentBits.Guilds,
 					GatewayIntentBits.GuildMembers,
-					GatewayIntentBits.GuildBans,
+					GatewayIntentBits.GuildModeration,
 					GatewayIntentBits.MessageContent,
 					// Intents.FLAGS.GUILD_INTEGRATIONS,
 					// Intents.FLAGS.GUILD_WEBHOOKS,
