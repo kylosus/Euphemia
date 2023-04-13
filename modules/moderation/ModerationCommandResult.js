@@ -1,12 +1,13 @@
 import { Colors } from 'discord.js';
 
 export default class ModerationCommandResult {
-	constructor(reason = null, aux = null) {
+	constructor(reason = null, aux = null, duration = '') {
 		// use ids
-		this.passed = [];
-		this.failed = [];
-		this.aux    = aux;
-		this.reason = reason;
+		this.passed   = [];
+		this.failed   = [];
+		this.aux      = aux;
+		this.duration = duration;
+		this.reason   = reason;
 	}
 
 	addPassed(p) {

@@ -21,7 +21,7 @@ export default async (channel, guild, moderator, result) => {
 
 	if (result.action === 'MUTE' || result.action === 'TIMEOUT') {
 		if (result.aux) {
-			embed.addFields({ name: 'Expires', value: time(new Date(result.aux), TimestampStyles.RelativeTime) });
+			embed.addFields({ name: 'Duration', value: `${result.duration} (expires ${time(new Date(result.aux), TimestampStyles.RelativeTime)})` });
 		}
 	}
 
