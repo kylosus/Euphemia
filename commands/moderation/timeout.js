@@ -56,7 +56,11 @@ export default class extends ModerationCommand {
 			throw new EmbedError(`Maximum timeout duration is ${inlineCode('1 week')}`);
 		}
 
+		// aux is expiration date
 		const result = new ModerationCommandResult(reason, dayjs().add(args.duration).toISOString());
+
+		// For better embeds
+		result.duration = args.duration.humanize();
 
 		await Promise.all(members.map(async m => {
 			try {
@@ -78,7 +82,10 @@ export default class extends ModerationCommand {
 		if (result.passed.length) {
 			embed.addFields(
 				{ name: 'Muted', value: result.passed.map(r => `<@${r.id}>`).join(' ') },
-				{ name: 'Expires', value: time(new Date(result.aux), TimestampStyles.RelativeTime), inline: true }
+				{ name:     'Duration',
+					value:  `${result.duration} (expires ${time(new Date(result.aux), TimestampStyles.RelativeTime)})`,
+					inline: false
+				}
 			);
 		}
 
@@ -88,7 +95,7 @@ export default class extends ModerationCommand {
 
 		embed.addFields(
 			{ name: 'Moderator', value: message.member.toString(), inline: true },
-			{ name: 'Reason', value: result?.reason ?? '*No reason provided*' }
+			{ name: 'Reason', value: result?.reason ?? '*No reason provided*', inline: true }
 		);
 
 		return message.reply({ embeds: [embed] });

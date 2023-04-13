@@ -50,6 +50,8 @@ export default class extends ModerationCommand {
 		const duration = args.duration ? dayjs().add(args.duration).toISOString() : null;
 		const result   = new ModerationCommandResult(reason, duration);
 
+		result.duration = args.duration.humanize();
+
 		const role = await (async guild => {
 			const role = await getMutedRole(guild);
 
@@ -84,28 +86,22 @@ export default class extends ModerationCommand {
 			.setColor(result.getColor());
 
 		if (result.passed.length) {
-			embed.addFields({ name: 'Muted', value: result.passed.map(r => userMention(r.id)).join(' ') });
-
-			// Passed and muted for a specific amount time
-			if (result.aux) {
-				embed.addFields({
-					name:   'Expires',
-					value:  time(new Date(result.aux), TimestampStyles.RelativeTime),
-					inline: true
-				});
-			}
+			embed.addFields(
+				{ name: 'Muted', value: result.passed.map(r => `<@${r.id}>`).join(' ') },
+				{ name:     'Duration',
+					value:  `${result.duration} (expires ${time(new Date(result.aux), TimestampStyles.RelativeTime)})`,
+					inline: false
+				}
+			);
 		}
 
 		if (result.failed.length) {
-			embed.addFields({
-				name:  'Failed',
-				value: result.failed.map(r => `${userMention(r.id)} - ${r.reason}`).join(' ')
-			});
+			embed.addFields({ name: 'Failed', value: result.failed.map(r => `<@${r.id}> - ${r.reason}`).join(' ') });
 		}
 
 		embed.addFields(
 			{ name: 'Moderator', value: message.member.toString(), inline: true },
-			{ name: 'Reason', value: result?.reason ?? '*No reason provided*' }
+			{ name: 'Reason', value: result?.reason ?? '*No reason provided*', inline: true }
 		);
 
 		return message.reply({ embeds: [embed] });

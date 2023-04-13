@@ -56,13 +56,14 @@ export default class ModerationCommand extends ECommand {
 		return reply;
 	}
 
-	async record(guild, moderator, { aux, reason, ...result }) {
+	async record(guild, moderator, { aux, reason, duration, ...result }) {
 		const passed = result.passed.map(r => ({
 			guild,
 			action:       this.actionName,
 			moderator,
 			target:       r,
 			aux,
+			duration,
 			reason,
 			passed:       true,
 			failedReason: null
@@ -74,6 +75,7 @@ export default class ModerationCommand extends ECommand {
 			moderator,
 			target:       r,
 			aux,
+			duration,
 			reason,
 			passed:       false,
 			failedReason: r.reason
