@@ -1,6 +1,9 @@
 import { ModerationCommandResult } from '../../modules/moderation/index.js';
 
-export const banUsers = async ({ message, users, deleteMessageDays = 0, reason }) => {
+// 1 day
+export const DELETE_SECONDS = 24 * 60 * 60;
+
+export const banUsers = async ({ message, users, deleteMessageSeconds = 0, reason }) => {
 	const result = new ModerationCommandResult(reason);
 
 	await Promise.all(users.map(async user => {
@@ -19,7 +22,7 @@ export const banUsers = async ({ message, users, deleteMessageDays = 0, reason }
 		}
 
 		try {
-			await message.guild.members.ban(user, { deleteMessageDays, reason });
+			await message.guild.members.ban(user, { deleteMessageSeconds, reason });
 		} catch (err) {
 			return result.addFailed(user, err.message);
 		}
@@ -31,7 +34,7 @@ export const banUsers = async ({ message, users, deleteMessageDays = 0, reason }
 };
 
 // Duplicated code, but whatever
-export const banMembers = async ({ message, members, deleteMessageDays = 0, reason }) => {
+export const banMembers = async ({ message, members, deleteMessageSeconds = 0, reason }) => {
 	const result = new ModerationCommandResult(reason);
 
 	await Promise.all(members.map(async member => {
@@ -41,12 +44,12 @@ export const banMembers = async ({ message, members, deleteMessageDays = 0, reas
 		}
 
 		// If the command author can't ban
-		if (member.roles.highestm.comparePositionTo(message.member.roles.highest) >= 0) {
+		if (member.roles.highest.comparePositionTo(message.member.roles.highest) >= 0) {
 			return result.addFailed(member, 'Missing user permissions');
 		}
 
 		try {
-			await message.guild.members.ban(member, { deleteMessageDays, reason });
+			await message.guild.members.ban(member, { deleteMessageSeconds, reason });
 		} catch (err) {
 			return result.addFailed(member, err.message);
 		}

@@ -1,7 +1,7 @@
-import { PermissionsBitField } from 'discord.js';
-import { ArgConsts }           from '../../lib/index.js';
-import { ModerationCommand }   from '../../modules/moderation/index.js';
-import { banUsers }            from './util.js';
+import { PermissionsBitField }      from 'discord.js';
+import { ArgConsts }                from '../../lib/index.js';
+import { ModerationCommand }        from '../../modules/moderation/index.js';
+import { banUsers, DELETE_SECONDS } from './util.js';
 
 export default class extends ModerationCommand {
 	constructor(client) {
@@ -37,7 +37,7 @@ export default class extends ModerationCommand {
 	}
 
 	async run(message, { users, reason }) {
-		return banUsers({ message, users, reason, deleteMessageDays: 1 });
+		return banUsers({ message, users, reason, deleteMessageSeconds: DELETE_SECONDS });
 	}
 
 }
