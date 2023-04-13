@@ -1,7 +1,7 @@
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, PermissionsBitField } from 'discord.js';
 import { ArgConsts, AutoEmbed }                                              from '../../lib/index.js';
 import { ModerationCommand }                                                 from '../../modules/moderation/index.js';
-import { banMembers }                                                        from './util.js';
+import { banMembers, DELETE_SECONDS }                                        from './util.js';
 import { EmbedError }                                                        from '../../lib/Error/index.js';
 
 const PROMPT_YES         = 'YES';
@@ -115,6 +115,6 @@ export default class extends ModerationCommand {
 
 		this.sendNoticeInteraction(interaction, 'Executing...').catch(() => {});
 
-		return banMembers({ message, members: range, reason, deleteMessageDays: 1 });
+		return banMembers({ message, members: range, reason, deleteMessageSeconds: DELETE_SECONDS });
 	}
 }

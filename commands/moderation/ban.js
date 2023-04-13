@@ -37,6 +37,6 @@ export default class extends ModerationCommand {
 	}
 
 	async run(message, { users, reason }) {
-		return banUsers({ message, users, reason, deleteMessageDays: 0 });
+		return banUsers({ message, users, reason, deleteMessageSeconds: 0 });
 	}
 }
