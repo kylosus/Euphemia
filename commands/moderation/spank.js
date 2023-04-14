@@ -53,7 +53,7 @@ export default class extends ECommand {
 		}
 
 		// Spank the actual member
-		await timeout(message.member);
+		await timeout(member);
 
 		return `${member.toString()} has been spanked by ${message.member}`;
 	}
