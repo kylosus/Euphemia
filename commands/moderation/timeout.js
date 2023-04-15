@@ -60,7 +60,8 @@ export default class extends ModerationCommand {
 		const result = new ModerationCommandResult(reason, dayjs().add(args.duration).toISOString());
 
 		// For better embeds
-		result.duration = args.duration.humanize();
+		// We check specially because slash commands return a number
+		result.duration = args.duration.humanize?.() ?? `${args.duration} minutes`;
 
 		await Promise.all(members.map(async m => {
 			try {
