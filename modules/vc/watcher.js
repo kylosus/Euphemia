@@ -47,7 +47,8 @@ const voiceStateUpdate = async (oldState, newState) => {
 		}
 
 		INTERVAL_ID = setInterval(() => {
-			currentHours += (INTERVAL_MINUTES / 60).toFixed(2);
+			currentHours += (INTERVAL_MINUTES / 60);
+			currentHours = currentHours.toFixed(2);
 
 			const timeString = (() => {
 				// Less than an hour, show minutes
