@@ -7,7 +7,7 @@ import { EmbedError }                               from '../../../lib/Error/ind
 export const TagArgType = new ArgumentType({
 	commandType:    ApplicationCommandOptionType.String,
 	commandOptions: { maxLength: MAX_TAG_LENGTH },
-	regex:          /^\w+[-_]?\w+$/,
+	regex:          /(^\w+[-_]?\w+$)/,
 	normalizer:     flatten,
 	finder:         (_, s) => {
 		if (s.length > MAX_TAG_LENGTH) {

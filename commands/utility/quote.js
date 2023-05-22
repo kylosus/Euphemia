@@ -14,7 +14,7 @@ export default class extends ECommand {
 			args:        [
 				{
 					id:      'id',
-					type:    ArgConsts.TYPE.BARE_ID,
+					type:    ArgConsts.TYPE.ID,
 					message: 'Please provide a message id.'
 				},
 				{
