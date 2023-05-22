@@ -13,7 +13,7 @@ export default class extends ModerationCommand {
 	constructor(client) {
 		super(client, {
 			actionName:        'timeout',
-			aliases:           ['timeout', 'to'],
+			aliases:           ['mute', 'timeout', 'to'],
 			description:       {
 				content:  'Times out mentioned members for a given amount of time',
 				usage:    '[minutes] <member1> [member2 ...]',
