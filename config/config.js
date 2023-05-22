@@ -7,5 +7,8 @@ export const BotConfig = {
 	COLOR_OK:      '#E91E63',
 	COLOR_NO:      '#EE291F',
 	COLOR_WARN:    '#FAA61A',
-	COLOR_SPECIAL: '#E91E63'
+	COLOR_SPECIAL: '#E91E63',
+
+	// Setting this false will disable slash commands
+	ENABLE_SLASH_COMMANDS: true,
 };
