@@ -10,11 +10,11 @@ export default class extends ModerationCommand {
 	constructor(client) {
 		super(client, {
 			actionName:        'mute',
-			aliases:           ['mute'],
+			aliases:           ['rolemute'],
 			description:       {
 				content:  'Mutes mentioned members for a given amount of time',
 				usage:    '[minutes] <member1> [member2 ...]',
-				examples: ['mute @Person1', 'mute 5 @Person1 @Person2']
+				examples: ['rolemute @Person1', 'rolemute 5 @Person1 @Person2']
 			},
 			userPermissions:   [PermissionsBitField.Flags.ManageRoles],
 			clientPermissions: [PermissionsBitField.Flags.ManageRoles, PermissionsBitField.Flags.ManageGuild],
