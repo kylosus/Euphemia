@@ -48,15 +48,16 @@ const voiceStateUpdate = async (oldState, newState) => {
 
 		INTERVAL_ID = setInterval(() => {
 			currentHours += (INTERVAL_MINUTES / 60);
-			currentHours = currentHours.toFixed(2);
+			
+			const currentHoursStr = currentHours.toFixed(2);
 
 			const timeString = (() => {
 				// Less than an hour, show minutes
 				if (currentHours < 1) {
-					return `${currentHours * 60} minutes`;
+					return `${currentHoursStr * 60} minutes`;
 				}
 
-				return `${currentHours} hours`;
+				return `${currentHoursStr} hours`;
 			})();
 
 			voiceChannel.setName(`[${timeString}] ${VOICE_CHANNEL_NAME}`).catch(console.error);
