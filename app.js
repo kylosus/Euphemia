@@ -56,7 +56,7 @@ class Client extends EClient {
 			prefix:              process.env.BOT_PREFIX || BotConfig.PREFIX || ';',
 			path:                new URL('commands', import.meta.url).pathname,
 			testGuild:           process.env.TEST_GUILD,
-			enableSlashCommands: Number(process.env.ENABLE_SLASH_COMMANDS) ?? BotConfig.ENABLE_SLASH_COMMANDS,
+			enableSlashCommands: Boolean(Number(process.env?.ENABLE_SLASH_COMMANDS ?? BotConfig.ENABLE_SLASH_COMMANDS)),
 		});
 	}
 }
