@@ -8,7 +8,7 @@ export default async guild => {
 	return guild.client.owners.map(owner => {
 		return owner.send({
 			embeds: [new EmbedBuilder()
-				.setColor(guild.client.defaultColor)
+				.setColor(guild.client.config.COLOR_SPECIAL)
 				.setImage(guild.iconURL() ?? DISCORD_LOGO)
 				.setTitle('Bot has joined a new guild')
 				.addFields(
