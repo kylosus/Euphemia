@@ -1,6 +1,6 @@
-import { inlineCode, channelMention, EmbedBuilder, Colors } from 'discord.js';
-import { EmbedLimits }                                      from '../../lib/index.js';
-import { truncate }                                         from 'lodash-es';
+import { inlineCode, channelMention, Colors, AttachmentBuilder } from 'discord.js';
+import { AutoEmbed, AutoEmbedLimits }                            from '../../lib/index.js';
+import { Buffer }                                                from 'node:buffer';
 
 const MOD_CHANNEL = '293432840538947584';
 
@@ -13,20 +13,32 @@ export default async (channel, oldMessage, newMessage) => {
 		return;
 	}
 
-	oldMessage.content = truncate(oldMessage.content, { length: EmbedLimits.FIELD_VALUE });
-	newMessage.content = truncate(newMessage.content, { length: EmbedLimits.FIELD_VALUE });
+	const files = [...getFiles(oldMessage.content, 'old.txt'), ...getFiles(newMessage.content, 'new.txt')];
+
+	const embed = new AutoEmbed()
+		.setColor(Colors.Purple)
+		.setTitle(`🖊 Message edited in #${newMessage.channel.name}`)
+		.setDescription(`${newMessage.member?.toString() || 'Unknown user'} ${inlineCode(newMessage.author?.id ?? 'Unknown id')} [Link](${newMessage.url})`)
+		.addFields(
+			{ name: 'ID', value: `${channelMention(oldMessage.channel.id)}/${oldMessage.id}`, inline: false },
+		)
+		.addFieldsWrap(
+			{ name: 'Old message', value: oldMessage.content, inline: false },
+			{ name: 'New message', value: newMessage.content, inline: false }
+		)
+		.setTimestamp();
 
 	return channel.send({
-		embeds: [new EmbedBuilder()
-			.setColor(Colors.Purple)
-			.setTitle(`🖊 Message edited in #${newMessage.channel.name}`)
-			.setDescription(`${newMessage.member?.toString() || 'Unknown user'} ${inlineCode(newMessage.author?.id ?? 'Unknown id')} [Link](${newMessage.url})`)
-
-			.addFields(
-				{ name: 'ID', value: `${channelMention(oldMessage.channel.id)}/${oldMessage.id}`, inline: false },
-				{ name: 'Old message', value: oldMessage.content, inline: false },
-				{ name: 'New message', value: newMessage.content, inline: false }
-			)
-			.setTimestamp()]	// Do I need moment // NO
+		files,
+		embeds: [embed]	// Do I need moment // NO
 	});
 };
+
+function getFiles(content, name) {
+	// Will overflow
+	if (content.length > AutoEmbedLimits.FIELD_VALUE_WRAPPED) {
+		return [new AttachmentBuilder(Buffer.from(content), { name })];
+	}
+
+	return []
+}

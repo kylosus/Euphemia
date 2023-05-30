@@ -1,6 +1,6 @@
-import { channelMention, EmbedBuilder, Colors } from 'discord.js';
-import { EmbedLimits }                          from '../../lib/index.js';
-import { truncate }                             from 'lodash-es';
+import { AttachmentBuilder, channelMention, Colors } from 'discord.js';
+import { AutoEmbed, AutoEmbedLimits }                from '../../lib/index.js';
+import { Buffer }                                    from 'node:buffer';
 
 const MOD_CHANNEL = '293432840538947584';
 
@@ -9,7 +9,9 @@ export default async (channel, message) => {
 		return;
 	}
 
-	const embed = new EmbedBuilder()
+	const payload = {};
+
+	const embed = new AutoEmbed()
 		.setColor(Colors.DarkPurple)
 		.setTitle(`🗑 Message deleted in #${message.channel.name}`)
 		.setDescription(message.author.toString() ?? 'Unknown user')
@@ -17,9 +19,16 @@ export default async (channel, message) => {
 		.setTimestamp();
 
 	if (message.content) {
-		embed.addFields({
+		// Will overflow
+		if (message.content.length > AutoEmbedLimits.FIELD_VALUE_WRAPPED) {
+			payload.files = [
+				new AttachmentBuilder(Buffer.from(message.content), { name: 'content.txt' })
+			];
+		}
+
+		embed.addFieldsWrap({
 			name:   'Content',
-			value:  truncate(message.content, { length: EmbedLimits.FIELD_VALUE - 6 }),
+			value:  message.content,
 			inline: false
 		});
 	}
@@ -40,5 +49,7 @@ export default async (channel, message) => {
 		});
 	})(message.attachments.first());
 
-	return channel.send({ embeds: [embed] });
+	payload.embeds = [embed];
+
+	return channel.send(payload);
 };
