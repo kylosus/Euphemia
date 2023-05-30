@@ -94,7 +94,7 @@ export default class extends ECommand {
 			inline: true
 		});
 
-		embed.addFields({ name: 'Status', value: _normalizeConstant(result.status || 'Unknown'), inline: true});
+		embed.addFields({ name: 'Status', value: _normalizeConstant(result.status || 'Unknown'), inline: true });
 
 
 		if (result.genres) {
