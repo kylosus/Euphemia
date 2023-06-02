@@ -208,6 +208,58 @@ const init = async (client, db) => {
 			${TAG_MENTION_TABLE_NAME} (tag_id, user, channel)
 		VALUES(@tagID, @userID, @channelID);
 	`);
+
+	// See https://www.sqlite.org/fts3.html
+	STATEMENTS.searchTag = await db.prepare(`
+		SELECT
+			name, COUNT(s.user) AS numSubscriptions
+		FROM
+			tag
+		LEFT JOIN
+			${SUBSCRIPTION_TABLE_NAME} as s ON s.tag_id = tag.id
+		WHERE
+			guild = @guildID AND name LIKE @name AND enabled = 1
+		GROUP BY
+			tag.id
+		ORDER BY
+			numSubscriptions DESC
+		LIMIT
+			@max
+	`);
+
+	STATEMENTS.searchTagUserIn = await db.prepare(`
+		SELECT
+			name, COUNT(s.user) AS numSubscriptions
+		FROM
+			tag
+		LEFT JOIN
+			${SUBSCRIPTION_TABLE_NAME} as s ON s.tag_id = tag.id
+		WHERE
+			guild = @guildID AND name LIKE @name AND enabled = 1 AND s.user = @userID
+		GROUP BY
+			tag.id
+		ORDER BY
+			numSubscriptions DESC
+		LIMIT
+			@max
+	`);
+
+	STATEMENTS.searchTagUserNotIn = await db.prepare(`
+		SELECT
+			name, COUNT(s.user) AS numSubscriptions
+		FROM
+			tag
+		LEFT JOIN
+			${SUBSCRIPTION_TABLE_NAME} as s ON s.tag_id = tag.id
+		WHERE
+			guild = @guildID AND name LIKE @name AND enabled = 1 AND s.user != @userID
+		GROUP BY
+			tag.id
+		ORDER BY
+			numSubscriptions DESC
+		LIMIT
+			@max
+	`);
 };
 
 const getTagCreator = async ({ guild, name }) => {
@@ -268,6 +320,21 @@ const registerTagMention = ({ tagID, user, channel }) => {
 	return STATEMENTS.registerTagMention.run({ '@tagID': tagID, '@userID': user.id, '@channelID': channel.id });
 };
 
+const searchTag = ({ name, guild, max = MAX_TAG_LENGTH }) => {
+	const nameSearch = `%${name}%`;
+	return STATEMENTS.searchTag.all({ '@name': nameSearch, '@guildID': guild.id, '@max': max });
+};
+
+const searchTagUserIn = ({ name, guild, user, userIn = true, max = MAX_TAG_LENGTH }) => {
+	const nameSearch = `%${name}%`;
+	return STATEMENTS.searchTagUserIn.all({ '@name': nameSearch, '@guildID': guild.id, '@userID': user.id, '@max': max });
+};
+
+const searchTagUserNotIn = ({ name, guild, user, userIn = true, max = MAX_TAG_LENGTH }) => {
+	const nameSearch = `%${name}%`;
+	return STATEMENTS.searchTagUserNotIn.all({ '@name': nameSearch, '@guildID': guild.id, '@userID': user.id, '@max': max });
+};
+
 export {
 	init,
 	getTagCreator,
@@ -280,5 +347,8 @@ export {
 	unsubscribeUserFrom,
 	getSubscribedUsers,
 	getTagIdMax,
-	registerTagMention
+	registerTagMention,
+	searchTag,
+	searchTagUserIn,
+	searchTagUserNotIn
 };

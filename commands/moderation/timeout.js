@@ -83,7 +83,8 @@ export default class extends ModerationCommand {
 		if (result.passed.length) {
 			embed.addFields(
 				{ name: 'Muted', value: result.passed.map(r => `<@${r.id}>`).join(' ') },
-				{ name:     'Duration',
+				{
+					name:   'Duration',
 					value:  `${result.duration} (expires ${time(new Date(result.aux), TimestampStyles.RelativeTime)})`,
 					inline: false
 				}

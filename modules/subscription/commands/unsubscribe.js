@@ -1,8 +1,8 @@
-import { inlineCode }          from 'discord.js';
-import { ECommand }            from '../../../lib/index.js';
-import { unsubscribeUserFrom } from '../db.js';
-import { TagArgType }          from './util.js';
-import { EmbedError }          from '../../../lib/Error/index.js';
+import { inlineCode }                           from 'discord.js';
+import { ECommand }                             from '../../../lib/index.js';
+import { searchTagUserIn, unsubscribeUserFrom } from '../db.js';
+import { autocomplete, TagArgType }             from './util.js';
+import { EmbedError }                           from '../../../lib/Error/index.js';
 
 export default class extends ECommand {
 	constructor(client) {
@@ -15,10 +15,11 @@ export default class extends ECommand {
 			},
 			args:        [
 				{
-					id:          'tag',
-					type:        TagArgType,
-					description: 'The tag to unsubscribe from',
-					message:     'Please enter a tag name'
+					id:           'tag',
+					type:         TagArgType,
+					description:  'The tag to unsubscribe from',
+					message:      'Please enter a tag name',
+					autocomplete: autocomplete(searchTagUserIn),
 				}
 			],
 			guildOnly:   true,

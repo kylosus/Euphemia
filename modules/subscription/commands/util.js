@@ -1,8 +1,14 @@
 import { ApplicationCommandOptionType, inlineCode } from 'discord.js';
-import ArgumentType                                 from '../../../lib/Argument/ArgumentType.js';
-import { flatten }                                  from '../../../lib/Argument/ArgumentTypeConstants.js';
-import { MAX_TAG_LENGTH }                           from '../db.js';
-import { EmbedError }                               from '../../../lib/Error/index.js';
+import ArgumentType
+																				from '../../../lib/Argument/ArgumentType.js';
+import {
+	flatten
+}                                                                               from '../../../lib/Argument/ArgumentTypeConstants.js';
+import { MAX_TAG_LENGTH }                                            from '../db.js';
+import { EmbedError }                                                           from '../../../lib/Error/index.js';
+import {
+	AUTOCOMPLETE_MAX
+}                                                                               from '../../../lib/Argument/Argument.js';
 
 export const TagArgType = new ArgumentType({
 	commandType:    ApplicationCommandOptionType.String,
@@ -42,3 +48,33 @@ export const chunk = (arr, maxLength) => {
 
 	return res;
 };
+
+export const autocomplete = dbFunc => {
+	return async (interaction, input) => {
+		const tags = await dbFunc({
+			name:  input.value,
+			guild: interaction.guild,
+			user:  interaction.user,
+			max:   AUTOCOMPLETE_MAX,
+		});
+
+		return interaction.respond(tags.map(t => ({
+			name:  `${t.name} (${t.numSubscriptions} subs)`,
+			value: t.name,
+		})));
+	};
+};
+
+// const _autocomplete = async (interaction, input) => {
+// 	const tags = await searchTag({
+// 		name:  input.value,
+// 		guild: interaction.guild,
+// 		user: interaction.user,
+// 		max:   AUTOCOMPLETE_MAX,
+// 	});
+//
+// 	return interaction.respond(tags.map(t => ({
+// 		name:  `${t.name} (${t.numSubscriptions} subs)`,
+// 		value: t.name,
+// 	})));
+// };
