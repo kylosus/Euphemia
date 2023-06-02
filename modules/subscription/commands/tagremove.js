@@ -1,7 +1,7 @@
 import { inlineCode, PermissionsBitField } from 'discord.js';
 import { ECommand }                        from '../../../lib/index.js';
-import { disableTag }                      from '../db.js';
-import { TagArgType }                      from './util.js';
+import { disableTag, searchTag }           from '../db.js';
+import { autocomplete, TagArgType }        from './util.js';
 import { EmbedError }                      from '../../../lib/Error/index.js';
 
 export default class extends ECommand {
@@ -16,10 +16,11 @@ export default class extends ECommand {
 			userPermissions: [PermissionsBitField.Flags.ManageRoles],
 			args:            [
 				{
-					id:          'tag',
-					type:        TagArgType,
-					description: 'The tag to remove',
-					message:     'Please enter a tag name'
+					id:           'tag',
+					type:         TagArgType,
+					description:  'The tag to remove',
+					message:      'Please enter a tag name',
+					autocomplete: autocomplete(searchTag)
 				}
 			],
 			guildOnly:       true,

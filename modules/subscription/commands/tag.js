@@ -1,7 +1,7 @@
 import { inlineCode, userMention, ButtonBuilder, ButtonStyle, MessagePayload } from 'discord.js';
 import { ECommand }                                                            from '../../../lib/index.js';
 import * as EmbedLimits                                                        from '../../../lib/EmbedLimits.js';
-import { getSubscribedUsers, registerTagMention, searchTag }                   from '../db.js';
+import { searchTag, getSubscribedUsers, registerTagMention }                   from '../db.js';
 import { autocomplete, chunk, TagArgType }                                     from './util.js';
 import { DecisionMessage }                                                     from '../../decisionmessage/index.js';
 import { subscribe }                                                           from './subscribe.js';
@@ -19,11 +19,11 @@ export default class extends ECommand {
 			},
 			args:        [
 				{
-					id:          'tag',
-					type:        TagArgType,
-					description: 'The tag to ping',
-					message:     'Please enter a valid tag name',
-					autocomplete,
+					id:           'tag',
+					type:         TagArgType,
+					description:  'The tag to ping',
+					message:      'Please enter a valid tag name',
+					autocomplete: autocomplete(searchTag),
 				}
 			],
 			guildOnly:   true,

@@ -212,13 +212,47 @@ const init = async (client, db) => {
 	// See https://www.sqlite.org/fts3.html
 	STATEMENTS.searchTag = await db.prepare(`
 		SELECT
-			name, COUNT(subscription.user) AS numSubscriptions
+			name, COUNT(s.user) AS numSubscriptions
 		FROM
 			tag
 		LEFT JOIN
-			subscription ON subscription.tag_id = tag.id
+			${SUBSCRIPTION_TABLE_NAME} as s ON s.tag_id = tag.id
 		WHERE
-			guild = @guildID AND name LIKE @name and enabled = 1
+			guild = @guildID AND name LIKE @name AND enabled = 1
+		GROUP BY
+			tag.id
+		ORDER BY
+			numSubscriptions DESC
+		LIMIT
+			@max
+	`);
+
+	STATEMENTS.searchTagUserIn = await db.prepare(`
+		SELECT
+			name, COUNT(s.user) AS numSubscriptions
+		FROM
+			tag
+		LEFT JOIN
+			${SUBSCRIPTION_TABLE_NAME} as s ON s.tag_id = tag.id
+		WHERE
+			guild = @guildID AND name LIKE @name AND enabled = 1 AND s.user = @userID
+		GROUP BY
+			tag.id
+		ORDER BY
+			numSubscriptions DESC
+		LIMIT
+			@max
+	`);
+
+	STATEMENTS.searchTagUserNotIn = await db.prepare(`
+		SELECT
+			name, COUNT(s.user) AS numSubscriptions
+		FROM
+			tag
+		LEFT JOIN
+			${SUBSCRIPTION_TABLE_NAME} as s ON s.tag_id = tag.id
+		WHERE
+			guild = @guildID AND name LIKE @name AND enabled = 1 AND s.user != @userID
 		GROUP BY
 			tag.id
 		ORDER BY
@@ -291,6 +325,16 @@ const searchTag = ({ name, guild, max = MAX_TAG_LENGTH }) => {
 	return STATEMENTS.searchTag.all({ '@name': nameSearch, '@guildID': guild.id, '@max': max });
 };
 
+const searchTagUserIn = ({ name, guild, user, userIn = true, max = MAX_TAG_LENGTH }) => {
+	const nameSearch = `%${name}%`;
+	return STATEMENTS.searchTagUserIn.all({ '@name': nameSearch, '@guildID': guild.id, '@userID': user.id, '@max': max });
+};
+
+const searchTagUserNotIn = ({ name, guild, user, userIn = true, max = MAX_TAG_LENGTH }) => {
+	const nameSearch = `%${name}%`;
+	return STATEMENTS.searchTagUserNotIn.all({ '@name': nameSearch, '@guildID': guild.id, '@userID': user.id, '@max': max });
+};
+
 export {
 	init,
 	getTagCreator,
@@ -304,5 +348,7 @@ export {
 	getSubscribedUsers,
 	getTagIdMax,
 	registerTagMention,
-	searchTag
+	searchTag,
+	searchTagUserIn,
+	searchTagUserNotIn
 };
