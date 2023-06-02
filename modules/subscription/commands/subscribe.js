@@ -1,8 +1,8 @@
-import { inlineCode }      from 'discord.js';
-import { ECommand }        from '../../../lib/index.js';
-import { subscribeUserTo } from '../db.js';
-import { TagArgType }      from './util.js';
-import { EmbedError }      from '../../../lib/Error/index.js';
+import { inlineCode }               from 'discord.js';
+import { ECommand }                 from '../../../lib/index.js';
+import { subscribeUserTo }          from '../db.js';
+import { autocomplete, TagArgType } from './util.js';
+import { EmbedError }               from '../../../lib/Error/index.js';
 
 export default class extends ECommand {
 	constructor(client) {
@@ -18,7 +18,8 @@ export default class extends ECommand {
 					id:          'tag',
 					type:        TagArgType,
 					description: 'The tag to subscribe to',
-					message:     'Please enter a tag name'
+					message:     'Please enter a tag name',
+					autocomplete
 				}
 			],
 			guildOnly:   true,

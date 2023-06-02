@@ -208,6 +208,24 @@ const init = async (client, db) => {
 			${TAG_MENTION_TABLE_NAME} (tag_id, user, channel)
 		VALUES(@tagID, @userID, @channelID);
 	`);
+
+	// See https://www.sqlite.org/fts3.html
+	STATEMENTS.searchTag = await db.prepare(`
+		SELECT
+			name, COUNT(subscription.user) AS numSubscriptions
+		FROM
+			tag
+		LEFT JOIN
+			subscription ON subscription.tag_id = tag.id
+		WHERE
+			guild = @guildID AND name LIKE @name and enabled = 1
+		GROUP BY
+			tag.id
+		ORDER BY
+			numSubscriptions DESC
+		LIMIT
+			@max
+	`);
 };
 
 const getTagCreator = async ({ guild, name }) => {
@@ -268,6 +286,11 @@ const registerTagMention = ({ tagID, user, channel }) => {
 	return STATEMENTS.registerTagMention.run({ '@tagID': tagID, '@userID': user.id, '@channelID': channel.id });
 };
 
+const searchTag = ({ name, guild, max = MAX_TAG_LENGTH }) => {
+	const nameSearch = `%${name}%`;
+	return STATEMENTS.searchTag.all({ '@name': nameSearch, '@guildID': guild.id, '@max': max });
+};
+
 export {
 	init,
 	getTagCreator,
@@ -280,5 +303,6 @@ export {
 	unsubscribeUserFrom,
 	getSubscribedUsers,
 	getTagIdMax,
-	registerTagMention
+	registerTagMention,
+	searchTag
 };
