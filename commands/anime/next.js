@@ -148,4 +148,3 @@ export default class extends ECommand {
 		return this.shipOne(message, result.Media);
 	}
 }
-
